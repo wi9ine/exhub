@@ -1,0 +1,26 @@
+{
+  "name": "@exhub/core",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts --out-dir dist",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "format:check": "biome format --check .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:integration:private": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "axios": "^1.12.2"
+  }
+}

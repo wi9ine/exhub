@@ -1,0 +1,27 @@
+{
+  "name": "@exhub/gopax",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts --out-dir dist",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "format:check": "biome format --check .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:integration:private": "vitest run test/private.integration.test.ts --passWithNoTests"
+  },
+  "dependencies": {
+    "@exhub/core": "workspace:*",
+    "axios": "^1.12.2"
+  }
+}
