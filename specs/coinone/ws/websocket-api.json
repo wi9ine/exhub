@@ -1,0 +1,1649 @@
+{
+  "asyncapi": "2.6.0",
+  "defaultContentType": "application/json",
+  "info": {
+    "title": "Coinone WebSocket API",
+    "description": "코인원 공식 문서 v1.7 기준 WebSocket 스펙입니다.",
+    "version": "1.7",
+    "contact": {
+      "name": "코인원 개발자 센터",
+      "url": "https://docs.coinone.co.kr/reference"
+    }
+  },
+  "servers": {
+    "public": {
+      "url": "wss://stream.coinone.co.kr",
+      "protocol": "wss",
+      "description": "Public 웹소켓 endpoint",
+      "x-doc-notes": [
+        "IP 당 최대 20개의 연결을 허용합니다.",
+        "request_type / channel / format 값은 대문자로 입력해야 합니다.",
+        "마지막 PING 이후 30분이 지나면 유휴 연결로 종료될 수 있습니다."
+      ]
+    },
+    "private": {
+      "url": "wss://stream.coinone.co.kr/v1/private",
+      "protocol": "wss",
+      "description": "Private 웹소켓 endpoint",
+      "x-doc-notes": [
+        "계정 당 최대 20개의 연결을 허용합니다.",
+        "인증 문제 발생 시 4280 Close Code 와 함께 연결이 종료됩니다.",
+        "연결 시 X-COINONE-PAYLOAD, X-COINONE-SIGNATURE 헤더를 사용합니다.",
+        "마지막 PING 이후 30분이 지나면 유휴 연결로 종료될 수 있습니다."
+      ]
+    }
+  },
+  "channels": {
+    "public.ping": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "publicPing",
+        "message": {
+          "$ref": "#/components/messages/PublicPingRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-ping"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-ping"
+      },
+      "subscribe": {
+        "operationId": "publicPong",
+        "message": {
+          "$ref": "#/components/messages/PublicPongResponse"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-ping"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-ping"
+      }
+    },
+    "public.orderbook": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribePublicOrderbook",
+        "message": {
+          "$ref": "#/components/messages/PublicOrderbookRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-orderbook"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-orderbook"
+      },
+      "subscribe": {
+        "operationId": "publicOrderbookMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/SubscribedOrderbookResponse"
+            },
+            {
+              "$ref": "#/components/messages/PublicOrderbookDataMessage"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-orderbook"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-orderbook"
+      }
+    },
+    "public.ticker": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribePublicTicker",
+        "message": {
+          "$ref": "#/components/messages/PublicTickerRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-ticker"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-ticker"
+      },
+      "subscribe": {
+        "operationId": "publicTickerMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/SubscribedTickerResponse"
+            },
+            {
+              "$ref": "#/components/messages/PublicTickerDataMessage"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-ticker"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-ticker"
+      }
+    },
+    "public.trade": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribePublicTrade",
+        "message": {
+          "$ref": "#/components/messages/PublicTradeRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-trade"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-trade"
+      },
+      "subscribe": {
+        "operationId": "publicTradeMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/SubscribedTradeResponse"
+            },
+            {
+              "$ref": "#/components/messages/PublicTradeDataMessage"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-trade"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-trade"
+      }
+    },
+    "public.chart": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribePublicChart",
+        "message": {
+          "$ref": "#/components/messages/PublicChartRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-chart"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-chart"
+      },
+      "subscribe": {
+        "operationId": "publicChartMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/SubscribedChartResponse"
+            },
+            {
+              "$ref": "#/components/messages/PublicChartDataMessage"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/public-websocket-chart"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-chart"
+      }
+    },
+    "private.ping": {
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "privatePing",
+        "message": {
+          "$ref": "#/components/messages/PrivatePingRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/private-websocket-1-ping"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-ping"
+      },
+      "subscribe": {
+        "operationId": "privatePong",
+        "message": {
+          "$ref": "#/components/messages/PrivatePongResponse"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/private-websocket-1-ping"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-ping"
+      }
+    },
+    "private.myOrder": {
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "subscribePrivateMyOrder",
+        "message": {
+          "$ref": "#/components/messages/PrivateMyOrderRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/private-websocket-1-myorder"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-myorder"
+      },
+      "subscribe": {
+        "operationId": "privateMyOrderMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/SubscribedMyOrderResponse"
+            },
+            {
+              "$ref": "#/components/messages/PrivateMyOrderDataMessage"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/private-websocket-1-myorder"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-myorder"
+      }
+    },
+    "private.myAsset": {
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "subscribePrivateMyAsset",
+        "message": {
+          "$ref": "#/components/messages/PrivateMyAssetRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/private-websocket-1-myasset"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-myasset"
+      },
+      "subscribe": {
+        "operationId": "privateMyAssetMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/SubscribedMyAssetResponse"
+            },
+            {
+              "$ref": "#/components/messages/PrivateMyAssetDataMessage"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.coinone.co.kr/reference/private-websocket-1-myasset"
+        },
+        "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-myasset"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TopicPair": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string",
+            "description": "마켓 기준 통화"
+          },
+          "target_currency": {
+            "type": "string",
+            "description": "조회 요청할 종목"
+          }
+        },
+        "required": [
+          "quote_currency",
+          "target_currency"
+        ]
+      },
+      "ChartTopic": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string"
+          },
+          "target_currency": {
+            "type": "string"
+          },
+          "interval": {
+            "type": "string",
+            "description": "1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 1d, 1w"
+          }
+        },
+        "required": [
+          "quote_currency",
+          "target_currency",
+          "interval"
+        ]
+      },
+      "PublicBaseRequest": {
+        "type": "object",
+        "properties": {
+          "request_type": {
+            "type": "string",
+            "enum": [
+              "SUBSCRIBE",
+              "UNSUBSCRIBE",
+              "PING"
+            ],
+            "description": "실행할 요청 종류"
+          },
+          "channel": {
+            "type": "string",
+            "description": "구독 채널명. PING 요청일 경우 생략합니다."
+          },
+          "topic": {
+            "type": "object",
+            "description": "quote_currency, target_currency 등의 정보를 담는 topic 오브젝트. PING 요청일 경우 생략합니다."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "DEFAULT",
+              "SHORT"
+            ],
+            "default": "DEFAULT",
+            "description": "단축 변수명으로 구독 원하는 경우 SHORT 입력 (기본값: DEFAULT)"
+          }
+        },
+        "required": [
+          "request_type"
+        ]
+      },
+      "PrivateBaseRequest": {
+        "type": "object",
+        "properties": {
+          "request_type": {
+            "type": "string",
+            "enum": [
+              "SUBSCRIBE",
+              "UNSUBSCRIBE",
+              "PING"
+            ],
+            "description": "실행할 요청 종류"
+          },
+          "channel": {
+            "type": "string",
+            "description": "구독 채널명. PING 요청일 경우 생략합니다."
+          },
+          "topic": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TopicPair"
+            },
+            "description": "전체 거래 종목 또는 특정 거래 종목에 대한 topic 목록"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "DEFAULT",
+              "SHORT"
+            ],
+            "default": "DEFAULT",
+            "description": "단축 변수명으로 구독 원하는 경우 SHORT 입력 (기본값: DEFAULT)"
+          }
+        },
+        "required": [
+          "request_type"
+        ]
+      },
+      "PingRequest": {
+        "type": "object",
+        "properties": {
+          "request_type": {
+            "type": "string",
+            "enum": [
+              "PING"
+            ],
+            "description": "연결 상태를 체크하고 세션 만료시간을 갱신하는 요청"
+          }
+        },
+        "required": [
+          "request_type"
+        ]
+      },
+      "PongResponse": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "PONG"
+            ],
+            "description": "PING 요청에 대한 응답"
+          }
+        },
+        "required": [
+          "response_type"
+        ]
+      },
+      "ConnectedResponse": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "CONNECTED"
+            ],
+            "description": "웹소켓 연결 직후 세션 생성 성공 응답"
+          },
+          "data": {
+            "type": "object",
+            "description": "세션 정보",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "description": "생성된 세션 식별자"
+              }
+            },
+            "required": [
+              "session_id"
+            ]
+          }
+        },
+        "required": [
+          "response_type",
+          "data"
+        ]
+      },
+      "PublicOrderbookRequestPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PublicBaseRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "ORDERBOOK"
+                ],
+                "description": "구독 채널명: ORDERBOOK"
+              },
+              "topic": {
+                "$ref": "#/components/schemas/TopicPair"
+              }
+            },
+            "required": [
+              "request_type",
+              "channel",
+              "topic"
+            ]
+          }
+        ]
+      },
+      "PublicTickerRequestPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PublicBaseRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "TICKER"
+                ],
+                "description": "구독 채널명: TICKER"
+              },
+              "topic": {
+                "$ref": "#/components/schemas/TopicPair"
+              }
+            },
+            "required": [
+              "request_type",
+              "channel",
+              "topic"
+            ]
+          }
+        ]
+      },
+      "PublicTradeRequestPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PublicBaseRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "TRADE"
+                ],
+                "description": "구독 채널명: TRADE"
+              },
+              "topic": {
+                "$ref": "#/components/schemas/TopicPair"
+              }
+            },
+            "required": [
+              "request_type",
+              "channel",
+              "topic"
+            ]
+          }
+        ]
+      },
+      "PublicChartRequestPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PublicBaseRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "CHART"
+                ],
+                "description": "구독 채널명: CHART"
+              },
+              "topic": {
+                "$ref": "#/components/schemas/ChartTopic"
+              }
+            },
+            "required": [
+              "request_type",
+              "channel",
+              "topic"
+            ]
+          }
+        ]
+      },
+      "PrivateMyOrderRequestPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PrivateBaseRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "MYORDER"
+                ],
+                "description": "구독 채널명: MYORDER"
+              }
+            },
+            "required": [
+              "request_type",
+              "channel"
+            ]
+          }
+        ]
+      },
+      "PrivateMyAssetRequestPayload": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PrivateBaseRequest"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "channel": {
+                "type": "string",
+                "enum": [
+                  "MYASSET"
+                ],
+                "description": "구독 채널명: MYASSET"
+              }
+            },
+            "required": [
+              "request_type",
+              "channel"
+            ]
+          }
+        ]
+      },
+      "SubscribedBase": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "SUBSCRIBED"
+            ]
+          },
+          "channel": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel"
+        ]
+      },
+      "PublicOrderbookStreamData": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string",
+            "x-abbreviation": "qc",
+            "description": "마켓 기준 통화 (예: KRW)"
+          },
+          "target_currency": {
+            "type": "string",
+            "x-abbreviation": "tc",
+            "description": "조회한 종목의 심볼 (예: BTC)"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "t",
+            "description": "타임스탬프 (millisecond)"
+          },
+          "id": {
+            "type": "string",
+            "x-abbreviation": "i",
+            "description": "order book id 값, id 값이 클수록 최신 OrderBook 정보"
+          },
+          "asks": {
+            "type": "array",
+            "x-abbreviation": "a",
+            "items": {
+              "type": "object",
+              "properties": {
+                "price": {
+                  "type": "string",
+                  "x-abbreviation": "p",
+                  "description": "매도 호가"
+                },
+                "qty": {
+                  "type": "string",
+                  "x-abbreviation": "q",
+                  "description": "매도 수량"
+                }
+              },
+              "required": [
+                "price",
+                "qty"
+              ]
+            },
+            "description": "매도 오더북 정보"
+          },
+          "bids": {
+            "type": "array",
+            "x-abbreviation": "b",
+            "items": {
+              "type": "object",
+              "properties": {
+                "price": {
+                  "type": "string",
+                  "x-abbreviation": "p",
+                  "description": "매수 호가"
+                },
+                "qty": {
+                  "type": "string",
+                  "x-abbreviation": "q",
+                  "description": "매수 수량"
+                }
+              },
+              "required": [
+                "price",
+                "qty"
+              ]
+            },
+            "description": "매수 오더북 정보"
+          }
+        },
+        "required": [
+          "quote_currency",
+          "target_currency",
+          "timestamp",
+          "id",
+          "asks",
+          "bids"
+        ],
+        "x-format-transforms": {
+          "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "description": "구독 data 정보"
+      },
+      "PublicOrderbookDataPayload": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "DATA"
+            ],
+            "x-abbreviation": "r",
+            "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "ORDERBOOK"
+            ],
+            "x-abbreviation": "c",
+            "description": "ORDERBOOK 채널 고정"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicOrderbookStreamData",
+            "x-abbreviation": "d",
+            "description": "구독 data 정보"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel",
+          "data"
+        ]
+      },
+      "PublicTickerStreamData": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string",
+            "x-abbreviation": "qc",
+            "description": "마켓 기준 통화"
+          },
+          "target_currency": {
+            "type": "string",
+            "x-abbreviation": "tc",
+            "description": "조회한 종목의 심볼"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "t",
+            "description": "티커 생성 시점 (Unix time) (ms)"
+          },
+          "quote_volume": {
+            "type": "string",
+            "x-abbreviation": "qv",
+            "description": "최근 24시간 기준 종목 체결 금액 (원화)"
+          },
+          "target_volume": {
+            "type": "string",
+            "x-abbreviation": "tv",
+            "description": "최근 24시간 기준 종목 체결량 (종목)"
+          },
+          "high": {
+            "type": "string",
+            "x-abbreviation": "hi",
+            "description": "고가"
+          },
+          "low": {
+            "type": "string",
+            "x-abbreviation": "lo",
+            "description": "저가"
+          },
+          "first": {
+            "type": "string",
+            "x-abbreviation": "fi",
+            "description": "시가"
+          },
+          "last": {
+            "type": "string",
+            "x-abbreviation": "la",
+            "description": "종가"
+          },
+          "change": {
+            "type": "string",
+            "x-abbreviation": "ch",
+            "description": "전일 대비 상태"
+          },
+          "yesterday_high": {
+            "type": "string",
+            "x-abbreviation": "yhi",
+            "description": "전일 고가"
+          },
+          "yesterday_low": {
+            "type": "string",
+            "x-abbreviation": "ylo",
+            "description": "전일 저가"
+          },
+          "yesterday_first": {
+            "type": "string",
+            "x-abbreviation": "yfi",
+            "description": "전일 시가"
+          },
+          "yesterday_last": {
+            "type": "string",
+            "x-abbreviation": "yla",
+            "description": "전일 종가"
+          },
+          "yesterday_quote_volume": {
+            "type": "string",
+            "x-abbreviation": "yqv",
+            "description": "전일 24시간 기준 종목 체결 금액 (원화)"
+          },
+          "yesterday_target_volume": {
+            "type": "string",
+            "x-abbreviation": "ytv",
+            "description": "전일 24시간 기준 종목 체결량 (종목)"
+          }
+        },
+        "x-format-transforms": {
+          "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "description": "구독 data 정보"
+      },
+      "PublicTickerDataPayload": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "DATA"
+            ],
+            "x-abbreviation": "r",
+            "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "TICKER"
+            ],
+            "x-abbreviation": "c",
+            "description": "TICKER 채널 고정"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicTickerStreamData",
+            "x-abbreviation": "d",
+            "description": "구독 data 정보"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel",
+          "data"
+        ]
+      },
+      "PublicTradeStreamData": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string",
+            "x-abbreviation": "qc",
+            "description": "마켓 기준 통화 (예: KRW)"
+          },
+          "target_currency": {
+            "type": "string",
+            "x-abbreviation": "tc",
+            "description": "조회한 종목의 심볼 (예: BTC)"
+          },
+          "id": {
+            "type": "string",
+            "x-abbreviation": "i",
+            "description": "티커 별 ID 값으로 클수록 최신 티커 정보"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "t",
+            "description": "타임스탬프 (millisecond)"
+          },
+          "price": {
+            "type": "string",
+            "x-abbreviation": "p",
+            "description": "체결 가격"
+          },
+          "qty": {
+            "type": "string",
+            "x-abbreviation": "q",
+            "description": "체결 수량"
+          },
+          "is_seller_maker": {
+            "type": "boolean",
+            "x-abbreviation": "sm",
+            "description": "매도자가 maker인지 여부"
+          }
+        },
+        "x-format-transforms": {
+          "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "description": "구독 data 정보"
+      },
+      "PublicTradeDataPayload": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "DATA"
+            ],
+            "x-abbreviation": "r",
+            "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "TRADE"
+            ],
+            "x-abbreviation": "c",
+            "description": "TRADE 채널 고정"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicTradeStreamData",
+            "x-abbreviation": "d",
+            "description": "구독 data 정보"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel",
+          "data"
+        ]
+      },
+      "PublicChartStreamData": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string",
+            "x-abbreviation": "qc",
+            "description": "마켓 기준 통화 (예: KRW)"
+          },
+          "target_currency": {
+            "type": "string",
+            "x-abbreviation": "tc",
+            "description": "조회한 종목의 심볼 (예: BTC)"
+          },
+          "interval": {
+            "type": "string",
+            "x-abbreviation": "iv",
+            "description": "조회한 차트의 간격"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "t",
+            "description": "타임스탬프 (millisecond)"
+          },
+          "id": {
+            "type": "string",
+            "x-abbreviation": "i",
+            "description": "ID 값으로 클수록 최신 정보"
+          },
+          "candle_timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "ct",
+            "description": "해당 캔들의 기준시각"
+          },
+          "high": {
+            "type": "string",
+            "x-abbreviation": "hi",
+            "description": "고가 (UTC 기준)"
+          },
+          "low": {
+            "type": "string",
+            "x-abbreviation": "lo",
+            "description": "저가 (UTC 기준)"
+          },
+          "first": {
+            "type": "string",
+            "x-abbreviation": "fi",
+            "description": "시가 (UTC 기준)"
+          },
+          "last": {
+            "type": "string",
+            "x-abbreviation": "la",
+            "description": "종가 (UTC 기준)"
+          },
+          "quote_volume": {
+            "type": "string",
+            "x-abbreviation": "qv",
+            "description": "최근 24시간 기준 종목 체결 금액 (원화)"
+          },
+          "target_volume": {
+            "type": "string",
+            "x-abbreviation": "tv",
+            "description": "최근 24시간 기준 종목 체결량 (종목)"
+          }
+        },
+        "x-format-transforms": {
+          "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "description": "구독 data 정보"
+      },
+      "PublicChartDataPayload": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "DATA"
+            ],
+            "x-abbreviation": "r",
+            "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "CHART"
+            ],
+            "x-abbreviation": "c",
+            "description": "CHART 채널 고정"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PublicChartStreamData",
+            "x-abbreviation": "d",
+            "description": "구독 data 정보"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel",
+          "data"
+        ]
+      },
+      "PrivateMyOrderStreamData": {
+        "type": "object",
+        "properties": {
+          "quote_currency": {
+            "type": "string",
+            "x-abbreviation": "qc",
+            "description": "마켓 기준 통화 (예: KRW)"
+          },
+          "target_currency": {
+            "type": "string",
+            "x-abbreviation": "tc",
+            "description": "주문 종목 심볼 (예: BTC)"
+          },
+          "order_id": {
+            "type": "string",
+            "x-abbreviation": "oi",
+            "description": "주문 식별 ID"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "x-abbreviation": "t",
+            "description": "주문 방식"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "wait",
+              "watch",
+              "not_triggered",
+              "trade",
+              "trade_done",
+              "cancel",
+              "cancel_post_only"
+            ],
+            "x-abbreviation": "st",
+            "description": "주문 진행 상태"
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "BID",
+              "ASK"
+            ],
+            "x-abbreviation": "s",
+            "description": "매수/매도 여부"
+          },
+          "order_price": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "op",
+            "description": "주문 가격"
+          },
+          "order_qty": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "oq",
+            "description": "주문 수량 (지정가, 시장가매도, 예약)"
+          },
+          "order_amount": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "oa",
+            "description": "주문 금액 (시장가 매수)"
+          },
+          "trade_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ti",
+            "description": "체결 식별 ID"
+          },
+          "is_maker": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "x-abbreviation": "im",
+            "description": "true: 메이커, false: 테이커"
+          },
+          "executed_price": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ep",
+            "description": "체결 가격"
+          },
+          "executed_qty": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "eq",
+            "description": "체결수량 또는 취소수량"
+          },
+          "executed_fee": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ef",
+            "description": "체결시 발생한 수수료"
+          },
+          "remain_qty": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "rq",
+            "description": "체결/취소 후 잔량"
+          },
+          "remain_amount": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ra",
+            "description": "체결/취소 후 잔량 금액 (시장가 매수)"
+          },
+          "user_order_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ui",
+            "description": "사용자 정의 주문 id"
+          },
+          "prevented_qty": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "공식 예시 응답에는 존재하나 Stream Fields 표에는 없음"
+          },
+          "executed_timestamp": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "x-abbreviation": "et",
+            "description": "체결/취소 타임스탬프"
+          },
+          "order_timestamp": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "x-abbreviation": "ot",
+            "description": "주문 타임스탬프"
+          },
+          "timestamp": {
+            "type": "integer",
+            "x-abbreviation": "ts",
+            "description": "타임스탬프"
+          }
+        },
+        "x-format-transforms": {
+          "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "x-doc-notes": [
+          "prevented_qty는 예시 응답에는 있으나 Stream Fields 표에는 명시되어 있지 않습니다."
+        ],
+        "description": "구독 data 정보"
+      },
+      "PrivateMyOrderDataPayload": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "DATA"
+            ],
+            "x-abbreviation": "r",
+            "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "MYORDER"
+            ],
+            "x-abbreviation": "c",
+            "description": "MYORDER 채널 고정"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PrivateMyOrderStreamData",
+            "x-abbreviation": "d",
+            "description": "구독 data 정보"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel",
+          "data"
+        ]
+      },
+      "PrivateMyAssetAsset": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "x-abbreviation": "c",
+            "description": "코인 심볼 (예: BTC)"
+          },
+          "available": {
+            "type": "string",
+            "x-abbreviation": "a",
+            "description": "주문가능 수량"
+          },
+          "limit": {
+            "type": "string",
+            "x-abbreviation": "l",
+            "description": "가용 잔고 ('available'과 'limit'의 합이 전체 잔고)"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "deposit",
+              "withdrawal",
+              "cancel_withdrawal",
+              "order",
+              "trade",
+              "cancel",
+              "cancel_post_only"
+            ],
+            "x-abbreviation": "t",
+            "description": "잔고 변경 사유"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "ts",
+            "description": "타임스탬프"
+          }
+        },
+        "required": [
+          "currency",
+          "available",
+          "limit"
+        ]
+      },
+      "PrivateMyAssetStreamData": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "oi",
+            "description": "주문 식별 ID"
+          },
+          "user_order_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ui",
+            "description": "사용자 정의 주문 id"
+          },
+          "trade_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "x-abbreviation": "ti",
+            "description": "체결 식별 ID"
+          },
+          "assets": {
+            "type": "array",
+            "x-abbreviation": "as",
+            "items": {
+              "$ref": "#/components/schemas/PrivateMyAssetAsset"
+            },
+            "description": "변동 자산 목록"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "deposit",
+              "withdrawal",
+              "cancel_withdrawal",
+              "order",
+              "trade",
+              "cancel",
+              "cancel_post_only"
+            ],
+            "x-abbreviation": "t",
+            "description": "잔고 변경 사유"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "ts",
+            "description": "타임스탬프"
+          }
+        },
+        "required": [
+          "assets",
+          "type",
+          "timestamp"
+        ],
+        "x-format-transforms": {
+          "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "description": "구독 data 정보"
+      },
+      "PrivateMyAssetDataPayload": {
+        "type": "object",
+        "properties": {
+          "response_type": {
+            "type": "string",
+            "enum": [
+              "DATA"
+            ],
+            "x-abbreviation": "r",
+            "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "MYASSET"
+            ],
+            "x-abbreviation": "c",
+            "description": "MYASSET 채널 고정"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PrivateMyAssetStreamData",
+            "x-abbreviation": "d",
+            "description": "구독 data 정보"
+          }
+        },
+        "required": [
+          "response_type",
+          "channel",
+          "data"
+        ]
+      }
+    },
+    "messages": {
+      "PublicPingRequest": {
+        "messageId": "coinone.ws.ping.request",
+        "payload": {
+          "$ref": "#/components/schemas/PingRequest"
+        }
+      },
+      "PublicPongResponse": {
+        "messageId": "coinone.ws.ping.response",
+        "payload": {
+          "$ref": "#/components/schemas/PongResponse"
+        }
+      },
+      "PrivatePingRequest": {
+        "messageId": "coinone.ws.private-ping.request",
+        "payload": {
+          "$ref": "#/components/schemas/PingRequest"
+        }
+      },
+      "PrivatePongResponse": {
+        "messageId": "coinone.ws.private-ping.response",
+        "payload": {
+          "$ref": "#/components/schemas/PongResponse"
+        }
+      },
+      "SubscribedOrderbookResponse": {
+        "messageId": "coinone.ws.orderbook.response",
+        "payload": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/SubscribedBase"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "ORDERBOOK"
+                  ]
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TopicPair"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "SubscribedTickerResponse": {
+        "messageId": "coinone.ws.ticker.response",
+        "payload": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/SubscribedBase"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "TICKER"
+                  ]
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TopicPair"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "SubscribedTradeResponse": {
+        "messageId": "coinone.ws.trade.response",
+        "payload": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/SubscribedBase"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "TRADE"
+                  ]
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TopicPair"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "SubscribedChartResponse": {
+        "messageId": "coinone.ws.chart.response",
+        "payload": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/SubscribedBase"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "CHART"
+                  ]
+                },
+                "data": {
+                  "$ref": "#/components/schemas/ChartTopic"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "SubscribedMyOrderResponse": {
+        "messageId": "coinone.ws.my-order.response",
+        "payload": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/SubscribedBase"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "MYORDER"
+                  ]
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopicPair"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "SubscribedMyAssetResponse": {
+        "messageId": "coinone.ws.my-asset.response",
+        "payload": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/SubscribedBase"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "channel": {
+                  "type": "string",
+                  "enum": [
+                    "MYASSET"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      },
+      "PublicOrderbookRequest": {
+        "messageId": "coinone.ws.orderbook.request",
+        "payload": {
+          "$ref": "#/components/schemas/PublicOrderbookRequestPayload"
+        }
+      },
+      "PublicTickerRequest": {
+        "messageId": "coinone.ws.ticker.request",
+        "payload": {
+          "$ref": "#/components/schemas/PublicTickerRequestPayload"
+        }
+      },
+      "PublicTradeRequest": {
+        "messageId": "coinone.ws.trade.request",
+        "payload": {
+          "$ref": "#/components/schemas/PublicTradeRequestPayload"
+        }
+      },
+      "PublicChartRequest": {
+        "messageId": "coinone.ws.chart.request",
+        "payload": {
+          "$ref": "#/components/schemas/PublicChartRequestPayload"
+        }
+      },
+      "PrivateMyOrderRequest": {
+        "messageId": "coinone.ws.my-order.request",
+        "payload": {
+          "$ref": "#/components/schemas/PrivateMyOrderRequestPayload"
+        }
+      },
+      "PrivateMyAssetRequest": {
+        "messageId": "coinone.ws.my-asset.request",
+        "payload": {
+          "$ref": "#/components/schemas/PrivateMyAssetRequestPayload"
+        }
+      },
+      "PublicOrderbookDataMessage": {
+        "messageId": "coinone.ws.orderbook.delta",
+        "payload": {
+          "$ref": "#/components/schemas/PublicOrderbookDataPayload"
+        }
+      },
+      "PublicTickerDataMessage": {
+        "messageId": "coinone.ws.ticker.delta",
+        "payload": {
+          "$ref": "#/components/schemas/PublicTickerDataPayload"
+        }
+      },
+      "PublicTradeDataMessage": {
+        "messageId": "coinone.ws.trade.delta",
+        "payload": {
+          "$ref": "#/components/schemas/PublicTradeDataPayload"
+        }
+      },
+      "PublicChartDataMessage": {
+        "messageId": "coinone.ws.chart.delta",
+        "payload": {
+          "$ref": "#/components/schemas/PublicChartDataPayload"
+        }
+      },
+      "PrivateMyOrderDataMessage": {
+        "messageId": "coinone.ws.my-order.delta",
+        "payload": {
+          "$ref": "#/components/schemas/PrivateMyOrderDataPayload"
+        }
+      },
+      "PrivateMyAssetDataMessage": {
+        "messageId": "coinone.ws.my-asset.delta",
+        "payload": {
+          "$ref": "#/components/schemas/PrivateMyAssetDataPayload"
+        }
+      }
+    }
+  },
+  "id": "urn:exhub:asyncapi:coinone:ws"
+}

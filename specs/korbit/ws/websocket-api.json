@@ -1,0 +1,1392 @@
+{
+  "asyncapi": "2.6.0",
+  "defaultContentType": "application/json",
+  "info": {
+    "title": "Korbit WebSocket API",
+    "description": "코빗 공식 문서 기준 WebSocket 스펙입니다.",
+    "version": "v2",
+    "contact": {
+      "name": "코빗 API Docs",
+      "url": "https://docs.korbit.co.kr/"
+    }
+  },
+  "servers": {
+    "public": {
+      "url": "wss://ws-api.korbit.co.kr/v2/public",
+      "protocol": "wss",
+      "description": "Public 타입 WebSocket endpoint",
+      "x-doc-notes": [
+        "Public 타입 데이터는 인증 없이 수신할 수 있습니다.",
+        "구독 요청을 보내면 가장 먼저 스냅샷 데이터가 전송되고 이후 실시간 데이터가 전송됩니다.",
+        "네트워크가 느리거나 트래픽이 과도할 경우 일부 메시지가 드랍될 수 있습니다."
+      ]
+    },
+    "private": {
+      "url": "wss://ws-api.korbit.co.kr/v2/private",
+      "protocol": "wss",
+      "description": "Private 타입 WebSocket endpoint",
+      "x-doc-notes": [
+        "Private 타입 데이터는 웹소켓 연결 시 인증이 필요합니다.",
+        "연결 시 X-KAPI-KEY 헤더와 URL 쿼리스트링 timestamp, signature 값을 입력해야 합니다.",
+        "REST API와 동일한 방식(HMAC-SHA256 또는 ED25519)으로 서명합니다.",
+        "네트워크가 느리거나 트래픽이 과도할 경우 커넥션이 강제 종료될 수 있으나 메시지가 드랍되지는 않습니다."
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "Public 타입"
+    },
+    {
+      "name": "Private 타입"
+    }
+  ],
+  "channels": {
+    "public.ticker": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribeTicker",
+        "message": {
+          "$ref": "#/components/messages/TickerPublicRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker",
+        "x-tags": [
+          "Public 타입"
+        ]
+      },
+      "subscribe": {
+        "operationId": "tickerMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/TickerPublicResponse"
+            },
+            {
+              "$ref": "#/components/messages/ControlSuccess"
+            },
+            {
+              "$ref": "#/components/messages/ControlFail"
+            },
+            {
+              "$ref": "#/components/messages/ControlError"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker",
+        "x-tags": [
+          "Public 타입"
+        ]
+      }
+    },
+    "public.orderbook": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribeOrderbook",
+        "message": {
+          "$ref": "#/components/messages/OrderbookPublicRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook",
+        "x-tags": [
+          "Public 타입"
+        ]
+      },
+      "subscribe": {
+        "operationId": "orderbookMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/OrderbookPublicResponse"
+            },
+            {
+              "$ref": "#/components/messages/ControlSuccess"
+            },
+            {
+              "$ref": "#/components/messages/ControlFail"
+            },
+            {
+              "$ref": "#/components/messages/ControlError"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook",
+        "x-tags": [
+          "Public 타입"
+        ]
+      }
+    },
+    "public.trade": {
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "subscribeTrade",
+        "message": {
+          "$ref": "#/components/messages/TradePublicRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade",
+        "x-tags": [
+          "Public 타입"
+        ]
+      },
+      "subscribe": {
+        "operationId": "tradeMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/TradePublicResponse"
+            },
+            {
+              "$ref": "#/components/messages/ControlSuccess"
+            },
+            {
+              "$ref": "#/components/messages/ControlFail"
+            },
+            {
+              "$ref": "#/components/messages/ControlError"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade",
+        "x-tags": [
+          "Public 타입"
+        ]
+      }
+    },
+    "private.myOrder": {
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "subscribeMyOrder",
+        "message": {
+          "$ref": "#/components/messages/MyOrderPrivateRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder",
+        "x-tags": [
+          "Private 타입"
+        ]
+      },
+      "subscribe": {
+        "operationId": "myOrderMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/MyOrderPrivateResponse"
+            },
+            {
+              "$ref": "#/components/messages/ControlSuccess"
+            },
+            {
+              "$ref": "#/components/messages/ControlFail"
+            },
+            {
+              "$ref": "#/components/messages/ControlError"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder",
+        "x-tags": [
+          "Private 타입"
+        ]
+      }
+    },
+    "private.myTrade": {
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "subscribeMyTrade",
+        "message": {
+          "$ref": "#/components/messages/MyTradePrivateRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade",
+        "x-tags": [
+          "Private 타입"
+        ]
+      },
+      "subscribe": {
+        "operationId": "myTradeMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/MyTradePrivateResponse"
+            },
+            {
+              "$ref": "#/components/messages/ControlSuccess"
+            },
+            {
+              "$ref": "#/components/messages/ControlFail"
+            },
+            {
+              "$ref": "#/components/messages/ControlError"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade",
+        "x-tags": [
+          "Private 타입"
+        ]
+      }
+    },
+    "private.myAsset": {
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "subscribeMyAsset",
+        "message": {
+          "$ref": "#/components/messages/MyAssetPrivateRequest"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset",
+        "x-tags": [
+          "Private 타입"
+        ]
+      },
+      "subscribe": {
+        "operationId": "myAssetMessages",
+        "message": {
+          "oneOf": [
+            {
+              "$ref": "#/components/messages/MyAssetPrivateResponse"
+            },
+            {
+              "$ref": "#/components/messages/ControlSuccess"
+            },
+            {
+              "$ref": "#/components/messages/ControlFail"
+            },
+            {
+              "$ref": "#/components/messages/ControlError"
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset",
+        "x-tags": [
+          "Private 타입"
+        ]
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "ControlSuccess": {
+        "name": "ControlSuccess",
+        "title": "제어 메시지 성공 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "number",
+              "description": "요청 메시지에 입력한 requestId 값",
+              "example": 1
+            },
+            "status": {
+              "type": "string",
+              "description": "제어 메시지 상태",
+              "enum": [
+                "success"
+              ],
+              "example": "success"
+            }
+          },
+          "required": [
+            "requestId",
+            "status"
+          ]
+        }
+      },
+      "ControlFail": {
+        "name": "ControlFail",
+        "title": "제어 메시지 실패 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "requestId": {
+              "type": "number",
+              "description": "요청 메시지에 입력한 requestId 값",
+              "example": 1
+            },
+            "status": {
+              "type": "string",
+              "description": "제어 메시지 상태",
+              "enum": [
+                "fail"
+              ],
+              "example": "fail"
+            },
+            "code": {
+              "type": "string",
+              "description": "오류 코드",
+              "example": "INVALID_SYMBOL"
+            },
+            "message": {
+              "type": "string",
+              "description": "오류 설명",
+              "example": "The symbol does not exist (eth_btc)"
+            }
+          },
+          "required": [
+            "requestId",
+            "status",
+            "code",
+            "message"
+          ]
+        }
+      },
+      "ControlError": {
+        "name": "ControlError",
+        "title": "제어 메시지 오류 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "제어 메시지 상태",
+              "enum": [
+                "error"
+              ],
+              "example": "error"
+            },
+            "message": {
+              "type": "string",
+              "description": "오류 설명"
+            }
+          },
+          "required": [
+            "status",
+            "message"
+          ]
+        }
+      },
+      "TickerPublicRequest": {
+        "name": "TickerPublicRequest",
+        "title": "현재가 (Ticker) 요청",
+        "payload": {
+          "type": "array",
+          "description": "웹소켓 구독 요청 메시지 배열. 메시지를 1개만 보낼 때에도 반드시 대괄호([])로 감싸야 합니다.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "number",
+                "description": "임의의 정수 요청 ID. 입력하면 요청 성공/실패 여부와 관계 없이 제어 메시지가 전송됩니다.",
+                "example": 1
+              },
+              "method": {
+                "type": "string",
+                "description": "고정 값 subscribe 또는 unsubscribe 입력",
+                "example": "subscribe"
+              },
+              "type": {
+                "type": "string",
+                "description": "고정 값 ticker 입력",
+                "example": "ticker"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "btc_krw"
+                },
+                "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
+                "example": [
+                  "btc_krw",
+                  "eth_krw"
+                ]
+              }
+            },
+            "required": [
+              "method",
+              "type",
+              "symbols"
+            ]
+          },
+          "minItems": 1,
+          "example": [
+            {
+              "method": "subscribe",
+              "type": "ticker",
+              "symbols": [
+                "btc_krw",
+                "eth_krw"
+              ]
+            }
+          ]
+        },
+        "messageId": "korbit.ws.ticker.request"
+      },
+      "TickerPublicResponse": {
+        "name": "TickerPublicResponse",
+        "title": "현재가 (Ticker) 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "ticker",
+              "description": "고정 값 ticker"
+            },
+            "timestamp": {
+              "type": "integer",
+              "example": 1700000027754,
+              "description": "현재 서버 시간 (단위: Unix Timestamp (밀리초))"
+            },
+            "symbol": {
+              "type": "string",
+              "example": "btc_krw",
+              "description": "거래쌍"
+            },
+            "snapshot": {
+              "type": "boolean",
+              "example": true,
+              "description": "스냅샷 데이터 여부.\n\ntrue - 구독 요청 직후 최초로 전송되는 메시지로서 요청 당시의 최신 정보를 전송합니다.\n\nfalse 또는 null - 이벤트 발생에 따라 실시간으로 전송되는 메시지입니다."
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "open": {
+                  "type": "string",
+                  "example": "94679000",
+                  "description": "최근 24시간 시가"
+                },
+                "high": {
+                  "type": "string",
+                  "example": "111162000",
+                  "description": "최근 24시간 고가"
+                },
+                "low": {
+                  "type": "string",
+                  "example": "93861000",
+                  "description": "최근 24시간 저가"
+                },
+                "close": {
+                  "type": "string",
+                  "example": "99027000",
+                  "description": "최근 24시간 종가"
+                },
+                "prevClose": {
+                  "type": "string",
+                  "example": "94679000",
+                  "description": "직전 24시간 종가"
+                },
+                "priceChange": {
+                  "type": "string",
+                  "example": "4348000",
+                  "description": "직전 종가 대비 가격 변화량. prevClose - close으로 계산합니다."
+                },
+                "priceChangePercent": {
+                  "type": "string",
+                  "example": "4.59",
+                  "description": "직전 종가 대비 가격 변화율(단위: %). 100 * (prevClose - close) / prevClose으로 계산합니다."
+                },
+                "volume": {
+                  "type": "string",
+                  "example": "147.94385655",
+                  "description": "최근 24시간 거래량(가상자산)"
+                },
+                "quoteVolume": {
+                  "type": "string",
+                  "example": "14311735005.18033",
+                  "description": "최근 24시간 거래대금(원화)"
+                },
+                "bestAskPrice": {
+                  "type": "string",
+                  "example": "99027000",
+                  "description": "매도 1호가"
+                },
+                "bestBidPrice": {
+                  "type": "string",
+                  "example": "99026000",
+                  "description": "매수 1호가"
+                },
+                "lastTradedAt": {
+                  "type": "integer",
+                  "example": 1700000010022,
+                  "description": "마지막 체결 시각 (단위: Unix Timestamp (밀리초))"
+                }
+              },
+              "required": [
+                "open",
+                "high",
+                "low",
+                "close",
+                "prevClose",
+                "priceChange",
+                "priceChangePercent",
+                "volume",
+                "quoteVolume",
+                "bestAskPrice",
+                "bestBidPrice",
+                "lastTradedAt"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "timestamp",
+            "symbol",
+            "snapshot",
+            "data"
+          ]
+        },
+        "messageId": "korbit.ws.ticker.response"
+      },
+      "OrderbookPublicRequest": {
+        "name": "OrderbookPublicRequest",
+        "title": "호가 (Orderbook) 요청",
+        "payload": {
+          "type": "array",
+          "description": "웹소켓 구독 요청 메시지 배열. 메시지를 1개만 보낼 때에도 반드시 대괄호([])로 감싸야 합니다.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "number",
+                "description": "임의의 정수 요청 ID. 입력하면 요청 성공/실패 여부와 관계 없이 제어 메시지가 전송됩니다.",
+                "example": 1
+              },
+              "method": {
+                "type": "string",
+                "description": "고정 값 subscribe 또는 unsubscribe 입력",
+                "example": "subscribe"
+              },
+              "type": {
+                "type": "string",
+                "description": "고정 값 orderbook 입력",
+                "example": "orderbook"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "btc_krw"
+                },
+                "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
+                "example": [
+                  "btc_krw",
+                  "eth_krw"
+                ]
+              },
+              "level": {
+                "type": "string",
+                "description": "오더북 모아보기 단위. 모아보기 단위는 호가 정책 조회 API로 확인할 수 있습니다. 입력하지 않을 경우 모아보기를 적용하지 않습니다.",
+                "example": "1000"
+              }
+            },
+            "required": [
+              "method",
+              "type",
+              "symbols"
+            ]
+          },
+          "minItems": 1,
+          "example": [
+            {
+              "method": "subscribe",
+              "type": "orderbook",
+              "symbols": [
+                "btc_krw"
+              ]
+            }
+          ]
+        },
+        "messageId": "korbit.ws.orderbook.request"
+      },
+      "OrderbookPublicResponse": {
+        "name": "OrderbookPublicResponse",
+        "title": "호가 (Orderbook) 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "orderbook",
+              "description": "고정 값 orderbook"
+            },
+            "timestamp": {
+              "type": "integer",
+              "example": 1700000006177,
+              "description": "현재 서버 시간 (단위: Unix Timestamp (밀리초))"
+            },
+            "symbol": {
+              "type": "string",
+              "example": "btc_krw",
+              "description": "거래쌍"
+            },
+            "snapshot": {
+              "type": "boolean",
+              "example": true,
+              "description": "스냅샷 데이터 여부.\n\ntrue - 구독 요청 직후 최초로 전송되는 메시지로서 요청 당시의 최신 정보를 전송합니다.\n\nfalse 또는 null - 이벤트 발생에 따라 실시간으로 전송되는 메시지입니다."
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "timestamp": {
+                  "type": "integer",
+                  "example": 1700000000234,
+                  "description": "호가 정보의 기준 시각 (단위: Unix Timestamp (밀리초))"
+                },
+                "asks": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "price": {
+                        "type": "string",
+                        "example": "99131000",
+                        "description": "매도호가"
+                      },
+                      "qty": {
+                        "type": "string",
+                        "example": "0.00456677",
+                        "description": "매도잔량"
+                      },
+                      "amt": {
+                        "type": "string",
+                        "description": "호가 금액 (오더북 모아보기를 사용하는 경우에만 세팅되며, 모아보기를 사용하지 않는 경우 price * qty로 계산할 수 있습니다.)",
+                        "example": "2500000"
+                      }
+                    },
+                    "required": [
+                      "price",
+                      "qty"
+                    ]
+                  },
+                  "description": "매도 호가 정보 (호가 오름차순 정렬)"
+                },
+                "bids": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "price": {
+                        "type": "string",
+                        "example": "99120000",
+                        "description": "매수호가"
+                      },
+                      "qty": {
+                        "type": "string",
+                        "example": "0.00363422",
+                        "description": "매수잔량"
+                      },
+                      "amt": {
+                        "type": "string",
+                        "description": "호가 금액 (오더북 모아보기를 사용하는 경우에만 세팅되며, 모아보기를 사용하지 않는 경우 price * qty로 계산할 수 있습니다.)",
+                        "example": "2500000"
+                      }
+                    },
+                    "required": [
+                      "price",
+                      "qty"
+                    ]
+                  },
+                  "description": "매수 호가 정보 (호가 내림차순 정렬)"
+                }
+              },
+              "required": [
+                "timestamp",
+                "asks",
+                "bids"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "timestamp",
+            "symbol",
+            "snapshot",
+            "data"
+          ]
+        },
+        "messageId": "korbit.ws.orderbook.response"
+      },
+      "TradePublicRequest": {
+        "name": "TradePublicRequest",
+        "title": "체결 (Trade) 요청",
+        "payload": {
+          "type": "array",
+          "description": "웹소켓 구독 요청 메시지 배열. 메시지를 1개만 보낼 때에도 반드시 대괄호([])로 감싸야 합니다.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "number",
+                "description": "임의의 정수 요청 ID. 입력하면 요청 성공/실패 여부와 관계 없이 제어 메시지가 전송됩니다.",
+                "example": 1
+              },
+              "method": {
+                "type": "string",
+                "description": "고정 값 subscribe 또는 unsubscribe 입력",
+                "example": "subscribe"
+              },
+              "type": {
+                "type": "string",
+                "description": "고정 값 trade 입력",
+                "example": "trade"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "btc_krw"
+                },
+                "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
+                "example": [
+                  "btc_krw",
+                  "eth_krw"
+                ]
+              }
+            },
+            "required": [
+              "method",
+              "type",
+              "symbols"
+            ]
+          },
+          "minItems": 1,
+          "example": [
+            {
+              "method": "subscribe",
+              "type": "trade",
+              "symbols": [
+                "btc_krw"
+              ]
+            }
+          ]
+        },
+        "messageId": "korbit.ws.trade.request"
+      },
+      "TradePublicResponse": {
+        "name": "TradePublicResponse",
+        "title": "체결 (Trade) 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "symbol": {
+              "type": "string",
+              "example": "btc_krw",
+              "description": "거래쌍"
+            },
+            "timestamp": {
+              "type": "integer",
+              "example": 1700000005498,
+              "description": "현재 서버 시간 (단위: Unix Timestamp (밀리초))"
+            },
+            "type": {
+              "type": "string",
+              "example": "trade",
+              "description": "고정 값 trade"
+            },
+            "snapshot": {
+              "type": "boolean",
+              "example": true,
+              "description": "스냅샷 데이터 여부.\n\ntrue - 구독 요청 직후 최초로 전송되는 메시지로서 요청 당시의 최신 정보를 전송합니다.\n\nfalse 또는 null - 이벤트 발생에 따라 실시간으로 전송되는 메시지입니다."
+            },
+            "data": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "integer",
+                    "example": 1700000001239,
+                    "description": "체결 시각 (단위: Unix Timestamp (밀리초))"
+                  },
+                  "price": {
+                    "type": "string",
+                    "example": "98909000",
+                    "description": "체결 가격"
+                  },
+                  "qty": {
+                    "type": "string",
+                    "example": "0.00146702",
+                    "description": "체결량"
+                  },
+                  "isBuyerTaker": {
+                    "type": "boolean",
+                    "example": true,
+                    "description": "매수 주문으로 인해 발생한 체결인지 여부"
+                  },
+                  "tradeId": {
+                    "type": "integer",
+                    "example": 123456,
+                    "description": "거래 체결 ID (각 거래쌍마다 생성된 개별 거래 체결 건의 ID)"
+                  }
+                },
+                "required": [
+                  "timestamp",
+                  "price",
+                  "qty",
+                  "isBuyerTaker",
+                  "tradeId"
+                ]
+              }
+            }
+          },
+          "required": [
+            "symbol",
+            "timestamp",
+            "type",
+            "snapshot",
+            "data"
+          ]
+        },
+        "messageId": "korbit.ws.trade.response"
+      },
+      "MyOrderPrivateRequest": {
+        "name": "MyOrderPrivateRequest",
+        "title": "내 주문 (MyOrder) 요청",
+        "payload": {
+          "type": "array",
+          "description": "웹소켓 구독 요청 메시지 배열. 메시지를 1개만 보낼 때에도 반드시 대괄호([])로 감싸야 합니다.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "number",
+                "description": "임의의 정수 요청 ID. 입력하면 요청 성공/실패 여부와 관계 없이 제어 메시지가 전송됩니다.",
+                "example": 1
+              },
+              "method": {
+                "type": "string",
+                "description": "고정 값 subscribe 또는 unsubscribe 입력",
+                "example": "subscribe"
+              },
+              "type": {
+                "type": "string",
+                "description": "고정 값 myOrder 입력",
+                "example": "myOrder"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "btc_krw"
+                },
+                "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
+                "example": [
+                  "btc_krw",
+                  "eth_krw"
+                ]
+              }
+            },
+            "required": [
+              "method",
+              "type",
+              "symbols"
+            ]
+          },
+          "minItems": 1,
+          "example": [
+            {
+              "method": "subscribe",
+              "type": "myOrder",
+              "symbols": [
+                "btc_krw"
+              ]
+            }
+          ]
+        },
+        "messageId": "korbit.ws.my-order.request"
+      },
+      "MyOrderPrivateResponse": {
+        "name": "MyOrderPrivateResponse",
+        "title": "내 주문 (MyOrder) 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "symbol": {
+              "type": "string",
+              "example": "btc_krw",
+              "description": "거래쌍"
+            },
+            "timestamp": {
+              "type": "integer",
+              "example": 1700000000000,
+              "description": "현재 서버 시간 (단위: Unix Timestamp (밀리초))"
+            },
+            "channelType": {
+              "type": "string",
+              "example": "myOrder",
+              "description": "고정 값 myOrder"
+            },
+            "order": {
+              "type": "object",
+              "properties": {
+                "orders": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "orderId": {
+                        "type": "integer",
+                        "example": 123456,
+                        "description": "주문 ID"
+                      },
+                      "status": {
+                        "type": "string",
+                        "example": "partiallyFilled",
+                        "description": "주문 상태\n\n- pending 주문 접수 대기중. 잔고가 부족한 경우 주문이 실패해 expired 상태로 전환될 수 있습니다.\n\n- unfilled 전량 미체결 (REST API의 open 상태와 동일)\n\n- filled 전량 체결\n\n- canceled 전량 취소\n\n- partiallyFilled 부분 체결\n\n- partiallyFilledCanceled 부분 체결 후 잔량 취소\n\n- expired 주문 접수 실패",
+                        "enum": [
+                          "pending",
+                          "unfilled",
+                          "filled",
+                          "canceled",
+                          "partiallyFilled",
+                          "partiallyFilledCanceled",
+                          "expired"
+                        ]
+                      },
+                      "side": {
+                        "type": "string",
+                        "example": "buy",
+                        "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                        "enum": [
+                          "buy",
+                          "sell"
+                        ]
+                      },
+                      "orderType": {
+                        "type": "string",
+                        "example": "limit",
+                        "description": "주문 유형 구분\n\n- limit 지정가 주문\n\n- market 시장가 주문\n\n- best BBO 주문 (Best-Bid-Offer, 최우선/최유리)",
+                        "enum": [
+                          "limit",
+                          "market",
+                          "best"
+                        ]
+                      },
+                      "timeInForce": {
+                        "type": "string",
+                        "example": "gtc",
+                        "description": "주문 취소 조건\n\n- gtc 일반적인 지정가 주문. 전량 체결되거나 취소될 때까지 유효한 주문입니다. (Good-Till-Canceled)\n\n- ioc 주문호가 또는 더 좋은 가격으로 즉시 체결시킵니다. 체결되지 않은 잔량은 취소됩니다. (Immediate-Or-Cancel)\n\n- fok 주문호가 또는 더 좋은 가격으로 즉시 전량 체결시킵니다. 전량 체결이 불가하다면 주문이 취소됩니다. (Fill-Or-Kill)\n\n- po 주문 입력 시 바로 체결되는 상황이라면 주문이 취소됩니다. 즉, 메이커(Maker) 주문만 발생합니다. (Post-Only)",
+                        "enum": [
+                          "gtc",
+                          "ioc",
+                          "fok",
+                          "po"
+                        ]
+                      },
+                      "price": {
+                        "type": "string",
+                        "example": "99017000",
+                        "description": "지정가 주문의 주문 가격(주문호가).\n\n시장가 주문은 주문 가격이 표시되지 않습니다."
+                      },
+                      "qty": {
+                        "type": "string",
+                        "example": "0.9",
+                        "description": "주문 수량 (가상자산). 지정가, BBO 및 시장가 매도 주문에서만 표시되며, BBO 매수 주문에서는 주문 확정 이후 표시됩니다."
+                      },
+                      "filledQty": {
+                        "type": "string",
+                        "example": "0.53793136",
+                        "description": "체결량 (체결 수량)"
+                      },
+                      "amt": {
+                        "type": "string",
+                        "example": "89115300",
+                        "description": "주문 대금 (KRW). 시장가 매수 및 BBO 매수 주문에서만 표시됩니다."
+                      },
+                      "filledAmt": {
+                        "type": "string",
+                        "example": "53260583.9536",
+                        "description": "체결금액"
+                      },
+                      "avgPrice": {
+                        "type": "string",
+                        "example": "99010000",
+                        "description": "평균 체결 단가"
+                      },
+                      "createdAt": {
+                        "type": "integer",
+                        "example": 1700000001000,
+                        "description": "주문 접수 시각 (timestamp)"
+                      },
+                      "lastFilledAt": {
+                        "type": "integer",
+                        "example": 1700000002000,
+                        "description": "마지막 체결 시각 (timestamp)"
+                      },
+                      "clientOrderId": {
+                        "type": "string",
+                        "example": "tjcfiDfSjq94giNAat31",
+                        "description": "주문 시 입력한 clientOrderId 값"
+                      }
+                    },
+                    "required": [
+                      "orderId",
+                      "status",
+                      "side",
+                      "orderType",
+                      "timeInForce",
+                      "price",
+                      "qty",
+                      "filledQty",
+                      "amt",
+                      "filledAmt",
+                      "avgPrice",
+                      "createdAt",
+                      "lastFilledAt",
+                      "clientOrderId"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "orders"
+              ]
+            }
+          },
+          "required": [
+            "symbol",
+            "timestamp",
+            "channelType",
+            "order"
+          ]
+        },
+        "messageId": "korbit.ws.my-order.response"
+      },
+      "MyTradePrivateRequest": {
+        "name": "MyTradePrivateRequest",
+        "title": "내 체결 (MyTrade) 요청",
+        "payload": {
+          "type": "array",
+          "description": "웹소켓 구독 요청 메시지 배열. 메시지를 1개만 보낼 때에도 반드시 대괄호([])로 감싸야 합니다.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "number",
+                "description": "임의의 정수 요청 ID. 입력하면 요청 성공/실패 여부와 관계 없이 제어 메시지가 전송됩니다.",
+                "example": 1
+              },
+              "method": {
+                "type": "string",
+                "description": "고정 값 subscribe 또는 unsubscribe 입력",
+                "example": "subscribe"
+              },
+              "type": {
+                "type": "string",
+                "description": "고정 값 myTrade 입력",
+                "example": "myTrade"
+              },
+              "symbols": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "btc_krw"
+                },
+                "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
+                "example": [
+                  "btc_krw",
+                  "eth_krw"
+                ]
+              }
+            },
+            "required": [
+              "method",
+              "type",
+              "symbols"
+            ]
+          },
+          "minItems": 1,
+          "example": [
+            {
+              "method": "subscribe",
+              "type": "myTrade",
+              "symbols": [
+                "btc_krw"
+              ]
+            }
+          ]
+        },
+        "messageId": "korbit.ws.my-trade.request"
+      },
+      "MyTradePrivateResponse": {
+        "name": "MyTradePrivateResponse",
+        "title": "내 체결 (MyTrade) 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "symbol": {
+              "type": "string",
+              "example": "btc_krw",
+              "description": "거래쌍"
+            },
+            "timestamp": {
+              "type": "integer",
+              "example": 1700000001000,
+              "description": "현재 서버 시간 (단위: Unix Timestamp (밀리초))"
+            },
+            "channelType": {
+              "type": "string",
+              "example": "myTrade",
+              "description": "고정 값 myTrade"
+            },
+            "trade": {
+              "type": "object",
+              "properties": {
+                "trades": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "tradeId": {
+                        "type": "integer",
+                        "example": 123456,
+                        "description": "거래 체결 ID (각 거래쌍마다 생성된 개별 거래 체결 건의 ID)"
+                      },
+                      "orderId": {
+                        "type": "integer",
+                        "example": 456789,
+                        "description": "원주문 ID"
+                      },
+                      "side": {
+                        "type": "string",
+                        "example": "buy",
+                        "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                        "enum": [
+                          "buy",
+                          "sell"
+                        ]
+                      },
+                      "price": {
+                        "type": "string",
+                        "example": "99051000",
+                        "description": "체결 단가"
+                      },
+                      "qty": {
+                        "type": "string",
+                        "example": "0.0013",
+                        "description": "체결 수량"
+                      },
+                      "fee": {
+                        "type": "string",
+                        "example": "50",
+                        "description": "수수료"
+                      },
+                      "feeCurrency": {
+                        "type": "string",
+                        "example": "krw",
+                        "description": "수수료 자산"
+                      },
+                      "filledAt": {
+                        "type": "integer",
+                        "example": 1700000000000,
+                        "description": "체결 시각 (timestamp)"
+                      },
+                      "isTaker": {
+                        "type": "boolean",
+                        "example": true,
+                        "description": "테이커(Taker) 체결 여부(Taker=true, Maker=false)"
+                      }
+                    },
+                    "required": [
+                      "tradeId",
+                      "orderId",
+                      "side",
+                      "price",
+                      "qty",
+                      "fee",
+                      "feeCurrency",
+                      "filledAt",
+                      "isTaker"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "trades"
+              ]
+            }
+          },
+          "required": [
+            "symbol",
+            "timestamp",
+            "channelType",
+            "trade"
+          ]
+        },
+        "messageId": "korbit.ws.my-trade.response"
+      },
+      "MyAssetPrivateRequest": {
+        "name": "MyAssetPrivateRequest",
+        "title": "내 자산 (MyAsset) 요청",
+        "payload": {
+          "type": "array",
+          "description": "웹소켓 구독 요청 메시지 배열. 메시지를 1개만 보낼 때에도 반드시 대괄호([])로 감싸야 합니다.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "number",
+                "description": "임의의 정수 요청 ID. 입력하면 요청 성공/실패 여부와 관계 없이 제어 메시지가 전송됩니다.",
+                "example": 1
+              },
+              "method": {
+                "type": "string",
+                "description": "고정 값 subscribe 또는 unsubscribe 입력",
+                "example": "subscribe"
+              },
+              "type": {
+                "type": "string",
+                "description": "고정 값 myAsset 입력",
+                "example": "myAsset"
+              }
+            },
+            "required": [
+              "method",
+              "type"
+            ]
+          },
+          "minItems": 1,
+          "example": [
+            {
+              "method": "subscribe",
+              "type": "myAsset"
+            }
+          ]
+        },
+        "messageId": "korbit.ws.my-asset.request"
+      },
+      "MyAssetPrivateResponse": {
+        "name": "MyAssetPrivateResponse",
+        "title": "내 자산 (MyAsset) 응답",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "timestamp": {
+              "type": "integer",
+              "example": 1700000001000,
+              "description": "현재 서버 시간 (단위: Unix Timestamp (밀리초))"
+            },
+            "channelType": {
+              "type": "string",
+              "example": "myAsset",
+              "description": "고정 값 myAsset"
+            },
+            "asset": {
+              "type": "object",
+              "properties": {
+                "assets": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "currency": {
+                        "type": "string",
+                        "example": "btc",
+                        "description": "자산 이름"
+                      },
+                      "balance": {
+                        "type": "string",
+                        "example": "10",
+                        "description": "보유 수량. 사용 가능 수량 + 거래 중 수량 + 출금 중 수량으로 계산합니다."
+                      },
+                      "available": {
+                        "type": "string",
+                        "example": "7",
+                        "description": "사용 가능 수량"
+                      },
+                      "tradeInUse": {
+                        "type": "string",
+                        "example": "2",
+                        "description": "거래 중 수량"
+                      },
+                      "withdrawalInUse": {
+                        "type": "string",
+                        "example": "1",
+                        "description": "출금 중 수량"
+                      },
+                      "avgPrice": {
+                        "type": "string",
+                        "example": "50000",
+                        "description": "매수평균가"
+                      },
+                      "updatedAt": {
+                        "type": "integer",
+                        "example": 1700000000000,
+                        "description": "변동 시각"
+                      }
+                    },
+                    "required": [
+                      "currency",
+                      "balance",
+                      "available",
+                      "tradeInUse",
+                      "withdrawalInUse",
+                      "avgPrice",
+                      "updatedAt"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "assets"
+              ]
+            }
+          },
+          "required": [
+            "timestamp",
+            "channelType",
+            "asset"
+          ]
+        },
+        "messageId": "korbit.ws.my-asset.response"
+      }
+    }
+  },
+  "id": "urn:exhub:asyncapi:korbit:ws"
+}

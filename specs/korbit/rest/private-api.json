@@ -1,0 +1,3600 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Korbit Private REST API",
+    "description": "코빗 공식 문서 기준 Private REST API 스펙입니다.",
+    "version": "v2",
+    "contact": {
+      "name": "코빗 API Docs",
+      "url": "https://docs.korbit.co.kr/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.korbit.co.kr"
+    }
+  ],
+  "tags": [
+    {
+      "name": "주문"
+    },
+    {
+      "name": "자산"
+    },
+    {
+      "name": "가상자산 입금"
+    },
+    {
+      "name": "가상자산 출금"
+    },
+    {
+      "name": "원화 입출금"
+    },
+    {
+      "name": "기타"
+    }
+  ],
+  "paths": {
+    "/v2/orders": {
+      "get": {
+        "tags": [
+          "주문"
+        ],
+        "summary": "개별 주문 조회",
+        "description": "주문 ID(orderId) 또는 사용자 지정 주문 ID(clientOrderId)를 이용해 개별 주문 정보를 조회합니다.\n\n단, expired, canceled 상태의 주문은 종결 후 약 3일이 지난 후에는 조회할 수 없습니다.",
+        "operationId": "getV2Orders",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_orders"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_orders",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "integer",
+                          "example": 1234,
+                          "description": "주문 ID"
+                        },
+                        "clientOrderId": {
+                          "type": "string",
+                          "example": "20141231-155959-abcdef",
+                          "description": "사용자 지정 주문 ID"
+                        },
+                        "symbol": {
+                          "type": "string",
+                          "example": "btc_krw",
+                          "description": "거래쌍의 심볼"
+                        },
+                        "orderType": {
+                          "type": "string",
+                          "example": "limit",
+                          "description": "주문 유형 구분\n\n- limit 지정가 주문\n\n- market 시장가 주문\n\n- best BBO 주문 (Best-Bid-Offer, 최우선/최유리)",
+                          "enum": [
+                            "limit",
+                            "market",
+                            "best"
+                          ]
+                        },
+                        "side": {
+                          "type": "string",
+                          "example": "buy",
+                          "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                          "enum": [
+                            "buy",
+                            "sell"
+                          ]
+                        },
+                        "timeInForce": {
+                          "type": "string",
+                          "example": "gtc",
+                          "description": "주문 취소 조건\n\n- gtc 일반적인 지정가 주문. 전량 체결되거나 취소될 때까지 유효한 주문입니다. (Good-Till-Canceled)\n\n- ioc 주문호가 또는 더 좋은 가격으로 즉시 체결시킵니다. 체결되지 않은 잔량은 취소됩니다. (Immediate-Or-Cancel)\n\n- fok 주문호가 또는 더 좋은 가격으로 즉시 전량 체결시킵니다. 전량 체결이 불가하다면 주문이 취소됩니다. (Fill-Or-Kill)\n\n- po 주문 입력 시 바로 체결되는 상황이라면 주문이 취소됩니다. 즉, 메이커(Maker) 주문만 발생합니다. (Post-Only)\n\nTime in Force 값을 입력하지 않았다면 다음 기본값이 설정됩니다.\n\n- 지정가 주문: gtc\n\n- 시장가 주문: ioc (시장가 주문에서는 ioc만 사용할 수 있습니다.)\n\nBBO 주문에서는 Time in Force 값을 반드시 직접 입력해야 합니다.",
+                          "enum": [
+                            "gtc",
+                            "ioc",
+                            "fok",
+                            "po"
+                          ]
+                        },
+                        "avgPrice": {
+                          "type": "string",
+                          "example": "5000",
+                          "description": "평균 체결 단가"
+                        },
+                        "price": {
+                          "type": "string",
+                          "example": "5000",
+                          "description": "지정가, BBO 주문의 주문 가격(호가).\n\n시장가 주문은 주문 가격이 표시되지 않으며, BBO 주문은 주문 확정 이후 표시됩니다."
+                        },
+                        "qty": {
+                          "type": "string",
+                          "example": "10",
+                          "description": "주문 수량 (가상자산). 지정가, BBO 및 시장가 매도 주문에서만 표시되며, BBO 매수 주문에서는 주문 확정 이후 표시됩니다."
+                        },
+                        "filledQty": {
+                          "type": "string",
+                          "example": "1",
+                          "description": "체결량 (체결 수량)"
+                        },
+                        "filledAmt": {
+                          "type": "string",
+                          "example": "5000",
+                          "description": "체결금액"
+                        },
+                        "createdAt": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "주문 접수 시각 (timestamp)"
+                        },
+                        "lastFilledAt": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "마지막 체결 시각 (timestamp)"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "partiallyFilled",
+                          "description": "주문 상태\n\n- pending 주문 접수 대기 중. 잔고가 부족하거나 timeInForce 조건에 해당할 경우, 주문이 실패해 expired 상태로 될 수 있습니다.\n\n- open 전량 미체결\n\n- filled 전량 체결\n\n- canceled 전량 취소\n\n- partiallyFilled 부분 체결\n\n- partiallyFilledCanceled 부분 체결 후 잔량 취소\n\n- expired 주문 접수 실패 (잔고 부족 또는 timeInForce 조건 해당 시)",
+                          "enum": [
+                            "pending",
+                            "open",
+                            "filled",
+                            "canceled",
+                            "partiallyFilled",
+                            "partiallyFilledCanceled",
+                            "expired"
+                          ]
+                        },
+                        "amt": {
+                          "type": "string",
+                          "description": "주문 대금 (KRW). 시장가 매수 및 BBO 매수 주문에서만 표시됩니다.",
+                          "example": "50000"
+                        },
+                        "triggeredAt": {
+                          "type": "number",
+                          "description": "조건부 주문 발동 시각 (timestamp)",
+                          "example": 1700000000000
+                        }
+                      },
+                      "required": [
+                        "orderId",
+                        "clientOrderId",
+                        "symbol",
+                        "orderType",
+                        "side",
+                        "timeInForce",
+                        "avgPrice",
+                        "price",
+                        "qty",
+                        "filledQty",
+                        "filledAmt",
+                        "createdAt",
+                        "lastFilledAt",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "orderId": 1234,
+                    "clientOrderId": "20141231-155959-abcdef",
+                    "symbol": "btc_krw",
+                    "orderType": "limit",
+                    "side": "buy",
+                    "timeInForce": "gtc",
+                    "avgPrice": "5000",
+                    "price": "5000",
+                    "qty": "10",
+                    "filledQty": "1",
+                    "filledAmt": "5000",
+                    "createdAt": 1700000000000,
+                    "lastFilledAt": 1700000000000,
+                    "status": "partiallyFilled"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "주문 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "orderId",
+            "in": "query",
+            "required": false,
+            "description": "주문 시 생성된 orderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1234
+          },
+          {
+            "name": "clientOrderId",
+            "in": "query",
+            "required": false,
+            "description": "주문 시 입력한 clientOrderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "20141231-155959-abcdef"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "주문"
+        ],
+        "summary": "주문하기",
+        "description": "신규 주문을 생성합니다.",
+        "operationId": "postV2Orders",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-post-_v2_orders"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-post-_v2_orders",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "orderId": {
+                          "type": "integer",
+                          "example": 1234,
+                          "description": "주문 ID"
+                        }
+                      },
+                      "required": [
+                        "orderId"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "orderId": 1234
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "주문 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "symbol": {
+                    "type": "string",
+                    "description": "대상 거래쌍의 심볼",
+                    "example": "btc_krw"
+                  },
+                  "side": {
+                    "type": "string",
+                    "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                    "example": "buy",
+                    "enum": [
+                      "buy",
+                      "sell"
+                    ]
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "지정가 주문의 주문 가격.\n\n시장가, BBO 주문의 경우 생략합니다.",
+                    "example": "250000"
+                  },
+                  "qty": {
+                    "type": "string",
+                    "description": "주문 수량(가상자산).\n\n지정가 주문과 시장가 매도 및 BBO 매도 주문인 경우 사용하며, 시장가 매수 및 BBO 매수 주문의 경우 생략합니다.",
+                    "example": "10"
+                  },
+                  "amt": {
+                    "type": "string",
+                    "description": "주문 대금(KRW).\n\n시장가 매수 및 BBO 매수 주문인 경우 사용하며, 지정가 주문과 시장가 매도 및 BBO 매도 주문의 경우 생략합니다.",
+                    "example": "250000"
+                  },
+                  "orderType": {
+                    "type": "string",
+                    "description": "주문 유형 구분\n\n- limit 지정가 주문\n\n- market 시장가 주문\n\n- best BBO 주문 (Best-Bid-Offer, 최유리/최우선 주문). BBO 주문은 timeInForce 및 bestNth 값을 반드시 입력해야 합니다.",
+                    "example": "limit",
+                    "enum": [
+                      "limit",
+                      "market",
+                      "best"
+                    ]
+                  },
+                  "bestNth": {
+                    "type": "number",
+                    "description": "주문 유형이 best인 경우 주문 가격을 선택합니다. (그 외 주문 유형에서는 생략합니다.)\n\n- timeInForce가 gtc, ioc, fok인 경우, 상대 방향 N호가(최유리)를 의미하며 1~5 사이의 값을 입력합니다.\n\n- timeInForce가 po인 경우, 자기 방향 N호가(최우선)를 의미하며 1~5 사이의 값을 입력합니다.",
+                    "example": 1,
+                    "enum": [
+                      "timeInForce"
+                    ]
+                  },
+                  "timeInForce": {
+                    "type": "string",
+                    "description": "주문 취소 조건\n\n- gtc 일반적인 지정가 주문. 전량 체결되거나 취소될 때까지 유효한 주문입니다. (Good-Till-Canceled)\n\n- ioc 주문호가 또는 더 좋은 가격으로 즉시 체결시킵니다. 체결되지 않은 잔량은 취소됩니다. (Immediate-Or-Cancel)\n\n- fok 주문호가 또는 더 좋은 가격으로 즉시 전량 체결시킵니다. 전량 체결이 불가하다면 주문이 취소됩니다. (Fill-Or-Kill)\n\n- po 주문 입력 시 바로 체결되는 상황이라면 주문이 취소됩니다. 즉, 메이커(Maker) 주문만 발생합니다. (Post-Only)\n\nTime in Force 값을 입력하지 않았다면 다음 기본값이 설정됩니다.\n\n- 지정가 주문: gtc\n\n- 시장가 주문: ioc (시장가 주문에서는 ioc만 사용할 수 있습니다.)\n\nBBO 주문에서는 Time in Force 값을 반드시 직접 입력해야 합니다.",
+                    "example": "gtc",
+                    "enum": [
+                      "gtc",
+                      "ioc",
+                      "fok",
+                      "po"
+                    ]
+                  },
+                  "clientOrderId": {
+                    "type": "string",
+                    "description": "사용자 지정 주문 ID. 동일한 clientOrderId로 여러 번 요청해도 한 번만 처리되며, GET /v2/orders API에서 clientOrderId로 주문을 검색할 수 있습니다.\n\n숫자와 영문 대소문자 및 -, _, . 등으로 이루어진 문자열을 최대 36자까지 설정할 수 있습니다. 정규표현식: [0-9a-zA-Z.:_-]{1,36}\n\n단, expired, canceled 상태의 주문은 종결 후 약 3일이 지난 후에는 clientOrderId로 검색할 수 없거나 그 clientOrderId를 다시 사용할 수 있습니다.",
+                    "example": "20141231-155959-abcdef"
+                  },
+                  "pp": {
+                    "type": "string",
+                    "description": "가격 보호 사용 여부. true를 입력하면 가격 보호 기능을 사용해, 이 주문은 Taker 체결 시 가격 보호 범위 안에서만 체결되게 합니다.\n\nppPercent 값으로 가격 보호 범위를 설정할 수 있습니다."
+                  },
+                  "ppPercent": {
+                    "type": "string",
+                    "description": "가격 보호 범위. 1 이상 100 이하의 정수를 입력합니다. 가격 보호 범위가 5라면, 이 주문은 Taker 체결 시 중간가(매도 1호가와 매수 1호가의 중간) 대비 5% 내에서만 체결되고 체결되지 않은 수량은 취소됩니다.\n\n가격 보호를 사용하지만 ppPercent를 입력하지 않았다면 거래소 기본값(5)을 사용합니다."
+                  },
+                  "timestamp": {
+                    "type": "number",
+                    "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+                    "example": "1719232467910"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다."
+                  },
+                  "recvWindow": {
+                    "type": "number",
+                    "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+                    "example": "5000"
+                  }
+                },
+                "required": [
+                  "symbol",
+                  "side",
+                  "orderType",
+                  "timestamp",
+                  "signature"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "주문"
+        ],
+        "summary": "주문 취소하기",
+        "description": "주문 취소 요청을 전송합니다.\n\nAPI 요청이 성공한 경우 주문 취소 요청이 성공적으로 접수되었음을 뜻합니다.\n\n오류 코드가 ORDER_ALREADY_CANCELED, ORDER_ALREADY_FILLED, ORDER_ALREADY_EXPIRED 중 하나인 경우, 지정한 주문이 이미 종결되었음을 뜻합니다.",
+        "operationId": "deleteV2Orders",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-delete-_v2_orders"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-delete-_v2_orders",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "주문 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "orderId",
+            "in": "query",
+            "required": false,
+            "description": "주문하기 API에서 생성된 orderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1234
+          },
+          {
+            "name": "clientOrderId",
+            "in": "query",
+            "required": false,
+            "description": "주문하기 API 요청 시 입력한 clientOrderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "20141231-155959-abcdef"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/openOrders": {
+      "get": {
+        "tags": [
+          "주문"
+        ],
+        "summary": "미체결 주문 조회",
+        "description": "단일 거래쌍의 미체결 주문 목록을 조회합니다.\n\nopen, partiallyFilled 상태인 주문만 조회됩니다.",
+        "operationId": "getV2OpenOrders",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_openOrders"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_openOrders",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderId": {
+                      "type": "number",
+                      "description": "주문 ID",
+                      "example": 1234
+                    },
+                    "clientOrderId": {
+                      "type": "string",
+                      "description": "사용자 지정 주문 ID",
+                      "example": "20141231-155959-abcdef"
+                    },
+                    "orderType": {
+                      "type": "string",
+                      "description": "주문 유형 구분\n\n- limit 지정가 주문\n\n- market 시장가 주문\n\n- best BBO 주문 (Best-Bid-Offer, 최우선/최유리)",
+                      "example": "limit",
+                      "enum": [
+                        "limit",
+                        "market",
+                        "best"
+                      ]
+                    },
+                    "side": {
+                      "type": "string",
+                      "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                      "example": "buy",
+                      "enum": [
+                        "buy",
+                        "sell"
+                      ]
+                    },
+                    "price": {
+                      "type": "string",
+                      "description": "지정가, BBO 주문의 주문 가격(호가).\n\n시장가 주문은 주문 가격이 표시되지 않으며, BBO 주문은 주문 확정 이후 표시됩니다.",
+                      "example": "5000"
+                    },
+                    "qty": {
+                      "type": "string",
+                      "description": "주문 수량 (가상자산). 지정가, BBO 및 시장가 매도 주문에서만 표시되며, BBO 매수 주문에서는 주문 확정 이후 표시됩니다.",
+                      "example": "10"
+                    },
+                    "amt": {
+                      "type": "string",
+                      "description": "주문 대금 (KRW). 시장가 매수 및 BBO 매수 주문에서만 표시됩니다.",
+                      "example": "50000"
+                    },
+                    "filledQty": {
+                      "type": "string",
+                      "description": "체결량 (체결 수량)",
+                      "example": "10"
+                    },
+                    "filledAmt": {
+                      "type": "string",
+                      "description": "체결금액",
+                      "example": "50000"
+                    },
+                    "avgPrice": {
+                      "type": "string",
+                      "description": "평균 체결 단가",
+                      "example": "5000"
+                    },
+                    "createdAt": {
+                      "type": "number",
+                      "description": "주문 접수 시각 (timestamp)",
+                      "example": 1700000000000
+                    },
+                    "lastFilledAt": {
+                      "type": "number",
+                      "description": "마지막 체결 시각 (timestamp)",
+                      "example": 1700000000000
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "주문 상태\n\n- pending 주문 접수 대기 중. 잔고가 부족하거나 timeInForce 조건에 해당할 경우, 주문이 실패해 expired 상태로 될 수 있습니다.\n\n- open 전량 미체결\n\n- filled 전량 체결\n\n- canceled 전량 취소\n\n- partiallyFilled 부분 체결\n\n- partiallyFilledCanceled 부분 체결 후 잔량 취소\n\n- expired 주문 접수 실패 (잔고 부족 또는 timeInForce 조건 해당 시)",
+                      "example": "partiallyFilled",
+                      "enum": [
+                        "pending",
+                        "open",
+                        "filled",
+                        "canceled",
+                        "partiallyFilled",
+                        "partiallyFilledCanceled",
+                        "expired"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "orderId",
+                    "orderType",
+                    "side",
+                    "filledQty",
+                    "filledAmt",
+                    "createdAt",
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "주문 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "최대 조회 건수 (범위: 1 - 1000, 기본값 500)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/allOrders": {
+      "get": {
+        "tags": [
+          "주문"
+        ],
+        "summary": "최근 주문 내역 조회",
+        "description": "단일 거래쌍의 최근 주문 목록을 조회합니다. 주문 생성 시각 기준으로 최근 36시간의 주문 내역만 조회 가능합니다.\n\n이 API는 주문 이력 확인을 위한 것으로 제공되는 데이터에 수 초 가량의 지연이 발생할 수 있습니다.\n\n지연 없는 현재 상태의 데이터가 필요할 경우 개별 주문 조회 또는 미체결 주문 조회 API를 사용해주세요.",
+        "operationId": "getV2AllOrders",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_allOrders"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_allOrders",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "orderId": {
+                      "type": "number",
+                      "description": "주문 ID",
+                      "example": 1234
+                    },
+                    "clientOrderId": {
+                      "type": "string",
+                      "description": "사용자 지정 주문 ID",
+                      "example": "20141231-155959-abcdef"
+                    },
+                    "symbol": {
+                      "type": "string",
+                      "description": "거래쌍의 심볼",
+                      "example": "btc_krw"
+                    },
+                    "orderType": {
+                      "type": "string",
+                      "description": "주문 유형 구분\n\n- limit 지정가 주문\n\n- market 시장가 주문\n\n- best BBO 주문 (Best-Bid-Offer, 최우선/최유리)",
+                      "example": "limit",
+                      "enum": [
+                        "limit",
+                        "market",
+                        "best"
+                      ]
+                    },
+                    "side": {
+                      "type": "string",
+                      "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                      "example": "buy",
+                      "enum": [
+                        "buy",
+                        "sell"
+                      ]
+                    },
+                    "timeInForce": {
+                      "type": "string",
+                      "description": "주문 취소 조건\n\n- gtc 일반적인 지정가 주문. 전량 체결되거나 취소될 때까지 유효한 주문입니다. (Good-Till-Canceled)\n\n- ioc 주문호가 또는 더 좋은 가격으로 즉시 체결시킵니다. 체결되지 않은 잔량은 취소됩니다. (Immediate-Or-Cancel)\n\n- fok 주문호가 또는 더 좋은 가격으로 즉시 전량 체결시킵니다. 전량 체결이 불가하다면 주문이 취소됩니다. (Fill-Or-Kill)\n\n- po 주문 입력 시 바로 체결되는 상황이라면 주문이 취소됩니다. 즉, 메이커(Maker) 주문만 발생합니다. (Post-Only)\n\nTime in Force 값을 입력하지 않았다면 다음 기본값이 설정됩니다.\n\n- 지정가 주문: gtc\n\n- 시장가 주문: ioc (시장가 주문에서는 ioc만 사용할 수 있습니다.)\n\nBBO 주문에서는 Time in Force 값을 반드시 직접 입력해야 합니다.",
+                      "example": "gtc",
+                      "enum": [
+                        "gtc",
+                        "ioc",
+                        "fok",
+                        "po"
+                      ]
+                    },
+                    "price": {
+                      "type": "string",
+                      "description": "지정가, BBO 주문의 주문 가격(호가).\n\n시장가 주문은 주문 가격이 표시되지 않으며, BBO 주문은 주문 확정 이후 표시됩니다.",
+                      "example": "5000"
+                    },
+                    "qty": {
+                      "type": "string",
+                      "description": "주문 수량 (가상자산). 지정가, BBO 및 시장가 매도 주문에서만 표시되며, BBO 매수 주문에서는 주문 확정 이후 표시됩니다.",
+                      "example": "10"
+                    },
+                    "amt": {
+                      "type": "string",
+                      "description": "주문 대금 (KRW). 시장가 매수 및 BBO 매수 주문에서만 표시됩니다.",
+                      "example": "50000"
+                    },
+                    "filledQty": {
+                      "type": "string",
+                      "description": "체결량 (체결 수량)",
+                      "example": "10"
+                    },
+                    "filledAmt": {
+                      "type": "string",
+                      "description": "체결금액",
+                      "example": "50000"
+                    },
+                    "avgPrice": {
+                      "type": "string",
+                      "description": "평균 체결 단가",
+                      "example": "5000"
+                    },
+                    "createdAt": {
+                      "type": "number",
+                      "description": "주문 접수 시각 (timestamp)",
+                      "example": 1700000000000
+                    },
+                    "lastFilledAt": {
+                      "type": "number",
+                      "description": "마지막 체결 시각 (timestamp)",
+                      "example": 1700000000000
+                    },
+                    "triggeredAt": {
+                      "type": "number",
+                      "description": "조건부 주문 발동 시각 (timestamp)",
+                      "example": 1700000000000
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "주문 상태\n\n- pending 주문 접수 대기 중. 잔고가 부족하거나 timeInForce 조건에 해당할 경우, 주문이 실패해 expired 상태로 될 수 있습니다.\n\n- open 전량 미체결\n\n- filled 전량 체결\n\n- canceled 전량 취소\n\n- partiallyFilled 부분 체결\n\n- partiallyFilledCanceled 부분 체결 후 잔량 취소\n\n- expired 주문 접수 실패 (잔고 부족 또는 timeInForce 조건 해당 시)",
+                      "example": "partiallyFilled",
+                      "enum": [
+                        "pending",
+                        "open",
+                        "filled",
+                        "canceled",
+                        "partiallyFilled",
+                        "partiallyFilledCanceled",
+                        "expired"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "orderId",
+                    "symbol",
+                    "orderType",
+                    "side",
+                    "filledQty",
+                    "filledAmt",
+                    "createdAt",
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "주문 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "required": false,
+            "description": "조회 시작 시각(timestamp). 현재 시간으로부터 36시간 전 자료까지만 조회 가능합니다. (기본값: 36시간 전)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "required": false,
+            "description": "조회 종료 시각(timestamp). (기본값: 현재)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "최대 조회 건수 (범위: 1 - 1000, 기본값 500)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/myTrades": {
+      "get": {
+        "tags": [
+          "주문"
+        ],
+        "summary": "최근 체결 내역 조회",
+        "description": "단일 거래쌍의 최근 체결 목록을 조회합니다. 최근 36시간의 체결 내역만 조회 가능합니다.\n\n이 API는 체결 이력 확인을 위한 API로 제공되는 데이터에 수 초 가량의 지연이 발생할 수 있습니다.",
+        "operationId": "getV2MyTrades",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_myTrades"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_myTrades",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "symbol": {
+                      "type": "string",
+                      "description": "거래쌍의 심볼",
+                      "example": "btc_krw"
+                    },
+                    "tradeId": {
+                      "type": "number",
+                      "description": "거래 체결 ID (각 거래쌍마다 생성된 개별 거래 체결 건의 ID)",
+                      "example": 1234
+                    },
+                    "orderId": {
+                      "type": "number",
+                      "description": "원주문 ID",
+                      "example": 1234
+                    },
+                    "side": {
+                      "type": "string",
+                      "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
+                      "example": "buy",
+                      "enum": [
+                        "buy",
+                        "sell"
+                      ]
+                    },
+                    "price": {
+                      "type": "string",
+                      "description": "체결 단가",
+                      "example": "5000"
+                    },
+                    "qty": {
+                      "type": "string",
+                      "description": "체결 수량",
+                      "example": "10"
+                    },
+                    "amt": {
+                      "type": "string",
+                      "description": "체결 금액",
+                      "example": "50000"
+                    },
+                    "tradedAt": {
+                      "type": "number",
+                      "description": "주문 체결 시각(timestamp)",
+                      "example": 1700000000000
+                    },
+                    "isTaker": {
+                      "type": "boolean",
+                      "description": "테이커(Taker) 체결 여부(Taker=true, Maker=false)",
+                      "example": true
+                    },
+                    "feeCurrency": {
+                      "type": "string",
+                      "description": "수수료 지불 자산",
+                      "example": "krw"
+                    },
+                    "feeQty": {
+                      "type": "string",
+                      "description": "수수료 수량",
+                      "example": "50"
+                    }
+                  },
+                  "required": [
+                    "symbol",
+                    "tradeId",
+                    "orderId",
+                    "side",
+                    "price",
+                    "qty",
+                    "amt",
+                    "tradedAt",
+                    "isTaker"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "주문 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "required": false,
+            "description": "조회 시작 시각(timestamp). 현재 시간으로부터 36시간 전 자료까지만 조회 가능합니다. (기본값: 36시간 전)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "required": false,
+            "description": "조회 종료 시각(timestamp). (기본값: 현재)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "최대 조회 건수 (범위: 1 - 1000, 기본값 500)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/balance": {
+      "get": {
+        "tags": [
+          "자산"
+        ],
+        "summary": "자산 현황",
+        "description": "내가 가지고 있는 자산 목록을 조회합니다.",
+        "operationId": "getV2Balance",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_balance"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_balance",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "currency": {
+                            "type": "string",
+                            "example": "btc",
+                            "description": "자산 이름"
+                          },
+                          "balance": {
+                            "type": "string",
+                            "example": "100",
+                            "description": "보유 수량. 사용 가능 수량 + 거래 중 수량 + 출금 중 수량으로 계산합니다."
+                          },
+                          "available": {
+                            "type": "string",
+                            "example": "70",
+                            "description": "사용 가능 수량"
+                          },
+                          "tradeInUse": {
+                            "type": "string",
+                            "example": "20",
+                            "description": "거래 중 수량"
+                          },
+                          "withdrawalInUse": {
+                            "type": "string",
+                            "example": "10",
+                            "description": "출금 중 수량"
+                          },
+                          "avgPrice": {
+                            "type": "string",
+                            "example": "5000",
+                            "description": "매수평균가"
+                          }
+                        },
+                        "required": [
+                          "currency",
+                          "balance",
+                          "available",
+                          "tradeInUse",
+                          "withdrawalInUse",
+                          "avgPrice"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "currency": "btc",
+                      "balance": "100",
+                      "available": "70",
+                      "tradeInUse": "20",
+                      "withdrawalInUse": "10",
+                      "avgPrice": "5000"
+                    },
+                    {
+                      "currency": "eth",
+                      "balance": "100",
+                      "available": "70",
+                      "tradeInUse": "20",
+                      "withdrawalInUse": "10",
+                      "avgPrice": "5000"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "자산 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currencies",
+            "in": "query",
+            "required": false,
+            "description": "조회할 자산 목록. 콤마(,)로 구분하여 입력합니다. 입력하지 않으면 보유 중인 모든 자산을 조회합니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc,eth"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/depositAddresses": {
+      "get": {
+        "tags": [
+          "가상자산 입금"
+        ],
+        "summary": "입금 주소 전체 조회",
+        "description": "가상자산 입금 주소 목록을 조회합니다.",
+        "operationId": "getV2CoinDepositAddresses",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_depositAddresses"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_depositAddresses",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "description": "가상자산 심볼",
+                      "example": "btc"
+                    },
+                    "network": {
+                      "type": "string",
+                      "description": "블록체인 네트워크 심볼",
+                      "example": "ETH"
+                    },
+                    "address": {
+                      "type": "string",
+                      "description": "입금 주소",
+                      "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                    },
+                    "secondaryAddress": {
+                      "type": "string",
+                      "description": "입금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                    }
+                  },
+                  "required": [
+                    "currency",
+                    "network",
+                    "address"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/depositAddress": {
+      "get": {
+        "tags": [
+          "가상자산 입금"
+        ],
+        "summary": "입금 주소 조회",
+        "description": "개별 가상자산의 입금 주소를 조회합니다.",
+        "operationId": "getV2CoinDepositAddress",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_depositAddress"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_depositAddress",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "currency": {
+                          "type": "string",
+                          "example": "btc",
+                          "description": "가상자산 심볼"
+                        },
+                        "network": {
+                          "type": "string",
+                          "example": "BTC",
+                          "description": "블록체인 네트워크 심볼"
+                        },
+                        "address": {
+                          "type": "string",
+                          "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                          "description": "입금 주소"
+                        },
+                        "secondaryAddress": {
+                          "type": "string",
+                          "description": "입금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                        }
+                      },
+                      "required": [
+                        "currency",
+                        "network",
+                        "address"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "currency": "btc",
+                    "network": "BTC",
+                    "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "description": "가상자산 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc"
+          },
+          {
+            "name": "network",
+            "in": "query",
+            "required": false,
+            "description": "블록체인 네트워크 심볼. 네트워크 정보는 /v2/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "BTC"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "가상자산 입금"
+        ],
+        "summary": "입금 주소 생성",
+        "description": "가상자산을 입금할 주소를 발급합니다. 입금 주소가 이미 존재한다면 신규 발급 없이 기존 입금 주소를 응답합니다.",
+        "operationId": "postV2CoinDepositAddress",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-post-_v2_coin_depositAddress"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-post-_v2_coin_depositAddress",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "currency": {
+                          "type": "string",
+                          "example": "btc",
+                          "description": "가상자산 심볼"
+                        },
+                        "network": {
+                          "type": "string",
+                          "example": "BTC",
+                          "description": "블록체인 네트워크 심볼"
+                        },
+                        "address": {
+                          "type": "string",
+                          "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                          "description": "입금 주소"
+                        },
+                        "secondaryAddress": {
+                          "type": "string",
+                          "description": "입금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                        }
+                      },
+                      "required": [
+                        "currency",
+                        "network",
+                        "address"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "currency": "btc",
+                    "network": "BTC",
+                    "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "type": "string",
+                    "description": "가상자산의 심볼",
+                    "example": "btc"
+                  },
+                  "network": {
+                    "type": "string",
+                    "description": "블록체인 네트워크 심볼. 네트워크 정보는 /v2/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.",
+                    "example": "BTC"
+                  },
+                  "timestamp": {
+                    "type": "number",
+                    "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+                    "example": "1719232467910"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다."
+                  },
+                  "recvWindow": {
+                    "type": "number",
+                    "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+                    "example": "5000"
+                  }
+                },
+                "required": [
+                  "currency",
+                  "timestamp",
+                  "signature"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/coin/recentDeposits": {
+      "get": {
+        "tags": [
+          "가상자산 입금"
+        ],
+        "summary": "최근 입금내역 조회",
+        "description": "최근 가상자산 입금 내역을 조회합니다.",
+        "operationId": "getV2CoinRecentDeposits",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_recentDeposits"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_recentDeposits",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1234,
+                            "description": "코인 입금 ID"
+                          },
+                          "network": {
+                            "type": "string",
+                            "example": "BTC",
+                            "description": "블록체인 네트워크 심볼"
+                          },
+                          "address": {
+                            "type": "string",
+                            "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                            "description": "입금 주소"
+                          },
+                          "secondaryAddress": {
+                            "type": "string",
+                            "description": "입금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "done",
+                            "description": "입금 진행 상황\n\n- pending 블록체인 네트워크에서 입금 트랜잭션을 발견한 상태\n\n- actionRequired 입금계류 서류제출 대기 중 (입금을 위해서는 코빗 웹사이트에서 필요한 서류를 제출해야 합니다.)\n\n- reviewing 입금계류 제출서류 심사 중\n\n- done 입금 완료\n\n- refunded 심사 거절 후 입금 금액이 반환된 상태\n\n- failed 입금 실패 (입금 트랜잭션에 문제가 있는 경우 등)",
+                            "enum": [
+                              "pending",
+                              "actionRequired",
+                              "reviewing",
+                              "done",
+                              "refunded",
+                              "failed"
+                            ]
+                          },
+                          "transactionHash": {
+                            "type": "string",
+                            "example": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                            "description": "블록체인 트랜잭션 해시"
+                          },
+                          "currency": {
+                            "type": "string",
+                            "example": "btc",
+                            "description": "입금 중인 가상자산의 심볼"
+                          },
+                          "quantity": {
+                            "type": "string",
+                            "example": "1.234",
+                            "description": "입금 중인 가상자산의 수량 (트랜잭션에 기록되는 수량과 같음)"
+                          },
+                          "createdAt": {
+                            "type": "integer",
+                            "example": 1700000000000,
+                            "description": "입금 수신 시각(timestamp)"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "network",
+                          "address",
+                          "secondaryAddress",
+                          "status",
+                          "transactionHash",
+                          "currency",
+                          "quantity",
+                          "createdAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1234,
+                      "network": "BTC",
+                      "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                      "secondaryAddress": null,
+                      "status": "done",
+                      "transactionHash": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                      "currency": "btc",
+                      "quantity": "1.234",
+                      "createdAt": 1700000000000
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "description": "가상자산의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "description": "최대 조회 건수 (범위: 1 - 100)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/deposit": {
+      "get": {
+        "tags": [
+          "가상자산 입금"
+        ],
+        "summary": "입금 진행상황 조회",
+        "description": "가상자산 입금 진행 상태를 조회합니다.",
+        "operationId": "getV2CoinDeposit",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_deposit"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_deposit",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1234,
+                          "description": "코인 입금 ID"
+                        },
+                        "network": {
+                          "type": "string",
+                          "example": "BTC",
+                          "description": "블록체인 네트워크 심볼"
+                        },
+                        "address": {
+                          "type": "string",
+                          "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                          "description": "입금 주소"
+                        },
+                        "secondaryAddress": {
+                          "type": "string",
+                          "description": "입금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "done",
+                          "description": "입금 진행 상황\n\n- pending 블록체인 네트워크에서 입금 트랜잭션을 발견한 상태\n\n- actionRequired 입금계류 서류제출 대기 중 (입금을 위해서는 코빗 웹사이트에서 필요한 서류를 제출해야 합니다.)\n\n- reviewing 입금계류 제출서류 심사 중\n\n- done 입금 완료\n\n- refunded 심사 거절 후 입금 금액이 반환된 상태\n\n- failed 입금 실패 (입금 트랜잭션에 문제가 있는 경우 등)",
+                          "enum": [
+                            "pending",
+                            "actionRequired",
+                            "reviewing",
+                            "done",
+                            "refunded",
+                            "failed"
+                          ]
+                        },
+                        "transactionHash": {
+                          "type": "string",
+                          "example": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                          "description": "블록체인 트랜잭션 해시"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "example": "btc",
+                          "description": "입금 중인 가상자산의 심볼"
+                        },
+                        "quantity": {
+                          "type": "string",
+                          "example": "1.234",
+                          "description": "입금 중인 가상자산의 수량 (트랜잭션에 기록되는 수량과 같음)"
+                        },
+                        "createdAt": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "입금 수신 시각(timestamp)"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "network",
+                        "address",
+                        "secondaryAddress",
+                        "status",
+                        "transactionHash",
+                        "currency",
+                        "quantity",
+                        "createdAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": 1234,
+                    "network": "BTC",
+                    "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                    "secondaryAddress": null,
+                    "status": "done",
+                    "transactionHash": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                    "currency": "btc",
+                    "quantity": "1.234",
+                    "createdAt": 1700000000000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "description": "가상자산의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc"
+          },
+          {
+            "name": "coinDepositId",
+            "in": "query",
+            "required": true,
+            "description": "가상자산 입금 ID",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1234
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/withdrawableAddresses": {
+      "get": {
+        "tags": [
+          "가상자산 출금"
+        ],
+        "summary": "출금 가능 주소 목록 조회",
+        "description": "API 출금 가능 주소로 등록된 주소를 조회합니다.",
+        "operationId": "getV2CoinWithdrawableAddresses",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_withdrawableAddresses"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_withdrawableAddresses",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "network": {
+                            "type": "string",
+                            "example": "BTC",
+                            "description": "블록체인 네트워크 심볼"
+                          },
+                          "currency": {
+                            "type": "string",
+                            "example": "btc",
+                            "description": "가상자산의 심볼. 네트워크를 대상으로 등록된 지갑 주소의 경우 생략되며, 이 경우 모든 자산을 출금할 수 있습니다."
+                          },
+                          "address": {
+                            "type": "string",
+                            "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                            "description": "등록된 출금 가능 주소"
+                          },
+                          "secondaryAddress": {
+                            "type": "string",
+                            "description": "2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                          }
+                        },
+                        "required": [
+                          "network",
+                          "currency",
+                          "address"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "network": "BTC",
+                      "currency": "btc",
+                      "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                    },
+                    {
+                      "network": "ETH",
+                      "address": "0x05a56e2d52c817161883f50c441c3228cfe54d9f"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/withdrawableAmount": {
+      "get": {
+        "tags": [
+          "가상자산 출금"
+        ],
+        "summary": "출금 가능 수량 조회",
+        "description": "출금 가능 수량을 조회합니다.",
+        "operationId": "getV2CoinWithdrawableAmount",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_withdrawableAmount"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_withdrawableAmount",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "currency": {
+                            "type": "string",
+                            "example": "btc",
+                            "description": "가상자산의 심볼"
+                          },
+                          "withdrawableAmount": {
+                            "type": "string",
+                            "example": "1.52",
+                            "description": "출금 가능 수량"
+                          },
+                          "withdrawalInUseAmount": {
+                            "type": "string",
+                            "example": "0.005",
+                            "description": "출금 진행 중 수량"
+                          }
+                        },
+                        "required": [
+                          "currency",
+                          "withdrawableAmount",
+                          "withdrawalInUseAmount"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "currency": "btc",
+                      "withdrawableAmount": "1.52",
+                      "withdrawalInUseAmount": "0.005"
+                    },
+                    {
+                      "currency": "eth",
+                      "withdrawableAmount": "10.52",
+                      "withdrawalInUseAmount": "2.5"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "description": "가상자산의 심볼. 입력하지 않으면 모든 가상자산을 조회합니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/withdrawal": {
+      "post": {
+        "tags": [
+          "가상자산 출금"
+        ],
+        "summary": "출금 요청",
+        "description": "가상자산 출금을 요청합니다. 출금 API를 사용하기 위해서는, 코빗 개발자센터에서 API 출금 허용주소 등록이 필요합니다.",
+        "operationId": "postV2CoinWithdrawal",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-post-_v2_coin_withdrawal"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-post-_v2_coin_withdrawal",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "pending",
+                          "description": "출금 진행상황\n\n- pending 출금 요청 접수됨\n\n- actionRequired (출금 취소 가능) 이메일 확인 대기 중. 계속 진행하기 위해서는 코빗 회원정보의 주소로 전송된 출금 확인 이메일을 확인해야 합니다.\n\n- reviewing (출금 취소 가능) 출금 심사 중. 코빗 정책에 따라 심사 후 출금이 지연될 수 있습니다.\n\n- processing 출금 처리 중\n\n- done 출금 완료\n\n- canceled 출금 취소\n\n- failed 출금 실패 (잔고 부족 또는 기타 오류)",
+                          "enum": [
+                            "pending",
+                            "actionRequired",
+                            "reviewing",
+                            "processing",
+                            "done",
+                            "canceled",
+                            "failed"
+                          ]
+                        },
+                        "coinWithdrawalId": {
+                          "type": "integer",
+                          "example": 1234,
+                          "description": "출금 요청 건의 고유 ID"
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "coinWithdrawalId"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "status": "pending",
+                    "coinWithdrawalId": 1234
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "type": "string",
+                    "description": "출금할 가상자산의 심볼",
+                    "example": "btc"
+                  },
+                  "network": {
+                    "type": "string",
+                    "description": "블록체인 네트워크 심볼. 네트워크 정보는 /v2/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.",
+                    "example": "BTC"
+                  },
+                  "amount": {
+                    "type": "string",
+                    "description": "출금할 가상자산의 수량 (수수료 별도)",
+                    "example": "0.02521236"
+                  },
+                  "address": {
+                    "type": "string",
+                    "description": "가상자산을 받을 주소. API 출금이 허용된 주소로만 출금할 수 있습니다.",
+                    "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                  },
+                  "secondaryAddress": {
+                    "type": "string",
+                    "description": "2차 주소 (Destination Tag, Memo 등. 없으면 \"\" (빈 문자열) 세팅 또는 생략)"
+                  },
+                  "timestamp": {
+                    "type": "number",
+                    "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+                    "example": "1719232467910"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다."
+                  },
+                  "recvWindow": {
+                    "type": "number",
+                    "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+                    "example": "5000"
+                  }
+                },
+                "required": [
+                  "currency",
+                  "amount",
+                  "address",
+                  "timestamp",
+                  "signature"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "가상자산 출금"
+        ],
+        "summary": "출금 취소",
+        "description": "가상자산 출금을 취소합니다.\n\n해당 출금 건의 상태가 아래 중 하나인 경우에만 취소 가능합니다.\n\n- actionRequired\n\n- reviewing",
+        "operationId": "deleteV2CoinWithdrawal",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-delete-_v2_coin_withdrawal"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-delete-_v2_coin_withdrawal",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "coinWithdrawalId",
+            "in": "query",
+            "required": true,
+            "description": "출금 ID (출금 요청 API 응답에서 받은 값)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1234
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "가상자산 출금"
+        ],
+        "summary": "출금 진행상황 조회",
+        "description": "요청한 출금의 진행 상황을 조회합니다.",
+        "operationId": "getV2CoinWithdrawal",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_withdrawal"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_withdrawal",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1234,
+                          "description": "가상자산 출금 ID"
+                        },
+                        "quantity": {
+                          "type": "string",
+                          "example": "1.234",
+                          "description": "출금된 가상자산 수량. (수수료를 제외한 값으로 블록체인 트랜잭션에 기록되는 수량과 동일함)"
+                        },
+                        "fee": {
+                          "type": "string",
+                          "example": "0.0001",
+                          "description": "출금 수수료"
+                        },
+                        "currency": {
+                          "type": "string",
+                          "example": "btc",
+                          "description": "출금 요청한 가상자산의 심볼"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "done",
+                          "description": "출금 진행상황\n\n- pending 출금 요청 접수됨\n\n- actionRequired (출금 취소 가능) 이메일 확인 대기 중. 계속 진행하기 위해서는 코빗 회원정보의 주소로 전송된 출금 확인 이메일을 확인해야 합니다.\n\n- reviewing (출금 취소 가능) 출금 심사 중. 코빗 정책에 따라 심사 후 출금이 지연될 수 있습니다.\n\n- processing 출금 처리 중\n\n- done 출금 완료\n\n- canceled 출금 취소\n\n- failed 출금 실패 (잔고 부족 또는 기타 오류)",
+                          "enum": [
+                            "pending",
+                            "actionRequired",
+                            "reviewing",
+                            "processing",
+                            "done",
+                            "canceled",
+                            "failed"
+                          ]
+                        },
+                        "network": {
+                          "type": "string",
+                          "example": "BTC",
+                          "description": "블록체인 네트워크 심볼"
+                        },
+                        "address": {
+                          "type": "string",
+                          "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                          "description": "출금 주소"
+                        },
+                        "secondaryAddress": {
+                          "type": "string",
+                          "description": "출금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                        },
+                        "transactionHash": {
+                          "type": "string",
+                          "example": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                          "description": "블록체인 트랜잭션 해시. (아직 네트워크로 전송되지 않았다면 null)"
+                        },
+                        "createdAt": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "출금 요청 시각(timestamp)"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "quantity",
+                        "fee",
+                        "currency",
+                        "status",
+                        "network",
+                        "address",
+                        "secondaryAddress",
+                        "transactionHash",
+                        "createdAt"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "id": 1234,
+                    "quantity": "1.234",
+                    "fee": "0.0001",
+                    "currency": "btc",
+                    "status": "done",
+                    "network": "BTC",
+                    "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                    "secondaryAddress": null,
+                    "transactionHash": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                    "createdAt": 1700000000000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "description": "조회할 가상자산의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc"
+          },
+          {
+            "name": "coinWithdrawalId",
+            "in": "query",
+            "required": true,
+            "description": "가상자산 출금 ID",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1234
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/coin/recentWithdrawals": {
+      "get": {
+        "tags": [
+          "가상자산 출금"
+        ],
+        "summary": "최근 출금내역 조회",
+        "description": "최근 가상자산 출금내역을 조회합니다.",
+        "operationId": "getV2CoinRecentWithdrawals",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_recentWithdrawals"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_coin_recentWithdrawals",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1234,
+                            "description": "가상자산 출금 ID"
+                          },
+                          "quantity": {
+                            "type": "string",
+                            "example": "1.234",
+                            "description": "출금된 가상자산 수량. (수수료를 제외한 값으로 블록체인 트랜잭션에 기록되는 수량과 동일함)"
+                          },
+                          "fee": {
+                            "type": "string",
+                            "example": "0.0001",
+                            "description": "출금 수수료"
+                          },
+                          "currency": {
+                            "type": "string",
+                            "example": "btc",
+                            "description": "출금 요청한 가상자산의 심볼"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "done",
+                            "description": "출금 진행상황\n\n- pending 출금 요청 접수됨\n\n- actionRequired (출금 취소 가능) 이메일 확인 대기 중. 계속 진행하기 위해서는 코빗 회원정보의 주소로 전송된 출금 확인 이메일을 확인해야 합니다.\n\n- reviewing (출금 취소 가능) 출금 심사 중. 코빗 정책에 따라 심사 후 출금이 지연될 수 있습니다.\n\n- processing 출금 처리 중\n\n- done 출금 완료\n\n- canceled 출금 취소\n\n- failed 출금 실패 (잔고 부족 또는 기타 오류)",
+                            "enum": [
+                              "pending",
+                              "actionRequired",
+                              "reviewing",
+                              "processing",
+                              "done",
+                              "canceled",
+                              "failed"
+                            ]
+                          },
+                          "network": {
+                            "type": "string",
+                            "example": "BTC",
+                            "description": "블록체인 네트워크 심볼"
+                          },
+                          "address": {
+                            "type": "string",
+                            "example": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                            "description": "출금 주소"
+                          },
+                          "secondaryAddress": {
+                            "type": "string",
+                            "description": "출금 2차 주소 (Destination Tag, Memo 등. 없으면 null)"
+                          },
+                          "transactionHash": {
+                            "type": "string",
+                            "example": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                            "description": "블록체인 트랜잭션 해시. (아직 네트워크로 전송되지 않았다면 null)"
+                          },
+                          "createdAt": {
+                            "type": "integer",
+                            "example": 1700000000000,
+                            "description": "출금 요청 시각(timestamp)"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "quantity",
+                          "fee",
+                          "currency",
+                          "status",
+                          "network",
+                          "address",
+                          "secondaryAddress",
+                          "transactionHash",
+                          "createdAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1234,
+                      "quantity": "1.234",
+                      "fee": "0.0001",
+                      "currency": "btc",
+                      "status": "done",
+                      "network": "BTC",
+                      "address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+                      "secondaryAddress": null,
+                      "transactionHash": "0x000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f",
+                      "createdAt": 1700000000000
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": true,
+            "description": "조회할 가상자산의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "description": "최대 조회 건수 (범위: 1 - 100)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/krw/sendKrwDepositPush": {
+      "post": {
+        "tags": [
+          "원화 입출금"
+        ],
+        "summary": "입금 요청",
+        "description": "코빗 모바일 앱으로 원화 입금 요청 알림을 전송합니다.\n\n알림 수신 후, 앱에서 인증을 완료해야 원화 입금이 진행됩니다.\n\n알림 수신을 위해서는 앱 알림 설정에서 앱 푸시 알림 받기 설정이 되어 있어야 합니다.",
+        "operationId": "postV2KrwSendKrwDepositPush",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-post-_v2_krw_sendKrwDepositPush"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-post-_v2_krw_sendKrwDepositPush",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "string",
+                    "description": "입금 요청할 금액",
+                    "example": "50000"
+                  },
+                  "timestamp": {
+                    "type": "number",
+                    "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+                    "example": "1719232467910"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다."
+                  },
+                  "recvWindow": {
+                    "type": "number",
+                    "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+                    "example": "5000"
+                  }
+                },
+                "required": [
+                  "amount",
+                  "timestamp",
+                  "signature"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/krw/sendKrwWithdrawalPush": {
+      "post": {
+        "tags": [
+          "원화 입출금"
+        ],
+        "summary": "출금 요청",
+        "description": "코빗 모바일 앱으로 원화 출금 요청 알림을 전송합니다.\n\n알림 수신 후, 앱에서 인증을 완료해야 원화 출금이 진행됩니다.\n\n알림 수신을 위해서는 앱 알림 설정에서 앱 푸시 알림 받기 설정이 되어 있어야 합니다.",
+        "operationId": "postV2KrwSendKrwWithdrawalPush",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-post-_v2_krw_sendKrwWithdrawalPush"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-post-_v2_krw_sendKrwWithdrawalPush",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  },
+                  "required": [
+                    "success"
+                  ]
+                },
+                "example": {
+                  "success": true
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 신청",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "string",
+                    "description": "출금 요청할 금액",
+                    "example": "50000"
+                  },
+                  "timestamp": {
+                    "type": "number",
+                    "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+                    "example": "1719232467910"
+                  },
+                  "signature": {
+                    "type": "string",
+                    "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다."
+                  },
+                  "recvWindow": {
+                    "type": "number",
+                    "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+                    "example": "5000"
+                  }
+                },
+                "required": [
+                  "amount",
+                  "timestamp",
+                  "signature"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/krw/recentDeposits": {
+      "get": {
+        "tags": [
+          "원화 입출금"
+        ],
+        "summary": "최근 입금내역 조회",
+        "description": "최근 KRW 입금 내역을 조회합니다.",
+        "operationId": "getV2KrwRecentDeposits",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_krw_recentDeposits"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_krw_recentDeposits",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1234,
+                            "description": "KRW 입금 ID"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "done",
+                            "description": "KRW 입금 진행 상황\n\n- pending 입금 접수중\n\n- processing 입금 처리중\n\n- reviewing 입금 심사중 (취소 가능)\n\n- done 입금 완료\n\n- canceling 입금 취소 접수됨\n\n- canceled 입금 취소 완료\n\n- failed 입금 실패",
+                            "enum": [
+                              "pending",
+                              "processing",
+                              "reviewing",
+                              "done",
+                              "canceling",
+                              "canceled",
+                              "failed"
+                            ]
+                          },
+                          "quantity": {
+                            "type": "string",
+                            "example": "50000",
+                            "description": "입금 금액"
+                          },
+                          "createdAt": {
+                            "type": "integer",
+                            "example": 1700000000000,
+                            "description": "입금 수신 시각(timestamp)"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "입금 구분 (includeAll=true인 경우)\n\n- general 일반 원화 입금\n\n- depositInterest 예치금 이용료\n\n- makerIncentive 메이커 인센티브\n\n- reward 이벤트 보상\n\n- etc 기타",
+                            "example": "depositInterest",
+                            "enum": [
+                              "general",
+                              "depositInterest",
+                              "makerIncentive",
+                              "reward",
+                              "etc"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "status",
+                          "quantity",
+                          "createdAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1234,
+                      "status": "done",
+                      "quantity": "50000",
+                      "createdAt": 1700000000000
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "입금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "description": "최대 조회 건수 (범위: 1 - 100)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "includeAll",
+            "in": "query",
+            "required": false,
+            "description": "전체 내역 조회 여부\n\n- false 일반 원화 입금만 (기본값)\n\n- true 원화 입금 외 예치금 이용료, 이벤트 보상 지급 등 포함",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "false",
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/krw/recentWithdrawals": {
+      "get": {
+        "tags": [
+          "원화 입출금"
+        ],
+        "summary": "최근 출금내역 조회",
+        "description": "최근 KRW 출금내역을 조회합니다.",
+        "operationId": "getV2KrwRecentWithdrawals",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_krw_recentWithdrawals"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_krw_recentWithdrawals",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 1234,
+                            "description": "KRW 출금 ID"
+                          },
+                          "quantity": {
+                            "type": "string",
+                            "example": "50000",
+                            "description": "출금된 KRW 수량. (수수료 제외 수량)"
+                          },
+                          "fee": {
+                            "type": "string",
+                            "example": "1000",
+                            "description": "출금 수수료"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "done",
+                            "description": "KRW 출금 진행 상황\n\n- processing 출금 처리중\n\n- done 출금 완료\n\n- failed 출금 실패\n\n- canceled 출금 취소",
+                            "enum": [
+                              "processing",
+                              "done",
+                              "failed",
+                              "canceled"
+                            ]
+                          },
+                          "createdAt": {
+                            "type": "integer",
+                            "example": 1700000000000,
+                            "description": "출금 요청 시각(timestamp)"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "quantity",
+                          "fee",
+                          "status",
+                          "createdAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "id": 1234,
+                      "quantity": "50000",
+                      "fee": "1000",
+                      "status": "done",
+                      "createdAt": 1700000000000
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "출금 조회",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "description": "최대 조회 건수 (범위: 1 - 100)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/tradingFeePolicy": {
+      "get": {
+        "tags": [
+          "기타"
+        ],
+        "summary": "거래수수료율 조회",
+        "description": "현재 회원 계정에 적용되는 거래수수료율을 조회합니다.",
+        "operationId": "getV2TradingFeePolicy",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_tradingFeePolicy"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_tradingFeePolicy",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "symbol": {
+                            "type": "string",
+                            "example": "btc_krw",
+                            "description": "거래쌍"
+                          },
+                          "buyFeeCurrency": {
+                            "type": "string",
+                            "example": "btc",
+                            "description": "매수 주문시 수수료 수취 자산"
+                          },
+                          "sellFeeCurrency": {
+                            "type": "string",
+                            "example": "krw",
+                            "description": "매도 주문시 수수료 수취 자산"
+                          },
+                          "maxFeeRate": {
+                            "type": "string",
+                            "example": "0.0015",
+                            "description": "최대 수취 가능 수수료율. buyFeeCurrency가 krw인 거래쌍의 매수 주문 시, 수량*가격*maxFeeRate만큼의 KRW가 추가로 필요하며(사용 중 금액으로 전환) 주문이 체결되면 체결시 수수료율에 따라 정산됩니다."
+                          },
+                          "takerFeeRate": {
+                            "type": "string",
+                            "example": "0.0015",
+                            "description": "테이커(Taker) 주문 체결시 수수료율"
+                          },
+                          "makerFeeRate": {
+                            "type": "string",
+                            "example": "0",
+                            "description": "메이커(Maker) 주문 체결시 수수료율"
+                          }
+                        },
+                        "required": [
+                          "symbol",
+                          "buyFeeCurrency",
+                          "sellFeeCurrency",
+                          "maxFeeRate",
+                          "takerFeeRate",
+                          "makerFeeRate"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "symbol": "btc_krw",
+                      "buyFeeCurrency": "btc",
+                      "sellFeeCurrency": "krw",
+                      "maxFeeRate": "0.0015",
+                      "takerFeeRate": "0.0015",
+                      "makerFeeRate": "0"
+                    },
+                    {
+                      "symbol": "eth_krw",
+                      "buyFeeCurrency": "eth",
+                      "sellFeeCurrency": "krw",
+                      "maxFeeRate": "0.0015",
+                      "takerFeeRate": "0.0015",
+                      "makerFeeRate": "0"
+                    },
+                    {
+                      "symbol": "etc_krw",
+                      "buyFeeCurrency": "krw",
+                      "sellFeeCurrency": "krw",
+                      "maxFeeRate": "0.0015",
+                      "takerFeeRate": "0.0015",
+                      "makerFeeRate": "0"
+                    },
+                    {
+                      "symbol": "xrp_krw",
+                      "buyFeeCurrency": "krw",
+                      "sellFeeCurrency": "krw",
+                      "maxFeeRate": "0.0015",
+                      "takerFeeRate": "0.0015",
+                      "makerFeeRate": "0"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "조회하려는 거래쌍을 입력합니다. 여러 거래쌍을 입력하려면 콤마(,)로 구분해 입력합니다. 입력하지 않으면 코빗에서 거래 가능한 모든 거래쌍의 정보를 응답합니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw,eth_krw"
+          },
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    },
+    "/v2/currentKeyInfo": {
+      "get": {
+        "tags": [
+          "기타"
+        ],
+        "summary": "API 키 정보 조회",
+        "description": "현재 사용중인 API 키의 정보를 조회합니다.",
+        "operationId": "getV2CurrentKeyInfo",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_currentKeyInfo"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_currentKeyInfo",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "apiKey": {
+                          "type": "string",
+                          "example": "FFSoRME97Sr7WBCMZJ_NO5Bj8MZ03EyArRzqyr1NKIA",
+                          "description": "API 키 ID"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "ed25519",
+                          "description": "키 종류\n\n- hmac-sha256\n\n- ed25519",
+                          "enum": [
+                            "hmac-sha256",
+                            "ed25519"
+                          ]
+                        },
+                        "publicKey": {
+                          "type": "string",
+                          "example": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAk+Yp3C31eFwoky+zyRNB6rAv/lgULTeghxTQpqwQHzM=\n-----END PUBLIC KEY-----\n",
+                          "description": "ed25519 공개 키. 키 종류가 ed25519일 때만 출력됩니다."
+                        },
+                        "permissions": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "readBalances"
+                          },
+                          "description": "API 키의 권한 목록\n\n- readBalances\n\n- readOrders\n\n- writeOrders\n\n- readDeposits\n\n- writeDeposits\n\n- readWithdrawals\n\n- writeWithdrawals",
+                          "example": [
+                            "readBalances",
+                            "readOrders"
+                          ]
+                        },
+                        "expiration": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "API 키 만료 시각"
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "activated",
+                          "description": "API 키 상태\n\n- activated 활성화\n\n- deactivated 비활성화",
+                          "enum": [
+                            "activated",
+                            "deactivated"
+                          ]
+                        },
+                        "label": {
+                          "type": "string",
+                          "example": "test key",
+                          "description": "API 키 라벨"
+                        },
+                        "createdAt": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "API 키 생성 시각"
+                        },
+                        "whitelist": {
+                          "type": "string",
+                          "description": "API 키의 접속 가능한 IP 주소 목록. 여러 개의 주소는 콤마(,)로 구분합니다.",
+                          "example": "1.2.3.4,5.6.7.8"
+                        }
+                      },
+                      "required": [
+                        "apiKey",
+                        "type",
+                        "publicKey",
+                        "permissions",
+                        "expiration",
+                        "status",
+                        "label",
+                        "createdAt",
+                        "whitelist"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "apiKey": "FFSoRME97Sr7WBCMZJ_NO5Bj8MZ03EyArRzqyr1NKIA",
+                    "type": "ed25519",
+                    "publicKey": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAk+Yp3C31eFwoky+zyRNB6rAv/lgULTeghxTQpqwQHzM=\n-----END PUBLIC KEY-----\n",
+                    "permissions": [
+                      "readBalances",
+                      "readOrders"
+                    ],
+                    "expiration": 1700000000000,
+                    "status": "activated",
+                    "label": "test key",
+                    "createdAt": 1700000000000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-required-permission": "없음",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "timestamp",
+            "in": "query",
+            "required": true,
+            "description": "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "query",
+            "required": true,
+            "description": "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "recvWindow",
+            "in": "query",
+            "required": false,
+            "description": "허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.",
+            "schema": {
+              "type": "number",
+              "default": 5000
+            }
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-KAPI-KEY",
+        "description": "코빗 Open API 키. Private API 요청에는 X-KAPI-KEY 헤더와 함께 timestamp, signature 값을 요청 변수에 포함해야 합니다."
+      }
+    }
+  }
+}

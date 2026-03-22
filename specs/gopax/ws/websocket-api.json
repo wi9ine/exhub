@@ -1,0 +1,2535 @@
+{
+  "asyncapi": "2.6.0",
+  "defaultContentType": "application/json",
+  "info": {
+    "title": "GOPAX WebSocket API",
+    "version": "1.0.0",
+    "description": "고팍스 공식 문서 기준 WebSocket 스펙입니다.",
+    "contact": {
+      "name": "GOPAX WebSocket API Docs",
+      "url": "https://gopax.github.io/wsapi/index.html"
+    }
+  },
+  "servers": {
+    "production": {
+      "url": "wss://wsapi.gopax.co.kr",
+      "protocol": "wss",
+      "description": "고팍스 WebSocket endpoint",
+      "x-doc-notes": [
+        "서버는 30초마다 primus::ping 메시지를 보내며, 30초 이내에 primus::pong으로 응답해야 합니다.",
+        "개인 API는 apiKey, timestamp, signature 쿼리스트링으로 인증합니다.",
+        "하나의 API Key로 동시에 최대 20개의 커넥션을 열 수 있습니다."
+      ]
+    }
+  },
+  "tags": [
+    {
+      "name": "개인 API"
+    },
+    {
+      "name": "공개 API"
+    }
+  ],
+  "channels": {
+    "private.미체결주문구독": {
+      "servers": [
+        "production"
+      ],
+      "publish": {
+        "operationId": "subscribe미체결주문구독",
+        "message": {
+          "name": "private_미체결주문구독_request",
+          "payload": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "string",
+                "example": "SubscribeToOrders"
+              },
+              "o": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "required": [
+              "n",
+              "o"
+            ]
+          }
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#f1d60da232"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#f1d60da232",
+        "x-tags": [
+          "개인 API"
+        ]
+      },
+      "subscribe": {
+        "operationId": "미체결주문구독Messages",
+        "message": {
+          "oneOf": [
+            {
+              "name": "private_미체결주문구독_response",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "n": {
+                    "type": "string",
+                    "example": "SubscribeToOrders"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "orderId": {
+                              "type": "integer",
+                              "example": 327347,
+                              "description": "오더 ID"
+                            },
+                            "status": {
+                              "type": "integer",
+                              "example": 1,
+                              "description": "1(미체결), 2(취소됨), 3(전체 체결됨), 4(일부 체결됨), 5(예약됨)"
+                            },
+                            "side": {
+                              "type": "integer",
+                              "example": 2,
+                              "description": "1(구매), 2(판매)"
+                            },
+                            "type": {
+                              "type": "integer",
+                              "example": 1,
+                              "description": "1(지정가), 2(시장가)"
+                            },
+                            "price": {
+                              "type": "integer",
+                              "example": 5500000,
+                              "description": "가격"
+                            },
+                            "orgAmount": {
+                              "type": "integer",
+                              "example": 1,
+                              "description": "최초 수량"
+                            },
+                            "remainAmount": {
+                              "type": "integer",
+                              "example": 1,
+                              "description": "미체결된 수량"
+                            },
+                            "createdAt": {
+                              "type": "integer",
+                              "example": 1597218137,
+                              "description": "주문이 들어간 시간"
+                            },
+                            "updatedAt": {
+                              "type": "integer",
+                              "example": 1597218137,
+                              "description": "마지막 업데이트 시간 (아직 변경 없을 경우 주문 시간과 동일)"
+                            },
+                            "tradedBaseAmount": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "체결된 Base Asset 수량 (이 예제에서는 ZEC가 단위)"
+                            },
+                            "tradedQuoteAmount": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "체결된 Quote Asset 수량 (이 예제에서는 KRW이 단위)"
+                            },
+                            "feeAmount": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "거래 수수료"
+                            },
+                            "feeAssetName": {
+                              "type": "string",
+                              "example": "KRW",
+                              "description": "거래 수수료 자산"
+                            },
+                            "rewardAmount": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "거래 리워드"
+                            },
+                            "rewardAssetName": {
+                              "type": "string",
+                              "example": "ZEC",
+                              "description": "거래 리워드 자산"
+                            },
+                            "timeInForce": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "0(gtc), 1(post only), 2(ioc), 3(fok)"
+                            },
+                            "protection": {
+                              "type": "integer",
+                              "example": 1,
+                              "description": "1(적용하지 않음), 2(적용함)"
+                            },
+                            "forcedCompletionReason": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "0(해당 없음), 1(timeInForce), 2(protection)"
+                            },
+                            "stopPrice": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "감시 가격 (예약가 주문일 경우만 0이 아닌 값)"
+                            },
+                            "takerFeeAmount": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "테이커 포지션으로 지불한 수수료"
+                            },
+                            "tradingPairName": {
+                              "type": "string",
+                              "example": "ZEC-KRW",
+                              "description": "오더북"
+                            }
+                          },
+                          "required": [
+                            "orderId",
+                            "status",
+                            "side",
+                            "type",
+                            "price",
+                            "orgAmount",
+                            "remainAmount",
+                            "createdAt",
+                            "updatedAt",
+                            "tradedBaseAmount",
+                            "tradedQuoteAmount",
+                            "feeAmount",
+                            "feeAssetName",
+                            "rewardAmount",
+                            "rewardAssetName",
+                            "timeInForce",
+                            "protection",
+                            "forcedCompletionReason",
+                            "stopPrice",
+                            "takerFeeAmount",
+                            "tradingPairName"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ]
+                  }
+                },
+                "required": [
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "private_미체결주문구독_delta",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "i": {
+                    "type": "integer",
+                    "example": -1,
+                    "description": "델타 푸시일 경우는 항상 -1"
+                  },
+                  "n": {
+                    "type": "string",
+                    "example": "OrderEvent"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "orderId": {
+                        "type": "integer",
+                        "example": 327347
+                      },
+                      "status": {
+                        "type": "integer",
+                        "example": 4,
+                        "description": "4(일부 체결됨)로 변경됨"
+                      },
+                      "side": {
+                        "type": "integer",
+                        "example": 2
+                      },
+                      "type": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 5500000
+                      },
+                      "orgAmount": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "remainAmount": {
+                        "type": "number",
+                        "example": 0.8,
+                        "description": "미체결된 수량이 0.2 감소"
+                      },
+                      "createdAt": {
+                        "type": "integer",
+                        "example": 1597218137
+                      },
+                      "updatedAt": {
+                        "type": "integer",
+                        "example": 1599093631,
+                        "description": "마지막 업데이트 시간이 갱신됨"
+                      },
+                      "tradedBaseAmount": {
+                        "type": "number",
+                        "example": 0.2,
+                        "description": "0.2 ZEC이 나감"
+                      },
+                      "tradedQuoteAmount": {
+                        "type": "integer",
+                        "example": 1100000,
+                        "description": "1,100,000 KRW이 들어옴"
+                      },
+                      "feeAmount": {
+                        "type": "integer",
+                        "example": 440,
+                        "description": "거래 수수료 (이 예제에서는 0.04% 부과)"
+                      },
+                      "feeAssetName": {
+                        "type": "string",
+                        "example": "KRW",
+                        "description": "거래 수수료 자산"
+                      },
+                      "rewardAmount": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "거래 리워드"
+                      },
+                      "rewardAssetName": {
+                        "type": "string",
+                        "example": "ZEC",
+                        "description": "거래 리워드 자산"
+                      },
+                      "timeInForce": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "protection": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "forcedCompletionReason": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "stopPrice": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "takerFeeAmount": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "ZEC-KRW"
+                      }
+                    },
+                    "required": [
+                      "orderId",
+                      "status",
+                      "side",
+                      "type",
+                      "price",
+                      "orgAmount",
+                      "remainAmount",
+                      "createdAt",
+                      "updatedAt",
+                      "tradedBaseAmount",
+                      "tradedQuoteAmount",
+                      "feeAmount",
+                      "feeAssetName",
+                      "rewardAmount",
+                      "rewardAssetName",
+                      "timeInForce",
+                      "protection",
+                      "forcedCompletionReason",
+                      "stopPrice",
+                      "takerFeeAmount",
+                      "tradingPairName"
+                    ]
+                  }
+                },
+                "required": [
+                  "i",
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "PingMessage",
+              "payload": {
+                "type": "string",
+                "example": "primus::ping::1591318325140"
+              }
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#f1d60da232"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#f1d60da232",
+        "x-tags": [
+          "개인 API"
+        ]
+      }
+    },
+    "private.잔고구독": {
+      "servers": [
+        "production"
+      ],
+      "publish": {
+        "operationId": "subscribe잔고구독",
+        "message": {
+          "name": "private_잔고구독_request",
+          "payload": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "string",
+                "example": "SubscribeToBalances"
+              },
+              "o": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "required": [
+              "n",
+              "o"
+            ]
+          }
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#fa07b908ad"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#fa07b908ad",
+        "x-tags": [
+          "개인 API"
+        ]
+      },
+      "subscribe": {
+        "operationId": "잔고구독Messages",
+        "message": {
+          "oneOf": [
+            {
+              "name": "private_잔고구독_response",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "n": {
+                    "type": "string",
+                    "example": "SubscribeToBalances"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "type": "boolean",
+                        "example": true
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "\"assetId\": 7",
+                          "description": "자산 ID",
+                          "oneOf": [
+                            {
+                              "type": "string",
+                              "example": "\"avail\": 989.4998",
+                              "description": "주문 가능 보유 수량"
+                            },
+                            {
+                              "type": "string",
+                              "example": "\"hold\": 2",
+                              "description": "오더북에 올라가 있는 수량"
+                            },
+                            {
+                              "type": "string",
+                              "example": "\"pendingWithdrawal\": 0",
+                              "description": "출금 처리 중인 수량"
+                            },
+                            {
+                              "type": "string",
+                              "example": "\"blendedPrice\": 429413.08986192",
+                              "description": "매수 평균가"
+                            },
+                            {
+                              "type": "string",
+                              "example": "\"lastUpdatedAt\": 1599097996.779",
+                              "description": "마지막 업데이트 시간"
+                            },
+                            {
+                              "type": "string",
+                              "example": "isoAlpha3\": \"ZEC",
+                              "description": "자산 이름"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "result",
+                      "data"
+                    ]
+                  }
+                },
+                "required": [
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "private_잔고구독_delta",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "i": {
+                    "type": "integer",
+                    "example": -1,
+                    "description": "델타 푸시일 경우는 항상 -1"
+                  },
+                  "n": {
+                    "type": "string",
+                    "example": "BalanceEvent"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "assetId": {
+                        "type": "integer",
+                        "example": 7
+                      },
+                      "avail": {
+                        "type": "number",
+                        "example": 990.4998,
+                        "description": "주문 가능 보유 수량 +1"
+                      },
+                      "hold": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "오더북에 올라가 있는 수량 -1"
+                      },
+                      "pendingWithdrawal": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "blendedPrice": {
+                        "type": "number",
+                        "example": 429413.08986192
+                      },
+                      "lastUpdatedAt": {
+                        "type": "number",
+                        "example": 1599098077.27
+                      },
+                      "isoAlpha3": {
+                        "type": "string",
+                        "example": "ZEC"
+                      }
+                    },
+                    "required": [
+                      "assetId",
+                      "avail",
+                      "hold",
+                      "pendingWithdrawal",
+                      "blendedPrice",
+                      "lastUpdatedAt",
+                      "isoAlpha3"
+                    ]
+                  }
+                },
+                "required": [
+                  "i",
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "PingMessage",
+              "payload": {
+                "type": "string",
+                "example": "primus::ping::1591318325140"
+              }
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#fa07b908ad"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#fa07b908ad",
+        "x-tags": [
+          "개인 API"
+        ]
+      }
+    },
+    "private.체결내역구독": {
+      "servers": [
+        "production"
+      ],
+      "publish": {
+        "operationId": "subscribe체결내역구독",
+        "message": {
+          "name": "private_체결내역구독_request",
+          "payload": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "string",
+                "example": "SubscribeToTrades"
+              },
+              "o": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "required": [
+              "n",
+              "o"
+            ]
+          }
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#70aea396f8"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#70aea396f8",
+        "x-tags": [
+          "개인 API"
+        ]
+      },
+      "subscribe": {
+        "operationId": "체결내역구독Messages",
+        "message": {
+          "oneOf": [
+            {
+              "name": "private_체결내역구독_response",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "n": {
+                    "type": "string",
+                    "example": "SubscribeToTrades"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                },
+                "required": [
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "private_체결내역구독_delta",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "i": {
+                    "type": "integer",
+                    "example": -1
+                  },
+                  "n": {
+                    "type": "string",
+                    "example": "TradeEvent"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "tradeId": {
+                        "type": "integer",
+                        "example": 74072,
+                        "description": "체결 ID"
+                      },
+                      "orderId": {
+                        "type": "integer",
+                        "example": 453529,
+                        "description": "오더 ID"
+                      },
+                      "side": {
+                        "type": "integer",
+                        "example": 2,
+                        "description": "1(구매), 2(판매)"
+                      },
+                      "type": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "1(지정가), 2(시장가)"
+                      },
+                      "baseAmount": {
+                        "type": "number",
+                        "example": 0.01,
+                        "description": "체결된 Base Asset 수량 (이 예제에서는 ZEC가 단위)"
+                      },
+                      "quoteAmount": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "체결된 Quote Asset 수량 (이 예제에서는 KRW가 단위)"
+                      },
+                      "fee": {
+                        "type": "number",
+                        "example": 0.0004,
+                        "description": "수수료 (리워드일 경우 음수)"
+                      },
+                      "feeAssetName": {
+                        "type": "string",
+                        "example": "KRW",
+                        "description": "수수료 자산 (수수료가 음수일 경우 리워드 자산)"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 100,
+                        "description": "가격"
+                      },
+                      "isSelfTrade": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "자전 체결 여부"
+                      },
+                      "occurredAt": {
+                        "type": "integer",
+                        "example": 1603932107,
+                        "description": "체결 시간"
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "ZEC-KRW",
+                        "description": "오더북"
+                      }
+                    },
+                    "required": [
+                      "tradeId",
+                      "orderId",
+                      "side",
+                      "type",
+                      "baseAmount",
+                      "quoteAmount",
+                      "fee",
+                      "feeAssetName",
+                      "price",
+                      "isSelfTrade",
+                      "occurredAt",
+                      "tradingPairName"
+                    ]
+                  }
+                },
+                "required": [
+                  "i",
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "PingMessage",
+              "payload": {
+                "type": "string",
+                "example": "primus::ping::1591318325140"
+              }
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#70aea396f8"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#70aea396f8",
+        "x-tags": [
+          "개인 API"
+        ]
+      }
+    },
+    "public.오더북구독": {
+      "servers": [
+        "production"
+      ],
+      "publish": {
+        "operationId": "subscribe오더북구독",
+        "message": {
+          "name": "public_오더북구독_request",
+          "payload": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "string",
+                "example": "SubscribeToOrderBook"
+              },
+              "o": {
+                "type": "object",
+                "properties": {
+                  "tradingPairName": {
+                    "type": "string",
+                    "example": "BCH-KRW",
+                    "description": "구독하고자 하는 오더북"
+                  }
+                },
+                "required": [
+                  "tradingPairName"
+                ]
+              }
+            },
+            "required": [
+              "n",
+              "o"
+            ]
+          }
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#3e61e5d414"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#3e61e5d414",
+        "x-tags": [
+          "공개 API"
+        ]
+      },
+      "subscribe": {
+        "operationId": "오더북구독Messages",
+        "message": {
+          "oneOf": [
+            {
+              "name": "public_오더북구독_response",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "n": {
+                    "type": "string",
+                    "example": "SubscribeToOrderBook"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "ask": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "entryId": {
+                              "type": "integer",
+                              "example": 50,
+                              "description": "업데이트 시퀀스 (+1씩 증가)"
+                            },
+                            "price": {
+                              "type": "integer",
+                              "example": 5100000,
+                              "description": "가격"
+                            },
+                            "volume": {
+                              "type": "number",
+                              "example": 2.5,
+                              "description": "수량"
+                            },
+                            "updatedAt": {
+                              "type": "number",
+                              "example": 1599089007.614,
+                              "description": "마지막 업데이트 시간"
+                            }
+                          },
+                          "required": [
+                            "entryId",
+                            "price",
+                            "volume",
+                            "updatedAt"
+                          ]
+                        },
+                        "description": "판매 엔트리 목록"
+                      },
+                      "bid": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "entryId": {
+                              "type": "integer",
+                              "example": 48
+                            },
+                            "price": {
+                              "type": "integer",
+                              "example": 5000000
+                            },
+                            "volume": {
+                              "type": "integer",
+                              "example": 5
+                            },
+                            "updatedAt": {
+                              "type": "number",
+                              "example": 1599088982.102
+                            }
+                          },
+                          "required": [
+                            "entryId",
+                            "price",
+                            "volume",
+                            "updatedAt"
+                          ]
+                        }
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "BCH-KRW"
+                      },
+                      "maxEntryId": {
+                        "type": "integer",
+                        "example": 50
+                      }
+                    },
+                    "required": [
+                      "ask",
+                      "bid",
+                      "tradingPairName",
+                      "maxEntryId"
+                    ]
+                  }
+                },
+                "required": [
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "public_오더북구독_delta",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "i": {
+                    "type": "integer",
+                    "example": -1,
+                    "description": "델타 푸시일 경우는 항상 -1"
+                  },
+                  "n": {
+                    "type": "string",
+                    "example": "OrderBookEvent"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "ask": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "bid": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "entryId": {
+                              "type": "integer",
+                              "example": 51
+                            },
+                            "price": {
+                              "type": "integer",
+                              "example": 5000000
+                            },
+                            "volume": {
+                              "type": "integer",
+                              "example": 0
+                            },
+                            "updatedAt": {
+                              "type": "number",
+                              "example": 1599089169.282
+                            }
+                          },
+                          "required": [
+                            "entryId",
+                            "price",
+                            "volume",
+                            "updatedAt"
+                          ]
+                        }
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "BCH-KRW"
+                      }
+                    },
+                    "required": [
+                      "ask",
+                      "bid",
+                      "tradingPairName"
+                    ]
+                  }
+                },
+                "required": [
+                  "i",
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "PingMessage",
+              "payload": {
+                "type": "string",
+                "example": "primus::ping::1591318325140"
+              }
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#3e61e5d414"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#3e61e5d414",
+        "x-tags": [
+          "공개 API"
+        ]
+      }
+    },
+    "public.거래쌍구독": {
+      "servers": [
+        "production"
+      ],
+      "publish": {
+        "operationId": "subscribe거래쌍구독",
+        "message": {
+          "name": "public_거래쌍구독_request",
+          "payload": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "string",
+                "example": "SubscribeToTradingPair"
+              },
+              "o": {
+                "type": "object",
+                "properties": {
+                  "tradingPairName": {
+                    "type": "string",
+                    "example": "BCH-KRW",
+                    "description": "구독하고자 하는 오더북"
+                  }
+                },
+                "required": [
+                  "tradingPairName"
+                ]
+              }
+            },
+            "required": [
+              "n",
+              "o"
+            ]
+          }
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf",
+        "x-tags": [
+          "공개 API"
+        ]
+      },
+      "subscribe": {
+        "operationId": "거래쌍구독Messages",
+        "message": {
+          "oneOf": [
+            {
+              "name": "public_거래쌍구독_response",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "i": {
+                    "type": "integer",
+                    "example": -1,
+                    "description": "델타 푸시일 경우는 항상 -1"
+                  },
+                  "n": {
+                    "type": "string",
+                    "example": "PublicTradeEvent"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "tradeId": {
+                        "type": "integer",
+                        "example": 75021,
+                        "description": "체결 내역 ID"
+                      },
+                      "baseAmount": {
+                        "type": "number",
+                        "example": 0.01,
+                        "description": "체결된 Base Asset 수량 (이 예제에서는 BCH가 단위)"
+                      },
+                      "quoteAmount": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "체결된 Quote Asset 수량 (이 예제에서는 KRW가 단위)"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 100,
+                        "description": "가격"
+                      },
+                      "isBuy": {
+                        "type": "boolean",
+                        "example": true,
+                        "description": "true(구매), false(판매)"
+                      },
+                      "occurredAt": {
+                        "type": "integer",
+                        "example": 1609756772,
+                        "description": "체결 시간"
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "BCH-KRW",
+                        "description": "오더북"
+                      }
+                    },
+                    "required": [
+                      "tradeId",
+                      "baseAmount",
+                      "quoteAmount",
+                      "price",
+                      "isBuy",
+                      "occurredAt",
+                      "tradingPairName"
+                    ]
+                  }
+                },
+                "required": [
+                  "i",
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "PingMessage",
+              "payload": {
+                "type": "string",
+                "example": "primus::ping::1591318325140"
+              }
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf",
+        "x-tags": [
+          "공개 API"
+        ]
+      }
+    },
+    "public.티커구독": {
+      "servers": [
+        "production"
+      ],
+      "publish": {
+        "operationId": "subscribe티커구독",
+        "message": {
+          "name": "public_티커구독_request",
+          "payload": {
+            "type": "object",
+            "properties": {
+              "n": {
+                "type": "string",
+                "example": "SubscribeToTickers"
+              },
+              "o": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            "required": [
+              "n",
+              "o"
+            ]
+          }
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#a98232916e"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#a98232916e",
+        "x-tags": [
+          "공개 API"
+        ]
+      },
+      "subscribe": {
+        "operationId": "티커구독Messages",
+        "message": {
+          "oneOf": [
+            {
+              "name": "public_티커구독_response",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "n": {
+                    "type": "string",
+                    "example": "SubscribeToTickers"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "baseVolume": {
+                              "type": "number",
+                              "example": 0.02,
+                              "description": "최근 24시간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                            },
+                            "high": {
+                              "type": "integer",
+                              "example": 37300000,
+                              "description": "최근 24시간 최고 거래 가격"
+                            },
+                            "highestBid": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "오더북 상의 현재 가장 높은 매수 가격"
+                            },
+                            "last": {
+                              "type": "integer",
+                              "example": 37300000,
+                              "description": "오더북 상의 현재 가격"
+                            },
+                            "lastTraded": {
+                              "type": "integer",
+                              "example": 1665640796413,
+                              "description": "최근 거래 시각(Unix time)"
+                            },
+                            "low": {
+                              "type": "integer",
+                              "example": 37300000,
+                              "description": "최근 24시간 최저 거래 가격"
+                            },
+                            "lowestAsk": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "오더북 상의 현재 가장 낮은 매도 가격"
+                            },
+                            "open": {
+                              "type": "integer",
+                              "example": 37300000,
+                              "description": "거래시작가, 한국시간(KST) 기준 00시 이후 첫 거래가 체결된 가격"
+                            },
+                            "quoteVolume": {
+                              "type": "integer",
+                              "example": 746000,
+                              "description": "최근 24시간 누적 거래량 (quote 자산 단위로 이 예시에서는 KRW)"
+                            },
+                            "tradingPairName": {
+                              "type": "string",
+                              "example": "BTC-KRW",
+                              "description": "오더북"
+                            }
+                          },
+                          "required": [
+                            "baseVolume",
+                            "high",
+                            "highestBid",
+                            "last",
+                            "lastTraded",
+                            "low",
+                            "lowestAsk",
+                            "open",
+                            "quoteVolume",
+                            "tradingPairName"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "data"
+                    ]
+                  }
+                },
+                "required": [
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "public_티커구독_delta",
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "i": {
+                    "type": "integer",
+                    "example": -1
+                  },
+                  "n": {
+                    "type": "string",
+                    "example": "TickerEvent"
+                  },
+                  "o": {
+                    "type": "object",
+                    "properties": {
+                      "BTC-KRW": {
+                        "type": "object",
+                        "properties": {
+                          "baseVolume": {
+                            "type": "number",
+                            "example": 0.02
+                          },
+                          "high": {
+                            "type": "integer",
+                            "example": 37300000
+                          },
+                          "highestBid": {
+                            "type": "integer",
+                            "example": 0
+                          },
+                          "last": {
+                            "type": "integer",
+                            "example": 37300000
+                          },
+                          "lastTraded": {
+                            "type": "integer",
+                            "example": 1665640796413
+                          },
+                          "low": {
+                            "type": "integer",
+                            "example": 37300000
+                          },
+                          "lowestAsk": {
+                            "type": "integer",
+                            "example": 0
+                          },
+                          "open": {
+                            "type": "integer",
+                            "example": 37300000
+                          },
+                          "quoteVolume": {
+                            "type": "integer",
+                            "example": 746000
+                          },
+                          "tradingPairName": {
+                            "type": "string",
+                            "example": "BTC-KRW"
+                          }
+                        },
+                        "required": [
+                          "baseVolume",
+                          "high",
+                          "highestBid",
+                          "last",
+                          "lastTraded",
+                          "low",
+                          "lowestAsk",
+                          "open",
+                          "quoteVolume",
+                          "tradingPairName"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "BTC-KRW"
+                    ]
+                  }
+                },
+                "required": [
+                  "i",
+                  "n",
+                  "o"
+                ]
+              }
+            },
+            {
+              "name": "PingMessage",
+              "payload": {
+                "type": "string",
+                "example": "primus::ping::1591318325140"
+              }
+            }
+          ]
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/wsapi/index.html#a98232916e"
+        },
+        "x-doc-url": "https://gopax.github.io/wsapi/index.html#a98232916e",
+        "x-tags": [
+          "공개 API"
+        ]
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "PingMessage": {
+        "name": "PingMessage",
+        "payload": {
+          "type": "string",
+          "example": "primus::ping::1591318325140"
+        },
+        "messageId": "gopax.ws.control.ping"
+      },
+      "PongMessage": {
+        "name": "PongMessage",
+        "payload": {
+          "type": "string",
+          "example": "primus::pong::1591318325140"
+        },
+        "messageId": "gopax.ws.control.pong"
+      },
+      "private_미체결주문구독_request": {
+        "name": "private_미체결주문구독_request",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToOrders"
+            },
+            "o": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.open-orders.request"
+      },
+      "private_미체결주문구독_response": {
+        "name": "private_미체결주문구독_response",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToOrders"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "orderId": {
+                        "type": "integer",
+                        "example": 327347,
+                        "description": "오더 ID"
+                      },
+                      "status": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "1(미체결), 2(취소됨), 3(전체 체결됨), 4(일부 체결됨), 5(예약됨)"
+                      },
+                      "side": {
+                        "type": "integer",
+                        "example": 2,
+                        "description": "1(구매), 2(판매)"
+                      },
+                      "type": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "1(지정가), 2(시장가)"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 5500000,
+                        "description": "가격"
+                      },
+                      "orgAmount": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "최초 수량"
+                      },
+                      "remainAmount": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "미체결된 수량"
+                      },
+                      "createdAt": {
+                        "type": "integer",
+                        "example": 1597218137,
+                        "description": "주문이 들어간 시간"
+                      },
+                      "updatedAt": {
+                        "type": "integer",
+                        "example": 1597218137,
+                        "description": "마지막 업데이트 시간 (아직 변경 없을 경우 주문 시간과 동일)"
+                      },
+                      "tradedBaseAmount": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "체결된 Base Asset 수량 (이 예제에서는 ZEC가 단위)"
+                      },
+                      "tradedQuoteAmount": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "체결된 Quote Asset 수량 (이 예제에서는 KRW이 단위)"
+                      },
+                      "feeAmount": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "거래 수수료"
+                      },
+                      "feeAssetName": {
+                        "type": "string",
+                        "example": "KRW",
+                        "description": "거래 수수료 자산"
+                      },
+                      "rewardAmount": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "거래 리워드"
+                      },
+                      "rewardAssetName": {
+                        "type": "string",
+                        "example": "ZEC",
+                        "description": "거래 리워드 자산"
+                      },
+                      "timeInForce": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "0(gtc), 1(post only), 2(ioc), 3(fok)"
+                      },
+                      "protection": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "1(적용하지 않음), 2(적용함)"
+                      },
+                      "forcedCompletionReason": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "0(해당 없음), 1(timeInForce), 2(protection)"
+                      },
+                      "stopPrice": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "감시 가격 (예약가 주문일 경우만 0이 아닌 값)"
+                      },
+                      "takerFeeAmount": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "테이커 포지션으로 지불한 수수료"
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "ZEC-KRW",
+                        "description": "오더북"
+                      }
+                    },
+                    "required": [
+                      "orderId",
+                      "status",
+                      "side",
+                      "type",
+                      "price",
+                      "orgAmount",
+                      "remainAmount",
+                      "createdAt",
+                      "updatedAt",
+                      "tradedBaseAmount",
+                      "tradedQuoteAmount",
+                      "feeAmount",
+                      "feeAssetName",
+                      "rewardAmount",
+                      "rewardAssetName",
+                      "timeInForce",
+                      "protection",
+                      "forcedCompletionReason",
+                      "stopPrice",
+                      "takerFeeAmount",
+                      "tradingPairName"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "data"
+              ]
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.open-orders.response"
+      },
+      "private_미체결주문구독_delta": {
+        "name": "private_미체결주문구독_delta",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "i": {
+              "type": "integer",
+              "example": -1,
+              "description": "델타 푸시일 경우는 항상 -1"
+            },
+            "n": {
+              "type": "string",
+              "example": "OrderEvent"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "orderId": {
+                  "type": "integer",
+                  "example": 327347
+                },
+                "status": {
+                  "type": "integer",
+                  "example": 4,
+                  "description": "4(일부 체결됨)로 변경됨"
+                },
+                "side": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "type": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "price": {
+                  "type": "integer",
+                  "example": 5500000
+                },
+                "orgAmount": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "remainAmount": {
+                  "type": "number",
+                  "example": 0.8,
+                  "description": "미체결된 수량이 0.2 감소"
+                },
+                "createdAt": {
+                  "type": "integer",
+                  "example": 1597218137
+                },
+                "updatedAt": {
+                  "type": "integer",
+                  "example": 1599093631,
+                  "description": "마지막 업데이트 시간이 갱신됨"
+                },
+                "tradedBaseAmount": {
+                  "type": "number",
+                  "example": 0.2,
+                  "description": "0.2 ZEC이 나감"
+                },
+                "tradedQuoteAmount": {
+                  "type": "integer",
+                  "example": 1100000,
+                  "description": "1,100,000 KRW이 들어옴"
+                },
+                "feeAmount": {
+                  "type": "integer",
+                  "example": 440,
+                  "description": "거래 수수료 (이 예제에서는 0.04% 부과)"
+                },
+                "feeAssetName": {
+                  "type": "string",
+                  "example": "KRW",
+                  "description": "거래 수수료 자산"
+                },
+                "rewardAmount": {
+                  "type": "integer",
+                  "example": 0,
+                  "description": "거래 리워드"
+                },
+                "rewardAssetName": {
+                  "type": "string",
+                  "example": "ZEC",
+                  "description": "거래 리워드 자산"
+                },
+                "timeInForce": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "protection": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "forcedCompletionReason": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "stopPrice": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "takerFeeAmount": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "ZEC-KRW"
+                }
+              },
+              "required": [
+                "orderId",
+                "status",
+                "side",
+                "type",
+                "price",
+                "orgAmount",
+                "remainAmount",
+                "createdAt",
+                "updatedAt",
+                "tradedBaseAmount",
+                "tradedQuoteAmount",
+                "feeAmount",
+                "feeAssetName",
+                "rewardAmount",
+                "rewardAssetName",
+                "timeInForce",
+                "protection",
+                "forcedCompletionReason",
+                "stopPrice",
+                "takerFeeAmount",
+                "tradingPairName"
+              ]
+            }
+          },
+          "required": [
+            "i",
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.open-orders.delta"
+      },
+      "private_잔고구독_request": {
+        "name": "private_잔고구독_request",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToBalances"
+            },
+            "o": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.balances.request"
+      },
+      "private_잔고구독_response": {
+        "name": "private_잔고구독_response",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToBalances"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "\"assetId\": 7",
+                    "description": "자산 ID",
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "example": "\"avail\": 989.4998",
+                        "description": "주문 가능 보유 수량"
+                      },
+                      {
+                        "type": "string",
+                        "example": "\"hold\": 2",
+                        "description": "오더북에 올라가 있는 수량"
+                      },
+                      {
+                        "type": "string",
+                        "example": "\"pendingWithdrawal\": 0",
+                        "description": "출금 처리 중인 수량"
+                      },
+                      {
+                        "type": "string",
+                        "example": "\"blendedPrice\": 429413.08986192",
+                        "description": "매수 평균가"
+                      },
+                      {
+                        "type": "string",
+                        "example": "\"lastUpdatedAt\": 1599097996.779",
+                        "description": "마지막 업데이트 시간"
+                      },
+                      {
+                        "type": "string",
+                        "example": "isoAlpha3\": \"ZEC",
+                        "description": "자산 이름"
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "data"
+              ]
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.balances.response"
+      },
+      "private_잔고구독_delta": {
+        "name": "private_잔고구독_delta",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "i": {
+              "type": "integer",
+              "example": -1,
+              "description": "델타 푸시일 경우는 항상 -1"
+            },
+            "n": {
+              "type": "string",
+              "example": "BalanceEvent"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "assetId": {
+                  "type": "integer",
+                  "example": 7
+                },
+                "avail": {
+                  "type": "number",
+                  "example": 990.4998,
+                  "description": "주문 가능 보유 수량 +1"
+                },
+                "hold": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "오더북에 올라가 있는 수량 -1"
+                },
+                "pendingWithdrawal": {
+                  "type": "integer",
+                  "example": 0
+                },
+                "blendedPrice": {
+                  "type": "number",
+                  "example": 429413.08986192
+                },
+                "lastUpdatedAt": {
+                  "type": "number",
+                  "example": 1599098077.27
+                },
+                "isoAlpha3": {
+                  "type": "string",
+                  "example": "ZEC"
+                }
+              },
+              "required": [
+                "assetId",
+                "avail",
+                "hold",
+                "pendingWithdrawal",
+                "blendedPrice",
+                "lastUpdatedAt",
+                "isoAlpha3"
+              ]
+            }
+          },
+          "required": [
+            "i",
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.balances.delta"
+      },
+      "private_체결내역구독_request": {
+        "name": "private_체결내역구독_request",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToTrades"
+            },
+            "o": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.my-trades.request"
+      },
+      "private_체결내역구독_response": {
+        "name": "private_체결내역구독_response",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToTrades"
+            },
+            "o": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.my-trades.response"
+      },
+      "private_체결내역구독_delta": {
+        "name": "private_체결내역구독_delta",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "i": {
+              "type": "integer",
+              "example": -1
+            },
+            "n": {
+              "type": "string",
+              "example": "TradeEvent"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "tradeId": {
+                  "type": "integer",
+                  "example": 74072,
+                  "description": "체결 ID"
+                },
+                "orderId": {
+                  "type": "integer",
+                  "example": 453529,
+                  "description": "오더 ID"
+                },
+                "side": {
+                  "type": "integer",
+                  "example": 2,
+                  "description": "1(구매), 2(판매)"
+                },
+                "type": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "1(지정가), 2(시장가)"
+                },
+                "baseAmount": {
+                  "type": "number",
+                  "example": 0.01,
+                  "description": "체결된 Base Asset 수량 (이 예제에서는 ZEC가 단위)"
+                },
+                "quoteAmount": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "체결된 Quote Asset 수량 (이 예제에서는 KRW가 단위)"
+                },
+                "fee": {
+                  "type": "number",
+                  "example": 0.0004,
+                  "description": "수수료 (리워드일 경우 음수)"
+                },
+                "feeAssetName": {
+                  "type": "string",
+                  "example": "KRW",
+                  "description": "수수료 자산 (수수료가 음수일 경우 리워드 자산)"
+                },
+                "price": {
+                  "type": "integer",
+                  "example": 100,
+                  "description": "가격"
+                },
+                "isSelfTrade": {
+                  "type": "boolean",
+                  "example": false,
+                  "description": "자전 체결 여부"
+                },
+                "occurredAt": {
+                  "type": "integer",
+                  "example": 1603932107,
+                  "description": "체결 시간"
+                },
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "ZEC-KRW",
+                  "description": "오더북"
+                }
+              },
+              "required": [
+                "tradeId",
+                "orderId",
+                "side",
+                "type",
+                "baseAmount",
+                "quoteAmount",
+                "fee",
+                "feeAssetName",
+                "price",
+                "isSelfTrade",
+                "occurredAt",
+                "tradingPairName"
+              ]
+            }
+          },
+          "required": [
+            "i",
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.my-trades.delta"
+      },
+      "public_오더북구독_request": {
+        "name": "public_오더북구독_request",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToOrderBook"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "BCH-KRW",
+                  "description": "구독하고자 하는 오더북"
+                }
+              },
+              "required": [
+                "tradingPairName"
+              ]
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.orderbook.request"
+      },
+      "public_오더북구독_response": {
+        "name": "public_오더북구독_response",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToOrderBook"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "ask": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "entryId": {
+                        "type": "integer",
+                        "example": 50,
+                        "description": "업데이트 시퀀스 (+1씩 증가)"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 5100000,
+                        "description": "가격"
+                      },
+                      "volume": {
+                        "type": "number",
+                        "example": 2.5,
+                        "description": "수량"
+                      },
+                      "updatedAt": {
+                        "type": "number",
+                        "example": 1599089007.614,
+                        "description": "마지막 업데이트 시간"
+                      }
+                    },
+                    "required": [
+                      "entryId",
+                      "price",
+                      "volume",
+                      "updatedAt"
+                    ]
+                  },
+                  "description": "판매 엔트리 목록"
+                },
+                "bid": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "entryId": {
+                        "type": "integer",
+                        "example": 48
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 5000000
+                      },
+                      "volume": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "updatedAt": {
+                        "type": "number",
+                        "example": 1599088982.102
+                      }
+                    },
+                    "required": [
+                      "entryId",
+                      "price",
+                      "volume",
+                      "updatedAt"
+                    ]
+                  }
+                },
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "BCH-KRW"
+                },
+                "maxEntryId": {
+                  "type": "integer",
+                  "example": 50
+                }
+              },
+              "required": [
+                "ask",
+                "bid",
+                "tradingPairName",
+                "maxEntryId"
+              ]
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.orderbook.response"
+      },
+      "public_오더북구독_delta": {
+        "name": "public_오더북구독_delta",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "i": {
+              "type": "integer",
+              "example": -1,
+              "description": "델타 푸시일 경우는 항상 -1"
+            },
+            "n": {
+              "type": "string",
+              "example": "OrderBookEvent"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "ask": {
+                  "type": "array",
+                  "items": {}
+                },
+                "bid": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "entryId": {
+                        "type": "integer",
+                        "example": 51
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 5000000
+                      },
+                      "volume": {
+                        "type": "integer",
+                        "example": 0
+                      },
+                      "updatedAt": {
+                        "type": "number",
+                        "example": 1599089169.282
+                      }
+                    },
+                    "required": [
+                      "entryId",
+                      "price",
+                      "volume",
+                      "updatedAt"
+                    ]
+                  }
+                },
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "BCH-KRW"
+                }
+              },
+              "required": [
+                "ask",
+                "bid",
+                "tradingPairName"
+              ]
+            }
+          },
+          "required": [
+            "i",
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.orderbook.delta"
+      },
+      "public_거래쌍구독_request": {
+        "name": "public_거래쌍구독_request",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToTradingPair"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "BCH-KRW",
+                  "description": "구독하고자 하는 오더북"
+                }
+              },
+              "required": [
+                "tradingPairName"
+              ]
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.trading-pair.request"
+      },
+      "public_거래쌍구독_response": {
+        "name": "public_거래쌍구독_response",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "i": {
+              "type": "integer",
+              "example": -1,
+              "description": "델타 푸시일 경우는 항상 -1"
+            },
+            "n": {
+              "type": "string",
+              "example": "PublicTradeEvent"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "tradeId": {
+                  "type": "integer",
+                  "example": 75021,
+                  "description": "체결 내역 ID"
+                },
+                "baseAmount": {
+                  "type": "number",
+                  "example": 0.01,
+                  "description": "체결된 Base Asset 수량 (이 예제에서는 BCH가 단위)"
+                },
+                "quoteAmount": {
+                  "type": "integer",
+                  "example": 1,
+                  "description": "체결된 Quote Asset 수량 (이 예제에서는 KRW가 단위)"
+                },
+                "price": {
+                  "type": "integer",
+                  "example": 100,
+                  "description": "가격"
+                },
+                "isBuy": {
+                  "type": "boolean",
+                  "example": true,
+                  "description": "true(구매), false(판매)"
+                },
+                "occurredAt": {
+                  "type": "integer",
+                  "example": 1609756772,
+                  "description": "체결 시간"
+                },
+                "tradingPairName": {
+                  "type": "string",
+                  "example": "BCH-KRW",
+                  "description": "오더북"
+                }
+              },
+              "required": [
+                "tradeId",
+                "baseAmount",
+                "quoteAmount",
+                "price",
+                "isBuy",
+                "occurredAt",
+                "tradingPairName"
+              ]
+            }
+          },
+          "required": [
+            "i",
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.trading-pair.response"
+      },
+      "public_티커구독_request": {
+        "name": "public_티커구독_request",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToTickers"
+            },
+            "o": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.ticker.request"
+      },
+      "public_티커구독_response": {
+        "name": "public_티커구독_response",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "n": {
+              "type": "string",
+              "example": "SubscribeToTickers"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "baseVolume": {
+                        "type": "number",
+                        "example": 0.02,
+                        "description": "최근 24시간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                      },
+                      "high": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "최근 24시간 최고 거래 가격"
+                      },
+                      "highestBid": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "오더북 상의 현재 가장 높은 매수 가격"
+                      },
+                      "last": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "오더북 상의 현재 가격"
+                      },
+                      "lastTraded": {
+                        "type": "integer",
+                        "example": 1665640796413,
+                        "description": "최근 거래 시각(Unix time)"
+                      },
+                      "low": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "최근 24시간 최저 거래 가격"
+                      },
+                      "lowestAsk": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "오더북 상의 현재 가장 낮은 매도 가격"
+                      },
+                      "open": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "거래시작가, 한국시간(KST) 기준 00시 이후 첫 거래가 체결된 가격"
+                      },
+                      "quoteVolume": {
+                        "type": "integer",
+                        "example": 746000,
+                        "description": "최근 24시간 누적 거래량 (quote 자산 단위로 이 예시에서는 KRW)"
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "BTC-KRW",
+                        "description": "오더북"
+                      }
+                    },
+                    "required": [
+                      "baseVolume",
+                      "high",
+                      "highestBid",
+                      "last",
+                      "lastTraded",
+                      "low",
+                      "lowestAsk",
+                      "open",
+                      "quoteVolume",
+                      "tradingPairName"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "data"
+              ]
+            }
+          },
+          "required": [
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.ticker.response"
+      },
+      "public_티커구독_delta": {
+        "name": "public_티커구독_delta",
+        "payload": {
+          "type": "object",
+          "properties": {
+            "i": {
+              "type": "integer",
+              "example": -1
+            },
+            "n": {
+              "type": "string",
+              "example": "TickerEvent"
+            },
+            "o": {
+              "type": "object",
+              "properties": {
+                "BTC-KRW": {
+                  "type": "object",
+                  "properties": {
+                    "baseVolume": {
+                      "type": "number",
+                      "example": 0.02
+                    },
+                    "high": {
+                      "type": "integer",
+                      "example": 37300000
+                    },
+                    "highestBid": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "last": {
+                      "type": "integer",
+                      "example": 37300000
+                    },
+                    "lastTraded": {
+                      "type": "integer",
+                      "example": 1665640796413
+                    },
+                    "low": {
+                      "type": "integer",
+                      "example": 37300000
+                    },
+                    "lowestAsk": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "open": {
+                      "type": "integer",
+                      "example": 37300000
+                    },
+                    "quoteVolume": {
+                      "type": "integer",
+                      "example": 746000
+                    },
+                    "tradingPairName": {
+                      "type": "string",
+                      "example": "BTC-KRW"
+                    }
+                  },
+                  "required": [
+                    "baseVolume",
+                    "high",
+                    "highestBid",
+                    "last",
+                    "lastTraded",
+                    "low",
+                    "lowestAsk",
+                    "open",
+                    "quoteVolume",
+                    "tradingPairName"
+                  ]
+                }
+              },
+              "required": [
+                "BTC-KRW"
+              ]
+            }
+          },
+          "required": [
+            "i",
+            "n",
+            "o"
+          ]
+        },
+        "messageId": "gopax.ws.ticker.delta"
+      }
+    }
+  },
+  "id": "urn:exhub:asyncapi:gopax:ws"
+}

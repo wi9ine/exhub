@@ -1,0 +1,1095 @@
+{
+  "asyncapi": "2.6.0",
+  "defaultContentType": "application/json",
+  "info": {
+    "title": "Bithumb WebSocket API",
+    "description": "빗썸 공식 API 문서 v2.1.5 기준 WebSocket 스펙입니다.",
+    "version": "2.1.5",
+    "contact": {
+      "name": "Bithumb API Docs",
+      "url": "https://apidocs.bithumb.com/reference"
+    }
+  },
+  "servers": {
+    "public": {
+      "url": "wss://ws-api.bithumb.com/websocket/v1",
+      "protocol": "wss",
+      "description": "Public WebSocket endpoint",
+      "bindings": {
+        "ws": {}
+      }
+    },
+    "private": {
+      "url": "wss://ws-api.bithumb.com/websocket/v1/private",
+      "protocol": "wss",
+      "description": "Private WebSocket endpoint",
+      "security": [
+        {
+          "BearerAuth": []
+        }
+      ],
+      "bindings": {
+        "ws": {}
+      }
+    }
+  },
+  "channels": {
+    "ticker": {
+      "description": "현재가 (Ticker) 데이터 수신",
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "requestTicker",
+        "message": {
+          "$ref": "#/components/messages/TickerRequestMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%ED%98%84%EC%9E%AC%EA%B0%80-ticker"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/현재가-ticker"
+      },
+      "subscribe": {
+        "operationId": "receiveTicker",
+        "message": {
+          "$ref": "#/components/messages/TickerMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%ED%98%84%EC%9E%AC%EA%B0%80-ticker"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/현재가-ticker"
+      },
+      "x-tags": [
+        "타입별 요청 및 응답"
+      ]
+    },
+    "trade": {
+      "description": "체결 (Trade) 데이터 수신",
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "requestTrade",
+        "message": {
+          "$ref": "#/components/messages/TradeRequestMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EC%B2%B4%EA%B2%B0-trade"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/체결-trade"
+      },
+      "subscribe": {
+        "operationId": "receiveTrade",
+        "message": {
+          "$ref": "#/components/messages/TradeMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EC%B2%B4%EA%B2%B0-trade"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/체결-trade"
+      },
+      "x-tags": [
+        "타입별 요청 및 응답"
+      ]
+    },
+    "orderbook": {
+      "description": "호가 (Orderbook) 데이터 수신",
+      "servers": [
+        "public"
+      ],
+      "publish": {
+        "operationId": "requestOrderbook",
+        "message": {
+          "$ref": "#/components/messages/OrderbookRequestMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%ED%98%B8%EA%B0%80-orderbook"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/호가-orderbook"
+      },
+      "subscribe": {
+        "operationId": "receiveOrderbook",
+        "message": {
+          "$ref": "#/components/messages/OrderbookMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%ED%98%B8%EA%B0%80-orderbook"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/호가-orderbook"
+      },
+      "x-tags": [
+        "타입별 요청 및 응답"
+      ]
+    },
+    "myOrder": {
+      "description": "내 주문 및 체결 (MyOrder) 데이터 수신",
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "requestMyOrder",
+        "message": {
+          "$ref": "#/components/messages/MyOrderRequestMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EB%82%B4-%EC%A3%BC%EB%AC%B8-%EB%B0%8F-%EC%B2%B4%EA%B2%B0-myorder"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/내-주문-및-체결-myorder"
+      },
+      "subscribe": {
+        "operationId": "receiveMyOrder",
+        "message": {
+          "$ref": "#/components/messages/MyOrderMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EB%82%B4-%EC%A3%BC%EB%AC%B8-%EB%B0%8F-%EC%B2%B4%EA%B2%B0-myorder"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/내-주문-및-체결-myorder"
+      },
+      "x-tags": [
+        "타입별 요청 및 응답"
+      ]
+    },
+    "myAsset": {
+      "description": "내 자산 (MyAsset) 데이터 수신",
+      "servers": [
+        "private"
+      ],
+      "publish": {
+        "operationId": "requestMyAsset",
+        "message": {
+          "$ref": "#/components/messages/MyAssetRequestMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EB%82%B4-%EC%9E%90%EC%82%B0-myasset"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/내-자산-myasset"
+      },
+      "subscribe": {
+        "operationId": "receiveMyAsset",
+        "message": {
+          "$ref": "#/components/messages/MyAssetMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EB%82%B4-%EC%9E%90%EC%82%B0-myasset"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/내-자산-myasset"
+      },
+      "x-tags": [
+        "타입별 요청 및 응답"
+      ]
+    },
+    "status": {
+      "description": "PING 메시지 또는 idle timeout 방지 시 수신되는 상태 응답",
+      "servers": [
+        "public",
+        "private"
+      ],
+      "subscribe": {
+        "operationId": "receiveStatus",
+        "message": {
+          "$ref": "#/components/messages/StatusMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EC%97%B0%EA%B2%B0-%EA%B4%80%EB%A6%AC"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/연결-관리"
+      },
+      "x-tags": [
+        "연결 관리"
+      ]
+    },
+    "error": {
+      "description": "웹소켓 에러 응답",
+      "servers": [
+        "public",
+        "private"
+      ],
+      "subscribe": {
+        "operationId": "receiveError",
+        "message": {
+          "$ref": "#/components/messages/ErrorMessage"
+        },
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/%EC%9B%B9%EC%86%8C%EC%BC%93-%EC%97%90%EB%9F%AC"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/웹소켓-에러"
+      },
+      "x-tags": [
+        "웹소켓 에러"
+      ]
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "REST API와 동일하게 Authorization 헤더로 JWT 인증을 진행합니다."
+      }
+    },
+    "schemas": {
+      "TicketObject": {
+        "type": "object",
+        "properties": {
+          "ticket": {
+            "type": "string",
+            "description": "요청자를 식별할 수 있는 값"
+          }
+        },
+        "required": [
+          "ticket"
+        ]
+      },
+      "FormatObject": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "DEFAULT",
+              "SIMPLE"
+            ],
+            "default": "DEFAULT",
+            "description": "DEFAULT는 기본형, SIMPLE은 축약형 포맷"
+          }
+        },
+        "required": [
+          "format"
+        ]
+      },
+      "TickerTypeField": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ticker"
+            ]
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "마켓 코드 리스트. 대문자만 허용"
+          },
+          "isOnlySnapshot": {
+            "type": "boolean",
+            "default": false
+          },
+          "isOnlyRealtime": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "type",
+          "codes"
+        ]
+      },
+      "TradeTypeField": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "trade"
+            ]
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "isOnlySnapshot": {
+            "type": "boolean",
+            "default": false
+          },
+          "isOnlyRealtime": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "type",
+          "codes"
+        ]
+      },
+      "OrderbookTypeField": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "orderbook"
+            ]
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "level": {
+            "type": "number",
+            "default": 1,
+            "description": "모아보기 단위"
+          },
+          "isOnlySnapshot": {
+            "type": "boolean",
+            "default": false
+          },
+          "isOnlyRealtime": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "type",
+          "codes"
+        ]
+      },
+      "MyOrderTypeField": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "myOrder"
+            ]
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "생략하거나 빈 배열이면 모든 마켓 수신"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "MyAssetTypeField": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "myAsset"
+            ]
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "TickerRequest": {
+        "type": "array",
+        "items": [
+          {
+            "$ref": "#/components/schemas/TicketObject"
+          },
+          {
+            "$ref": "#/components/schemas/TickerTypeField"
+          }
+        ],
+        "additionalItems": {
+          "$ref": "#/components/schemas/FormatObject"
+        },
+        "minItems": 2,
+        "maxItems": 3
+      },
+      "TradeRequest": {
+        "type": "array",
+        "items": [
+          {
+            "$ref": "#/components/schemas/TicketObject"
+          },
+          {
+            "$ref": "#/components/schemas/TradeTypeField"
+          }
+        ],
+        "additionalItems": {
+          "$ref": "#/components/schemas/FormatObject"
+        },
+        "minItems": 2,
+        "maxItems": 3
+      },
+      "OrderbookRequest": {
+        "type": "array",
+        "items": [
+          {
+            "$ref": "#/components/schemas/TicketObject"
+          },
+          {
+            "$ref": "#/components/schemas/OrderbookTypeField"
+          }
+        ],
+        "additionalItems": {
+          "$ref": "#/components/schemas/FormatObject"
+        },
+        "minItems": 2,
+        "maxItems": 3
+      },
+      "MyOrderRequest": {
+        "type": "array",
+        "items": [
+          {
+            "$ref": "#/components/schemas/TicketObject"
+          },
+          {
+            "$ref": "#/components/schemas/MyOrderTypeField"
+          }
+        ],
+        "additionalItems": {
+          "$ref": "#/components/schemas/FormatObject"
+        },
+        "minItems": 2,
+        "maxItems": 3
+      },
+      "MyAssetRequest": {
+        "type": "array",
+        "items": [
+          {
+            "$ref": "#/components/schemas/TicketObject"
+          },
+          {
+            "$ref": "#/components/schemas/MyAssetTypeField"
+          }
+        ],
+        "additionalItems": {
+          "$ref": "#/components/schemas/FormatObject"
+        },
+        "minItems": 2,
+        "maxItems": 3
+      },
+      "TickerData": {
+        "type": "object",
+        "x-format-transforms": {
+          "SIMPLE": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "x-abbreviation": "ty"
+          },
+          "code": {
+            "type": "string",
+            "x-abbreviation": "cd"
+          },
+          "opening_price": {
+            "type": "number",
+            "x-abbreviation": "op"
+          },
+          "high_price": {
+            "type": "number",
+            "x-abbreviation": "hp"
+          },
+          "low_price": {
+            "type": "number",
+            "x-abbreviation": "lp"
+          },
+          "trade_price": {
+            "type": "number",
+            "x-abbreviation": "tp"
+          },
+          "prev_closing_price": {
+            "type": "number",
+            "x-abbreviation": "pcp"
+          },
+          "change": {
+            "type": "string",
+            "enum": [
+              "RISE",
+              "EVEN",
+              "FALL"
+            ],
+            "x-abbreviation": "c"
+          },
+          "change_price": {
+            "type": "number",
+            "x-abbreviation": "cp"
+          },
+          "signed_change_price": {
+            "type": "number",
+            "x-abbreviation": "scp"
+          },
+          "change_rate": {
+            "type": "number",
+            "x-abbreviation": "cr"
+          },
+          "signed_change_rate": {
+            "type": "number",
+            "x-abbreviation": "scr"
+          },
+          "trade_volume": {
+            "type": "number",
+            "x-abbreviation": "tv"
+          },
+          "acc_trade_volume": {
+            "type": "number",
+            "x-abbreviation": "atv"
+          },
+          "acc_trade_volume_24h": {
+            "type": "number",
+            "x-abbreviation": "atv24h"
+          },
+          "acc_trade_price": {
+            "type": "number",
+            "x-abbreviation": "atp"
+          },
+          "acc_trade_price_24h": {
+            "type": "number",
+            "x-abbreviation": "atp24h"
+          },
+          "trade_date": {
+            "type": "string",
+            "x-abbreviation": "tdt"
+          },
+          "trade_time": {
+            "type": "string",
+            "x-abbreviation": "ttm"
+          },
+          "trade_timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "ttms"
+          },
+          "ask_bid": {
+            "type": "string",
+            "enum": [
+              "ASK",
+              "BID"
+            ],
+            "x-abbreviation": "ab"
+          },
+          "acc_ask_volume": {
+            "type": "number",
+            "x-abbreviation": "aav"
+          },
+          "acc_bid_volume": {
+            "type": "number",
+            "x-abbreviation": "abv"
+          },
+          "highest_52_week_price": {
+            "type": "number",
+            "x-abbreviation": "h52wp"
+          },
+          "highest_52_week_date": {
+            "type": "string",
+            "x-abbreviation": "h52wdt"
+          },
+          "lowest_52_week_price": {
+            "type": "number",
+            "x-abbreviation": "l52wp"
+          },
+          "lowest_52_week_date": {
+            "type": "string",
+            "x-abbreviation": "l52wdt"
+          },
+          "market_state": {
+            "type": "string",
+            "x-abbreviation": "ms"
+          },
+          "is_trading_suspended": {
+            "type": "boolean",
+            "x-abbreviation": "its"
+          },
+          "delisting_date": {
+            "type": "string",
+            "nullable": true,
+            "x-abbreviation": "dd"
+          },
+          "market_warning": {
+            "type": "string",
+            "x-abbreviation": "mw"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "tms"
+          },
+          "stream_type": {
+            "type": "string",
+            "enum": [
+              "SNAPSHOT",
+              "REALTIME"
+            ],
+            "x-abbreviation": "st"
+          }
+        }
+      },
+      "TradeData": {
+        "type": "object",
+        "x-format-transforms": {
+          "SIMPLE": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "x-abbreviation": "ty"
+          },
+          "code": {
+            "type": "string",
+            "x-abbreviation": "cd"
+          },
+          "trade_price": {
+            "type": "number",
+            "x-abbreviation": "tp"
+          },
+          "trade_volume": {
+            "type": "number",
+            "x-abbreviation": "tv"
+          },
+          "ask_bid": {
+            "type": "string",
+            "enum": [
+              "ASK",
+              "BID"
+            ],
+            "x-abbreviation": "ab"
+          },
+          "prev_closing_price": {
+            "type": "number",
+            "x-abbreviation": "pcp"
+          },
+          "change": {
+            "type": "string",
+            "enum": [
+              "RISE",
+              "EVEN",
+              "FALL"
+            ],
+            "x-abbreviation": "c"
+          },
+          "change_price": {
+            "type": "number",
+            "x-abbreviation": "cp"
+          },
+          "trade_date": {
+            "type": "string",
+            "x-abbreviation": "tdt"
+          },
+          "trade_time": {
+            "type": "string",
+            "x-abbreviation": "ttm"
+          },
+          "trade_timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "ttms"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "tms"
+          },
+          "sequential_id": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "sid"
+          },
+          "stream_type": {
+            "type": "string",
+            "enum": [
+              "SNAPSHOT",
+              "REALTIME"
+            ],
+            "x-abbreviation": "st"
+          }
+        }
+      },
+      "OrderbookUnit": {
+        "type": "object",
+        "properties": {
+          "ask_price": {
+            "type": "number",
+            "x-abbreviation": "obu.ap"
+          },
+          "bid_price": {
+            "type": "number",
+            "x-abbreviation": "obu.bp"
+          },
+          "ask_size": {
+            "type": "number",
+            "x-abbreviation": "obu.as"
+          },
+          "bid_size": {
+            "type": "number",
+            "x-abbreviation": "obu.bs"
+          }
+        }
+      },
+      "OrderbookData": {
+        "type": "object",
+        "x-format-transforms": {
+          "SIMPLE": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "x-abbreviation": "ty"
+          },
+          "code": {
+            "type": "string",
+            "x-abbreviation": "cd"
+          },
+          "total_ask_size": {
+            "type": "number",
+            "x-abbreviation": "tas"
+          },
+          "total_bid_size": {
+            "type": "number",
+            "x-abbreviation": "tbs"
+          },
+          "orderbook_units": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderbookUnit"
+            },
+            "x-abbreviation": "obu"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "tms"
+          },
+          "level": {
+            "type": "number",
+            "x-abbreviation": "lv"
+          }
+        }
+      },
+      "MyOrderData": {
+        "type": "object",
+        "x-format-transforms": {
+          "SIMPLE": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "x-abbreviation": "ty"
+          },
+          "code": {
+            "type": "string",
+            "x-abbreviation": "cd"
+          },
+          "client_order_id": {
+            "type": "string",
+            "x-abbreviation": "coid"
+          },
+          "uuid": {
+            "type": "string",
+            "x-abbreviation": "uid"
+          },
+          "ask_bid": {
+            "type": "string",
+            "enum": [
+              "ASK",
+              "BID"
+            ],
+            "x-abbreviation": "ab"
+          },
+          "order_type": {
+            "type": "string",
+            "enum": [
+              "limit",
+              "price",
+              "market"
+            ],
+            "x-abbreviation": "ot"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "wait",
+              "trade",
+              "done",
+              "cancel"
+            ],
+            "x-abbreviation": "s"
+          },
+          "trade_uuid": {
+            "type": "string",
+            "x-abbreviation": "tuid"
+          },
+          "price": {
+            "type": "number",
+            "x-abbreviation": "p"
+          },
+          "volume": {
+            "type": "number",
+            "x-abbreviation": "v"
+          },
+          "remaining_volume": {
+            "type": "number",
+            "x-abbreviation": "rv"
+          },
+          "executed_volume": {
+            "type": "number",
+            "x-abbreviation": "ev"
+          },
+          "trades_count": {
+            "type": "number",
+            "x-abbreviation": "tc"
+          },
+          "reserved_fee": {
+            "type": "number",
+            "x-abbreviation": "rsf"
+          },
+          "remaining_fee": {
+            "type": "number",
+            "x-abbreviation": "rmf"
+          },
+          "paid_fee": {
+            "type": "number",
+            "x-abbreviation": "pf"
+          },
+          "executed_funds": {
+            "type": "number",
+            "x-abbreviation": "ef"
+          },
+          "trade_timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "ttms"
+          },
+          "order_timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "otms"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "tms"
+          },
+          "stream_type": {
+            "type": "string",
+            "enum": [
+              "REALTIME"
+            ],
+            "x-abbreviation": "st"
+          }
+        },
+        "x-doc-notes": [
+          "문서 공지에 canceling_uuid, cancel_type 필드가 향후 추가 예정이라고 명시되어 있으나 현재 응답 표에는 포함되어 있지 않아 스키마에 반영하지 않았습니다."
+        ]
+      },
+      "MyAssetEntry": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "x-abbreviation": "ast.cu"
+          },
+          "balance": {
+            "type": "string",
+            "x-abbreviation": "ast.b",
+            "description": "주문가능 수량. 공식 예시 응답 기준 문자열로 반환됨"
+          },
+          "locked": {
+            "type": "string",
+            "x-abbreviation": "ast.l",
+            "description": "주문 중 묶여있는 수량. 공식 예시 응답 기준 문자열로 반환됨"
+          }
+        }
+      },
+      "MyAssetData": {
+        "type": "object",
+        "x-format-transforms": {
+          "SIMPLE": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "x-abbreviation": "ty"
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MyAssetEntry"
+            },
+            "x-abbreviation": "ast"
+          },
+          "asset_timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "asttms"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "x-abbreviation": "tms"
+          },
+          "stream_type": {
+            "type": "string",
+            "enum": [
+              "REALTIME"
+            ],
+            "x-abbreviation": "st"
+          }
+        },
+        "x-doc-notes": [
+          "assets.balance, assets.locked는 응답 표에는 Double로 표기되어 있으나 공식 예시 응답은 문자열로 제공됩니다. 스키마는 공식 예시 응답 형식에 맞춰 문자열로 정의했습니다."
+        ]
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "WRONG_FORMAT",
+              "NO_TICKET",
+              "NO_TYPE",
+              "NO_CODES",
+              "INVALID_PARAM"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "message"
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "StatusResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "UP"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      }
+    },
+    "messages": {
+      "TickerRequestMessage": {
+        "messageId": "bithumb.ws.ticker.request",
+        "payload": {
+          "$ref": "#/components/schemas/TickerRequest"
+        }
+      },
+      "TickerMessage": {
+        "messageId": "bithumb.ws.ticker.response",
+        "payload": {
+          "$ref": "#/components/schemas/TickerData"
+        }
+      },
+      "TradeRequestMessage": {
+        "messageId": "bithumb.ws.trade.request",
+        "payload": {
+          "$ref": "#/components/schemas/TradeRequest"
+        }
+      },
+      "TradeMessage": {
+        "messageId": "bithumb.ws.trade.response",
+        "payload": {
+          "$ref": "#/components/schemas/TradeData"
+        }
+      },
+      "OrderbookRequestMessage": {
+        "messageId": "bithumb.ws.orderbook.request",
+        "payload": {
+          "$ref": "#/components/schemas/OrderbookRequest"
+        }
+      },
+      "OrderbookMessage": {
+        "messageId": "bithumb.ws.orderbook.response",
+        "payload": {
+          "$ref": "#/components/schemas/OrderbookData"
+        }
+      },
+      "MyOrderRequestMessage": {
+        "messageId": "bithumb.ws.my-order.request",
+        "payload": {
+          "$ref": "#/components/schemas/MyOrderRequest"
+        }
+      },
+      "MyOrderMessage": {
+        "messageId": "bithumb.ws.my-order.response",
+        "payload": {
+          "$ref": "#/components/schemas/MyOrderData"
+        }
+      },
+      "MyAssetRequestMessage": {
+        "messageId": "bithumb.ws.my-asset.request",
+        "payload": {
+          "$ref": "#/components/schemas/MyAssetRequest"
+        }
+      },
+      "MyAssetMessage": {
+        "messageId": "bithumb.ws.my-asset.response",
+        "payload": {
+          "$ref": "#/components/schemas/MyAssetData"
+        }
+      },
+      "ErrorMessage": {
+        "messageId": "bithumb.ws.control.error",
+        "payload": {
+          "$ref": "#/components/schemas/ErrorResponse"
+        }
+      },
+      "StatusMessage": {
+        "messageId": "bithumb.ws.control.status",
+        "payload": {
+          "$ref": "#/components/schemas/StatusResponse"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "타입별 요청 및 응답",
+      "description": "빗썸 공식 문서의 타입별 요청 및 응답 카테고리"
+    },
+    {
+      "name": "연결 관리",
+      "description": "빗썸 공식 문서의 연결 관리 카테고리"
+    },
+    {
+      "name": "웹소켓 에러",
+      "description": "빗썸 공식 문서의 웹소켓 에러 카테고리"
+    }
+  ],
+  "id": "urn:exhub:asyncapi:bithumb:ws"
+}

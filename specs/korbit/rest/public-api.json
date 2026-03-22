@@ -1,0 +1,1284 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Korbit Public REST API",
+    "description": "코빗 공식 문서 기준 Public REST API 스펙입니다.",
+    "version": "v2",
+    "contact": {
+      "name": "코빗 API Docs",
+      "url": "https://docs.korbit.co.kr/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.korbit.co.kr"
+    }
+  ],
+  "tags": [
+    {
+      "name": "시세"
+    },
+    {
+      "name": "기타"
+    }
+  ],
+  "paths": {
+    "/v2/tickers": {
+      "get": {
+        "tags": [
+          "시세"
+        ],
+        "summary": "현재가 조회",
+        "description": "하나 또는 여러 거래쌍의 현재가(Ticker) 정보를 조회합니다.",
+        "operationId": "getV2Tickers",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_tickers"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_tickers",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "symbol": {
+                            "type": "string",
+                            "example": "btc_krw",
+                            "description": "거래쌍"
+                          },
+                          "open": {
+                            "type": "string",
+                            "example": "77060000",
+                            "description": "최근 24시간 시가"
+                          },
+                          "high": {
+                            "type": "string",
+                            "example": "79650000",
+                            "description": "최근 24시간 고가"
+                          },
+                          "low": {
+                            "type": "string",
+                            "example": "76550000",
+                            "description": "최근 24시간 저가"
+                          },
+                          "close": {
+                            "type": "string",
+                            "example": "77136000",
+                            "description": "최근 24시간 종가"
+                          },
+                          "prevClose": {
+                            "type": "string",
+                            "example": "77060000",
+                            "description": "직전 24시간 종가"
+                          },
+                          "priceChange": {
+                            "type": "string",
+                            "example": "76000",
+                            "description": "직전 종가 대비 가격 변화량. prevClose - close으로 계산합니다."
+                          },
+                          "priceChangePercent": {
+                            "type": "string",
+                            "example": "0.1",
+                            "description": "직전 종가 대비 가격 변화율(단위: %). 100 * (prevClose - close) / prevClose으로 계산합니다."
+                          },
+                          "volume": {
+                            "type": "string",
+                            "example": "48.73739983",
+                            "description": "최근 24시간 거래량(가상자산)"
+                          },
+                          "quoteVolume": {
+                            "type": "string",
+                            "example": "3785149733.32633",
+                            "description": "최근 24시간 거래대금(원화)"
+                          },
+                          "bestBidPrice": {
+                            "type": "string",
+                            "example": "77136000",
+                            "description": "매수 1호가"
+                          },
+                          "bestAskPrice": {
+                            "type": "string",
+                            "example": "77193000",
+                            "description": "매도 1호가"
+                          },
+                          "lastTradedAt": {
+                            "type": "integer",
+                            "example": 1725525721041,
+                            "description": "마지막 체결 시각 (단위: Unix Timestamp (밀리초))"
+                          }
+                        },
+                        "required": [
+                          "symbol",
+                          "open",
+                          "high",
+                          "low",
+                          "close",
+                          "prevClose",
+                          "priceChange",
+                          "priceChangePercent",
+                          "volume",
+                          "quoteVolume",
+                          "bestBidPrice",
+                          "bestAskPrice",
+                          "lastTradedAt"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "symbol": "btc_krw",
+                      "open": "77060000",
+                      "high": "79650000",
+                      "low": "76550000",
+                      "close": "77136000",
+                      "prevClose": "77060000",
+                      "priceChange": "76000",
+                      "priceChangePercent": "0.1",
+                      "volume": "48.73739983",
+                      "quoteVolume": "3785149733.32633",
+                      "bestBidPrice": "77136000",
+                      "bestAskPrice": "77193000",
+                      "lastTradedAt": 1725525721041
+                    },
+                    {
+                      "symbol": "eth_krw",
+                      "open": "3259000",
+                      "high": "3370000",
+                      "low": "3222000",
+                      "close": "3250000",
+                      "prevClose": "3259000",
+                      "priceChange": "-9000",
+                      "priceChangePercent": "-0.28",
+                      "volume": "161.99278306",
+                      "quoteVolume": "532827941.01581",
+                      "bestBidPrice": "3251000",
+                      "bestAskPrice": "3254000",
+                      "lastTradedAt": 1725525545630
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다. 여러 거래쌍을 한 번에 조회하고자 한다면 콤마(,)로 구분해 입력합니다.\n\n입력하지 않으면 코빗에서 거래 가능한 모든 거래쌍의 현재가 정보를 응답합니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw,eth_krw"
+          }
+        ]
+      }
+    },
+    "/v2/orderbook": {
+      "get": {
+        "tags": [
+          "시세"
+        ],
+        "summary": "호가 조회",
+        "description": "단일 거래쌍의 호가 정보를 조회합니다.",
+        "operationId": "getV2Orderbook",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_orderbook"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_orderbook",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp": {
+                          "type": "integer",
+                          "example": 1708057740895,
+                          "description": "호가 정보의 기준 시각 (단위: Unix Timestamp (밀리초))"
+                        },
+                        "bids": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "price": {
+                                "type": "string",
+                                "example": "73303000",
+                                "description": "매수호가"
+                              },
+                              "qty": {
+                                "type": "string",
+                                "example": "0.00898326",
+                                "description": "매수잔량"
+                              },
+                              "amt": {
+                                "type": "string",
+                                "description": "호가 금액 (오더북 모아보기를 사용하는 경우에만 세팅되며, 모아보기를 사용하지 않는 경우 price * qty로 계산할 수 있습니다.)",
+                                "example": "2500000"
+                              }
+                            },
+                            "required": [
+                              "price",
+                              "qty"
+                            ]
+                          },
+                          "description": "매수 호가 정보 (호가 내림차순 정렬)"
+                        },
+                        "asks": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "price": {
+                                "type": "string",
+                                "example": "73304000",
+                                "description": "매도호가"
+                              },
+                              "qty": {
+                                "type": "string",
+                                "example": "0.00985212",
+                                "description": "매도잔량"
+                              },
+                              "amt": {
+                                "type": "string",
+                                "description": "호가 금액 (오더북 모아보기를 사용하는 경우에만 세팅되며, 모아보기를 사용하지 않는 경우 price * qty로 계산할 수 있습니다.)",
+                                "example": "2500000"
+                              }
+                            },
+                            "required": [
+                              "price",
+                              "qty"
+                            ]
+                          },
+                          "description": "매도 호가 정보 (호가 오름차순 정렬)"
+                        }
+                      },
+                      "required": [
+                        "timestamp",
+                        "bids",
+                        "asks"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "timestamp": 1708057740895,
+                    "bids": [
+                      {
+                        "price": "73303000",
+                        "qty": "0.00898326"
+                      },
+                      {
+                        "price": "73302000",
+                        "qty": "0.00790837"
+                      },
+                      {
+                        "price": "73301000",
+                        "qty": "0.00843099"
+                      },
+                      {
+                        "price": "73300000",
+                        "qty": "0.00054024"
+                      },
+                      {
+                        "price": "73299000",
+                        "qty": "0.00663446"
+                      }
+                    ],
+                    "asks": [
+                      {
+                        "price": "73304000",
+                        "qty": "0.00985212"
+                      },
+                      {
+                        "price": "73305000",
+                        "qty": "0.00367505"
+                      },
+                      {
+                        "price": "73306000",
+                        "qty": "0.0096254"
+                      },
+                      {
+                        "price": "73307000",
+                        "qty": "0.00502544"
+                      },
+                      {
+                        "price": "73308000",
+                        "qty": "0.00640584"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "description": "오더북 모아보기 단위. 모아보기 단위는 호가 정책 조회 API로 확인할 수 있습니다. 입력하지 않을 경우 모아보기를 적용하지 않습니다.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "1000"
+          }
+        ]
+      }
+    },
+    "/v2/trades": {
+      "get": {
+        "tags": [
+          "시세"
+        ],
+        "summary": "최근 체결 내역",
+        "description": "최근 체결 내역을 조회합니다.",
+        "operationId": "getV2Trades",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_trades"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_trades",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "timestamp": {
+                            "type": "integer",
+                            "example": 1708057271149,
+                            "description": "체결 시각 (단위: Unix Timestamp (밀리초))"
+                          },
+                          "price": {
+                            "type": "string",
+                            "example": "70507000",
+                            "description": "체결 가격"
+                          },
+                          "qty": {
+                            "type": "string",
+                            "example": "0.00981535",
+                            "description": "체결량"
+                          },
+                          "isBuyerTaker": {
+                            "type": "boolean",
+                            "example": false,
+                            "description": "매수 주문으로 인해 발생한 체결인지 여부"
+                          },
+                          "tradeId": {
+                            "type": "number",
+                            "description": "거래 체결 ID (각 거래쌍마다 생성된 개별 거래 체결 건의 ID)",
+                            "example": 1234
+                          }
+                        },
+                        "required": [
+                          "timestamp",
+                          "price",
+                          "qty",
+                          "isBuyerTaker",
+                          "tradeId"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "timestamp": 1708057271149,
+                      "price": "70507000",
+                      "qty": "0.00981535",
+                      "isBuyerTaker": false
+                    },
+                    {
+                      "timestamp": 1708057271035,
+                      "price": "70508000",
+                      "qty": "0.00682475",
+                      "isBuyerTaker": false
+                    },
+                    {
+                      "timestamp": 1708057270922,
+                      "price": "70509000",
+                      "qty": "0.00844147",
+                      "isBuyerTaker": false
+                    },
+                    {
+                      "timestamp": 1708057270809,
+                      "price": "70510000",
+                      "qty": "0.00553963",
+                      "isBuyerTaker": false
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "최대 조회 건수 (범위: 1 - 500)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          }
+        ]
+      }
+    },
+    "/v2/candles": {
+      "get": {
+        "tags": [
+          "시세"
+        ],
+        "summary": "캔들스틱 조회",
+        "description": "시세 캔들스틱 정보를 조회합니다.",
+        "operationId": "getV2Candles",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_candles"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_candles",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "timestamp": {
+                            "type": "integer",
+                            "example": 1708041600000,
+                            "description": "캔들 시작 시각(timestamp)"
+                          },
+                          "open": {
+                            "type": "string",
+                            "example": "71211000",
+                            "description": "시가"
+                          },
+                          "high": {
+                            "type": "string",
+                            "example": "9999990000",
+                            "description": "고가"
+                          },
+                          "low": {
+                            "type": "string",
+                            "example": "300000",
+                            "description": "저가"
+                          },
+                          "close": {
+                            "type": "string",
+                            "example": "71392000",
+                            "description": "종가"
+                          },
+                          "volume": {
+                            "type": "string",
+                            "example": "1.932320026577213946",
+                            "description": "거래량"
+                          }
+                        },
+                        "required": [
+                          "timestamp",
+                          "open",
+                          "high",
+                          "low",
+                          "close",
+                          "volume"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "timestamp": 1708041600000,
+                      "open": "71211000",
+                      "high": "9999990000",
+                      "low": "300000",
+                      "close": "71392000",
+                      "volume": "1.932320026577213946"
+                    },
+                    {
+                      "timestamp": 1708045200000,
+                      "open": "73510000",
+                      "high": "74605000",
+                      "low": "300000",
+                      "close": "72315000",
+                      "volume": "2.418698679231323743"
+                    },
+                    {
+                      "timestamp": 1708048800000,
+                      "open": "72315000",
+                      "high": "9999990000",
+                      "low": "300000",
+                      "close": "72380000",
+                      "volume": "1.947520219976227299"
+                    },
+                    {
+                      "timestamp": 1708052400000,
+                      "open": "70267000",
+                      "high": "74777000",
+                      "low": "300000",
+                      "close": "74049000",
+                      "volume": "2.254855048982521506"
+                    },
+                    {
+                      "timestamp": 1708056000000,
+                      "open": "68304000",
+                      "high": "74834000",
+                      "low": "68241000",
+                      "close": "74825000",
+                      "volume": "0.630193755379195341"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "대상 거래쌍의 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "btc_krw"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "각 캔들 주기(단위)\n\n허용되는 값:\n\n- 1 1분\n\n- 5 5분\n\n- 15 15분\n\n- 30 30분\n\n- 60 1시간\n\n- 240 4시간\n\n- 1D 1일\n\n- 1W 1주",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "5",
+                "15",
+                "30",
+                "60",
+                "240",
+                "1D",
+                "1W"
+              ]
+            },
+            "example": "60"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "description": "조회 시작 시각(timestamp). 입력하지 않으면 거래쌍 상장 시점부터 조회합니다.",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1619244573612
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "description": "조회 종료 시각(timestamp). start보다 큰 값을 입력해야 합니다. 입력하지 않으면 현재 시점까지 조회합니다.",
+            "schema": {
+              "type": "number"
+            },
+            "example": 1715244369188
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "description": "최대 조회 건수 (범위: 1 - 200)",
+            "schema": {
+              "type": "number"
+            },
+            "example": 100
+          }
+        ]
+      }
+    },
+    "/v2/currencyPairs": {
+      "get": {
+        "tags": [
+          "시세"
+        ],
+        "summary": "거래지원 목록 조회",
+        "description": "",
+        "operationId": "getV2CurrencyPairs",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_currencyPairs"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_currencyPairs",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "symbol": {
+                            "type": "string",
+                            "example": "btc_krw",
+                            "description": "거래쌍 심볼"
+                          },
+                          "status": {
+                            "type": "string",
+                            "example": "launched",
+                            "description": "거래 가능 상태\n\n- launched 거래 가능\n\n- stopped 거래 중단",
+                            "enum": [
+                              "launched",
+                              "stopped"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "symbol",
+                          "status"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "symbol": "btc_krw",
+                      "status": "launched"
+                    },
+                    {
+                      "symbol": "eth_krw",
+                      "status": "launched"
+                    },
+                    {
+                      "symbol": "xrp_krw",
+                      "status": "stopped"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/tickSizePolicy": {
+      "get": {
+        "tags": [
+          "시세"
+        ],
+        "summary": "호가 정책 조회",
+        "description": "지정한 거래쌍의 호가 정책 및 오더북 모아보기 단위를 조회합니다.",
+        "operationId": "getV2TickSizePolicy",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_tickSizePolicy"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_tickSizePolicy",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "symbol": {
+                            "type": "string",
+                            "example": "xrp_krw",
+                            "description": "거래쌍 심볼"
+                          },
+                          "tickSizePolicy": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "priceGte": {
+                                  "type": "string",
+                                  "example": "0",
+                                  "description": "가격 범위 시작값 (이상)"
+                                },
+                                "tickSize": {
+                                  "type": "string",
+                                  "example": "0.0001",
+                                  "description": "해당 가격 범위의 호가 단위"
+                                }
+                              },
+                              "required": [
+                                "priceGte",
+                                "tickSize"
+                              ]
+                            },
+                            "description": "호가 정책 목록.\n\n배열에서 주문가격 >= priceGte 조건을 만족하는 항목 중 가장 큰 priceGte 값을 가진 항목의 tickSize를 사용합니다.\n\n예: 주문가격이 150원이라면, priceGte가 \"100\"인 항목의 tickSize를 사용합니다."
+                          },
+                          "orderbookLevels": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "0.1"
+                            },
+                            "description": "오더북 모아보기 단위 목록",
+                            "example": [
+                              "0.1",
+                              "1",
+                              "10",
+                              "100"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "symbol",
+                          "tickSizePolicy",
+                          "orderbookLevels"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "symbol": "xrp_krw",
+                      "tickSizePolicy": [
+                        {
+                          "priceGte": "0",
+                          "tickSize": "0.0001"
+                        },
+                        {
+                          "priceGte": "1",
+                          "tickSize": "0.001"
+                        },
+                        {
+                          "priceGte": "10",
+                          "tickSize": "0.01"
+                        },
+                        {
+                          "priceGte": "100",
+                          "tickSize": "0.1"
+                        },
+                        {
+                          "priceGte": "1000",
+                          "tickSize": "1"
+                        },
+                        {
+                          "priceGte": "5000",
+                          "tickSize": "5"
+                        },
+                        {
+                          "priceGte": "10000",
+                          "tickSize": "10"
+                        },
+                        {
+                          "priceGte": "50000",
+                          "tickSize": "50"
+                        },
+                        {
+                          "priceGte": "100000",
+                          "tickSize": "100"
+                        },
+                        {
+                          "priceGte": "500000",
+                          "tickSize": "500"
+                        },
+                        {
+                          "priceGte": "1000000",
+                          "tickSize": "1000"
+                        }
+                      ],
+                      "orderbookLevels": [
+                        "0.1",
+                        "1",
+                        "10",
+                        "100"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "description": "거래쌍 심볼",
+            "schema": {
+              "type": "string"
+            },
+            "example": "xrp_krw"
+          }
+        ]
+      }
+    },
+    "/v2/currencies": {
+      "get": {
+        "tags": [
+          "기타"
+        ],
+        "summary": "가상자산 정보 조회",
+        "description": "가상자산 정보를 조회합니다.",
+        "operationId": "getV2Currencies",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_currencies"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_currencies",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "example": "krw",
+                            "description": "자산 심볼"
+                          },
+                          "fullName": {
+                            "type": "string",
+                            "example": "Won",
+                            "description": "자산 이름"
+                          },
+                          "withdrawalMaxAmountPerRequest": {
+                            "type": "string",
+                            "example": "5000000000",
+                            "description": "요청 1회당 최대 출금 수량"
+                          },
+                          "depositStatus": {
+                            "type": "string",
+                            "example": "launched",
+                            "description": "(삭제 예정) 입금 가능 상태. networkList 하단의 depositStatus 필드를 참조해주세요."
+                          },
+                          "withdrawalStatus": {
+                            "type": "string",
+                            "example": "launched",
+                            "description": "(삭제 예정) 출금 가능 상태. networkList 하단의 withdrawalStatus 필드를 참조해주세요."
+                          },
+                          "withdrawalTxFee": {
+                            "type": "string",
+                            "example": "1000",
+                            "description": "(삭제 예정) 출금 수수료. networkList 하단의 withdrawalTxFee 필드를 참조해주세요."
+                          },
+                          "withdrawalMinAmount": {
+                            "type": "string",
+                            "example": "1000",
+                            "description": "(삭제 예정) 최소 출금 수량. networkList 하단의 withdrawalMinAmount 필드를 참조해주세요."
+                          },
+                          "defaultNetwork": {
+                            "type": "string",
+                            "example": "BTC",
+                            "description": "기본 네트워크 심볼"
+                          },
+                          "networkList": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "example": "BTC",
+                                  "description": "네트워크 심볼"
+                                },
+                                "fullName": {
+                                  "type": "string",
+                                  "example": "Bitcoin",
+                                  "description": "네트워크 이름"
+                                },
+                                "depositStatus": {
+                                  "type": "string",
+                                  "example": "launched",
+                                  "description": "입금 가능 상태\n\n값:\n\n- launched 입금 가능\n\n- stopped 입금 중단",
+                                  "enum": [
+                                    "launched",
+                                    "stopped"
+                                  ]
+                                },
+                                "withdrawalStatus": {
+                                  "type": "string",
+                                  "example": "launched",
+                                  "description": "출금 가능 상태.\n\n값:\n\n- launched 출금 가능\n\n- stopped 출금 중단",
+                                  "enum": [
+                                    "launched",
+                                    "stopped"
+                                  ]
+                                },
+                                "confirmationCount": {
+                                  "type": "integer",
+                                  "example": 3,
+                                  "description": "입금에 필요한 컨펌 수"
+                                },
+                                "withdrawalTxFee": {
+                                  "type": "string",
+                                  "example": "0.0008",
+                                  "description": "출금 수수료"
+                                },
+                                "withdrawalMinAmount": {
+                                  "type": "string",
+                                  "example": "0.0001",
+                                  "description": "최소 출금 수량"
+                                },
+                                "withdrawalPrecision": {
+                                  "type": "integer",
+                                  "example": 8,
+                                  "description": "출금 수량의 소숫점 자릿수"
+                                },
+                                "hasSecondaryAddr": {
+                                  "type": "boolean",
+                                  "example": false,
+                                  "description": "2차 주소 존재 여부"
+                                },
+                                "addressExplorerUrl": {
+                                  "type": "string",
+                                  "example": "https://www.blockchain.com/ko/btc/address/",
+                                  "description": "블록체인 탐색기 주소"
+                                },
+                                "contractAddress": {
+                                  "type": "string",
+                                  "description": "컨트랙트 주소",
+                                  "example": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2"
+                                }
+                              },
+                              "required": [
+                                "name",
+                                "fullName",
+                                "depositStatus",
+                                "withdrawalStatus",
+                                "confirmationCount",
+                                "withdrawalTxFee",
+                                "withdrawalMinAmount",
+                                "withdrawalPrecision",
+                                "hasSecondaryAddr",
+                                "addressExplorerUrl"
+                              ]
+                            },
+                            "description": "지원하는 블록체인 네트워크 목록"
+                          },
+                          "confirmationCount": {
+                            "type": "string",
+                            "example": "3",
+                            "description": "(삭제 예정) 입금에 필요한 컨펌 수. networkList 하단의 confirmationCount 필드를 참조해주세요."
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "fullName",
+                          "withdrawalMaxAmountPerRequest",
+                          "depositStatus",
+                          "withdrawalStatus",
+                          "withdrawalTxFee",
+                          "withdrawalMinAmount",
+                          "defaultNetwork",
+                          "networkList",
+                          "confirmationCount"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": [
+                    {
+                      "name": "krw",
+                      "fullName": "Won",
+                      "withdrawalMaxAmountPerRequest": "5000000000",
+                      "depositStatus": "launched",
+                      "withdrawalStatus": "launched",
+                      "withdrawalTxFee": "1000",
+                      "withdrawalMinAmount": "1000"
+                    },
+                    {
+                      "name": "btc",
+                      "fullName": "Bitcoin",
+                      "withdrawalMaxAmountPerRequest": "120",
+                      "defaultNetwork": "BTC",
+                      "networkList": [
+                        {
+                          "name": "BTC",
+                          "fullName": "Bitcoin",
+                          "depositStatus": "launched",
+                          "withdrawalStatus": "launched",
+                          "confirmationCount": 3,
+                          "withdrawalTxFee": "0.0008",
+                          "withdrawalMinAmount": "0.0001",
+                          "withdrawalPrecision": 8,
+                          "hasSecondaryAddr": false,
+                          "addressExplorerUrl": "https://www.blockchain.com/ko/btc/address/"
+                        }
+                      ],
+                      "depositStatus": "launched",
+                      "withdrawalStatus": "launched",
+                      "confirmationCount": "3",
+                      "withdrawalTxFee": "0.0008",
+                      "withdrawalMinAmount": "0.0001"
+                    },
+                    {
+                      "name": "eth",
+                      "fullName": "Ethereum",
+                      "withdrawalMaxAmountPerRequest": "2000",
+                      "defaultNetwork": "ETH",
+                      "networkList": [
+                        {
+                          "name": "ETH",
+                          "fullName": "Ethereum",
+                          "depositStatus": "launched",
+                          "withdrawalStatus": "launched",
+                          "confirmationCount": 45,
+                          "withdrawalTxFee": "0.005",
+                          "withdrawalMinAmount": "0.0001",
+                          "withdrawalPrecision": 8,
+                          "hasSecondaryAddr": false,
+                          "addressExplorerUrl": "https://etherscan.io/address/"
+                        },
+                        {
+                          "name": "BASE",
+                          "fullName": "BASE",
+                          "depositStatus": "launched",
+                          "withdrawalStatus": "launched",
+                          "confirmationCount": 1,
+                          "withdrawalTxFee": "0.001",
+                          "withdrawalMinAmount": "0.0001",
+                          "withdrawalPrecision": 8,
+                          "hasSecondaryAddr": false,
+                          "addressExplorerUrl": "https://basescan.org/address/"
+                        }
+                      ],
+                      "depositStatus": "launched",
+                      "withdrawalStatus": "launched",
+                      "confirmationCount": "45",
+                      "withdrawalTxFee": "0.005",
+                      "withdrawalMinAmount": "0.0001"
+                    },
+                    {
+                      "name": "usdt",
+                      "fullName": "Tether",
+                      "withdrawalMaxAmountPerRequest": "500000",
+                      "defaultNetwork": "TRX",
+                      "networkList": [
+                        {
+                          "name": "TRX",
+                          "fullName": "Tron",
+                          "depositStatus": "launched",
+                          "withdrawalStatus": "launched",
+                          "confirmationCount": 1,
+                          "withdrawalTxFee": "1",
+                          "withdrawalMinAmount": "1",
+                          "withdrawalPrecision": 6,
+                          "hasSecondaryAddr": false,
+                          "addressExplorerUrl": "https://tronscan.org/#/address/"
+                        }
+                      ],
+                      "depositStatus": "launched",
+                      "withdrawalStatus": "launched",
+                      "confirmationCount": "1",
+                      "withdrawalTxFee": "1",
+                      "withdrawalMinAmount": "1"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/time": {
+      "get": {
+        "tags": [
+          "기타"
+        ],
+        "summary": "서버 시각 조회",
+        "description": "서버 시각을 조회합니다.",
+        "operationId": "getV2Time",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://docs.korbit.co.kr/#REST-get-_v2_time"
+        },
+        "x-doc-url": "https://docs.korbit.co.kr/#REST-get-_v2_time",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "time": {
+                          "type": "integer",
+                          "example": 1700000000000,
+                          "description": "서버 시각(timestamp)"
+                        }
+                      },
+                      "required": [
+                        "time"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "time": 1700000000000
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1173 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "GOPAX Public REST API",
+    "version": "1.0.0",
+    "description": "고팍스 공식 문서 기준 스펙입니다.",
+    "contact": {
+      "name": "GOPAX API Docs",
+      "url": "https://gopax.github.io/API/index.html"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.gopax.co.kr"
+    }
+  ],
+  "tags": [
+    {
+      "name": "공개 API"
+    }
+  ],
+  "paths": {
+    "/assets": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "자산 목록 조회",
+        "operationId": "getAssets",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#f55085599b"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#f55085599b",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "ETH",
+                        "description": "자산 이름"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "이더리움",
+                        "description": "자산 이름 (국문)"
+                      },
+                      "englishName": {
+                        "type": "string",
+                        "example": "Ethereum",
+                        "description": "자산 이름 (영문)"
+                      },
+                      "scale": {
+                        "type": "integer",
+                        "example": 8,
+                        "description": "자산 최대 소수점 자리수"
+                      },
+                      "withdrawalFee": {
+                        "type": "number",
+                        "example": 0.03,
+                        "description": "출금 수수료"
+                      },
+                      "withdrawalAmountMin": {
+                        "type": "number",
+                        "example": 0.015,
+                        "description": "출금 최소 금액"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "englishName",
+                      "scale",
+                      "withdrawalFee",
+                      "withdrawalAmountMin"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trading-pairs": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "거래쌍 목록 조회",
+        "operationId": "getTradingPairs",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#bd57884325"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#bd57884325",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "거래쌍 ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "ETH-KRW",
+                        "description": "거래쌍 이름"
+                      },
+                      "baseAsset": {
+                        "type": "string",
+                        "example": "ETH",
+                        "description": "base 자산"
+                      },
+                      "quoteAsset": {
+                        "type": "string",
+                        "example": "KRW",
+                        "description": "quote 자산"
+                      },
+                      "baseAssetScale": {
+                        "type": "integer",
+                        "example": 8,
+                        "description": "base 자산 최대 소수점 자리수"
+                      },
+                      "quoteAssetScale": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "quote 자산 최대 소수점 자리수"
+                      },
+                      "priceMin": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "최소 주문 가격"
+                      },
+                      "restApiOrderAmountMin": {
+                        "type": "object",
+                        "properties": {
+                          "limitAsk": {
+                            "type": "object",
+                            "properties": {
+                              "amount": {
+                                "type": "integer",
+                                "example": 1000
+                              },
+                              "unit": {
+                                "type": "string",
+                                "example": "KRW"
+                              }
+                            },
+                            "required": [
+                              "amount",
+                              "unit"
+                            ]
+                          },
+                          "limitBid": {
+                            "type": "object",
+                            "properties": {
+                              "amount": {
+                                "type": "integer",
+                                "example": 1000
+                              },
+                              "unit": {
+                                "type": "string",
+                                "example": "KRW"
+                              }
+                            },
+                            "required": [
+                              "amount",
+                              "unit"
+                            ]
+                          },
+                          "marketAsk": {
+                            "type": "object",
+                            "properties": {
+                              "amount": {
+                                "type": "number",
+                                "example": 0.001
+                              },
+                              "unit": {
+                                "type": "string",
+                                "example": "ETH"
+                              }
+                            },
+                            "required": [
+                              "amount",
+                              "unit"
+                            ]
+                          },
+                          "marketBid": {
+                            "type": "object",
+                            "properties": {
+                              "amount": {
+                                "type": "integer",
+                                "example": 1000
+                              },
+                              "unit": {
+                                "type": "string",
+                                "example": "KRW"
+                              }
+                            },
+                            "required": [
+                              "amount",
+                              "unit"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "limitAsk",
+                          "limitBid",
+                          "marketAsk",
+                          "marketBid"
+                        ],
+                        "description": "REST API 통해 주문 시 최소 주문 수량"
+                      },
+                      "makerFeePercent": {
+                        "type": "number",
+                        "example": 0.2,
+                        "description": "메이커 거래 수수료 퍼센트"
+                      },
+                      "takerFeePercent": {
+                        "type": "number",
+                        "example": 0.2,
+                        "description": "테이커 거래 수수료 퍼센트"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "baseAsset",
+                      "quoteAsset",
+                      "baseAssetScale",
+                      "quoteAssetScale",
+                      "priceMin",
+                      "restApiOrderAmountMin",
+                      "makerFeePercent",
+                      "takerFeePercent"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trading-pairs/{TradingPair}/price-tick-size": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "가격 틱 사이즈 조회",
+        "operationId": "getTradingPairsTradingPairPriceTickSize",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#8cbaa14a64"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#8cbaa14a64",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "startPrice": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "tickSize": {
+                        "type": "integer",
+                        "example": 1
+                      }
+                    },
+                    "required": [
+                      "startPrice",
+                      "tickSize"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "TradingPair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "거래쌍 (예: BTC-KRW)"
+          }
+        ]
+      }
+    },
+    "/trading-pairs/{TradingPair}/ticker": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "티커 조회",
+        "operationId": "getTradingPairsTradingPairTicker",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#c63d14aba7"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#c63d14aba7",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "price": {
+                      "type": "integer",
+                      "example": 15393000,
+                      "description": "오더북 상의 현재 가격"
+                    },
+                    "ask": {
+                      "type": "integer",
+                      "example": 15397000,
+                      "description": "오더북 상의 현재 가장 낮은 매도 가격"
+                    },
+                    "askVolume": {
+                      "type": "number",
+                      "example": 0.56,
+                      "description": "오더북 상의 현재 가장 낮은 매도 가격의 수량"
+                    },
+                    "bid": {
+                      "type": "integer",
+                      "example": 15393000,
+                      "description": "오더북 상의 현재 가장 높은 매수 가격"
+                    },
+                    "bidVolume": {
+                      "type": "number",
+                      "example": 1.9513,
+                      "description": "오더북 상의 현재 가장 높은 매수 가격의 수량"
+                    },
+                    "volume": {
+                      "type": "number",
+                      "example": 487.43035427,
+                      "description": "최근 24시간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                    },
+                    "quoteVolume": {
+                      "type": "number",
+                      "example": 7319576689.34135,
+                      "description": "최근 24시간 누적 거래량 (quote 자산 단위로 이 예시에서는 KRW)"
+                    },
+                    "time": {
+                      "type": "string",
+                      "example": "2020-10-28T02:05:55.958Z",
+                      "description": "티커 최근 갱신 시간"
+                    }
+                  },
+                  "required": [
+                    "price",
+                    "ask",
+                    "askVolume",
+                    "bid",
+                    "bidVolume",
+                    "volume",
+                    "quoteVolume",
+                    "time"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "TradingPair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "거래쌍 (예: BTC-KRW)"
+          }
+        ]
+      }
+    },
+    "/trading-pairs/{TradingPair}/book": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "오더북 조회",
+        "operationId": "getTradingPairsTradingPairBook",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#6ad081727e"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#6ad081727e",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sequence": {
+                      "type": "integer",
+                      "example": 110815766
+                    },
+                    "ask": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "110815528",
+                          "description": "오더북 엔트리 업데이트 시간"
+                        }
+                      },
+                      "description": "오더북 판매 엔트리 목록"
+                    },
+                    "bid": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "example": "108223577"
+                        }
+                      },
+                      "description": "오더북 구매 엔트리 목록"
+                    }
+                  },
+                  "required": [
+                    "sequence",
+                    "ask",
+                    "bid"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "TradingPair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "거래쌍 (예: BTC-KRW)"
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "description": "1 = 매수 및 매도 각 1개2 = 매수 및 매도 각 50개3 = 전체",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/trading-pairs/{TradingPair}/trades": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "체결 기록 조회",
+        "operationId": "getTradingPairsTradingPairTrades",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#c3c0208b04-2"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#c3c0208b04-2",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "type": "string",
+                        "example": "2020-09-25T11:10:29.000Z",
+                        "description": "체결 시간"
+                      },
+                      "date": {
+                        "type": "integer",
+                        "example": 1601032229,
+                        "description": "체결 시간 초 단위 타임스탬프"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "example": 21876490,
+                        "description": "체결 이벤트 ID"
+                      },
+                      "price": {
+                        "type": "integer",
+                        "example": 12353000,
+                        "description": "체결 가격"
+                      },
+                      "amount": {
+                        "type": "number",
+                        "example": 0.2951,
+                        "description": "체결 수량 (base 자산 단위로 이 예시에서는 BTC)"
+                      },
+                      "side": {
+                        "type": "string",
+                        "example": "sell",
+                        "description": "buy(구매), sell(판매)"
+                      }
+                    },
+                    "required": [
+                      "time",
+                      "date",
+                      "id",
+                      "price",
+                      "amount",
+                      "side"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "TradingPair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "거래쌍 (예: BTC-KRW)"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "반환되는 항목의 개수 (최대 100)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pastmax",
+            "in": "query",
+            "required": false,
+            "description": "이 ID보다 오래된 데이터를 조회",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "latestmin",
+            "in": "query",
+            "required": false,
+            "description": "이 ID보다 새로운 최신 데이터를 조회",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "description": "이 타임스탬프 이후의 데이터를 조회 (초 단위)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "before",
+            "in": "query",
+            "required": false,
+            "description": "이 타임스탬프 이전의 데이터를 조회 (초 단위)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/trading-pairs/{TradingPair}/stats": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "최근 24시간 통계 조회",
+        "operationId": "getTradingPairsTradingPairStats",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#24"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#24",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "open": {
+                      "type": "integer",
+                      "example": 12132000,
+                      "description": "24시간 전 가격"
+                    },
+                    "high": {
+                      "type": "integer",
+                      "example": 12543000,
+                      "description": "최근 24시간 동안 최고가"
+                    },
+                    "low": {
+                      "type": "integer",
+                      "example": 12059000,
+                      "description": "최근 24시간 동안 최저가"
+                    },
+                    "close": {
+                      "type": "integer",
+                      "example": 12349000,
+                      "description": "현재 가격 (1분마다 갱신됨)"
+                    },
+                    "volume": {
+                      "type": "number",
+                      "example": 332.12915604,
+                      "description": "최근 24시간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                    },
+                    "time": {
+                      "type": "string",
+                      "example": "2020-09-25T11:13:47.371Z",
+                      "description": "최근 통계 업데이트 시간"
+                    }
+                  },
+                  "required": [
+                    "open",
+                    "high",
+                    "low",
+                    "close",
+                    "volume",
+                    "time"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "TradingPair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "거래쌍 (예: BTC-KRW)"
+          }
+        ]
+      }
+    },
+    "/trading-pairs/stats": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "최근 24시간 통계 조회 (모든 거래쌍)",
+        "operationId": "getTradingPairsStats",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#24-2"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#24-2",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "example": "ETH-KRW",
+                        "description": "거래쌍"
+                      },
+                      "open": {
+                        "type": "integer",
+                        "example": 394200,
+                        "description": "24시간 전 가격"
+                      },
+                      "high": {
+                        "type": "integer",
+                        "example": 409900,
+                        "description": "최근 24시간 동안 최고가"
+                      },
+                      "low": {
+                        "type": "integer",
+                        "example": 388700,
+                        "description": "최근 24시간 동안 최저가"
+                      },
+                      "close": {
+                        "type": "integer",
+                        "example": 397200,
+                        "description": "현재 가격 (1분마다 갱신됨)"
+                      },
+                      "volume": {
+                        "type": "number",
+                        "example": 4017.90526766,
+                        "description": "최근 24시간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                      },
+                      "time": {
+                        "type": "string",
+                        "example": "2020-09-25T11:14:14.866Z",
+                        "description": "최근 통계 업데이트 시간"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "open",
+                      "high",
+                      "low",
+                      "close",
+                      "volume",
+                      "time"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trading-pairs/{TradingPair}/candles": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "차트 데이터 조회",
+        "description": "1개의 구간은 1개의 차트 봉과 일치합니다.",
+        "operationId": "getTradingPairsTradingPairCandles",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#10f99c8763"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#10f99c8763",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "example": 1601032200000,
+                      "description": "구간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "TradingPair",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "거래쌍 (예: BTC-KRW)"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "required": true,
+            "description": "시작 시점 타임스탬프 (밀리세컨드 단위)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": true,
+            "description": "종료 시점 타임스탬프 (밀리세컨드 단위)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "각 구간 길이 (분 단위로, 1/5/30/1440 중 택일)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "반환되는 항목의 개수 (최대 1024)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/trading-pairs/cautions": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "투자유의 정보 조회",
+        "description": "여부 항목들이 모두 false이지만 alertLevel 이 정상(0)이 아닌 경우가 발생할 수 있습니다. 이는 한번 주의나 경고가 되면 24시간 동안 안전한 경우에만 정상으로 복귀 라는 룰에 의한 것이고 자연스러운 현상입니다.",
+        "operationId": "getTradingPairsCautions",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#e4dbb6ad96"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#e4dbb6ad96",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "거래쌍 ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "example": "ETH-KRW",
+                        "description": "거래쌍 이름"
+                      },
+                      "alertLevel": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "Alert Level - 정상(0), 주의(1), 경고(2)"
+                      },
+                      "isPriceChange": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "가격 급등 또는 급락 여부"
+                      },
+                      "isMonopolyBuy": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "(deprecated)"
+                      },
+                      "isLowLiquidity": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "(deprecated)"
+                      },
+                      "isSoarTradingVolume": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "거래량 급등 또는 급락 여부"
+                      },
+                      "isSoarDepositAmount": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "입금량 급등 또는 급락 여부"
+                      },
+                      "isGlobalPriceDifference": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "가격 차이 발생 여부"
+                      },
+                      "isMonopolyTrading": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "소수 계정 거래 집중"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "alertLevel",
+                      "isPriceChange",
+                      "isMonopolyBuy",
+                      "isLowLiquidity",
+                      "isSoarTradingVolume",
+                      "isSoarDepositAmount",
+                      "isGlobalPriceDifference",
+                      "isMonopolyTrading"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "showActive",
+            "in": "query",
+            "required": false,
+            "description": "true : Risk가 있는 항목만 노출, false : 전체 항목 노출",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/tickers": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "전체 티커 조회",
+        "operationId": "getTickers",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#5273f952f5"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#5273f952f5",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "baseVolume": {
+                        "type": "number",
+                        "example": 0.02,
+                        "description": "최근 24시간 누적 거래량 (base 자산 단위로 이 예시에서는 BTC)"
+                      },
+                      "high": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "최근 24시간 최고 거래 가격"
+                      },
+                      "highestBid": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "오더북 상의 현재 가장 높은 매수 가격"
+                      },
+                      "last": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "오더북 상의 현재 가격"
+                      },
+                      "lastTraded": {
+                        "type": "integer",
+                        "example": 1665640796413,
+                        "description": "최근 거래 시각(Unix time)"
+                      },
+                      "low": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "최근 24시간 최저 거래 가격"
+                      },
+                      "lowestAsk": {
+                        "type": "integer",
+                        "example": 0,
+                        "description": "오더북 상의 현재 가장 낮은 매도 가격"
+                      },
+                      "open": {
+                        "type": "integer",
+                        "example": 37300000,
+                        "description": "거래시작가, 한국시간(KST) 기준 00시 이후 첫 거래가 체결된 가격"
+                      },
+                      "quoteVolume": {
+                        "type": "integer",
+                        "example": 746000,
+                        "description": "최근 24시간 누적 거래량 (quote 자산 단위로 이 예시에서는 KRW)"
+                      },
+                      "tradingPairName": {
+                        "type": "string",
+                        "example": "BTC-KRW",
+                        "description": "오더북"
+                      }
+                    },
+                    "required": [
+                      "baseVolume",
+                      "high",
+                      "highestBid",
+                      "last",
+                      "lastTraded",
+                      "low",
+                      "lowestAsk",
+                      "open",
+                      "quoteVolume",
+                      "tradingPairName"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/time": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "서버 시간 조회",
+        "operationId": "getTime",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#31180a60f1"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#31180a60f1",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "serverTime": {
+                      "type": "integer",
+                      "example": 1601033421109,
+                      "description": "밀리세컨드 단위 타임스탬프"
+                    }
+                  },
+                  "required": [
+                    "serverTime"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notices": {
+      "get": {
+        "tags": [
+          "공개 API"
+        ],
+        "summary": "공지사항 조회",
+        "operationId": "getNotices",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html#53976d821f"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html#53976d821f",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "\"id\": 531",
+                    "description": "공지사항 ID",
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "example": "\"type\": 1",
+                        "description": "공지사항 타입"
+                      },
+                      {
+                        "type": "string",
+                        "example": "title\": \"정기점검",
+                        "description": "공지사항 제목"
+                      },
+                      {
+                        "type": "string",
+                        "example": "content\": \"곧 정기점검이 있을 예정입니다",
+                        "description": "공지사항 내용"
+                      },
+                      {
+                        "type": "string",
+                        "example": "createdAt\": \"2020-12-29T01:24:13.000Z",
+                        "description": "공지사항 생성 시간"
+                      },
+                      {
+                        "type": "string",
+                        "example": "updatedAt\": \"2020-12-29T01:24:13.000Z",
+                        "description": "공지사항 갱신 시간"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "페이지별 아이템 개수 (최대 20)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "페이지 번호 (0부터 시작)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "타입 (0 = 구분 없음, 1 = 일반 공지, 2 = 상장, 3 = 이벤트)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "양식 (0 = HTML, 1 = 일반 텍스트)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
