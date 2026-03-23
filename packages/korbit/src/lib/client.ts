@@ -1,8 +1,11 @@
-import { ExHubConfigurationError, hmacSha256Hex, resolveBaseUrl, toQueryString } from "@exhub/core";
-import type { AxiosRequestConfig } from "axios";
+import {
+  defaultHttpTransport,
+  ExHubConfigurationError,
+  hmacSha256Hex,
+  resolveBaseUrl,
+  toQueryString,
+} from "@exhub/core";
 
-import * as privateApi from "../generated/private";
-import * as publicApi from "../generated/public";
 import type {
   KorbitClient,
   KorbitClientOptions,
@@ -12,12 +15,9 @@ import type {
 
 const KORBIT_DEFAULT_BASE_URL = "https://api.korbit.co.kr";
 
-function createPublicRequestConfig(baseURL: string, timeout: number): AxiosRequestConfig {
-  return {
-    baseURL,
-    timeout,
-  };
-}
+type AsyncResult<TMethod> = TMethod extends (...args: never[]) => Promise<infer TResult>
+  ? TResult
+  : never;
 
 async function resolveCredentials(options: KorbitClientOptions): Promise<KorbitCredentials> {
   if (options.credentialsProvider) {
@@ -29,257 +29,163 @@ async function resolveCredentials(options: KorbitClientOptions): Promise<KorbitC
   throw new ExHubConfigurationError("Korbit 인증 정보가 설정되지 않았습니다.");
 }
 
-async function createPrivateRequestConfig(
-  options: KorbitClientOptions,
-  baseURL: string,
-  timeout: number,
-): Promise<{
-  signedParams: {
-    timestamp: number;
-    signature: string;
-    recvWindow: number;
-  };
-  requestConfig: AxiosRequestConfig;
-}>;
-async function createPrivateRequestConfig<TInput extends Record<string, unknown>>(
-  options: KorbitClientOptions,
-  baseURL: string,
-  timeout: number,
-  params: TInput,
-): Promise<{
-  signedParams: TInput & {
-    timestamp: number;
-    signature: string;
-    recvWindow: number;
-  };
-  requestConfig: AxiosRequestConfig;
-}>;
-async function createPrivateRequestConfig(
-  options: KorbitClientOptions,
-  baseURL: string,
-  timeout: number,
-  params?: KorbitSignedParamsInput,
-): Promise<{
-  signedParams:
-    | {
-        timestamp: number;
-        signature: string;
-        recvWindow: number;
-      }
-    | (Record<string, unknown> & {
-        timestamp: number;
-        signature: string;
-        recvWindow: number;
-      });
-  requestConfig: AxiosRequestConfig;
-}> {
-  const credentials = await resolveCredentials(options);
-  const timestamp = Date.now();
-  const recvWindow = credentials.recvWindow ?? 5_000;
-  const unsignedParams = params
-    ? {
-        ...params,
-        timestamp,
-        recvWindow,
-      }
-    : {
-        timestamp,
-        recvWindow,
-      };
-  const signature = hmacSha256Hex(toQueryString(unsignedParams), credentials.secretKey);
-  const signedParams = {
-    ...unsignedParams,
-    signature,
-  };
+export function createKorbitClient(options: KorbitClientOptions = {}): KorbitClient {
+  const transport = defaultHttpTransport;
+  const baseURL = resolveBaseUrl(KORBIT_DEFAULT_BASE_URL, options.baseURL);
+  const timeout = options.timeout ?? 10_000;
 
-  return {
-    signedParams,
-    requestConfig: {
+  function requestPublic<TResponse>(
+    path: string,
+    query?: Record<string, unknown>,
+  ): Promise<TResponse> {
+    return transport.request<TResponse>({
+      method: "GET",
       baseURL,
+      path,
+      query,
+      timeout,
+    });
+  }
+
+  async function requestPrivate<TResponse>(
+    path: string,
+    params?: KorbitSignedParamsInput,
+  ): Promise<TResponse> {
+    const credentials = await resolveCredentials(options);
+    const timestamp = Date.now();
+    const recvWindow = credentials.recvWindow ?? 5_000;
+    const unsignedParams = params
+      ? {
+          ...params,
+          timestamp,
+          recvWindow,
+        }
+      : {
+          timestamp,
+          recvWindow,
+        };
+    const signature = hmacSha256Hex(toQueryString(unsignedParams), credentials.secretKey);
+
+    return transport.request<TResponse>({
+      method: "GET",
+      baseURL,
+      path,
+      query: {
+        ...unsignedParams,
+        signature,
+      },
       timeout,
       headers: {
         "X-KAPI-KEY": credentials.apiKey,
       },
-    },
-  };
-}
-
-export function createKorbitClient(options: KorbitClientOptions = {}): KorbitClient {
-  const baseURL = resolveBaseUrl(KORBIT_DEFAULT_BASE_URL, options.baseURL);
-  const timeout = options.timeout ?? 10_000;
+    });
+  }
 
   return {
     market: {
       tickers: async (params) =>
-        (await publicApi.getv2tickers(params, createPublicRequestConfig(baseURL, timeout))).data,
+        requestPublic<AsyncResult<KorbitClient["market"]["tickers"]>>("/v2/tickers", params),
       orderbook: async (params) =>
-        (await publicApi.getv2orderbook(params, createPublicRequestConfig(baseURL, timeout))).data,
+        requestPublic<AsyncResult<KorbitClient["market"]["orderbook"]>>("/v2/orderbook", params),
       trades: async (params) =>
-        (await publicApi.getv2trades(params, createPublicRequestConfig(baseURL, timeout))).data,
+        requestPublic<AsyncResult<KorbitClient["market"]["trades"]>>("/v2/trades", params),
       candles: async (params) =>
-        (await publicApi.getv2candles(params, createPublicRequestConfig(baseURL, timeout))).data,
+        requestPublic<AsyncResult<KorbitClient["market"]["candles"]>>("/v2/candles", params),
       currencyPairs: async () =>
-        (await publicApi.getv2currencypairs(createPublicRequestConfig(baseURL, timeout))).data,
+        requestPublic<AsyncResult<KorbitClient["market"]["currencyPairs"]>>("/v2/currencyPairs"),
       tickSizePolicy: async (params) =>
-        (await publicApi.getv2ticksizepolicy(params, createPublicRequestConfig(baseURL, timeout)))
-          .data,
+        requestPublic<AsyncResult<KorbitClient["market"]["tickSizePolicy"]>>(
+          "/v2/tickSizePolicy",
+          params,
+        ),
       currencies: async () =>
-        (await publicApi.getv2currencies(createPublicRequestConfig(baseURL, timeout))).data,
-      time: async () =>
-        (await publicApi.getv2time(createPublicRequestConfig(baseURL, timeout))).data,
+        requestPublic<AsyncResult<KorbitClient["market"]["currencies"]>>("/v2/currencies"),
+      time: async () => requestPublic<AsyncResult<KorbitClient["market"]["time"]>>("/v2/time"),
     },
     orders: {
-      getOrder: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+      getOrder: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["getOrder"]>>("/v2/orders", params),
+      getOpenOrders: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["getOpenOrders"]>>(
+          "/v2/openOrders",
           params,
-        );
-        return (await privateApi.getv2orders(signedParams, requestConfig)).data;
-      },
-      getOpenOrders: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+        ),
+      getAllOrders: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["getAllOrders"]>>(
+          "/v2/allOrders",
           params,
-        );
-        return (await privateApi.getv2openorders(signedParams, requestConfig)).data;
-      },
-      getAllOrders: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
-          params,
-        );
-        return (await privateApi.getv2allorders(signedParams, requestConfig)).data;
-      },
-      getMyTrades: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
-          params,
-        );
-        return (await privateApi.getv2mytrades(signedParams, requestConfig)).data;
-      },
+        ),
+      getMyTrades: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["getMyTrades"]>>("/v2/myTrades", params),
     },
     assets: {
-      getBalance: async (params) => {
-        const { signedParams, requestConfig } = params
-          ? await createPrivateRequestConfig(options, baseURL, timeout, params)
-          : await createPrivateRequestConfig(options, baseURL, timeout);
-        return (await privateApi.getv2balance(signedParams, requestConfig)).data;
-      },
+      getBalance: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["assets"]["getBalance"]>>("/v2/balance", params),
     },
     cryptoDeposits: {
-      getDepositAddresses: async () => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
-        );
-        return (await privateApi.getv2coindepositaddresses(signedParams, requestConfig)).data;
-      },
-      getDepositAddress: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+      getDepositAddresses: async () =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["getDepositAddresses"]>>(
+          "/v2/coin/depositAddresses",
+        ),
+      getDepositAddress: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["getDepositAddress"]>>(
+          "/v2/coin/depositAddress",
           params,
-        );
-        return (await privateApi.getv2coindepositaddress(signedParams, requestConfig)).data;
-      },
-      getRecentDeposits: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+        ),
+      getRecentDeposits: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["getRecentDeposits"]>>(
+          "/v2/coin/recentDeposits",
           params,
-        );
-        return (await privateApi.getv2coinrecentdeposits(signedParams, requestConfig)).data;
-      },
-      getDeposit: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+        ),
+      getDeposit: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["getDeposit"]>>(
+          "/v2/coin/deposit",
           params,
-        );
-        return (await privateApi.getv2coindeposit(signedParams, requestConfig)).data;
-      },
+        ),
     },
     cryptoWithdrawals: {
-      getWithdrawableAddresses: async () => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
-        );
-        return (await privateApi.getv2coinwithdrawableaddresses(signedParams, requestConfig)).data;
-      },
-      getWithdrawableAmount: async (params) => {
-        const { signedParams, requestConfig } = params
-          ? await createPrivateRequestConfig(options, baseURL, timeout, params)
-          : await createPrivateRequestConfig(options, baseURL, timeout);
-        return (await privateApi.getv2coinwithdrawableamount(signedParams, requestConfig)).data;
-      },
-      getRecentWithdrawals: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+      getWithdrawableAddresses: async () =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["getWithdrawableAddresses"]>>(
+          "/v2/coin/withdrawableAddresses",
+        ),
+      getWithdrawableAmount: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["getWithdrawableAmount"]>>(
+          "/v2/coin/withdrawableAmount",
           params,
-        );
-        return (await privateApi.getv2coinrecentwithdrawals(signedParams, requestConfig)).data;
-      },
-      getWithdrawal: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+        ),
+      getRecentWithdrawals: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["getRecentWithdrawals"]>>(
+          "/v2/coin/recentWithdrawals",
           params,
-        );
-        return (await privateApi.getv2coinwithdrawal(signedParams, requestConfig)).data;
-      },
+        ),
+      getWithdrawal: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["getWithdrawal"]>>(
+          "/v2/coin/withdrawal",
+          params,
+        ),
     },
     krw: {
-      getRecentDeposits: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+      getRecentDeposits: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["krw"]["getRecentDeposits"]>>(
+          "/v2/krw/recentDeposits",
           params,
-        );
-        return (await privateApi.getv2krwrecentdeposits(signedParams, requestConfig)).data;
-      },
-      getRecentWithdrawals: async (params) => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
+        ),
+      getRecentWithdrawals: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["krw"]["getRecentWithdrawals"]>>(
+          "/v2/krw/recentWithdrawals",
           params,
-        );
-        return (await privateApi.getv2krwrecentwithdrawals(signedParams, requestConfig)).data;
-      },
+        ),
     },
     service: {
-      getTradingFeePolicy: async (params) => {
-        const { signedParams, requestConfig } = params
-          ? await createPrivateRequestConfig(options, baseURL, timeout, params)
-          : await createPrivateRequestConfig(options, baseURL, timeout);
-        return (await privateApi.getv2tradingfeepolicy(signedParams, requestConfig)).data;
-      },
-      getCurrentKeyInfo: async () => {
-        const { signedParams, requestConfig } = await createPrivateRequestConfig(
-          options,
-          baseURL,
-          timeout,
-        );
-        return (await privateApi.getv2currentkeyinfo(signedParams, requestConfig)).data;
-      },
+      getTradingFeePolicy: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["service"]["getTradingFeePolicy"]>>(
+          "/v2/tradingFeePolicy",
+          params,
+        ),
+      getCurrentKeyInfo: async () =>
+        requestPrivate<AsyncResult<KorbitClient["service"]["getCurrentKeyInfo"]>>(
+          "/v2/currentKeyInfo",
+        ),
     },
   };
 }
