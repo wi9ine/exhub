@@ -5,22 +5,24 @@
  * 고팍스 공식 문서 기준 스펙입니다.
  * OpenAPI spec version: 1.0.0
  */
+import type { GetnoticesFormat } from './getnoticesFormat';
+import type { GetnoticesType } from './getnoticesType';
 
 export type GetnoticesParams = {
 /**
  * 페이지별 아이템 개수 (최대 20)
  */
-limit?: string;
+limit?: number;
 /**
  * 페이지 번호 (0부터 시작)
  */
-page?: string;
+page?: number;
 /**
- * 타입 (0 = 구분 없음, 1 = 일반 공지, 2 = 상장, 3 = 이벤트)
+ * 공지 유형. 0=전체, 1=일반, 2=신규상장, 3=이벤트
  */
-type?: string;
+type?: GetnoticesType;
 /**
- * 양식 (0 = HTML, 1 = 일반 텍스트)
+ * 응답 형식. 0=HTML, 1=plain text
  */
-format?: string;
+format?: GetnoticesFormat;
 };

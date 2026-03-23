@@ -160,6 +160,13 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
           `${GOPAX_PRIVATE_PATHS.orders}/${encodedOrderId}`,
         );
       },
+      getOrderByClientOrderId: async (clientOrderId) => {
+        const encoded = encodePathSegment(clientOrderId);
+        return requestPrivate<AsyncResult<GopaxClient["orders"]["getOrderByClientOrderId"]>>(
+          "GET",
+          `${GOPAX_PRIVATE_PATHS.orders}/clientOrderId/${encoded}`,
+        );
+      },
     },
     trades: {
       getTrades: async (params) =>

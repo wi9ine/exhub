@@ -10,23 +10,23 @@ export type GetdepositwithdrawalstatusParams = {
 /**
  * 반환되는 항목의 개수 (최대 20)
  */
-limit?: string;
+limit?: number;
 /**
  * 이 ID보다 오래된 데이터를 조회
  */
-latestmin?: string;
+latestmin?: number;
 /**
  * 이 타임스탬프 이후의 데이터를 조회 (ms 단위)
  */
-after?: string;
+after?: number;
 /**
  * 이 타임스탬프 이전의 데이터를 조회 (ms 단위)
  */
-before?: string;
+before?: number;
 /**
  * 완료된 입출금 내역만 조회 (true/false 중 택일)
  */
-completedOnly?: string;
+completedOnly?: boolean;
 /**
  * 해당 자산의 입출금 내역 조회 (BTC, ETH ...)
  */

@@ -10,21 +10,21 @@ export type GettradingpairstradingpairtradesParams = {
 /**
  * 반환되는 항목의 개수 (최대 100)
  */
-limit?: string;
+limit?: number;
 /**
  * 이 ID보다 오래된 데이터를 조회
  */
-pastmax?: string;
+pastmax?: number;
 /**
  * 이 ID보다 새로운 최신 데이터를 조회
  */
-latestmin?: string;
+latestmin?: number;
 /**
  * 이 타임스탬프 이후의 데이터를 조회 (초 단위)
  */
-after?: string;
+after?: number;
 /**
  * 이 타임스탬프 이전의 데이터를 조회 (초 단위)
  */
-before?: string;
+before?: number;
 };

@@ -10,11 +10,11 @@ export type GetordersParams = {
 /**
  * true일 경우 완전 체결 혹은 취소된 주문들도 조회 결과에 포함됨(완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능)
  */
-includePast?: string;
+includePast?: boolean;
 /**
  * 리턴되는 주문 수가 3천 개를 초과할 경우에는true로 설정하여 페이지 별로 1천 개씩 접근 필요
  */
-pagination?: string;
+pagination?: boolean;
 /**
  * 해당 거래쌍 주문 조회 (BTC-KRW, ETH-KRW ...)
  */
@@ -26,17 +26,17 @@ status?: string;
 /**
  * 시작 시점 타임 스탬프 (밀리세컨드 단위)
  */
-since?: string;
+since?: number;
 /**
  * since와 함께 사용true: 시작 시점이 updatedAt 기준false: 시작 시점이 createdAt 기준
  */
-filterByUpdatedAt?: string;
+filterByUpdatedAt?: boolean;
 /**
  * 최대 주문 개수
  */
-limit?: string;
+limit?: number;
 /**
  * limit과 함께 사용 true: 최근 주문부터 limit 만큼 데이터 조회false: 오래된 주문부터 limit 만큼 데이터 조회
  */
-tail?: string;
+tail?: boolean;
 };

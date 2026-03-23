@@ -7,7 +7,9 @@
  */
 
 export * from './getassets200Item';
+export * from './getnoticesFormat';
 export * from './getnoticesParams';
+export * from './getnoticesType';
 export * from './gettickers200Item';
 export * from './gettime200';
 export * from './gettradingpairs200Item';
@@ -20,7 +22,9 @@ export * from './gettradingpairscautions200Item';
 export * from './gettradingpairscautionsParams';
 export * from './gettradingpairsstats200Item';
 export * from './gettradingpairstradingpairbook200';
+export * from './gettradingpairstradingpairbookLevel';
 export * from './gettradingpairstradingpairbookParams';
+export * from './gettradingpairstradingpaircandlesInterval';
 export * from './gettradingpairstradingpaircandlesParams';
 export * from './gettradingpairstradingpairpriceticksize200Item';
 export * from './gettradingpairstradingpairstats200';

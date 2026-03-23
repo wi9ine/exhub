@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
+export * from './deleteordersclientorderid200';
 export * from './deleteordersorderid200';
 export * from './getbalances200Item';
 export * from './getbalancesassetname200';
@@ -16,6 +17,10 @@ export * from './getorders200Item';
 export * from './getorders200ItemBalanceChange';
 export * from './getorders200ItemBalanceChangeBaseFee';
 export * from './getorders200ItemBalanceChangeQuoteFee';
+export * from './getordersclientorderid200';
+export * from './getordersclientorderid200BalanceChange';
+export * from './getordersclientorderid200BalanceChangeBaseFee';
+export * from './getordersclientorderid200BalanceChangeQuoteFee';
 export * from './getordersorderid200';
 export * from './getordersorderid200BalanceChange';
 export * from './getordersorderid200BalanceChangeBaseFee';

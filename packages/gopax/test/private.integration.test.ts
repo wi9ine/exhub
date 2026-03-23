@@ -32,7 +32,7 @@ describe("gopax private integration", () => {
     const balances = await client.account.getBalances();
     asset = balances[0]?.asset ?? asset;
 
-    const orders = await client.orders.getOrders({ includePast: "true", limit: "10" });
+    const orders = await client.orders.getOrders({ includePast: true, limit: 10 });
     orderId = orders[0]?.id;
   });
 
@@ -47,7 +47,7 @@ describe("gopax private integration", () => {
   });
 
   testIf("주문 조회", async () => {
-    const result = await client.orders.getOrders({ includePast: "true", limit: "10" });
+    const result = await client.orders.getOrders({ includePast: true, limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
@@ -58,12 +58,12 @@ describe("gopax private integration", () => {
   });
 
   testIf("체결 기록 조회", async () => {
-    const result = await client.trades.getTrades({ limit: "10" });
+    const result = await client.trades.getTrades({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("입출금 기록 조회", async () => {
-    const result = await client.wallet.getDepositWithdrawalStatus({ limit: "10" });
+    const result = await client.wallet.getDepositWithdrawalStatus({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 

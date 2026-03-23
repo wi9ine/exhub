@@ -5,10 +5,11 @@
  * 고팍스 공식 문서 기준 스펙입니다.
  * OpenAPI spec version: 1.0.0
  */
+import type { GettradingpairstradingpairbookLevel } from './gettradingpairstradingpairbookLevel';
 
 export type GettradingpairstradingpairbookParams = {
 /**
- * 1 = 매수 및 매도 각 1개2 = 매수 및 매도 각 50개3 = 전체
+ * 오더북 레벨. 1 = 1개 호가, 2 = 50개 호가, 3 = 전체 오더북
  */
-level?: string;
+level?: GettradingpairstradingpairbookLevel;
 };

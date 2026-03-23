@@ -12,6 +12,7 @@ import type {
 } from 'axios';
 
 import type {
+  Deleteordersclientorderid200,
   Deleteordersorderid200,
   Getbalances200Item,
   Getbalancesassetname200,
@@ -20,6 +21,7 @@ import type {
   GetdepositwithdrawalstatusParams,
   Getorders200Item,
   GetordersParams,
+  Getordersclientorderid200,
   Getordersorderid200,
   Gettrades200Item,
   GettradesParams,
@@ -178,6 +180,30 @@ export const postwithdrawals = (
     );
   }
 
+/**
+ * 완전 체결 혹은 취소된 주문은 완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능합니다.
+ * @summary 클라이언트 주문 ID로 특정 주문 조회
+ */
+export const getordersclientorderid = (
+    clientOrderID: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Getordersclientorderid200>> => {
+    return axios.get(
+      `/orders/clientOrderId/${clientOrderID}`,options
+    );
+  }
+
+/**
+ * 해당하는 오더가 존재하지 않으면 404 에러가 반환됩니다.
+ * @summary 클라이언트 주문 ID로 주문 취소
+ */
+export const deleteordersclientorderid = (
+    clientOrderID: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Deleteordersclientorderid200>> => {
+    return axios.delete(
+      `/orders/clientOrderId/${clientOrderID}`,options
+    );
+  }
+
 export type GetbalancesResult = AxiosResponse<Getbalances200Item[]>
 export type GetbalancesassetnameResult = AxiosResponse<Getbalancesassetname200>
 export type GetordersResult = AxiosResponse<Getorders200Item[]>
@@ -189,3 +215,5 @@ export type GetdepositwithdrawalstatusResult = AxiosResponse<string[]>
 export type GetcryptodepositaddressesResult = AxiosResponse<Getcryptodepositaddresses200Item[]>
 export type GetcryptowithdrawaladdressesResult = AxiosResponse<Getcryptowithdrawaladdresses200Item[]>
 export type PostwithdrawalsResult = AxiosResponse<void>
+export type GetordersclientorderidResult = AxiosResponse<Getordersclientorderid200>
+export type DeleteordersclientorderidResult = AxiosResponse<Deleteordersclientorderid200>

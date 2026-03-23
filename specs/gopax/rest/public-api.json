@@ -472,9 +472,14 @@
             "name": "level",
             "in": "query",
             "required": false,
-            "description": "1 = 매수 및 매도 각 1개2 = 매수 및 매도 각 50개3 = 전체",
+            "description": "오더북 레벨. 1 = 1개 호가, 2 = 50개 호가, 3 = 전체 오더북",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "enum": [
+                1,
+                2,
+                3
+              ]
             }
           }
         ]
@@ -563,7 +568,7 @@
             "required": false,
             "description": "반환되는 항목의 개수 (최대 100)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -572,7 +577,7 @@
             "required": false,
             "description": "이 ID보다 오래된 데이터를 조회",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -581,7 +586,7 @@
             "required": false,
             "description": "이 ID보다 새로운 최신 데이터를 조회",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -590,7 +595,7 @@
             "required": false,
             "description": "이 타임스탬프 이후의 데이터를 조회 (초 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -599,7 +604,7 @@
             "required": false,
             "description": "이 타임스탬프 이전의 데이터를 조회 (초 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           }
         ]
@@ -806,7 +811,7 @@
             "required": true,
             "description": "시작 시점 타임스탬프 (밀리세컨드 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -815,16 +820,22 @@
             "required": true,
             "description": "종료 시점 타임스탬프 (밀리세컨드 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
             "name": "interval",
             "in": "query",
             "required": true,
-            "description": "각 구간 길이 (분 단위로, 1/5/30/1440 중 택일)",
+            "description": "캔들 시간 간격 (분 단위): 1, 5, 30, 1440 중 하나",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "enum": [
+                1,
+                5,
+                30,
+                1440
+              ]
             }
           },
           {
@@ -833,7 +844,8 @@
             "required": false,
             "description": "반환되는 항목의 개수 (최대 1024)",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "maximum": 1024
             }
           }
         ]
@@ -936,9 +948,9 @@
             "name": "showActive",
             "in": "query",
             "required": false,
-            "description": "true : Risk가 있는 항목만 노출, false : 전체 항목 노출",
+            "description": "true이면 위험 항목만 표시, false이면 전체 표시",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           }
         ]
@@ -1136,7 +1148,7 @@
             "required": false,
             "description": "페이지별 아이템 개수 (최대 20)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1145,25 +1157,35 @@
             "required": false,
             "description": "페이지 번호 (0부터 시작)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
             "name": "type",
             "in": "query",
             "required": false,
-            "description": "타입 (0 = 구분 없음, 1 = 일반 공지, 2 = 상장, 3 = 이벤트)",
+            "description": "공지 유형. 0=전체, 1=일반, 2=신규상장, 3=이벤트",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2,
+                3
+              ]
             }
           },
           {
             "name": "format",
             "in": "query",
             "required": false,
-            "description": "양식 (0 = HTML, 1 = 일반 텍스트)",
+            "description": "응답 형식. 0=HTML, 1=plain text",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "enum": [
+                0,
+                1
+              ]
             }
           }
         ]

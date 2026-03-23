@@ -6,9 +6,10 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GettradingpairscautionsParams = {
-/**
- * true이면 위험 항목만 표시, false이면 전체 표시
- */
-showActive?: boolean;
-};
+export type GetnoticesFormat = typeof GetnoticesFormat[keyof typeof GetnoticesFormat];
+
+
+export const GetnoticesFormat = {
+  NUMBER_0: 0,
+  NUMBER_1: 1,
+} as const;

@@ -5,22 +5,24 @@
  * 고팍스 공식 문서 기준 스펙입니다.
  * OpenAPI spec version: 1.0.0
  */
+import type { GettradingpairstradingpaircandlesInterval } from './gettradingpairstradingpaircandlesInterval';
 
 export type GettradingpairstradingpaircandlesParams = {
 /**
  * 시작 시점 타임스탬프 (밀리세컨드 단위)
  */
-start: string;
+start: number;
 /**
  * 종료 시점 타임스탬프 (밀리세컨드 단위)
  */
-end: string;
+end: number;
 /**
- * 각 구간 길이 (분 단위로, 1/5/30/1440 중 택일)
+ * 캔들 시간 간격 (분 단위): 1, 5, 30, 1440 중 하나
  */
-interval: string;
+interval: GettradingpairstradingpaircandlesInterval;
 /**
  * 반환되는 항목의 개수 (최대 1024)
+ * @maximum 1024
  */
-limit?: string;
+limit?: number;
 };

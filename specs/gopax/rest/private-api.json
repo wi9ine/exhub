@@ -443,7 +443,7 @@
             "required": false,
             "description": "true일 경우 완전 체결 혹은 취소된 주문들도 조회 결과에 포함됨(완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능)",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -452,7 +452,7 @@
             "required": false,
             "description": "리턴되는 주문 수가 3천 개를 초과할 경우에는true로 설정하여 페이지 별로 1천 개씩 접근 필요",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -479,7 +479,7 @@
             "required": false,
             "description": "시작 시점 타임 스탬프 (밀리세컨드 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -488,7 +488,7 @@
             "required": false,
             "description": "since와 함께 사용true: 시작 시점이 updatedAt 기준false: 시작 시점이 createdAt 기준",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -497,7 +497,7 @@
             "required": false,
             "description": "최대 주문 개수",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -506,7 +506,7 @@
             "required": false,
             "description": "limit과 함께 사용 true: 최근 주문부터 limit 만큼 데이터 조회false: 오래된 주문부터 limit 만큼 데이터 조회",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -1281,7 +1281,7 @@
             "required": false,
             "description": "반환되는 항목의 개수 (최대 100)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1290,7 +1290,7 @@
             "required": false,
             "description": "이 ID보다 오래된 데이터를 조회",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1299,7 +1299,7 @@
             "required": false,
             "description": "이 ID보다 새로운 최신 데이터를 조회",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1308,7 +1308,7 @@
             "required": false,
             "description": "이 타임스탬프 이후의 데이터를 조회 (초 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1317,7 +1317,7 @@
             "required": false,
             "description": "이 타임스탬프 이전의 데이터를 조회 (초 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1326,7 +1326,7 @@
             "required": false,
             "description": "true인 경우에 한하여 한 달 이상 지난 데이터까지 모두 포함하여 조회(다른 파라미터들보다 더 높은 우선순위를 가짐)",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -1476,7 +1476,7 @@
             "required": false,
             "description": "반환되는 항목의 개수 (최대 20)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1485,7 +1485,7 @@
             "required": false,
             "description": "이 ID보다 오래된 데이터를 조회",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1494,7 +1494,7 @@
             "required": false,
             "description": "이 타임스탬프 이후의 데이터를 조회 (ms 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1503,7 +1503,7 @@
             "required": false,
             "description": "이 타임스탬프 이전의 데이터를 조회 (ms 단위)",
             "schema": {
-              "type": "string"
+              "type": "integer"
             }
           },
           {
@@ -1512,7 +1512,7 @@
             "required": false,
             "description": "완료된 입출금 내역만 조회 (true/false 중 택일)",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           },
           {
@@ -1875,6 +1875,333 @@
             }
           }
         }
+      }
+    },
+    "/orders/clientOrderId/{ClientOrderID}": {
+      "get": {
+        "tags": [
+          "개인 API"
+        ],
+        "summary": "클라이언트 주문 ID로 특정 주문 조회",
+        "description": "완전 체결 혹은 취소된 주문은 완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능합니다.",
+        "operationId": "getOrdersClientOrderId",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "453324",
+                      "description": "주문 ID"
+                    },
+                    "clientOrderId": {
+                      "type": "string",
+                      "example": "zeckrw23456",
+                      "description": "클라이언트 오더 ID (존재할 경우에 한하여 표시됨)"
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "updated",
+                      "description": "placed(미체결), cancelled(취소됨), completed(전체 체결됨), updated(일부 체결됨), reserved(예약됨)"
+                    },
+                    "forcedCompletionReason": {
+                      "nullable": true,
+                      "example": null,
+                      "description": "주문 중도 취소된 경우에 한하여 그 사유로 protection/timeInForce 중 하나"
+                    },
+                    "tradingPairName": {
+                      "type": "string",
+                      "example": "ZEC-KRW",
+                      "description": "오더북"
+                    },
+                    "side": {
+                      "type": "string",
+                      "example": "buy",
+                      "description": "buy(구매), sell(판매)"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example": "limit",
+                      "description": "limit(지정가), market(시장가)"
+                    },
+                    "price": {
+                      "type": "integer",
+                      "example": 1000000,
+                      "description": "주문 가격"
+                    },
+                    "stopPrice": {
+                      "nullable": true,
+                      "example": null,
+                      "description": "감시 가격 (예약가 주문에 한하여 표시됨)"
+                    },
+                    "amount": {
+                      "type": "integer",
+                      "example": 4,
+                      "description": "최초 주문 수량"
+                    },
+                    "remaining": {
+                      "type": "integer",
+                      "example": 1,
+                      "description": "오더북에 남아 있는 미체결 주문 수량"
+                    },
+                    "protection": {
+                      "type": "string",
+                      "example": "yes",
+                      "description": "최초 체결가 기준 ±10% 초과되는 주문 취소 여부로 yes/no 중 하나"
+                    },
+                    "timeInForce": {
+                      "type": "string",
+                      "example": "gtc",
+                      "description": "지정가 주문 유형으로 gtc/po/ioc/fok 중 하나"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2020-09-25T04:06:20.000Z",
+                      "description": "주문 넣은 시간"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2020-09-25T04:06:29.000Z",
+                      "description": "주문 업데이트 시간"
+                    },
+                    "balanceChange": {
+                      "type": "object",
+                      "properties": {
+                        "baseGross": {
+                          "type": "integer",
+                          "example": 3,
+                          "description": "base 자산 잔고 gross 변화 (이 경우 ZEC)"
+                        },
+                        "baseFee": {
+                          "type": "object",
+                          "properties": {
+                            "taking": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "taker 포지션으로 발생한 base 자산 수수료"
+                            },
+                            "making": {
+                              "type": "number",
+                              "example": -0.0012,
+                              "description": "maker 포지션으로 발생한 base 자산 수수료"
+                            }
+                          },
+                          "required": [
+                            "taking",
+                            "making"
+                          ]
+                        },
+                        "baseNet": {
+                          "type": "number",
+                          "example": 2.9988,
+                          "description": "base 자산 잔고 net 변화 (이 경우 ZEC)"
+                        },
+                        "quoteGross": {
+                          "type": "integer",
+                          "example": -3000000,
+                          "description": "quote 자산 잔고 gross 변화 (이 경우 KRW)"
+                        },
+                        "quoteFee": {
+                          "type": "object",
+                          "properties": {
+                            "taking": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "taker 포지션으로 발생한 quote 자산 수수료"
+                            },
+                            "making": {
+                              "type": "integer",
+                              "example": 0,
+                              "description": "maker 포지션으로 발생한 quote 자산 수수료"
+                            }
+                          },
+                          "required": [
+                            "taking",
+                            "making"
+                          ]
+                        },
+                        "quoteNet": {
+                          "type": "integer",
+                          "example": -3000000,
+                          "description": "quote 자산 잔고 net 변화 (이 경우 KRW)"
+                        }
+                      },
+                      "required": [
+                        "baseGross",
+                        "baseFee",
+                        "baseNet",
+                        "quoteGross",
+                        "quoteFee",
+                        "quoteNet"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "clientOrderId",
+                    "status",
+                    "forcedCompletionReason",
+                    "tradingPairName",
+                    "side",
+                    "type",
+                    "price",
+                    "stopPrice",
+                    "amount",
+                    "remaining",
+                    "protection",
+                    "timeInForce",
+                    "createdAt",
+                    "updatedAt",
+                    "balanceChange"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ClientOrderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "클라이언트 오더 ID"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "required": false,
+            "description": "밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nonce",
+            "in": "header",
+            "required": false,
+            "description": "timestamp 대신 사용할 수 있는 증가하는 난스 값.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "header",
+            "required": true,
+            "description": "HMAC-SHA512 서명값(base64 인코딩).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "receive-window",
+            "in": "header",
+            "required": false,
+            "description": "리시브 윈도 (200~60000 밀리세컨드).",
+            "schema": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 60000
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "개인 API"
+        ],
+        "summary": "클라이언트 주문 ID로 주문 취소",
+        "description": "해당하는 오더가 존재하지 않으면 404 에러가 반환됩니다.",
+        "operationId": "deleteOrdersClientOrderId",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://gopax.github.io/API/index.html"
+        },
+        "x-doc-url": "https://gopax.github.io/API/index.html",
+        "responses": {
+          "200": {
+            "description": "성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "ClientOrderID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "클라이언트 오더 ID"
+          },
+          {
+            "name": "timestamp",
+            "in": "header",
+            "required": false,
+            "description": "밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "nonce",
+            "in": "header",
+            "required": false,
+            "description": "timestamp 대신 사용할 수 있는 증가하는 난스 값.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "signature",
+            "in": "header",
+            "required": true,
+            "description": "HMAC-SHA512 서명값(base64 인코딩).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "receive-window",
+            "in": "header",
+            "required": false,
+            "description": "리시브 윈도 (200~60000 밀리세컨드).",
+            "schema": {
+              "type": "integer",
+              "minimum": 200,
+              "maximum": 60000
+            }
+          }
+        ],
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
       }
     }
   },

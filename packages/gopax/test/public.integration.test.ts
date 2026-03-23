@@ -33,12 +33,12 @@ describe("@exhub/gopax public integration", () => {
   });
 
   it("오더북 조회", async () => {
-    const result = await client.market.orderbook(tradingPair, { level: "1" });
+    const result = await client.market.orderbook(tradingPair, { level: 1 });
     expect(result).toBeTruthy();
   });
 
   it("체결 기록 조회", async () => {
-    const result = await client.market.trades(tradingPair, { limit: "10" });
+    const result = await client.market.trades(tradingPair, { limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
@@ -55,17 +55,17 @@ describe("@exhub/gopax public integration", () => {
   it("차트 데이터 조회", async () => {
     const now = Date.now();
     const result = await client.market.candles(tradingPair, {
-      start: String(now - 60 * 60 * 1000),
-      end: String(now),
-      interval: "1",
-      limit: "10",
+      start: now - 60 * 60 * 1000,
+      end: now,
+      interval: 1,
+      limit: 10,
     });
     expect(Array.isArray(result)).toBe(true);
   });
 
   it("투자유의 정보 조회", async (context) => {
     try {
-      const result = await client.market.cautions({ showActive: "false" });
+      const result = await client.market.cautions({ showActive: false });
       expect(Array.isArray(result)).toBe(true);
     } catch (error) {
       if (
@@ -94,7 +94,7 @@ describe("@exhub/gopax public integration", () => {
   });
 
   it("공지사항 조회", async () => {
-    const result = await client.market.notices({ limit: "10" });
+    const result = await client.market.notices({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 });

@@ -7,6 +7,7 @@ import type {
   Getcryptowithdrawaladdresses200Item,
   GetdepositwithdrawalstatusParams,
   Getorders200Item,
+  Getordersclientorderid200,
   Getordersorderid200,
   GetordersParams,
   Gettrades200Item,
@@ -75,6 +76,7 @@ export interface GopaxClient {
   orders: {
     getOrders: (params?: GetordersParams) => Promise<Getorders200Item[]>;
     getOrder: (orderId: string) => Promise<Getordersorderid200>;
+    getOrderByClientOrderId: (clientOrderId: string) => Promise<Getordersclientorderid200>;
   };
   trades: {
     getTrades: (params?: GettradesParams) => Promise<Gettrades200Item[]>;

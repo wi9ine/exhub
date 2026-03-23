@@ -10,27 +10,27 @@ export type GettradesParams = {
 /**
  * 반환되는 항목의 개수 (최대 100)
  */
-limit?: string;
+limit?: number;
 /**
  * 이 ID보다 오래된 데이터를 조회
  */
-pastmax?: string;
+pastmax?: number;
 /**
  * 이 ID보다 새로운 최신 데이터를 조회
  */
-latestmin?: string;
+latestmin?: number;
 /**
  * 이 타임스탬프 이후의 데이터를 조회 (초 단위)
  */
-after?: string;
+after?: number;
 /**
  * 이 타임스탬프 이전의 데이터를 조회 (초 단위)
  */
-before?: string;
+before?: number;
 /**
  * true인 경우에 한하여 한 달 이상 지난 데이터까지 모두 포함하여 조회(다른 파라미터들보다 더 높은 우선순위를 가짐)
  */
-deepSearch?: string;
+deepSearch?: boolean;
 /**
  * 해당 거래쌍의 데이터 조회 (BTC-KRW, ETH-KRW...)
  */
