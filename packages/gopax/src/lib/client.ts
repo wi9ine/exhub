@@ -153,6 +153,13 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
           undefined,
           true,
         ),
+      placeOrder: async (body) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["placeOrder"]>>(
+          "POST",
+          GOPAX_PRIVATE_PATHS.orders,
+          undefined,
+          body,
+        ),
       getOrder: async (orderId) => {
         const encodedOrderId = encodePathSegment(orderId);
         return requestPrivate<AsyncResult<GopaxClient["orders"]["getOrder"]>>(
@@ -160,10 +167,24 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
           `${GOPAX_PRIVATE_PATHS.orders}/${encodedOrderId}`,
         );
       },
+      cancelOrder: async (orderId) => {
+        const encodedOrderId = encodePathSegment(orderId);
+        return requestPrivate<AsyncResult<GopaxClient["orders"]["cancelOrder"]>>(
+          "DELETE",
+          `${GOPAX_PRIVATE_PATHS.orders}/${encodedOrderId}`,
+        );
+      },
       getOrderByClientOrderId: async (clientOrderId) => {
         const encoded = encodePathSegment(clientOrderId);
         return requestPrivate<AsyncResult<GopaxClient["orders"]["getOrderByClientOrderId"]>>(
           "GET",
+          `${GOPAX_PRIVATE_PATHS.orders}/clientOrderId/${encoded}`,
+        );
+      },
+      cancelOrderByClientOrderId: async (clientOrderId) => {
+        const encoded = encodePathSegment(clientOrderId);
+        return requestPrivate<AsyncResult<GopaxClient["orders"]["cancelOrderByClientOrderId"]>>(
+          "DELETE",
           `${GOPAX_PRIVATE_PATHS.orders}/clientOrderId/${encoded}`,
         );
       },
@@ -192,6 +213,13 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
         requestPrivate<AsyncResult<GopaxClient["wallet"]["getCryptoWithdrawalAddresses"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.cryptoWithdrawalAddresses,
+        ),
+      withdraw: async (body) =>
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["withdraw"]>>(
+          "POST",
+          "/withdrawals",
+          undefined,
+          body,
         ),
     },
   };

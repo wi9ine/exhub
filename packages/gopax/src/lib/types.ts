@@ -1,6 +1,8 @@
 import type { ExHubClientOptions } from "@exhub/core";
 
 import type {
+  Deleteordersclientorderid200,
+  Deleteordersorderid200,
   Getbalances200Item,
   Getbalancesassetname200,
   Getcryptodepositaddresses200Item,
@@ -12,6 +14,9 @@ import type {
   GetordersParams,
   Gettrades200Item,
   GettradesParams,
+  Postorders200,
+  PostordersBody,
+  PostwithdrawalsBody,
 } from "../generated/private/model";
 import type {
   Getassets200Item,
@@ -75,8 +80,11 @@ export interface GopaxClient {
   };
   orders: {
     getOrders: (params?: GetordersParams) => Promise<Getorders200Item[]>;
+    placeOrder: (body: PostordersBody) => Promise<Postorders200>;
     getOrder: (orderId: string) => Promise<Getordersorderid200>;
+    cancelOrder: (orderId: string) => Promise<Deleteordersorderid200>;
     getOrderByClientOrderId: (clientOrderId: string) => Promise<Getordersclientorderid200>;
+    cancelOrderByClientOrderId: (clientOrderId: string) => Promise<Deleteordersclientorderid200>;
   };
   trades: {
     getTrades: (params?: GettradesParams) => Promise<Gettrades200Item[]>;
@@ -85,5 +93,6 @@ export interface GopaxClient {
     getDepositWithdrawalStatus: (params?: GetdepositwithdrawalstatusParams) => Promise<string[]>;
     getCryptoDepositAddresses: () => Promise<Getcryptodepositaddresses200Item[]>;
     getCryptoWithdrawalAddresses: () => Promise<Getcryptowithdrawaladdresses200Item[]>;
+    withdraw: (body: PostwithdrawalsBody) => Promise<void>;
   };
 }
