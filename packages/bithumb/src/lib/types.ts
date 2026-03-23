@@ -5,6 +5,8 @@ import type {
   CanceltwaporderParams,
   Createtwaporder200Item,
   CreatetwaporderParams,
+  DeleteOrder200,
+  DeleteOrderParams,
   GetAccounts200Item,
   GetDeposit200,
   GetDepositParams,
@@ -33,6 +35,20 @@ import type {
   GetWithdrawsKrw200Item,
   GetWithdrawsKrwParams,
   GetWithdrawsParams,
+  PostDepositsGenerateCoinAddress201,
+  PostDepositsGenerateCoinAddressBody,
+  PostDepositsKrw201,
+  PostDepositsKrwBody,
+  PostOrders201,
+  PostOrdersBatch200,
+  PostOrdersBatchBody,
+  PostOrdersBody,
+  PostOrdersCancel200,
+  PostOrdersCancelBody,
+  PostWithdrawsCoin201,
+  PostWithdrawsCoinBody,
+  PostWithdrawsKrw201,
+  PostWithdrawsKrwBody,
 } from "../generated/private/model";
 import type {
   Day200Item,
@@ -94,7 +110,11 @@ export interface BithumbClient {
   };
   orders: {
     getOrdersChance: (params: GetOrdersChanceParams) => Promise<GetOrdersChance200>;
+    placeOrder: (body: PostOrdersBody) => Promise<PostOrders201>;
+    placeBatchOrders: (body: PostOrdersBatchBody) => Promise<PostOrdersBatch200>;
     getOrder: (params?: GetOrderParams) => Promise<GetOrder200>;
+    cancelOrder: (params?: DeleteOrderParams) => Promise<DeleteOrder200>;
+    cancelOrders: (body: PostOrdersCancelBody) => Promise<PostOrdersCancel200>;
     getOrders: (params?: GetOrdersParams) => Promise<GetOrders200Item[]>;
     getTwapOrders: (params?: GettwapordersParams) => Promise<Gettwaporders200Item[]>;
     cancelTwapOrder: (params: CanceltwaporderParams) => Promise<Canceltwaporder200Item[]>;
@@ -106,6 +126,8 @@ export interface BithumbClient {
     getWithdraw: (params: GetWithdrawParams) => Promise<GetWithdraw200>;
     getWithdrawsChance: (params: GetWithdrawsChanceParams) => Promise<GetWithdrawsChance200>;
     getWithdrawsCoinAddresses: () => Promise<GetWithdrawsCoinAddresses200Item[]>;
+    withdrawCoin: (body: PostWithdrawsCoinBody) => Promise<PostWithdrawsCoin201>;
+    withdrawKrw: (body: PostWithdrawsKrwBody) => Promise<PostWithdrawsKrw201>;
   };
   deposits: {
     getDeposits: (params?: GetDepositsParams) => Promise<GetDeposits200Item[]>;
@@ -115,5 +137,9 @@ export interface BithumbClient {
     getDepositsCoinAddress: (
       params: GetDepositsCoinAddressParams,
     ) => Promise<GetDepositsCoinAddress200>;
+    depositKrw: (body: PostDepositsKrwBody) => Promise<PostDepositsKrw201>;
+    generateCoinAddress: (
+      body: PostDepositsGenerateCoinAddressBody,
+    ) => Promise<PostDepositsGenerateCoinAddress201>;
   };
 }

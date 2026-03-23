@@ -149,6 +149,23 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
           "/v2.1/order/active_orders",
           body,
         ),
+      placeOrder: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["placeOrder"]>>("/v2.1/order", body),
+      placeLimitOrder: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["placeLimitOrder"]>>(
+          "/v2.1/order/limit",
+          body,
+        ),
+      cancelOrders: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["cancelOrders"]>>(
+          "/v2.1/order/cancel/all",
+          body,
+        ),
+      cancelOrder: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["cancelOrder"]>>(
+          "/v2.1/order/cancel",
+          body,
+        ),
       orderDetail: async (body) =>
         requestPrivate<AsyncResult<CoinoneClient["orders"]["orderDetail"]>>(
           "/v2.1/order/detail",
@@ -204,6 +221,11 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
       coinWithdrawalAddressBook: async (body) =>
         requestPrivate<AsyncResult<CoinoneClient["transactions"]["coinWithdrawalAddressBook"]>>(
           "/v2.1/transaction/coin/withdrawal/address_book",
+          body,
+        ),
+      coinWithdrawal: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["transactions"]["coinWithdrawal"]>>(
+          "/v2.1/transaction/coin/withdrawal",
           body,
         ),
     },

@@ -1,6 +1,10 @@
 import type { ExHubClientOptions } from "@exhub/core";
 
 import type {
+  Deletev2coinwithdrawal200,
+  Deletev2coinwithdrawalParams,
+  Deletev2orders200,
+  Deletev2ordersParams,
   Getv2allorders200,
   Getv2allordersParams,
   Getv2balance200,
@@ -32,6 +36,16 @@ import type {
   Getv2ordersParams,
   Getv2tradingfeepolicy200,
   Getv2tradingfeepolicyParams,
+  Postv2coindepositaddress200,
+  Postv2coindepositaddressBody,
+  Postv2coinwithdrawal200,
+  Postv2coinwithdrawalBody,
+  Postv2krwsendkrwdepositpush200,
+  Postv2krwsendkrwdepositpushBody,
+  Postv2krwsendkrwwithdrawalpush200,
+  Postv2krwsendkrwwithdrawalpushBody,
+  Postv2orders200,
+  Postv2ordersBody,
 } from "../generated/private/model";
 import type {
   Getv2candles200,
@@ -73,6 +87,10 @@ export interface KorbitClient {
     time: () => Promise<Getv2time200>;
   };
   orders: {
+    placeOrder: (body: Postv2ordersBody) => Promise<Postv2orders200>;
+    cancelOrder: (
+      params: Omit<Deletev2ordersParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<Deletev2orders200>;
     getOrder: (
       params: Omit<Getv2ordersParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<Getv2orders200>;
@@ -93,6 +111,9 @@ export interface KorbitClient {
   };
   cryptoDeposits: {
     getDepositAddresses: () => Promise<Getv2coindepositaddresses200>;
+    createDepositAddress: (
+      body: Postv2coindepositaddressBody,
+    ) => Promise<Postv2coindepositaddress200>;
     getDepositAddress: (
       params: Omit<Getv2coindepositaddressParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<Getv2coindepositaddress200>;
@@ -108,6 +129,10 @@ export interface KorbitClient {
     getWithdrawableAmount: (
       params?: Omit<Getv2coinwithdrawableamountParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<Getv2coinwithdrawableamount200>;
+    withdraw: (body: Postv2coinwithdrawalBody) => Promise<Postv2coinwithdrawal200>;
+    cancelWithdrawal: (
+      params: Omit<Deletev2coinwithdrawalParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<Deletev2coinwithdrawal200>;
     getRecentWithdrawals: (
       params: Omit<Getv2coinrecentwithdrawalsParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<Getv2coinrecentwithdrawals200>;
@@ -116,6 +141,12 @@ export interface KorbitClient {
     ) => Promise<Getv2coinwithdrawal200>;
   };
   krw: {
+    sendDepositPush: (
+      body: Postv2krwsendkrwdepositpushBody,
+    ) => Promise<Postv2krwsendkrwdepositpush200>;
+    sendWithdrawalPush: (
+      body: Postv2krwsendkrwwithdrawalpushBody,
+    ) => Promise<Postv2krwsendkrwwithdrawalpush200>;
     getRecentDeposits: (
       params: Omit<Getv2krwrecentdepositsParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<Getv2krwrecentdeposits200>;

@@ -2,10 +2,16 @@ import type { ExHubClientOptions } from "@exhub/core";
 import { createNonce, ExHubConfigurationError, resolveBaseUrl, sha512Hex } from "@exhub/core";
 
 import type {
+  CancelOrder200,
+  CancelOrderBody,
+  CancelOrders200,
+  CancelOrdersBody,
   CoinTransactionHistory200,
   CoinTransactionHistoryBody,
+  CoinWithdrawal200,
   CoinWithdrawalAddressBook200,
   CoinWithdrawalAddressBookBody,
+  CoinWithdrawalBody,
   CoinWithdrawalLimit200,
   CoinWithdrawalLimitBody,
   FindActiveOrders200,
@@ -30,10 +36,14 @@ import type {
   KrwTransactionHistoryBody,
   OrderDetail200,
   OrderDetailBody,
+  OrderPlaceLimitOrder200,
+  OrderPlaceLimitOrderBody,
   OrderRewardHistory200,
   OrderRewardHistoryBody,
   OrderRewardPrograms200,
   OrderRewardProgramsBody,
+  PlaceOrder200,
+  PlaceOrderBody,
   SingleCoinTransactionHistory200,
   SingleCoinTransactionHistoryBody,
 } from "../generated/private/model";
@@ -133,6 +143,14 @@ export interface CoinoneClient {
     findActiveOrders: (
       body?: Omit<FindActiveOrdersBody, "access_token" | "nonce">,
     ) => Promise<FindActiveOrders200>;
+    placeOrder: (body: Omit<PlaceOrderBody, "access_token" | "nonce">) => Promise<PlaceOrder200>;
+    placeLimitOrder: (
+      body: Omit<OrderPlaceLimitOrderBody, "access_token" | "nonce">,
+    ) => Promise<OrderPlaceLimitOrder200>;
+    cancelOrders: (
+      body: Omit<CancelOrdersBody, "access_token" | "nonce">,
+    ) => Promise<CancelOrders200>;
+    cancelOrder: (body: Omit<CancelOrderBody, "access_token" | "nonce">) => Promise<CancelOrder200>;
     orderDetail: (body: Omit<OrderDetailBody, "access_token" | "nonce">) => Promise<OrderDetail200>;
     findAllCompletedOrders: (
       body: Omit<FindAllCompletedOrdersBody, "access_token" | "nonce">,
@@ -166,6 +184,9 @@ export interface CoinoneClient {
     coinWithdrawalAddressBook: (
       body?: Omit<CoinWithdrawalAddressBookBody, "access_token" | "nonce">,
     ) => Promise<CoinWithdrawalAddressBook200>;
+    coinWithdrawal: (
+      body: Omit<CoinWithdrawalBody, "access_token" | "nonce">,
+    ) => Promise<CoinWithdrawal200>;
   };
   rewards: {
     orderRewardPrograms: (

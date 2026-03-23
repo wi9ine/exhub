@@ -147,11 +147,35 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
           "/v1/orders/chance",
           params,
         ),
+      placeOrder: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["placeOrder"]>>(
+          "POST",
+          "/v1/orders",
+          body,
+        ),
+      placeBatchOrders: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["placeBatchOrders"]>>(
+          "POST",
+          "/v1/orders/batch",
+          body,
+        ),
       getOrder: async (params) =>
         requestPrivate<AsyncResult<BithumbClient["orders"]["getOrder"]>>(
           "GET",
           "/v1/order",
           params,
+        ),
+      cancelOrder: async (params) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelOrder"]>>(
+          "DELETE",
+          "/v1/order",
+          params,
+        ),
+      cancelOrders: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelOrders"]>>(
+          "POST",
+          "/v1/orders/cancel",
+          body,
         ),
       getOrders: async (params) =>
         requestPrivate<AsyncResult<BithumbClient["orders"]["getOrders"]>>(
@@ -208,6 +232,18 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
           "GET",
           "/v1/withdraws/coin_addresses",
         ),
+      withdrawCoin: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["withdrawCoin"]>>(
+          "POST",
+          "/v1/withdraws/coin",
+          body,
+        ),
+      withdrawKrw: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["withdrawKrw"]>>(
+          "POST",
+          "/v1/withdraws/krw",
+          body,
+        ),
     },
     deposits: {
       getDeposits: async (params) =>
@@ -238,6 +274,18 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
           "GET",
           "/v1/deposits/coin_address",
           params,
+        ),
+      depositKrw: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["depositKrw"]>>(
+          "POST",
+          "/v1/deposits/krw",
+          body,
+        ),
+      generateCoinAddress: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["generateCoinAddress"]>>(
+          "POST",
+          "/v1/deposits/generate_coin_address",
+          body,
         ),
     },
   };
