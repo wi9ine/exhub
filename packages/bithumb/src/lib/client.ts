@@ -147,11 +147,7 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
     },
     service: {
       getNotices: callPublicNoInput(publicApi.getNotices, baseURL, timeout),
-      getFeeInfo: callPublicWithPath(
-        publicApi.getFeeInfo,
-        baseURL,
-        timeout,
-      ),
+      getFeeInfo: callPublicWithPath(publicApi.getFeeInfo, baseURL, timeout),
       getStatusWallet: callPrivateNoInput(privateApi.getStatusWallet, options, baseURL, timeout),
       api: callPrivateNoInput(privateApi.api, options, baseURL, timeout),
     },
