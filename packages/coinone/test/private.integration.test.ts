@@ -1,10 +1,15 @@
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { config as loadEnv } from "dotenv";
 import { beforeAll, describe, expect, it, type TestContext } from "vitest";
 
 import { createCoinoneClient } from "../src";
 
+const envPath = resolve(fileURLToPath(new URL(".", import.meta.url)), "../../../.env.local");
+
 loadEnv({
-  path: "/Users/nukeguys/Projects/exhub/.env.local",
+  path: envPath,
   quiet: true,
 });
 

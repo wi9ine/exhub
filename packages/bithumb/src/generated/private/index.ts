@@ -13,6 +13,10 @@ import type {
 
 import type {
   Api200Item,
+  Canceltwaporder200Item,
+  CanceltwaporderParams,
+  Createtwaporder200Item,
+  CreatetwaporderParams,
   DeleteOrder200,
   DeleteOrderParams,
   GetAccounts200Item,
@@ -27,12 +31,6 @@ import type {
   GetDepositsParams,
   GetOrder200,
   GetOrderParams,
-  GetOrders111200Item,
-  GetOrders111Params,
-  GetOrders11200Item,
-  GetOrders11Params,
-  GetOrders1200Item,
-  GetOrders1Params,
   GetOrders200Item,
   GetOrdersChance200,
   GetOrdersChanceParams,
@@ -47,6 +45,8 @@ import type {
   GetWithdrawsKrw200Item,
   GetWithdrawsKrwParams,
   GetWithdrawsParams,
+  Gettwaporders200Item,
+  GettwapordersParams,
   PostDepositsGenerateCoinAddress201,
   PostDepositsGenerateCoinAddressBody,
   PostDepositsKrw201,
@@ -177,9 +177,9 @@ export const postOrdersCancel = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 내역 조회
  */
-export const getOrders1 = (
-    params?: GetOrders1Params, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetOrders1200Item[]>> => {
+export const gettwaporders = (
+    params?: GettwapordersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Gettwaporders200Item[]>> => {
     return axios.get(
       `/twap`,{
     ...options,
@@ -191,9 +191,9 @@ export const getOrders1 = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 취소
  */
-export const getOrders11 = (
-    params: GetOrders11Params, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetOrders11200Item[]>> => {
+export const canceltwaporder = (
+    params: CanceltwaporderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Canceltwaporder200Item[]>> => {
     return axios.delete(
       `/twap`,{
     ...options,
@@ -205,9 +205,9 @@ export const getOrders11 = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문하기
  */
-export const getOrders111 = (
-    params: GetOrders111Params, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetOrders111200Item[]>> => {
+export const createtwaporder = (
+    params: CreatetwaporderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Createtwaporder200Item[]>> => {
     return axios.post(
       `/twap`,undefined,{
     ...options,
@@ -435,9 +435,9 @@ export type GetOrdersResult = AxiosResponse<GetOrders200Item[]>
 export type PostOrdersResult = AxiosResponse<PostOrders201>
 export type PostOrdersBatchResult = AxiosResponse<PostOrdersBatch200>
 export type PostOrdersCancelResult = AxiosResponse<PostOrdersCancel200>
-export type GetOrders1Result = AxiosResponse<GetOrders1200Item[]>
-export type GetOrders11Result = AxiosResponse<GetOrders11200Item[]>
-export type GetOrders111Result = AxiosResponse<GetOrders111200Item[]>
+export type GettwapordersResult = AxiosResponse<Gettwaporders200Item[]>
+export type CanceltwaporderResult = AxiosResponse<Canceltwaporder200Item[]>
+export type CreatetwaporderResult = AxiosResponse<Createtwaporder200Item[]>
 export type GetWithdrawsResult = AxiosResponse<GetWithdraws200Item[]>
 export type GetWithdrawsKrwResult = AxiosResponse<GetWithdrawsKrw200Item[]>
 export type PostWithdrawsKrwResult = AxiosResponse<PostWithdrawsKrw201>

@@ -5,8 +5,10 @@
  * 빗썸 공식 API 문서 v2.1.5 기준 Private REST API 스펙입니다.
  * OpenAPI spec version: 2.1.5
  */
-import type { GetOrders1400Error } from './getOrders1400Error';
 
-export type GetOrders1400 = {
-  error?: GetOrders1400Error;
+export type CanceltwaporderParams = {
+/**
+ * 취소할 TWAP 주문 ID
+ */
+algo_order_id: string;
 };

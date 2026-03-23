@@ -1,6 +1,10 @@
 import type { ExHubClientOptions } from "@exhub/core";
 import type {
   Api200Item,
+  Canceltwaporder200Item,
+  CanceltwaporderParams,
+  Createtwaporder200Item,
+  CreatetwaporderParams,
   GetAccounts200Item,
   GetDeposit200,
   GetDepositParams,
@@ -13,17 +17,13 @@ import type {
   GetDepositsParams,
   GetOrder200,
   GetOrderParams,
-  GetOrders1Params,
-  GetOrders11Params,
-  GetOrders111Params,
   GetOrders200Item,
-  GetOrders1200Item,
-  GetOrders11200Item,
-  GetOrders111200Item,
   GetOrdersChance200,
   GetOrdersChanceParams,
   GetOrdersParams,
   GetStatusWallet200Item,
+  Gettwaporders200Item,
+  GettwapordersParams,
   GetWithdraw200,
   GetWithdrawParams,
   GetWithdraws200Item,
@@ -98,9 +98,9 @@ export interface BithumbClient {
     getOrdersChance: (params: GetOrdersChanceParams) => Promise<GetOrdersChance200>;
     getOrder: (params?: GetOrderParams) => Promise<GetOrder200>;
     getOrders: (params?: GetOrdersParams) => Promise<GetOrders200Item[]>;
-    getOrders1: (params?: GetOrders1Params) => Promise<GetOrders1200Item[]>;
-    getOrders11: (params: GetOrders11Params) => Promise<GetOrders11200Item[]>;
-    getOrders111: (params: GetOrders111Params) => Promise<GetOrders111200Item[]>;
+    getTwapOrders: (params?: GettwapordersParams) => Promise<Gettwaporders200Item[]>;
+    cancelTwapOrder: (params: CanceltwaporderParams) => Promise<Canceltwaporder200Item[]>;
+    createTwapOrder: (params: CreatetwaporderParams) => Promise<Createtwaporder200Item[]>;
   };
   withdrawals: {
     getWithdraws: (params?: GetWithdrawsParams) => Promise<GetWithdraws200Item[]>;

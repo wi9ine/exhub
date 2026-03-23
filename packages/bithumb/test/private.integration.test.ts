@@ -1,10 +1,15 @@
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { config as loadEnv } from "dotenv";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { createBithumbClient } from "../src";
 
+const envPath = resolve(fileURLToPath(new URL(".", import.meta.url)), "../../../.env.local");
+
 loadEnv({
-  path: "/Users/nukeguys/Projects/exhub/.env.local",
+  path: envPath,
   quiet: true,
 });
 
@@ -61,7 +66,7 @@ describe("bithumb private integration", () => {
   });
 
   testIf("TWAP 주문 내역 조회", async () => {
-    const result = await client.orders.getOrders1({ market, limit: 10 });
+    const result = await client.orders.getTwapOrders({ market, limit: 10 });
     expect(result).toBeTruthy();
   });
 

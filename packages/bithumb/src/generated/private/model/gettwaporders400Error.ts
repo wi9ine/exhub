@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GetOrders1400Error = {
+export type Gettwaporders400Error = {
   name?: string;
   message?: string;
 };

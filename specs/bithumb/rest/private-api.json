@@ -1980,7 +1980,7 @@
       "get": {
         "summary": "TWAP 주문 내역 조회",
         "description": "주문 목록을 조회합니다.",
-        "operationId": "get_orders-1",
+        "operationId": "getTwapOrders",
         "parameters": [
           {
             "name": "Authorization",
@@ -2219,7 +2219,7 @@
       "delete": {
         "summary": "TWAP 주문 취소",
         "description": "주문 목록을 조회합니다.",
-        "operationId": "get_orders-1-1",
+        "operationId": "cancelTwapOrder",
         "parameters": [
           {
             "name": "Authorization",
@@ -2331,7 +2331,7 @@
       "post": {
         "summary": "TWAP 주문하기",
         "description": "주문 목록을 조회합니다.",
-        "operationId": "get_orders-1-1-1",
+        "operationId": "createTwapOrder",
         "parameters": [
           {
             "name": "Authorization",

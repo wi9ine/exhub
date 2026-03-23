@@ -1,10 +1,15 @@
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { config as loadEnv } from "dotenv";
 import { beforeAll, describe, expect, it } from "vitest";
 
 import { createKorbitClient } from "../src";
 
+const envPath = resolve(fileURLToPath(new URL(".", import.meta.url)), "../../../.env.local");
+
 loadEnv({
-  path: "/Users/nukeguys/Projects/exhub/.env.local",
+  path: envPath,
   quiet: true,
 });
 

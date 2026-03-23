@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GetOrders1200Item = {
+export type Gettwaporders200Item = {
   /** 다음 페이지 존재 여부 */
   has_next?: boolean;
   /** 다음 페이지 조회를 위한 커서 값 */

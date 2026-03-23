@@ -4161,7 +4161,19 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "access_token",
+                  "nonce"
+                ],
                 "properties": {
+                  "access_token": {
+                    "type": "string",
+                    "description": "사용자의 액세스 토큰 (access token)"
+                  },
+                  "nonce": {
+                    "type": "string",
+                    "description": "UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")"
+                  },
                   "currency": {
                     "type": "string",
                     "description": "출금 주소를 조회 하려는 종목"

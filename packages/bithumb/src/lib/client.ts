@@ -1,6 +1,7 @@
 import {
   createHs256Jwt,
   createNonce,
+  ExHubConfigurationError,
   resolveBaseUrl,
   sha512HexDigest,
   toQueryString,
@@ -13,10 +14,10 @@ import type { BithumbClient, BithumbClientOptions, BithumbCredentials } from "./
 
 const BITHUMB_DEFAULT_BASE_URL = "https://api.bithumb.com/v1";
 
-function createPublicRequestConfig(options: BithumbClientOptions): AxiosRequestConfig {
+function createPublicRequestConfig(baseURL: string, timeout: number): AxiosRequestConfig {
   return {
-    baseURL: resolveBaseUrl(BITHUMB_DEFAULT_BASE_URL, options.baseURL),
-    timeout: options.timeout ?? 10_000,
+    baseURL,
+    timeout,
   };
 }
 
@@ -25,11 +26,13 @@ function resolveCredentials(
 ): Promise<BithumbCredentials> | BithumbCredentials {
   if (options.credentialsProvider) return options.credentialsProvider();
   if (options.credentials) return options.credentials;
-  throw new Error("Bithumb 인증 정보가 설정되지 않았습니다.");
+  throw new ExHubConfigurationError("Bithumb 인증 정보가 설정되지 않았습니다.");
 }
 
 async function createPrivateRequestConfig(
   options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
   payload?: Record<string, unknown>,
 ): Promise<AxiosRequestConfig> {
   const credentials = await resolveCredentials(options);
@@ -47,8 +50,8 @@ async function createPrivateRequestConfig(
   };
 
   return {
-    baseURL: resolveBaseUrl(BITHUMB_DEFAULT_BASE_URL, options.baseURL),
-    timeout: options.timeout ?? 10_000,
+    baseURL,
+    timeout,
     headers: {
       Authorization: `Bearer ${createHs256Jwt(tokenPayload, credentials.secretKey)}`,
       Accept: "application/json",
@@ -59,16 +62,19 @@ async function createPrivateRequestConfig(
 
 function callPublicWithParams<TParams, TResult>(
   fn: (params: TParams, options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
-  options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
-  return async (params: TParams) => (await fn(params, createPublicRequestConfig(options))).data;
+  return async (params: TParams) =>
+    (await fn(params, createPublicRequestConfig(baseURL, timeout))).data;
 }
 
 function callPublicWithPath<TPath, TResult>(
   fn: (path: TPath, options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
-  options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
-  return async (path: TPath) => (await fn(path, createPublicRequestConfig(options))).data;
+  return async (path: TPath) => (await fn(path, createPublicRequestConfig(baseURL, timeout))).data;
 }
 
 function callPublicWithParamsAndPath<TParams, TResult>(
@@ -77,91 +83,122 @@ function callPublicWithParamsAndPath<TParams, TResult>(
     unit?: number,
     options?: AxiosRequestConfig,
   ) => Promise<AxiosResponse<TResult>>,
-  options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async (params: TParams, unit?: number) =>
-    (await fn(params, unit, createPublicRequestConfig(options))).data;
+    (await fn(params, unit, createPublicRequestConfig(baseURL, timeout))).data;
 }
 
 function callPublicNoInput<TResult>(
   fn: (options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
-  options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
-  return async () => (await fn(createPublicRequestConfig(options))).data;
+  return async () => (await fn(createPublicRequestConfig(baseURL, timeout))).data;
 }
 
 function callPrivateWithParams<TParams extends Record<string, unknown> | undefined, TResult>(
   fn: (params: TParams, options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
   options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async (params: TParams) =>
-    (await fn(params, await createPrivateRequestConfig(options, params))).data;
+    (await fn(params, await createPrivateRequestConfig(options, baseURL, timeout, params))).data;
 }
 
 function callPrivateNoInput<TResult>(
   fn: (options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
   options: BithumbClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
-  return async () => (await fn(await createPrivateRequestConfig(options))).data;
+  return async () => (await fn(await createPrivateRequestConfig(options, baseURL, timeout))).data;
 }
 
 export function createBithumbClient(options: BithumbClientOptions = {}): BithumbClient {
+  const baseURL = resolveBaseUrl(BITHUMB_DEFAULT_BASE_URL, options.baseURL);
+  const timeout = options.timeout ?? 10_000;
+
   return {
     markets: {
-      getMarketAll: callPublicWithParams(publicApi.getMarketAll, options),
+      getMarketAll: callPublicWithParams(publicApi.getMarketAll, baseURL, timeout),
       getMarketVirtualAssetWarning: callPublicNoInput(
         publicApi.getMarketVirtualAssetWarning,
-        options,
+        baseURL,
+        timeout,
       ),
     },
     candles: {
-      minute1: callPublicWithParamsAndPath(publicApi.minute1, options),
-      day: callPublicWithParams(publicApi.day, options),
-      week: callPublicWithParams(publicApi.week, options),
-      month: callPublicWithParams(publicApi.month, options),
+      minute1: callPublicWithParamsAndPath(publicApi.minute1, baseURL, timeout),
+      day: callPublicWithParams(publicApi.day, baseURL, timeout),
+      week: callPublicWithParams(publicApi.week, baseURL, timeout),
+      month: callPublicWithParams(publicApi.month, baseURL, timeout),
     },
     trades: {
-      getTradesTicks: callPublicWithParams(publicApi.getTradesTicks, options),
+      getTradesTicks: callPublicWithParams(publicApi.getTradesTicks, baseURL, timeout),
     },
     tickers: {
-      getTicker: callPublicWithParams(publicApi.getTicker, options),
+      getTicker: callPublicWithParams(publicApi.getTicker, baseURL, timeout),
     },
     orderbook: {
-      getOrderbook: callPublicWithParams(publicApi.getOrderbook, options),
+      getOrderbook: callPublicWithParams(publicApi.getOrderbook, baseURL, timeout),
     },
     service: {
-      getNotices: callPublicNoInput(publicApi.getNotices, options),
+      getNotices: callPublicNoInput(publicApi.getNotices, baseURL, timeout),
       getCreditLendingmarginLevel1: callPublicWithPath(
         publicApi.getCreditLendingmarginLevel1,
-        options,
+        baseURL,
+        timeout,
       ),
-      getStatusWallet: callPrivateNoInput(privateApi.getStatusWallet, options),
-      api: callPrivateNoInput(privateApi.api, options),
+      getStatusWallet: callPrivateNoInput(privateApi.getStatusWallet, options, baseURL, timeout),
+      api: callPrivateNoInput(privateApi.api, options, baseURL, timeout),
     },
     accounts: {
-      getAccounts: callPrivateNoInput(privateApi.getAccounts, options),
+      getAccounts: callPrivateNoInput(privateApi.getAccounts, options, baseURL, timeout),
     },
     orders: {
-      getOrdersChance: callPrivateWithParams(privateApi.getOrdersChance, options),
-      getOrder: callPrivateWithParams(privateApi.getOrder, options),
-      getOrders: callPrivateWithParams(privateApi.getOrders, options),
-      getOrders1: callPrivateWithParams(privateApi.getOrders1, options),
-      getOrders11: callPrivateWithParams(privateApi.getOrders11, options),
-      getOrders111: callPrivateWithParams(privateApi.getOrders111, options),
+      getOrdersChance: callPrivateWithParams(privateApi.getOrdersChance, options, baseURL, timeout),
+      getOrder: callPrivateWithParams(privateApi.getOrder, options, baseURL, timeout),
+      getOrders: callPrivateWithParams(privateApi.getOrders, options, baseURL, timeout),
+      getTwapOrders: callPrivateWithParams(privateApi.gettwaporders, options, baseURL, timeout),
+      cancelTwapOrder: callPrivateWithParams(privateApi.canceltwaporder, options, baseURL, timeout),
+      createTwapOrder: callPrivateWithParams(privateApi.createtwaporder, options, baseURL, timeout),
     },
     withdrawals: {
-      getWithdraws: callPrivateWithParams(privateApi.getWithdraws, options),
-      getWithdrawsKrw: callPrivateWithParams(privateApi.getWithdrawsKrw, options),
-      getWithdraw: callPrivateWithParams(privateApi.getWithdraw, options),
-      getWithdrawsChance: callPrivateWithParams(privateApi.getWithdrawsChance, options),
-      getWithdrawsCoinAddresses: callPrivateNoInput(privateApi.getWithdrawsCoinAddresses, options),
+      getWithdraws: callPrivateWithParams(privateApi.getWithdraws, options, baseURL, timeout),
+      getWithdrawsKrw: callPrivateWithParams(privateApi.getWithdrawsKrw, options, baseURL, timeout),
+      getWithdraw: callPrivateWithParams(privateApi.getWithdraw, options, baseURL, timeout),
+      getWithdrawsChance: callPrivateWithParams(
+        privateApi.getWithdrawsChance,
+        options,
+        baseURL,
+        timeout,
+      ),
+      getWithdrawsCoinAddresses: callPrivateNoInput(
+        privateApi.getWithdrawsCoinAddresses,
+        options,
+        baseURL,
+        timeout,
+      ),
     },
     deposits: {
-      getDeposits: callPrivateWithParams(privateApi.getDeposits, options),
-      getDepositsKrw: callPrivateWithParams(privateApi.getDepositsKrw, options),
-      getDeposit: callPrivateWithParams(privateApi.getDeposit, options),
-      getDepositsCoinAddresses: callPrivateNoInput(privateApi.getDepositsCoinAddresses, options),
-      getDepositsCoinAddress: callPrivateWithParams(privateApi.getDepositsCoinAddress, options),
+      getDeposits: callPrivateWithParams(privateApi.getDeposits, options, baseURL, timeout),
+      getDepositsKrw: callPrivateWithParams(privateApi.getDepositsKrw, options, baseURL, timeout),
+      getDeposit: callPrivateWithParams(privateApi.getDeposit, options, baseURL, timeout),
+      getDepositsCoinAddresses: callPrivateNoInput(
+        privateApi.getDepositsCoinAddresses,
+        options,
+        baseURL,
+        timeout,
+      ),
+      getDepositsCoinAddress: callPrivateWithParams(
+        privateApi.getDepositsCoinAddress,
+        options,
+        baseURL,
+        timeout,
+      ),
     },
   };
 }

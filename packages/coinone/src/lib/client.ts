@@ -1,33 +1,8 @@
 import type { AxiosRequestConfig } from "axios";
 
 import * as privateApi from "../generated/private";
-import type {
-  CoinTransactionHistoryBody,
-  CoinWithdrawalAddressBookBody,
-  CoinWithdrawalLimitBody,
-  FindActiveOrdersBody,
-  FindAllCompletedOrdersBody,
-  FindAllOpenOrdersBody,
-  FindAllTradeFeesBody,
-  FindBalanceBody,
-  FindBalanceByCurrenciesBody,
-  FindCompletedOrdersBody,
-  FindOpenOrdersBody,
-  FindOrderInfoBody,
-  FindTradeFeeByPairBody,
-  KrwTransactionHistoryBody,
-  OrderDetailBody,
-  OrderRewardHistoryBody,
-  OrderRewardProgramsBody,
-  SingleCoinTransactionHistoryBody,
-} from "../generated/private/model";
 import * as publicApi from "../generated/public";
-import type {
-  CoinoneClient,
-  CoinoneClientOptions,
-  CoinoneCredentials,
-  CreateCoinoneSignedBodyInput,
-} from "./types";
+import type { CoinoneClient, CoinoneClientOptions, CreateCoinoneSignedBodyInput } from "./types";
 import {
   createCoinoneHeaders,
   createCoinoneSignedBody,
@@ -35,32 +10,62 @@ import {
   resolveCoinoneCredentials,
 } from "./types";
 
-function createPublicRequestConfig(options: CoinoneClientOptions): AxiosRequestConfig {
+function createPublicRequestConfig(baseURL: string, timeout: number): AxiosRequestConfig {
   return {
-    baseURL: resolveCoinoneBaseUrl(options),
-    timeout: options.timeout ?? 10_000,
+    baseURL,
+    timeout,
   };
 }
 
-async function createPrivateRequestContext<
-  TSignedBody extends Record<string, unknown>,
-  TInput extends CreateCoinoneSignedBodyInput = undefined,
->(options: CoinoneClientOptions, body?: TInput) {
-  const credentials = (await resolveCoinoneCredentials(options)) as CoinoneCredentials;
-  const requestBody = createCoinoneSignedBody(credentials, body) as unknown as TSignedBody;
+async function createPrivateRequestContext(
+  options: CoinoneClientOptions,
+  baseURL: string,
+  timeout: number,
+): Promise<{
+  requestBody: {
+    access_token: string;
+    nonce: string;
+  };
+  requestConfig: AxiosRequestConfig;
+}>;
+async function createPrivateRequestContext<TInput extends Record<string, unknown>>(
+  options: CoinoneClientOptions,
+  baseURL: string,
+  timeout: number,
+  body: TInput,
+): Promise<{
+  requestBody: TInput & {
+    access_token: string;
+    nonce: string;
+  };
+  requestConfig: AxiosRequestConfig;
+}>;
+async function createPrivateRequestContext(
+  options: CoinoneClientOptions,
+  baseURL: string,
+  timeout: number,
+  body?: CreateCoinoneSignedBodyInput,
+) {
+  const credentials = await resolveCoinoneCredentials(options);
+  const requestBody = body
+    ? createCoinoneSignedBody(credentials, body)
+    : createCoinoneSignedBody(credentials);
   const signed = createCoinoneHeaders(credentials, requestBody);
 
   return {
     requestBody,
     requestConfig: {
-      baseURL: resolveCoinoneBaseUrl(options),
-      timeout: options.timeout ?? 10_000,
+      baseURL,
+      timeout,
       headers: signed.headers,
     } satisfies AxiosRequestConfig,
   };
 }
 
 export function createCoinoneClient(options: CoinoneClientOptions = {}): CoinoneClient {
+  const baseURL = resolveCoinoneBaseUrl(options);
+  const timeout = options.timeout ?? 10_000;
+
   return {
     market: {
       rangeUnit: async (quoteCurrency, targetCurrency) =>
@@ -68,21 +73,26 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
           await publicApi.rangeUnit(
             quoteCurrency,
             targetCurrency,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       markets: async (quoteCurrency) =>
-        (await publicApi.markets(quoteCurrency, createPublicRequestConfig(options))).data,
+        (await publicApi.markets(quoteCurrency, createPublicRequestConfig(baseURL, timeout))).data,
       market: async (quoteCurrency, targetCurrency) =>
-        (await publicApi.market(quoteCurrency, targetCurrency, createPublicRequestConfig(options)))
-          .data,
+        (
+          await publicApi.market(
+            quoteCurrency,
+            targetCurrency,
+            createPublicRequestConfig(baseURL, timeout),
+          )
+        ).data,
       orderbook: async (quoteCurrency, targetCurrency, params) =>
         (
           await publicApi.orderbook(
             params,
             quoteCurrency,
             targetCurrency,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       recentCompletedOrders: async (quoteCurrency, targetCurrency, params) =>
@@ -91,77 +101,105 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
             params,
             quoteCurrency,
             targetCurrency,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       tickers: async (quoteCurrency, params) =>
-        (await publicApi.tickers(params, quoteCurrency, createPublicRequestConfig(options))).data,
+        (
+          await publicApi.tickers(
+            params,
+            quoteCurrency,
+            createPublicRequestConfig(baseURL, timeout),
+          )
+        ).data,
       ticker: async (quoteCurrency, targetCurrency, params) =>
         (
           await publicApi.ticker(
             params,
             quoteCurrency,
             targetCurrency,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       utcTickers: async (quoteCurrency, params) =>
-        (await publicApi.utcTickers(params, quoteCurrency, createPublicRequestConfig(options)))
-          .data,
+        (
+          await publicApi.utcTickers(
+            params,
+            quoteCurrency,
+            createPublicRequestConfig(baseURL, timeout),
+          )
+        ).data,
       utcTicker: async (quoteCurrency, targetCurrency, params) =>
         (
           await publicApi.utcTicker(
             params,
             quoteCurrency,
             targetCurrency,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
-      currencies: async () => (await publicApi.currencies(createPublicRequestConfig(options))).data,
+      currencies: async () =>
+        (await publicApi.currencies(createPublicRequestConfig(baseURL, timeout))).data,
       currency: async (currency) =>
-        (await publicApi.currency(currency, createPublicRequestConfig(options))).data,
+        (await publicApi.currency(currency, createPublicRequestConfig(baseURL, timeout))).data,
       chart: async (quoteCurrency, targetCurrency, params) =>
         (
           await publicApi.chart(
             params,
             quoteCurrency,
             targetCurrency,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       orderbookDeprecated: async (params) =>
-        (await publicApi.orderbookDeprecated(params, createPublicRequestConfig(options))).data,
-      tickerDeprecated: async (params) =>
-        (await publicApi.ticker1(params, createPublicRequestConfig(options))).data,
-      tickerUtcDeprecated: async (params) =>
-        (await publicApi.tickerUtcDeprecated(params, createPublicRequestConfig(options))).data,
-      recentCompletedOrdersDeprecated: async (params) =>
-        (await publicApi.recentCompleteOrdersDeprecated(params, createPublicRequestConfig(options)))
+        (await publicApi.orderbookDeprecated(params, createPublicRequestConfig(baseURL, timeout)))
           .data,
+      tickerDeprecated: async (params) =>
+        (await publicApi.ticker1(params, createPublicRequestConfig(baseURL, timeout))).data,
+      tickerUtcDeprecated: async (params) =>
+        (await publicApi.tickerUtcDeprecated(params, createPublicRequestConfig(baseURL, timeout)))
+          .data,
+      recentCompletedOrdersDeprecated: async (params) =>
+        (
+          await publicApi.recentCompleteOrdersDeprecated(
+            params,
+            createPublicRequestConfig(baseURL, timeout),
+          )
+        ).data,
     },
     account: {
       findBalance: async () => {
-        const { requestBody, requestConfig } =
-          await createPrivateRequestContext<FindBalanceBody>(options);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+        );
         return (await privateApi.findBalance(requestBody, requestConfig)).data;
       },
       findBalanceByCurrencies: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindBalanceByCurrenciesBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.findBalanceByCurrencies(requestBody, requestConfig)).data;
       },
       findAllTradeFees: async () => {
-        const { requestBody, requestConfig } =
-          await createPrivateRequestContext<FindAllTradeFeesBody>(options);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+        );
         return (await privateApi.findAllTradeFees(requestBody, requestConfig)).data;
       },
       findTradeFeeByPair: async (quoteCurrency = "KRW", targetCurrency = "BTC", body = {}) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindTradeFeeByPairBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (
           await privateApi.findTradeFeeByPair(
             requestBody,
@@ -174,105 +212,112 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
     },
     orders: {
       findActiveOrders: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindActiveOrdersBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.findActiveOrders(requestBody, requestConfig)).data;
       },
       orderDetail: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          OrderDetailBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.orderDetail(requestBody, requestConfig)).data;
       },
       findAllCompletedOrders: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindAllCompletedOrdersBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.findAllCompletedOrders(requestBody, requestConfig)).data;
       },
       findCompletedOrders: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindCompletedOrdersBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.findCompletedOrders(requestBody, requestConfig)).data;
       },
       findAllOpenOrders: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindAllOpenOrdersBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.findAllOpenOrders(requestBody, requestConfig)).data;
       },
       findOpenOrders: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindOpenOrdersBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.findOpenOrders(requestBody, requestConfig)).data;
       },
       findOrderInfo: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          FindOrderInfoBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.findOrderInfo(requestBody, requestConfig)).data;
       },
     },
     transactions: {
       krwTransactionHistory: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          KrwTransactionHistoryBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.krwTransactionHistory(requestBody, requestConfig)).data;
       },
       coinTransactionHistory: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          CoinTransactionHistoryBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.coinTransactionHistory(requestBody, requestConfig)).data;
       },
       singleCoinTransactionHistory: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          SingleCoinTransactionHistoryBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.singleCoinTransactionHistory(requestBody, requestConfig)).data;
       },
       coinWithdrawalLimit: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          CoinWithdrawalLimitBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = await createPrivateRequestContext(
+          options,
+          baseURL,
+          timeout,
+          body,
+        );
         return (await privateApi.coinWithdrawalLimit(requestBody, requestConfig)).data;
       },
       coinWithdrawalAddressBook: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          CoinWithdrawalAddressBookBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.coinWithdrawalAddressBook(requestBody, requestConfig)).data;
       },
     },
     rewards: {
       orderRewardPrograms: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          OrderRewardProgramsBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.orderRewardPrograms(requestBody, requestConfig)).data;
       },
       orderRewardHistory: async (body) => {
-        const { requestBody, requestConfig } = await createPrivateRequestContext<
-          OrderRewardHistoryBody,
-          typeof body
-        >(options, body);
+        const { requestBody, requestConfig } = body
+          ? await createPrivateRequestContext(options, baseURL, timeout, body)
+          : await createPrivateRequestContext(options, baseURL, timeout);
         return (await privateApi.orderRewardHistory(requestBody, requestConfig)).data;
       },
     },

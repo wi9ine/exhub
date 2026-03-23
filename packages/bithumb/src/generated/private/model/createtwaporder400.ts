@@ -5,8 +5,8 @@
  * 빗썸 공식 API 문서 v2.1.5 기준 Private REST API 스펙입니다.
  * OpenAPI spec version: 2.1.5
  */
-import type { GetOrders11400Error } from './getOrders11400Error';
+import type { Createtwaporder400Error } from './createtwaporder400Error';
 
-export type GetOrders11400 = {
-  error?: GetOrders11400Error;
+export type Createtwaporder400 = {
+  error?: Createtwaporder400Error;
 };

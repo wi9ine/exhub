@@ -1,4 +1,4 @@
-import { resolveBaseUrl, sha512Base64, toQueryString } from "@exhub/core";
+import { ExHubConfigurationError, resolveBaseUrl, sha512Base64, toQueryString } from "@exhub/core";
 import type { AxiosRequestConfig } from "axios";
 
 import * as privateApi from "../generated/private";
@@ -15,10 +15,24 @@ import type {
   GopaxSignedQueryInput,
 } from "./types";
 
-function createPublicRequestConfig(options: GopaxClientOptions): AxiosRequestConfig {
+const GOPAX_DEFAULT_BASE_URL = "https://api.gopax.co.kr";
+const GOPAX_PRIVATE_PATHS = {
+  balances: "/balances",
+  orders: "/orders",
+  trades: "/trades",
+  depositWithdrawalStatus: "/deposit-withdrawal-status",
+  cryptoDepositAddresses: "/crypto-deposit-addresses",
+  cryptoWithdrawalAddresses: "/crypto-withdrawal-addresses",
+} as const;
+
+function encodePathSegment(value: string): string {
+  return encodeURIComponent(value);
+}
+
+function createPublicRequestConfig(baseURL: string, timeout: number): AxiosRequestConfig {
   return {
-    baseURL: resolveBaseUrl("https://api.gopax.co.kr", options.baseURL),
-    timeout: options.timeout ?? 10_000,
+    baseURL,
+    timeout,
   };
 }
 
@@ -29,11 +43,13 @@ async function resolveCredentials(options: GopaxClientOptions): Promise<GopaxCre
   if (options.credentials) {
     return options.credentials;
   }
-  throw new Error("GOPAX 인증 정보가 설정되지 않았습니다.");
+  throw new ExHubConfigurationError("GOPAX 인증 정보가 설정되지 않았습니다.");
 }
 
 async function createPrivateRequestConfig<TInput extends GopaxSignedQueryInput = undefined>(
   options: GopaxClientOptions,
+  baseURL: string,
+  timeout: number,
   method: "GET" | "POST" | "DELETE",
   path: string,
   params?: TInput,
@@ -51,8 +67,8 @@ async function createPrivateRequestConfig<TInput extends GopaxSignedQueryInput =
 
   return {
     requestConfig: {
-      baseURL: resolveBaseUrl("https://api.gopax.co.kr", options.baseURL),
-      timeout: options.timeout ?? 10_000,
+      baseURL,
+      timeout,
       headers: {
         "api-key": credentials.apiKey,
         timestamp,
@@ -65,23 +81,27 @@ async function createPrivateRequestConfig<TInput extends GopaxSignedQueryInput =
 }
 
 export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient {
+  const baseURL = resolveBaseUrl(GOPAX_DEFAULT_BASE_URL, options.baseURL);
+  const timeout = options.timeout ?? 10_000;
+
   return {
     market: {
-      assets: async () => (await publicApi.getassets(createPublicRequestConfig(options))).data,
+      assets: async () =>
+        (await publicApi.getassets(createPublicRequestConfig(baseURL, timeout))).data,
       tradingPairs: async () =>
-        (await publicApi.gettradingpairs(createPublicRequestConfig(options))).data,
+        (await publicApi.gettradingpairs(createPublicRequestConfig(baseURL, timeout))).data,
       priceTickSize: async (tradingPair) =>
         (
           await publicApi.gettradingpairstradingpairpriceticksize(
             tradingPair,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       ticker: async (tradingPair) =>
         (
           await publicApi.gettradingpairstradingpairticker(
             tradingPair,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       orderbook: async (tradingPair, params) =>
@@ -89,7 +109,7 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
           await publicApi.gettradingpairstradingpairbook(
             tradingPair,
             params,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       trades: async (tradingPair, params) =>
@@ -97,53 +117,70 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
           await publicApi.gettradingpairstradingpairtrades(
             tradingPair,
             params,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       stats: async (tradingPair) =>
         (
           await publicApi.gettradingpairstradingpairstats(
             tradingPair,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       allStats: async () =>
-        (await publicApi.gettradingpairsstats(createPublicRequestConfig(options))).data,
+        (await publicApi.gettradingpairsstats(createPublicRequestConfig(baseURL, timeout))).data,
       candles: async (tradingPair, params) =>
         (
           await publicApi.gettradingpairstradingpaircandles(
             tradingPair,
             params,
-            createPublicRequestConfig(options),
+            createPublicRequestConfig(baseURL, timeout),
           )
         ).data,
       cautions: async (params) =>
-        (await publicApi.gettradingpairscautions(params, createPublicRequestConfig(options))).data,
-      tickers: async () => (await publicApi.gettickers(createPublicRequestConfig(options))).data,
-      time: async () => (await publicApi.gettime(createPublicRequestConfig(options))).data,
+        (
+          await publicApi.gettradingpairscautions(
+            params,
+            createPublicRequestConfig(baseURL, timeout),
+          )
+        ).data,
+      tickers: async () =>
+        (await publicApi.gettickers(createPublicRequestConfig(baseURL, timeout))).data,
+      time: async () => (await publicApi.gettime(createPublicRequestConfig(baseURL, timeout))).data,
       notices: async (params) =>
-        (await publicApi.getnotices(params, createPublicRequestConfig(options))).data,
+        (await publicApi.getnotices(params, createPublicRequestConfig(baseURL, timeout))).data,
     },
     account: {
       getBalances: async () => {
-        const { requestConfig } = await createPrivateRequestConfig(options, "GET", "/balances");
+        const { requestConfig } = await createPrivateRequestConfig(
+          options,
+          baseURL,
+          timeout,
+          "GET",
+          GOPAX_PRIVATE_PATHS.balances,
+        );
         return (await privateApi.getbalances(requestConfig)).data;
       },
       getBalance: async (assetName) => {
+        const encodedAssetName = encodePathSegment(assetName);
         const { requestConfig } = await createPrivateRequestConfig(
           options,
+          baseURL,
+          timeout,
           "GET",
-          `/balances/${assetName}`,
+          `${GOPAX_PRIVATE_PATHS.balances}/${encodedAssetName}`,
         );
-        return (await privateApi.getbalancesassetname(assetName, requestConfig)).data;
+        return (await privateApi.getbalancesassetname(encodedAssetName, requestConfig)).data;
       },
     },
     orders: {
       getOrders: async (params) => {
         const { requestConfig } = await createPrivateRequestConfig<GetordersParams>(
           options,
+          baseURL,
+          timeout,
           "GET",
-          "/orders",
+          GOPAX_PRIVATE_PATHS.orders,
           params,
           undefined,
           true,
@@ -151,20 +188,25 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
         return (await privateApi.getorders(params, requestConfig)).data;
       },
       getOrder: async (orderId) => {
+        const encodedOrderId = encodePathSegment(orderId);
         const { requestConfig } = await createPrivateRequestConfig(
           options,
+          baseURL,
+          timeout,
           "GET",
-          `/orders/${orderId}`,
+          `${GOPAX_PRIVATE_PATHS.orders}/${encodedOrderId}`,
         );
-        return (await privateApi.getordersorderid(orderId, requestConfig)).data;
+        return (await privateApi.getordersorderid(encodedOrderId, requestConfig)).data;
       },
     },
     trades: {
       getTrades: async (params) => {
         const { requestConfig } = await createPrivateRequestConfig<GettradesParams>(
           options,
+          baseURL,
+          timeout,
           "GET",
-          "/trades",
+          GOPAX_PRIVATE_PATHS.trades,
           params,
         );
         return (await privateApi.gettrades(params, requestConfig)).data;
@@ -175,8 +217,10 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
         const { requestConfig } =
           await createPrivateRequestConfig<GetdepositwithdrawalstatusParams>(
             options,
+            baseURL,
+            timeout,
             "GET",
-            "/deposit-withdrawal-status",
+            GOPAX_PRIVATE_PATHS.depositWithdrawalStatus,
             params,
           );
         return (await privateApi.getdepositwithdrawalstatus(params, requestConfig)).data;
@@ -184,16 +228,20 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
       getCryptoDepositAddresses: async () => {
         const { requestConfig } = await createPrivateRequestConfig(
           options,
+          baseURL,
+          timeout,
           "GET",
-          "/crypto-deposit-addresses",
+          GOPAX_PRIVATE_PATHS.cryptoDepositAddresses,
         );
         return (await privateApi.getcryptodepositaddresses(requestConfig)).data;
       },
       getCryptoWithdrawalAddresses: async () => {
         const { requestConfig } = await createPrivateRequestConfig(
           options,
+          baseURL,
+          timeout,
           "GET",
-          "/crypto-withdrawal-addresses",
+          GOPAX_PRIVATE_PATHS.cryptoWithdrawalAddresses,
         );
         return (await privateApi.getcryptowithdrawaladdresses(requestConfig)).data;
       },

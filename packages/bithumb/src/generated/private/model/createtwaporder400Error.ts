@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GetOrders111200Item = {
-  /** TWAP 주문 ID */
-  algo_order_id: string;
+export type Createtwaporder400Error = {
+  name?: string;
+  message?: string;
 };

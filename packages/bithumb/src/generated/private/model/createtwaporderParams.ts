@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GetOrders111Params = {
+export type CreatetwaporderParams = {
 /**
  * Market ID
  */

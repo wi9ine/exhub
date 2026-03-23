@@ -1,3 +1,6 @@
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import axios from "axios";
 import { config as loadEnv } from "dotenv";
 import { beforeAll, describe, expect, it } from "vitest";
@@ -7,8 +10,10 @@ import type { ListDeposits200Item } from "../src/generated/exchange/model/listDe
 import type { ListTravelruleVasps200Item } from "../src/generated/exchange/model/listTravelruleVasps200Item";
 import type { ListWithdrawals200Item } from "../src/generated/exchange/model/listWithdrawals200Item";
 
+const envPath = resolve(fileURLToPath(new URL(".", import.meta.url)), "../../../.env.local");
+
 loadEnv({
-  path: "/Users/nukeguys/Projects/exhub/.env.local",
+  path: envPath,
   quiet: true,
 });
 

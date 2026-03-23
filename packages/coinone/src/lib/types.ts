@@ -1,5 +1,5 @@
 import type { ExHubClientOptions } from "@exhub/core";
-import { createNonce, resolveBaseUrl, sha512Hex } from "@exhub/core";
+import { createNonce, ExHubConfigurationError, resolveBaseUrl, sha512Hex } from "@exhub/core";
 
 import type {
   CoinTransactionHistory200,
@@ -209,7 +209,7 @@ export function resolveCoinoneCredentials(
 ): Promise<CoinoneCredentials> | CoinoneCredentials {
   if (options.credentialsProvider) return options.credentialsProvider();
   if (options.credentials) return options.credentials;
-  throw new Error("Coinone 인증 정보가 설정되지 않았습니다.");
+  throw new ExHubConfigurationError("Coinone 인증 정보가 설정되지 않았습니다.");
 }
 
 export function resolveCoinoneBaseUrl(options: CoinoneClientOptions): string {

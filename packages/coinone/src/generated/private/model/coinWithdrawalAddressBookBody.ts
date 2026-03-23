@@ -7,6 +7,10 @@
  */
 
 export type CoinWithdrawalAddressBookBody = {
+  /** 사용자의 액세스 토큰 (access token) */
+  access_token: string;
+  /** UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83") */
+  nonce: string;
   /** 출금 주소를 조회 하려는 종목 */
   currency?: string;
 };

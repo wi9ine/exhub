@@ -1,6 +1,7 @@
 import {
   createHs256Jwt,
   createNonce,
+  ExHubConfigurationError,
   resolveBaseUrl,
   sha512HexDigest,
   toQueryString,
@@ -13,10 +14,10 @@ import type { UpbitClient, UpbitClientOptions, UpbitCredentials } from "./types"
 
 const UPBIT_DEFAULT_BASE_URL = "https://api.upbit.com/v1";
 
-function createPublicRequestConfig(options: UpbitClientOptions): AxiosRequestConfig {
+function createPublicRequestConfig(baseURL: string, timeout: number): AxiosRequestConfig {
   return {
-    baseURL: resolveBaseUrl(UPBIT_DEFAULT_BASE_URL, options.baseURL),
-    timeout: options.timeout ?? 10_000,
+    baseURL,
+    timeout,
   };
 }
 
@@ -29,15 +30,16 @@ function resolveCredentials(
   if (options.credentials) {
     return options.credentials;
   }
-  throw new Error("Upbit 인증 정보가 설정되지 않았습니다.");
+  throw new ExHubConfigurationError("Upbit 인증 정보가 설정되지 않았습니다.");
 }
 
 async function createPrivateRequestConfig(
   options: UpbitClientOptions,
+  baseURL: string,
+  timeout: number,
   payload: Record<string, unknown> | undefined,
 ): Promise<AxiosRequestConfig> {
   const credentials = await resolveCredentials(options);
-  const baseURL = resolveBaseUrl(UPBIT_DEFAULT_BASE_URL, options.baseURL);
   const nonce = createNonce();
   const tokenPayload = {
     access_key: credentials.accessKey,
@@ -57,7 +59,7 @@ async function createPrivateRequestConfig(
   const authorization = `Bearer ${createHs256Jwt(signedPayload, credentials.secretKey)}`;
   return {
     baseURL,
-    timeout: options.timeout ?? 10_000,
+    timeout,
     headers: {
       Authorization: authorization,
       Accept: "application/json",
@@ -67,10 +69,11 @@ async function createPrivateRequestConfig(
 
 function callPublicWithParams<TParams, TResult>(
   fn: (params: TParams, options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
-  options: UpbitClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async (params: TParams) => {
-    const response = await fn(params, createPublicRequestConfig(options));
+    const response = await fn(params, createPublicRequestConfig(baseURL, timeout));
     return response.data;
   };
 }
@@ -81,10 +84,11 @@ function callPublicWithPathAndParams<TPath, TParams, TResult>(
     params: TParams,
     options?: AxiosRequestConfig,
   ) => Promise<AxiosResponse<TResult>>,
-  options: UpbitClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async (pathParam: TPath, params: TParams) => {
-    const response = await fn(pathParam, params, createPublicRequestConfig(options));
+    const response = await fn(pathParam, params, createPublicRequestConfig(baseURL, timeout));
     return response.data;
   };
 }
@@ -92,9 +96,13 @@ function callPublicWithPathAndParams<TPath, TParams, TResult>(
 function callPrivateWithoutInput<TResult>(
   fn: (options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
   options: UpbitClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async () => {
-    const response = await fn(await createPrivateRequestConfig(options, undefined));
+    const response = await fn(
+      await createPrivateRequestConfig(options, baseURL, timeout, undefined),
+    );
     return response.data;
   };
 }
@@ -102,9 +110,14 @@ function callPrivateWithoutInput<TResult>(
 function callPrivateWithParams<TParams extends Record<string, unknown> | undefined, TResult>(
   fn: (params: TParams, options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
   options: UpbitClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async (params: TParams) => {
-    const response = await fn(params, await createPrivateRequestConfig(options, params));
+    const response = await fn(
+      params,
+      await createPrivateRequestConfig(options, baseURL, timeout, params),
+    );
     return response.data;
   };
 }
@@ -112,95 +125,186 @@ function callPrivateWithParams<TParams extends Record<string, unknown> | undefin
 function callPrivateWithBody<TBody extends Record<string, unknown>, TResult>(
   fn: (body: TBody, options?: AxiosRequestConfig) => Promise<AxiosResponse<TResult>>,
   options: UpbitClientOptions,
+  baseURL: string,
+  timeout: number,
 ) {
   return async (body: TBody) => {
-    const response = await fn(body, await createPrivateRequestConfig(options, body));
+    const response = await fn(
+      body,
+      await createPrivateRequestConfig(options, baseURL, timeout, body),
+    );
     return response.data;
   };
 }
 
 export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient {
+  const baseURL = resolveBaseUrl(UPBIT_DEFAULT_BASE_URL, options.baseURL);
+  const timeout = options.timeout ?? 10_000;
+
   return {
     tradingPairs: {
-      listTradingPairs: callPublicWithParams(quotationApi.listTradingPairs, options),
+      listTradingPairs: callPublicWithParams(quotationApi.listTradingPairs, baseURL, timeout),
     },
     candles: {
-      listCandlesSeconds: callPublicWithParams(quotationApi.listCandlesSeconds, options),
-      listCandlesMinutes: callPublicWithPathAndParams(quotationApi.listCandlesMinutes, options),
-      listCandlesDays: callPublicWithParams(quotationApi.listCandlesDays, options),
-      listCandlesWeeks: callPublicWithParams(quotationApi.listCandlesWeeks, options),
-      listCandlesMonths: callPublicWithParams(quotationApi.listCandlesMonths, options),
-      listCandlesYears: callPublicWithParams(quotationApi.listCandlesYears, options),
+      listCandlesSeconds: callPublicWithParams(quotationApi.listCandlesSeconds, baseURL, timeout),
+      listCandlesMinutes: callPublicWithPathAndParams(
+        quotationApi.listCandlesMinutes,
+        baseURL,
+        timeout,
+      ),
+      listCandlesDays: callPublicWithParams(quotationApi.listCandlesDays, baseURL, timeout),
+      listCandlesWeeks: callPublicWithParams(quotationApi.listCandlesWeeks, baseURL, timeout),
+      listCandlesMonths: callPublicWithParams(quotationApi.listCandlesMonths, baseURL, timeout),
+      listCandlesYears: callPublicWithParams(quotationApi.listCandlesYears, baseURL, timeout),
     },
     trades: {
-      recentTradesHistory: callPublicWithParams(quotationApi.recentTradesHistory, options),
+      recentTradesHistory: callPublicWithParams(quotationApi.recentTradesHistory, baseURL, timeout),
     },
     tickers: {
-      listTickers: callPublicWithParams(quotationApi.listTickers, options),
-      listQuoteTickers: callPublicWithParams(quotationApi.listQuoteTickers, options),
+      listTickers: callPublicWithParams(quotationApi.listTickers, baseURL, timeout),
+      listQuoteTickers: callPublicWithParams(quotationApi.listQuoteTickers, baseURL, timeout),
     },
     orderbook: {
-      listOrderbooks: callPublicWithParams(quotationApi.listOrderbooks, options),
+      listOrderbooks: callPublicWithParams(quotationApi.listOrderbooks, baseURL, timeout),
       listOrderbookInstruments: callPublicWithParams(
         quotationApi.listOrderbookInstruments,
-        options,
+        baseURL,
+        timeout,
       ),
-      listOrderbookLevels: callPublicWithParams(quotationApi.listOrderbookLevels, options),
+      listOrderbookLevels: callPublicWithParams(quotationApi.listOrderbookLevels, baseURL, timeout),
     },
     assets: {
-      getBalance: callPrivateWithoutInput(exchangeApi.getBalance, options),
+      getBalance: callPrivateWithoutInput(exchangeApi.getBalance, options, baseURL, timeout),
     },
     orders: {
       availableOrderInformation: callPrivateWithParams(
         exchangeApi.availableOrderInformation,
         options,
+        baseURL,
+        timeout,
       ),
-      newOrder: callPrivateWithBody(exchangeApi.newOrder, options),
-      testOrder: callPrivateWithBody(exchangeApi.testOrder, options),
-      getOrder: callPrivateWithParams(exchangeApi.getOrder, options),
-      cancelOrder: callPrivateWithParams(exchangeApi.cancelOrder, options),
-      listOrdersByIds: callPrivateWithParams(exchangeApi.listOrdersByIds, options),
-      cancelOrdersByIds: callPrivateWithParams(exchangeApi.cancelOrdersByIds, options),
-      listOpenOrders: callPrivateWithParams(exchangeApi.listOpenOrders, options),
-      batchCancelOrders: callPrivateWithParams(exchangeApi.batchCancelOrders, options),
-      listClosedOrders: callPrivateWithParams(exchangeApi.listClosedOrders, options),
-      cancelAndNewOrder: callPrivateWithBody(exchangeApi.cancelAndNewOrder, options),
+      newOrder: callPrivateWithBody(exchangeApi.newOrder, options, baseURL, timeout),
+      testOrder: callPrivateWithBody(exchangeApi.testOrder, options, baseURL, timeout),
+      getOrder: callPrivateWithParams(exchangeApi.getOrder, options, baseURL, timeout),
+      cancelOrder: callPrivateWithParams(exchangeApi.cancelOrder, options, baseURL, timeout),
+      listOrdersByIds: callPrivateWithParams(
+        exchangeApi.listOrdersByIds,
+        options,
+        baseURL,
+        timeout,
+      ),
+      cancelOrdersByIds: callPrivateWithParams(
+        exchangeApi.cancelOrdersByIds,
+        options,
+        baseURL,
+        timeout,
+      ),
+      listOpenOrders: callPrivateWithParams(exchangeApi.listOpenOrders, options, baseURL, timeout),
+      batchCancelOrders: callPrivateWithParams(
+        exchangeApi.batchCancelOrders,
+        options,
+        baseURL,
+        timeout,
+      ),
+      listClosedOrders: callPrivateWithParams(
+        exchangeApi.listClosedOrders,
+        options,
+        baseURL,
+        timeout,
+      ),
+      cancelAndNewOrder: callPrivateWithBody(
+        exchangeApi.cancelAndNewOrder,
+        options,
+        baseURL,
+        timeout,
+      ),
     },
     withdrawals: {
       availableWithdrawalInformation: callPrivateWithParams(
         exchangeApi.availableWithdrawalInformation,
         options,
+        baseURL,
+        timeout,
       ),
       listWithdrawalAddresses: callPrivateWithoutInput(
         exchangeApi.listWithdrawalAddresses,
         options,
+        baseURL,
+        timeout,
       ),
-      withdraw: callPrivateWithBody(exchangeApi.withdraw, options),
-      cancelWithdrawal: callPrivateWithParams(exchangeApi.cancelWithdrawal, options),
-      withdrawKrw: callPrivateWithBody(exchangeApi.withdrawKrw, options),
-      getWithdrawal: callPrivateWithParams(exchangeApi.getWithdrawal, options),
-      listWithdrawals: callPrivateWithParams(exchangeApi.listWithdrawals, options),
+      withdraw: callPrivateWithBody(exchangeApi.withdraw, options, baseURL, timeout),
+      cancelWithdrawal: callPrivateWithParams(
+        exchangeApi.cancelWithdrawal,
+        options,
+        baseURL,
+        timeout,
+      ),
+      withdrawKrw: callPrivateWithBody(exchangeApi.withdrawKrw, options, baseURL, timeout),
+      getWithdrawal: callPrivateWithParams(exchangeApi.getWithdrawal, options, baseURL, timeout),
+      listWithdrawals: callPrivateWithParams(
+        exchangeApi.listWithdrawals,
+        options,
+        baseURL,
+        timeout,
+      ),
     },
     deposits: {
       availableDepositInformation: callPrivateWithParams(
         exchangeApi.availableDepositInformation,
         options,
+        baseURL,
+        timeout,
       ),
-      createDepositAddress: callPrivateWithBody(exchangeApi.createDepositAddress, options),
-      getDepositAddress: callPrivateWithParams(exchangeApi.getDepositAddress, options),
-      listDepositAddresses: callPrivateWithoutInput(exchangeApi.listDepositAddresses, options),
-      depositKrw: callPrivateWithBody(exchangeApi.depositKrw, options),
-      getDeposit: callPrivateWithParams(exchangeApi.getDeposit, options),
-      listDeposits: callPrivateWithParams(exchangeApi.listDeposits, options),
+      createDepositAddress: callPrivateWithBody(
+        exchangeApi.createDepositAddress,
+        options,
+        baseURL,
+        timeout,
+      ),
+      getDepositAddress: callPrivateWithParams(
+        exchangeApi.getDepositAddress,
+        options,
+        baseURL,
+        timeout,
+      ),
+      listDepositAddresses: callPrivateWithoutInput(
+        exchangeApi.listDepositAddresses,
+        options,
+        baseURL,
+        timeout,
+      ),
+      depositKrw: callPrivateWithBody(exchangeApi.depositKrw, options, baseURL, timeout),
+      getDeposit: callPrivateWithParams(exchangeApi.getDeposit, options, baseURL, timeout),
+      listDeposits: callPrivateWithParams(exchangeApi.listDeposits, options, baseURL, timeout),
     },
     travelRule: {
-      listTravelruleVasps: callPrivateWithoutInput(exchangeApi.listTravelruleVasps, options),
-      verifyTravelruleByUuid: callPrivateWithBody(exchangeApi.verifyTravelruleByUuid, options),
-      verifyTravelruleByTxid: callPrivateWithBody(exchangeApi.verifyTravelruleByTxid, options),
+      listTravelruleVasps: callPrivateWithoutInput(
+        exchangeApi.listTravelruleVasps,
+        options,
+        baseURL,
+        timeout,
+      ),
+      verifyTravelruleByUuid: callPrivateWithBody(
+        exchangeApi.verifyTravelruleByUuid,
+        options,
+        baseURL,
+        timeout,
+      ),
+      verifyTravelruleByTxid: callPrivateWithBody(
+        exchangeApi.verifyTravelruleByTxid,
+        options,
+        baseURL,
+        timeout,
+      ),
     },
     service: {
-      getServiceStatus: callPrivateWithoutInput(exchangeApi.getServiceStatus, options),
-      listApiKeys: callPrivateWithoutInput(exchangeApi.listApiKeys, options),
+      getServiceStatus: callPrivateWithoutInput(
+        exchangeApi.getServiceStatus,
+        options,
+        baseURL,
+        timeout,
+      ),
+      listApiKeys: callPrivateWithoutInput(exchangeApi.listApiKeys, options, baseURL, timeout),
     },
   };
 }
