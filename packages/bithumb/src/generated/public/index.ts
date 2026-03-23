@@ -14,7 +14,7 @@ import type {
 import type {
   Day200Item,
   DayParams,
-  GetCreditLendingmarginLevel1200Item,
+  GetFeeInfo200Item,
   GetMarketAll200Item,
   GetMarketAllParams,
   GetMarketVirtualAssetWarning200Item,
@@ -44,7 +44,7 @@ export const getMarketAll = (
     params?: GetMarketAllParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetMarketAll200Item[]>> => {
     return axios.get(
-      `/market/all`,{
+      `/v1/market/all`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -58,7 +58,7 @@ export const minute1 = (
     unit: number = 1, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Minute1200Item[]>> => {
     return axios.get(
-      `/candles/minutes/${unit}`,{
+      `/v1/candles/minutes/${unit}`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -71,7 +71,7 @@ export const day = (
     params: DayParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Day200Item[]>> => {
     return axios.get(
-      `/candles/days`,{
+      `/v1/candles/days`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -84,7 +84,7 @@ export const week = (
     params: WeekParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Week200Item[]>> => {
     return axios.get(
-      `/candles/weeks`,{
+      `/v1/candles/weeks`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -97,7 +97,7 @@ export const month = (
     params: MonthParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Month200Item[]>> => {
     return axios.get(
-      `/candles/months`,{
+      `/v1/candles/months`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -110,7 +110,7 @@ export const getTradesTicks = (
     params: GetTradesTicksParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetTradesTicks200Item[]>> => {
     return axios.get(
-      `/trades/ticks`,{
+      `/v1/trades/ticks`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -124,7 +124,7 @@ export const getTicker = (
     params: GetTickerParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetTicker200Item[]>> => {
     return axios.get(
-      `/ticker`,{
+      `/v1/ticker`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -137,7 +137,7 @@ export const getOrderbook = (
     params: GetOrderbookParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetOrderbook200Item[]>> => {
     return axios.get(
-      `/orderbook`,{
+      `/v1/orderbook`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -151,7 +151,7 @@ export const getMarketVirtualAssetWarning = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetMarketVirtualAssetWarning200Item[]>> => {
     return axios.get(
-      `/market/virtual_asset_warning`,options
+      `/v1/market/virtual_asset_warning`,options
     );
   }
 
@@ -163,18 +163,18 @@ export const getNotices = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetNotices200Item[]>> => {
     return axios.get(
-      `/notices`,options
+      `/v1/notices`,options
     );
   }
 
 /**
- * @summary Copy of 
+ * @summary 입출금 수수료 조회
  */
-export const getCreditLendingmarginLevel1 = (
+export const getFeeInfo = (
     currency: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCreditLendingmarginLevel1200Item[]>> => {
+ ): Promise<AxiosResponse<GetFeeInfo200Item[]>> => {
     return axios.get(
-      `/fee/inout/${currency}`,options
+      `/v2/fee/inout/${currency}`,options
     );
   }
 
@@ -188,4 +188,4 @@ export type GetTickerResult = AxiosResponse<GetTicker200Item[]>
 export type GetOrderbookResult = AxiosResponse<GetOrderbook200Item[]>
 export type GetMarketVirtualAssetWarningResult = AxiosResponse<GetMarketVirtualAssetWarning200Item[]>
 export type GetNoticesResult = AxiosResponse<GetNotices200Item[]>
-export type GetCreditLendingmarginLevel1Result = AxiosResponse<GetCreditLendingmarginLevel1200Item[]>
+export type GetFeeInfoResult = AxiosResponse<GetFeeInfo200Item[]>

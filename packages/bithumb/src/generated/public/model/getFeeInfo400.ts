@@ -5,8 +5,8 @@
  * 빗썸 공식 API 문서 v2.1.5 기준 Public REST API 스펙입니다.
  * OpenAPI spec version: 2.1.5
  */
-import type { GetCreditLendingmarginLevel1400Error } from './getCreditLendingmarginLevel1400Error';
+import type { GetFeeInfo400Error } from './getFeeInfo400Error';
 
-export type GetCreditLendingmarginLevel1400 = {
-  error?: GetCreditLendingmarginLevel1400Error;
+export type GetFeeInfo400 = {
+  error?: GetFeeInfo400Error;
 };

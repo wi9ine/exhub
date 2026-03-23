@@ -67,7 +67,7 @@ describe("@exhub/bithumb public integration", () => {
 
   it("입출금 수수료 조회", async (context) => {
     try {
-      const result = await client.service.getCreditLendingmarginLevel1("BTC");
+      const result = await client.service.getFeeInfo("BTC");
       expect(Array.isArray(result)).toBe(true);
     } catch (error) {
       if (

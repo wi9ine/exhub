@@ -12,7 +12,7 @@ import * as privateApi from "../generated/private";
 import * as publicApi from "../generated/public";
 import type { BithumbClient, BithumbClientOptions, BithumbCredentials } from "./types";
 
-const BITHUMB_DEFAULT_BASE_URL = "https://api.bithumb.com/v1";
+const BITHUMB_DEFAULT_BASE_URL = "https://api.bithumb.com";
 
 function createPublicRequestConfig(baseURL: string, timeout: number): AxiosRequestConfig {
   return {
@@ -147,8 +147,8 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
     },
     service: {
       getNotices: callPublicNoInput(publicApi.getNotices, baseURL, timeout),
-      getCreditLendingmarginLevel1: callPublicWithPath(
-        publicApi.getCreditLendingmarginLevel1,
+      getFeeInfo: callPublicWithPath(
+        publicApi.getFeeInfo,
         baseURL,
         timeout,
       ),

@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GetCreditLendingmarginLevel1400Error = {
+export type GetFeeInfo400Error = {
   name?: number;
   message?: string;
 };

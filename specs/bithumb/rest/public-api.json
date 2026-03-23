@@ -15,7 +15,7 @@
     }
   ],
   "paths": {
-    "/market/all": {
+    "/v1/market/all": {
       "get": {
         "summary": "마켓 코드 조회",
         "description": "빗썸에서 거래 가능한 마켓과 가상자산 정보를 제공합니다.",
@@ -137,7 +137,7 @@
         ]
       }
     },
-    "/candles/minutes/{unit}": {
+    "/v1/candles/minutes/{unit}": {
       "get": {
         "summary": "분(Minute) 캔들",
         "description": "",
@@ -306,7 +306,7 @@
         ]
       }
     },
-    "/candles/days": {
+    "/v1/candles/days": {
       "get": {
         "summary": "일(Day) 캔들",
         "description": "",
@@ -481,7 +481,7 @@
         ]
       }
     },
-    "/candles/weeks": {
+    "/v1/candles/weeks": {
       "get": {
         "summary": "주(Week) 캔들",
         "description": "",
@@ -636,7 +636,7 @@
         ]
       }
     },
-    "/candles/months": {
+    "/v1/candles/months": {
       "get": {
         "summary": "월(Month) 캔들",
         "description": "",
@@ -791,7 +791,7 @@
         ]
       }
     },
-    "/trades/ticks": {
+    "/v1/trades/ticks": {
       "get": {
         "summary": "최근 체결 내역",
         "description": "",
@@ -954,7 +954,7 @@
         ]
       }
     },
-    "/ticker": {
+    "/v1/ticker": {
       "get": {
         "summary": "현재가 정보",
         "description": "요청 시점 종목의 스냅샷이 제공됩니다.",
@@ -1163,7 +1163,7 @@
         ]
       }
     },
-    "/orderbook": {
+    "/v1/orderbook": {
       "get": {
         "summary": "호가 정보 조회",
         "description": "",
@@ -1300,7 +1300,7 @@
         ]
       }
     },
-    "/market/virtual_asset_warning": {
+    "/v1/market/virtual_asset_warning": {
       "get": {
         "summary": "경보제",
         "description": "경보중인 마켓-코인 목록 조회",
@@ -1425,7 +1425,7 @@
         ]
       }
     },
-    "/notices": {
+    "/v1/notices": {
       "get": {
         "summary": "공지사항 조회",
         "description": "빗썸 공지사항을 조회합니다.",
@@ -1539,10 +1539,10 @@
         ]
       }
     },
-    "/fee/inout/{currency}": {
+    "/v2/fee/inout/{currency}": {
       "get": {
         "description": "",
-        "operationId": "get_credit_lendingmargin_level-1",
+        "operationId": "get_fee_info",
         "responses": {
           "200": {
             "description": "200",
@@ -1710,7 +1710,7 @@
             "shell"
           ]
         },
-        "summary": "Copy of ",
+        "summary": "입출금 수수료 조회",
         "tags": [
           "서비스 정보"
         ]

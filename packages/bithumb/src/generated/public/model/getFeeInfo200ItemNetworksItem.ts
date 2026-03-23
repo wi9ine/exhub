@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GetCreditLendingmarginLevel1200ItemNetworksItem = {
+export type GetFeeInfo200ItemNetworksItem = {
   net_name?: string;
   deposit_fee_quantity?: string;
   deposit_minimum_quantity?: string;

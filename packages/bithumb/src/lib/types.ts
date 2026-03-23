@@ -37,7 +37,7 @@ import type {
 import type {
   Day200Item,
   DayParams,
-  GetCreditLendingmarginLevel1200Item,
+  GetFeeInfo200Item,
   GetMarketAll200Item,
   GetMarketAllParams,
   GetMarketVirtualAssetWarning200Item,
@@ -85,9 +85,7 @@ export interface BithumbClient {
   };
   service: {
     getNotices: () => Promise<GetNotices200Item[]>;
-    getCreditLendingmarginLevel1: (
-      currency: string,
-    ) => Promise<GetCreditLendingmarginLevel1200Item[]>;
+    getFeeInfo: (currency: string) => Promise<GetFeeInfo200Item[]>;
     getStatusWallet: () => Promise<GetStatusWallet200Item[]>;
     api: () => Promise<Api200Item[]>;
   };

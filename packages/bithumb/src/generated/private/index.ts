@@ -74,7 +74,7 @@ export const getAccounts = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetAccounts200Item[]>> => {
     return axios.get(
-      `/accounts`,options
+      `/v1/accounts`,options
     );
   }
 
@@ -86,7 +86,7 @@ export const getOrdersChance = (
     params: GetOrdersChanceParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetOrdersChance200>> => {
     return axios.get(
-      `/orders/chance`,{
+      `/v1/orders/chance`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -100,7 +100,7 @@ export const getOrder = (
     params?: GetOrderParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetOrder200>> => {
     return axios.get(
-      `/order`,{
+      `/v1/order`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -114,7 +114,7 @@ export const deleteOrder = (
     params?: DeleteOrderParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<DeleteOrder200>> => {
     return axios.delete(
-      `/order`,{
+      `/v1/order`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -128,7 +128,7 @@ export const getOrders = (
     params?: GetOrdersParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetOrders200Item[]>> => {
     return axios.get(
-      `/orders`,{
+      `/v1/orders`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -142,7 +142,7 @@ export const postOrders = (
     postOrdersBody: PostOrdersBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostOrders201>> => {
     return axios.post(
-      `/orders`,
+      `/v1/orders`,
       postOrdersBody,options
     );
   }
@@ -155,7 +155,7 @@ export const postOrdersBatch = (
     postOrdersBatchBody: PostOrdersBatchBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostOrdersBatch200>> => {
     return axios.post(
-      `/orders/batch`,
+      `/v1/orders/batch`,
       postOrdersBatchBody,options
     );
   }
@@ -168,7 +168,7 @@ export const postOrdersCancel = (
     postOrdersCancelBody: PostOrdersCancelBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostOrdersCancel200>> => {
     return axios.post(
-      `/orders/cancel`,
+      `/v1/orders/cancel`,
       postOrdersCancelBody,options
     );
   }
@@ -181,7 +181,7 @@ export const gettwaporders = (
     params?: GettwapordersParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Gettwaporders200Item[]>> => {
     return axios.get(
-      `/twap`,{
+      `/v1/twap`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -195,7 +195,7 @@ export const canceltwaporder = (
     params: CanceltwaporderParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Canceltwaporder200Item[]>> => {
     return axios.delete(
-      `/twap`,{
+      `/v1/twap`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -209,7 +209,7 @@ export const createtwaporder = (
     params: CreatetwaporderParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Createtwaporder200Item[]>> => {
     return axios.post(
-      `/twap`,undefined,{
+      `/v1/twap`,undefined,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -223,7 +223,7 @@ export const getWithdraws = (
     params?: GetWithdrawsParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetWithdraws200Item[]>> => {
     return axios.get(
-      `/withdraws`,{
+      `/v1/withdraws`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -237,7 +237,7 @@ export const getWithdrawsKrw = (
     params?: GetWithdrawsKrwParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetWithdrawsKrw200Item[]>> => {
     return axios.get(
-      `/withdraws/krw`,{
+      `/v1/withdraws/krw`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -251,7 +251,7 @@ export const postWithdrawsKrw = (
     postWithdrawsKrwBody: PostWithdrawsKrwBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostWithdrawsKrw201>> => {
     return axios.post(
-      `/withdraws/krw`,
+      `/v1/withdraws/krw`,
       postWithdrawsKrwBody,options
     );
   }
@@ -264,7 +264,7 @@ export const getWithdraw = (
     params: GetWithdrawParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetWithdraw200>> => {
     return axios.get(
-      `/withdraw`,{
+      `/v1/withdraw`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -278,7 +278,7 @@ export const getWithdrawsChance = (
     params: GetWithdrawsChanceParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetWithdrawsChance200>> => {
     return axios.get(
-      `/withdraws/chance`,{
+      `/v1/withdraws/chance`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -292,7 +292,7 @@ export const postWithdrawsCoin = (
     postWithdrawsCoinBody: PostWithdrawsCoinBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostWithdrawsCoin201>> => {
     return axios.post(
-      `/withdraws/coin`,
+      `/v1/withdraws/coin`,
       postWithdrawsCoinBody,options
     );
   }
@@ -305,7 +305,7 @@ export const getWithdrawsCoinAddresses = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetWithdrawsCoinAddresses200Item[]>> => {
     return axios.get(
-      `/withdraws/coin_addresses`,options
+      `/v1/withdraws/coin_addresses`,options
     );
   }
 
@@ -317,7 +317,7 @@ export const getDeposits = (
     params?: GetDepositsParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetDeposits200Item[]>> => {
     return axios.get(
-      `/deposits`,{
+      `/v1/deposits`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -331,7 +331,7 @@ export const getDepositsKrw = (
     params?: GetDepositsKrwParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetDepositsKrw200Item[]>> => {
     return axios.get(
-      `/deposits/krw`,{
+      `/v1/deposits/krw`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -345,7 +345,7 @@ export const postDepositsKrw = (
     postDepositsKrwBody: PostDepositsKrwBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostDepositsKrw201>> => {
     return axios.post(
-      `/deposits/krw`,
+      `/v1/deposits/krw`,
       postDepositsKrwBody,options
     );
   }
@@ -358,7 +358,7 @@ export const getDeposit = (
     params: GetDepositParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetDeposit200>> => {
     return axios.get(
-      `/deposit`,{
+      `/v1/deposit`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -372,7 +372,7 @@ export const postDepositsGenerateCoinAddress = (
     postDepositsGenerateCoinAddressBody: PostDepositsGenerateCoinAddressBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<PostDepositsGenerateCoinAddress201>> => {
     return axios.post(
-      `/deposits/generate_coin_address`,
+      `/v1/deposits/generate_coin_address`,
       postDepositsGenerateCoinAddressBody,options
     );
   }
@@ -385,7 +385,7 @@ export const getDepositsCoinAddresses = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetDepositsCoinAddresses200Item[]>> => {
     return axios.get(
-      `/deposits/coin_addresses`,options
+      `/v1/deposits/coin_addresses`,options
     );
   }
 
@@ -397,7 +397,7 @@ export const getDepositsCoinAddress = (
     params: GetDepositsCoinAddressParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetDepositsCoinAddress200>> => {
     return axios.get(
-      `/deposits/coin_address`,{
+      `/v1/deposits/coin_address`,{
     ...options,
         params: {...params, ...options?.params},}
     );
@@ -411,7 +411,7 @@ export const getStatusWallet = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<GetStatusWallet200Item[]>> => {
     return axios.get(
-      `/status/wallet`,options
+      `/v1/status/wallet`,options
     );
   }
 
@@ -423,7 +423,7 @@ export const api = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Api200Item[]>> => {
     return axios.get(
-      `/api_keys`,options
+      `/v1/api_keys`,options
     );
   }
 

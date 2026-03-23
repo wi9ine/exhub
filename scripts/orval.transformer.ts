@@ -21,7 +21,8 @@ function toSnakeCase(value: unknown) {
 }
 
 function fallbackOperationId(method: string, route: string) {
-  return toSnakeCase(`${method} ${route}`);
+  const cleanRoute = route.replace(/^\/v\d+/, "");
+  return toSnakeCase(`${method} ${cleanRoute}`);
 }
 
 export default defineTransformer((inputSchema) => {
