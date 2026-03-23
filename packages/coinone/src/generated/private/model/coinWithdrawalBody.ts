@@ -12,7 +12,7 @@ export type CoinWithdrawalBody = {
   /** UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83") */
   nonce: string;
   /** 출금하려는 가상자산 */
-  'currency': string;
+  currency: string;
   /** 출금하려는 수량 */
   amount: string;
   /** 출금 주소 (가상자산을 입금 받게될 주소) */

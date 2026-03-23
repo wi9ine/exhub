@@ -330,7 +330,7 @@ export const coinWithdrawalAddressBook = (
   }
 
 /**
- * 2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.
+ * 2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.
  * @summary 가상자산 출금
  */
 export const coinWithdrawal = (

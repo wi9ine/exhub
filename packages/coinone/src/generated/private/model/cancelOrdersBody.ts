@@ -11,7 +11,7 @@ export type CancelOrdersBody = {
   access_token: string;
   /** UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83") */
   nonce: string;
-  /** 마켓 기준 통화 */
+  /** 마켓 기준 통화 */
   quote_currency: string;
   /** 취소하려는 종목의 심볼 */
   target_currency: string;

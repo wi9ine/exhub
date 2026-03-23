@@ -2915,7 +2915,7 @@
                   },
                   "quote_currency": {
                     "type": "string",
-                    "description": "\b마켓 기준 통화",
+                    "description": "마켓 기준 통화",
                     "default": "KRW"
                   },
                   "target_currency": {
@@ -4287,7 +4287,7 @@
     "/v2.1/transaction/coin/withdrawal": {
       "post": {
         "summary": "가상자산 출금",
-        "description": "\b2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.",
+        "description": "2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.",
         "operationId": "coin-withdrawal",
         "parameters": [
           {
@@ -4317,7 +4317,7 @@
                 "required": [
                   "access_token",
                   "nonce",
-                  "\bcurrency",
+                  "currency",
                   "amount",
                   "address"
                 ],
@@ -4330,7 +4330,7 @@
                     "type": "string",
                     "description": "UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")"
                   },
-                  "\bcurrency": {
+                  "currency": {
                     "type": "string",
                     "description": "출금하려는 가상자산"
                   },
