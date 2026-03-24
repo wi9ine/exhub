@@ -19,7 +19,7 @@
     "exactOptionalPropertyTypes": true,
     "types": ["node"],
     "paths": {
-      "@exhub/core": ["core/src/index.ts"],
+      "@exhub/core": ["packages/core/src/index.ts"],
       "@exhub/bithumb": ["packages/bithumb/src/index.ts"],
       "@exhub/coinone": ["packages/coinone/src/index.ts"],
       "@exhub/gopax": ["packages/gopax/src/index.ts"],
