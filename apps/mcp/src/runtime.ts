@@ -557,21 +557,13 @@ function getUpbitTools() {
           numberArg("unit", "분 캔들 단위", true),
           upbitQuotationQuery("GetMinuteCandles", true),
         ]),
-        tool("candles", "getDayCandles", "public", [
-          upbitQuotationQuery("GetDayCandles", true),
-        ]),
-        tool("candles", "getWeekCandles", "public", [
-          upbitQuotationQuery("GetWeekCandles", true),
-        ]),
+        tool("candles", "getDayCandles", "public", [upbitQuotationQuery("GetDayCandles", true)]),
+        tool("candles", "getWeekCandles", "public", [upbitQuotationQuery("GetWeekCandles", true)]),
         tool("candles", "getMonthCandles", "public", [
           upbitQuotationQuery("GetMonthCandles", true),
         ]),
-        tool("candles", "getYearCandles", "public", [
-          upbitQuotationQuery("GetYearCandles", true),
-        ]),
-        tool("trades", "listTradesTicks", "public", [
-          upbitQuotationQuery("ListTradesTicks", true),
-        ]),
+        tool("candles", "getYearCandles", "public", [upbitQuotationQuery("GetYearCandles", true)]),
+        tool("trades", "listTradesTicks", "public", [upbitQuotationQuery("ListTradesTicks", true)]),
         tool("tickers", "listTickers", "public", [upbitQuotationQuery("ListTickers", true)]),
         tool("tickers", "listQuoteTickers", "public", [
           upbitQuotationQuery("ListQuoteTickers", true),
@@ -586,9 +578,7 @@ function getUpbitTools() {
           upbitQuotationQuery("ListOrderbookSupportedLevels", true),
         ]),
         tool("assets", "listBalance", "private"),
-        tool("orders", "getOrderChance", "private", [
-          upbitExchangeQuery("GetOrderChance", true),
-        ]),
+        tool("orders", "getOrderChance", "private", [upbitExchangeQuery("GetOrderChance", true)]),
         tool("orders", "createOrder", "private", [upbitExchangeBody("CreateOrder")]),
         tool("orders", "createTestOrder", "private", [upbitExchangeBody("CreateTestOrder")]),
         tool("orders", "getOrder", "private", [upbitExchangeQuery("GetOrder")]),
@@ -598,7 +588,9 @@ function getUpbitTools() {
         tool("orders", "listOpenOrders", "private", [upbitExchangeQuery("ListOpenOrders")]),
         tool("orders", "cancelOpenOrders", "private", [upbitExchangeQuery("CancelOpenOrders")]),
         tool("orders", "listClosedOrders", "private", [upbitExchangeQuery("ListClosedOrders")]),
-        tool("orders", "cancelAndCreateOrder", "private", [upbitExchangeBody("CancelAndCreateOrder")]),
+        tool("orders", "cancelAndCreateOrder", "private", [
+          upbitExchangeBody("CancelAndCreateOrder"),
+        ]),
         tool("withdrawals", "getWithdrawChance", "private", [
           upbitExchangeQuery("GetWithdrawChance", true),
         ]),
@@ -607,7 +599,9 @@ function getUpbitTools() {
         tool("withdrawals", "cancelWithdrawal", "private", [
           upbitExchangeQuery("CancelWithdrawal", true),
         ]),
-        tool("withdrawals", "createWithdrawKrw", "private", [upbitExchangeBody("CreateWithdrawKrw")]),
+        tool("withdrawals", "createWithdrawKrw", "private", [
+          upbitExchangeBody("CreateWithdrawKrw"),
+        ]),
         tool("withdrawals", "getWithdrawal", "private", [upbitExchangeQuery("GetWithdrawal")]),
         tool("withdrawals", "listWithdrawals", "private", [upbitExchangeQuery("ListWithdrawals")]),
         tool("deposits", "getDepositChance", "private", [
@@ -665,9 +659,7 @@ function getBithumbTools() {
         tool("service", "getWalletStatus", "private"),
         tool("service", "listApiKeys", "private"),
         tool("accounts", "listAccounts", "private"),
-        tool("orders", "getOrderChance", "private", [
-          bithumbPrivateQuery("GetOrderChance", true),
-        ]),
+        tool("orders", "getOrderChance", "private", [bithumbPrivateQuery("GetOrderChance", true)]),
         tool("orders", "createOrder", "private", [bithumbPrivateBody("CreateOrder")]),
         tool("orders", "createOrdersBatch", "private", [bithumbPrivateBody("CreateOrdersBatch")]),
         tool("orders", "getOrder", "private", [bithumbPrivateQuery("GetOrder")]),
@@ -682,14 +674,20 @@ function getBithumbTools() {
           bithumbPrivateQuery("CreateTwapOrder", true),
         ]),
         tool("withdrawals", "listWithdraws", "private", [bithumbPrivateQuery("ListWithdraws")]),
-        tool("withdrawals", "listWithdrawsKrw", "private", [bithumbPrivateQuery("ListWithdrawsKrw")]),
+        tool("withdrawals", "listWithdrawsKrw", "private", [
+          bithumbPrivateQuery("ListWithdrawsKrw"),
+        ]),
         tool("withdrawals", "getWithdraw", "private", [bithumbPrivateQuery("GetWithdraw", true)]),
         tool("withdrawals", "getWithdrawChance", "private", [
           bithumbPrivateQuery("GetWithdrawChance", true),
         ]),
         tool("withdrawals", "listWithdrawsCoinAddresses", "private"),
-        tool("withdrawals", "createWithdrawsCoin", "private", [bithumbPrivateBody("CreateWithdrawsCoin")]),
-        tool("withdrawals", "createWithdrawsKrw", "private", [bithumbPrivateBody("CreateWithdrawsKrw")]),
+        tool("withdrawals", "createWithdrawsCoin", "private", [
+          bithumbPrivateBody("CreateWithdrawsCoin"),
+        ]),
+        tool("withdrawals", "createWithdrawsKrw", "private", [
+          bithumbPrivateBody("CreateWithdrawsKrw"),
+        ]),
         tool("deposits", "listDeposits", "private", [bithumbPrivateQuery("ListDeposits")]),
         tool("deposits", "listDepositsKrw", "private", [bithumbPrivateQuery("ListDepositsKrw")]),
         tool("deposits", "getDeposit", "private", [bithumbPrivateQuery("GetDeposit", true)]),
@@ -721,7 +719,9 @@ function getCoinoneTools() {
           stringArg("quoteCurrency", "quote currency", false),
           stringArg("targetCurrency", "target currency", false),
         ]),
-        tool("market", "listMarkets", "public", [stringArg("quoteCurrency", "quote currency", false)]),
+        tool("market", "listMarkets", "public", [
+          stringArg("quoteCurrency", "quote currency", false),
+        ]),
         tool("market", "getMarket", "public", [
           stringArg("quoteCurrency", "quote currency", false),
           stringArg("targetCurrency", "target currency", false),
@@ -764,7 +764,9 @@ function getCoinoneTools() {
         tool("market", "getOrderbookDeprecated", "public", [
           coinonePublicQuery("GetOrderbookDeprecated"),
         ]),
-        tool("market", "getTickerDeprecated", "public", [coinonePublicQuery("GetTickerDeprecated")]),
+        tool("market", "getTickerDeprecated", "public", [
+          coinonePublicQuery("GetTickerDeprecated"),
+        ]),
         tool("market", "getTickerUtcDeprecated", "public", [
           coinonePublicQuery("GetTickerUtcDeprecated"),
         ]),
@@ -815,7 +817,9 @@ function getCoinoneTools() {
         tool("transactions", "listCoinWithdrawalAddressBook", "private", [
           coinonePrivateBody("ListCoinWithdrawalAddressBook", false),
         ]),
-        tool("transactions", "createCoinWithdrawal", "private", [coinonePrivateBody("CreateCoinWithdrawal")]),
+        tool("transactions", "createCoinWithdrawal", "private", [
+          coinonePrivateBody("CreateCoinWithdrawal"),
+        ]),
         tool("rewards", "listOrderRewardPrograms", "private", [
           coinonePrivateBody("ListOrderRewardPrograms", false),
         ]),

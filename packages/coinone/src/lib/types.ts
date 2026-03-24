@@ -107,7 +107,10 @@ export interface CoinoneClient {
       targetCurrency?: string,
       params?: GetTickerParams,
     ) => Promise<GetTicker200>;
-    listTickerUtc: (quoteCurrency?: string, params?: ListTickerUtcParams) => Promise<ListTickerUtc200>;
+    listTickerUtc: (
+      quoteCurrency?: string,
+      params?: ListTickerUtcParams,
+    ) => Promise<ListTickerUtc200>;
     getTickerUtc: (
       quoteCurrency?: string,
       targetCurrency?: string,
@@ -152,9 +155,7 @@ export interface CoinoneClient {
     cancelOrders: (
       body: Omit<CancelOrdersBody, "access_token" | "nonce">,
     ) => Promise<CancelOrders200>;
-    cancelOrder: (
-      body: Omit<CancelOrderBody, "access_token" | "nonce">,
-    ) => Promise<CancelOrder200>;
+    cancelOrder: (body: Omit<CancelOrderBody, "access_token" | "nonce">) => Promise<CancelOrder200>;
     getOrderDetail: (
       body: Omit<GetOrderDetailBody, "access_token" | "nonce">,
     ) => Promise<GetOrderDetail200>;

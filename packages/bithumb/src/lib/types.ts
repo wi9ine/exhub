@@ -85,7 +85,10 @@ export interface BithumbClient {
     getMarketVirtualAssetWarning: () => Promise<GetMarketVirtualAssetWarning200Item[]>;
   };
   candles: {
-    getMinuteCandles: (params: GetMinuteCandlesParams, unit?: number) => Promise<GetMinuteCandles200Item[]>;
+    getMinuteCandles: (
+      params: GetMinuteCandlesParams,
+      unit?: number,
+    ) => Promise<GetMinuteCandles200Item[]>;
     getDayCandles: (params: GetDayCandlesParams) => Promise<GetDayCandles200Item[]>;
     getWeekCandles: (params: GetWeekCandlesParams) => Promise<GetWeekCandles200Item[]>;
     getMonthCandles: (params: GetMonthCandlesParams) => Promise<GetMonthCandles200Item[]>;

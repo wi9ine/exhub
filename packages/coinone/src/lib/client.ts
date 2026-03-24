@@ -95,7 +95,9 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
           params,
         ),
       listCurrencies: async () =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["listCurrencies"]>>("/public/v2/currencies"),
+        requestPublic<AsyncResult<CoinoneClient["market"]["listCurrencies"]>>(
+          "/public/v2/currencies",
+        ),
       getCurrency: async (currency = "BTC") =>
         requestPublic<AsyncResult<CoinoneClient["market"]["getCurrency"]>>(
           `/public/v2/currencies/${currency}`,
@@ -111,7 +113,10 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
           params,
         ),
       getTickerDeprecated: async (params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["getTickerDeprecated"]>>("/ticker", params),
+        requestPublic<AsyncResult<CoinoneClient["market"]["getTickerDeprecated"]>>(
+          "/ticker",
+          params,
+        ),
       getTickerUtcDeprecated: async (params) =>
         requestPublic<AsyncResult<CoinoneClient["market"]["getTickerUtcDeprecated"]>>(
           "/ticker_utc",
@@ -211,19 +216,14 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
       getCoinTransactionHistoryDetail: async (body) =>
         requestPrivate<
           AsyncResult<CoinoneClient["transactions"]["getCoinTransactionHistoryDetail"]>
-        >(
-          "/v2.1/transaction/coin/history/detail",
-          body,
-        ),
+        >("/v2.1/transaction/coin/history/detail", body),
       getCoinWithdrawalLimit: async (body) =>
         requestPrivate<AsyncResult<CoinoneClient["transactions"]["getCoinWithdrawalLimit"]>>(
           "/v2.1/transaction/coin/withdrawal/limit",
           body,
         ),
       listCoinWithdrawalAddressBook: async (body) =>
-        requestPrivate<
-          AsyncResult<CoinoneClient["transactions"]["listCoinWithdrawalAddressBook"]>
-        >(
+        requestPrivate<AsyncResult<CoinoneClient["transactions"]["listCoinWithdrawalAddressBook"]>>(
           "/v2.1/transaction/coin/withdrawal/address_book",
           body,
         ),

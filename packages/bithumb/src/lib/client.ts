@@ -140,10 +140,7 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
           "/v1/status/wallet",
         ),
       listApiKeys: async () =>
-        requestPrivate<AsyncResult<BithumbClient["service"]["listApiKeys"]>>(
-          "GET",
-          "/v1/api_keys",
-        ),
+        requestPrivate<AsyncResult<BithumbClient["service"]["listApiKeys"]>>("GET", "/v1/api_keys"),
     },
     accounts: {
       listAccounts: async () =>

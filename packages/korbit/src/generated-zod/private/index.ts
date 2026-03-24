@@ -5,7 +5,7 @@
  * 코빗 공식 문서 기준 Private REST API 스펙입니다.
  * OpenAPI spec version: v2
  */
-import * as zod from 'zod';
+import * as zod from "zod";
 
 /**
  * 주문 ID(orderId) 또는 사용자 지정 주문 ID(clientOrderId)를 이용해 개별 주문 정보를 조회합니다.
@@ -16,14 +16,34 @@ import * as zod from 'zod';
 export const getOrderQueryRecvWindowDefault = 5000;
 
 export const GetOrderQueryParams = zod.object({
-  "symbol": zod.string().describe('대상 거래쌍의 심볼'),
-  "orderId": zod.number().optional().describe('주문 시 생성된 orderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.'),
-  "clientOrderId": zod.string().optional().describe('주문 시 입력한 clientOrderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getOrderQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  symbol: zod.string().describe("대상 거래쌍의 심볼"),
+  orderId: zod
+    .number()
+    .optional()
+    .describe(
+      "주문 시 생성된 orderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+    ),
+  clientOrderId: zod
+    .string()
+    .optional()
+    .describe(
+      "주문 시 입력한 clientOrderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+    ),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getOrderQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 주문 취소 요청을 전송합니다.
@@ -36,14 +56,34 @@ API 요청이 성공한 경우 주문 취소 요청이 성공적으로 접수되
 export const cancelOrderQueryRecvWindowDefault = 5000;
 
 export const CancelOrderQueryParams = zod.object({
-  "symbol": zod.string().describe('대상 거래쌍의 심볼'),
-  "orderId": zod.number().optional().describe('주문하기 API에서 생성된 orderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.'),
-  "clientOrderId": zod.string().optional().describe('주문하기 API 요청 시 입력한 clientOrderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(cancelOrderQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  symbol: zod.string().describe("대상 거래쌍의 심볼"),
+  orderId: zod
+    .number()
+    .optional()
+    .describe(
+      "주문하기 API에서 생성된 orderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+    ),
+  clientOrderId: zod
+    .string()
+    .optional()
+    .describe(
+      "주문하기 API 요청 시 입력한 clientOrderId 값. orderId와 clientOrderId 중 하나를 반드시 입력해야 합니다.",
+    ),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(cancelOrderQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 단일 거래쌍의 미체결 주문 목록을 조회합니다.
@@ -54,13 +94,23 @@ open, partiallyFilled 상태인 주문만 조회됩니다.
 export const listOpenOrdersQueryRecvWindowDefault = 5000;
 
 export const ListOpenOrdersQueryParams = zod.object({
-  "symbol": zod.string().describe('대상 거래쌍의 심볼'),
-  "limit": zod.number().optional().describe('최대 조회 건수 (범위: 1 - 1000, 기본값 500)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listOpenOrdersQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  symbol: zod.string().describe("대상 거래쌍의 심볼"),
+  limit: zod.number().optional().describe("최대 조회 건수 (범위: 1 - 1000, 기본값 500)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listOpenOrdersQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 단일 거래쌍의 최근 주문 목록을 조회합니다. 주문 생성 시각 기준으로 최근 36시간의 주문 내역만 조회 가능합니다.
@@ -73,15 +123,30 @@ export const ListOpenOrdersQueryParams = zod.object({
 export const listAllOrdersQueryRecvWindowDefault = 5000;
 
 export const ListAllOrdersQueryParams = zod.object({
-  "symbol": zod.string().describe('대상 거래쌍의 심볼'),
-  "startTime": zod.number().optional().describe('조회 시작 시각(timestamp). 현재 시간으로부터 36시간 전 자료까지만 조회 가능합니다. (기본값: 36시간 전)'),
-  "endTime": zod.number().optional().describe('조회 종료 시각(timestamp). (기본값: 현재)'),
-  "limit": zod.number().optional().describe('최대 조회 건수 (범위: 1 - 1000, 기본값 500)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listAllOrdersQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  symbol: zod.string().describe("대상 거래쌍의 심볼"),
+  startTime: zod
+    .number()
+    .optional()
+    .describe(
+      "조회 시작 시각(timestamp). 현재 시간으로부터 36시간 전 자료까지만 조회 가능합니다. (기본값: 36시간 전)",
+    ),
+  endTime: zod.number().optional().describe("조회 종료 시각(timestamp). (기본값: 현재)"),
+  limit: zod.number().optional().describe("최대 조회 건수 (범위: 1 - 1000, 기본값 500)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listAllOrdersQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 단일 거래쌍의 최근 체결 목록을 조회합니다. 최근 36시간의 체결 내역만 조회 가능합니다.
@@ -92,15 +157,30 @@ export const ListAllOrdersQueryParams = zod.object({
 export const listMyTradesQueryRecvWindowDefault = 5000;
 
 export const ListMyTradesQueryParams = zod.object({
-  "symbol": zod.string().describe('대상 거래쌍의 심볼'),
-  "startTime": zod.number().optional().describe('조회 시작 시각(timestamp). 현재 시간으로부터 36시간 전 자료까지만 조회 가능합니다. (기본값: 36시간 전)'),
-  "endTime": zod.number().optional().describe('조회 종료 시각(timestamp). (기본값: 현재)'),
-  "limit": zod.number().optional().describe('최대 조회 건수 (범위: 1 - 1000, 기본값 500)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listMyTradesQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  symbol: zod.string().describe("대상 거래쌍의 심볼"),
+  startTime: zod
+    .number()
+    .optional()
+    .describe(
+      "조회 시작 시각(timestamp). 현재 시간으로부터 36시간 전 자료까지만 조회 가능합니다. (기본값: 36시간 전)",
+    ),
+  endTime: zod.number().optional().describe("조회 종료 시각(timestamp). (기본값: 현재)"),
+  limit: zod.number().optional().describe("최대 조회 건수 (범위: 1 - 1000, 기본값 500)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listMyTradesQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 내가 가지고 있는 자산 목록을 조회합니다.
@@ -109,12 +189,27 @@ export const ListMyTradesQueryParams = zod.object({
 export const listBalanceQueryRecvWindowDefault = 5000;
 
 export const ListBalanceQueryParams = zod.object({
-  "currencies": zod.string().optional().describe('조회할 자산 목록. 콤마(,)로 구분하여 입력합니다. 입력하지 않으면 보유 중인 모든 자산을 조회합니다.'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listBalanceQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currencies: zod
+    .string()
+    .optional()
+    .describe(
+      "조회할 자산 목록. 콤마(,)로 구분하여 입력합니다. 입력하지 않으면 보유 중인 모든 자산을 조회합니다.",
+    ),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listBalanceQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 가상자산 입금 주소 목록을 조회합니다.
@@ -123,11 +218,21 @@ export const ListBalanceQueryParams = zod.object({
 export const listCoinDepositAddressesQueryRecvWindowDefault = 5000;
 
 export const ListCoinDepositAddressesQueryParams = zod.object({
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listCoinDepositAddressesQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listCoinDepositAddressesQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 개별 가상자산의 입금 주소를 조회합니다.
@@ -136,13 +241,28 @@ export const ListCoinDepositAddressesQueryParams = zod.object({
 export const getCoinDepositAddressQueryRecvWindowDefault = 5000;
 
 export const GetCoinDepositAddressQueryParams = zod.object({
-  "currency": zod.string().describe('가상자산 심볼'),
-  "network": zod.string().optional().describe('블록체인 네트워크 심볼. 네트워크 정보는 \/v2\/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getCoinDepositAddressQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currency: zod.string().describe("가상자산 심볼"),
+  network: zod
+    .string()
+    .optional()
+    .describe(
+      "블록체인 네트워크 심볼. 네트워크 정보는 /v2/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.",
+    ),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getCoinDepositAddressQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 최근 가상자산 입금 내역을 조회합니다.
@@ -151,13 +271,23 @@ export const GetCoinDepositAddressQueryParams = zod.object({
 export const listCoinRecentDepositsQueryRecvWindowDefault = 5000;
 
 export const ListCoinRecentDepositsQueryParams = zod.object({
-  "currency": zod.string().describe('가상자산의 심볼'),
-  "limit": zod.number().describe('최대 조회 건수 (범위: 1 - 100)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listCoinRecentDepositsQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currency: zod.string().describe("가상자산의 심볼"),
+  limit: zod.number().describe("최대 조회 건수 (범위: 1 - 100)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listCoinRecentDepositsQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 가상자산 입금 진행 상태를 조회합니다.
@@ -166,13 +296,23 @@ export const ListCoinRecentDepositsQueryParams = zod.object({
 export const getCoinDepositQueryRecvWindowDefault = 5000;
 
 export const GetCoinDepositQueryParams = zod.object({
-  "currency": zod.string().describe('가상자산의 심볼'),
-  "coinDepositId": zod.number().describe('가상자산 입금 ID'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getCoinDepositQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currency: zod.string().describe("가상자산의 심볼"),
+  coinDepositId: zod.number().describe("가상자산 입금 ID"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getCoinDepositQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * API 출금 가능 주소로 등록된 주소를 조회합니다.
@@ -181,11 +321,21 @@ export const GetCoinDepositQueryParams = zod.object({
 export const listCoinWithdrawableAddressesQueryRecvWindowDefault = 5000;
 
 export const ListCoinWithdrawableAddressesQueryParams = zod.object({
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listCoinWithdrawableAddressesQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listCoinWithdrawableAddressesQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 출금 가능 수량을 조회합니다.
@@ -194,12 +344,25 @@ export const ListCoinWithdrawableAddressesQueryParams = zod.object({
 export const getCoinWithdrawableAmountQueryRecvWindowDefault = 5000;
 
 export const GetCoinWithdrawableAmountQueryParams = zod.object({
-  "currency": zod.string().optional().describe('가상자산의 심볼. 입력하지 않으면 모든 가상자산을 조회합니다.'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getCoinWithdrawableAmountQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currency: zod
+    .string()
+    .optional()
+    .describe("가상자산의 심볼. 입력하지 않으면 모든 가상자산을 조회합니다."),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getCoinWithdrawableAmountQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 가상자산 출금을 취소합니다.
@@ -214,12 +377,22 @@ export const GetCoinWithdrawableAmountQueryParams = zod.object({
 export const cancelCoinWithdrawalQueryRecvWindowDefault = 5000;
 
 export const CancelCoinWithdrawalQueryParams = zod.object({
-  "coinWithdrawalId": zod.number().describe('출금 ID (출금 요청 API 응답에서 받은 값)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(cancelCoinWithdrawalQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  coinWithdrawalId: zod.number().describe("출금 ID (출금 요청 API 응답에서 받은 값)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(cancelCoinWithdrawalQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 요청한 출금의 진행 상황을 조회합니다.
@@ -228,13 +401,23 @@ export const CancelCoinWithdrawalQueryParams = zod.object({
 export const getCoinWithdrawalQueryRecvWindowDefault = 5000;
 
 export const GetCoinWithdrawalQueryParams = zod.object({
-  "currency": zod.string().describe('조회할 가상자산의 심볼'),
-  "coinWithdrawalId": zod.number().describe('가상자산 출금 ID'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getCoinWithdrawalQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currency: zod.string().describe("조회할 가상자산의 심볼"),
+  coinWithdrawalId: zod.number().describe("가상자산 출금 ID"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getCoinWithdrawalQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 최근 가상자산 출금내역을 조회합니다.
@@ -243,13 +426,23 @@ export const GetCoinWithdrawalQueryParams = zod.object({
 export const listCoinRecentWithdrawalsQueryRecvWindowDefault = 5000;
 
 export const ListCoinRecentWithdrawalsQueryParams = zod.object({
-  "currency": zod.string().describe('조회할 가상자산의 심볼'),
-  "limit": zod.number().describe('최대 조회 건수 (범위: 1 - 100)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listCoinRecentWithdrawalsQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  currency: zod.string().describe("조회할 가상자산의 심볼"),
+  limit: zod.number().describe("최대 조회 건수 (범위: 1 - 100)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listCoinRecentWithdrawalsQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 최근 KRW 입금 내역을 조회합니다.
@@ -258,13 +451,28 @@ export const ListCoinRecentWithdrawalsQueryParams = zod.object({
 export const listKrwRecentDepositsQueryRecvWindowDefault = 5000;
 
 export const ListKrwRecentDepositsQueryParams = zod.object({
-  "limit": zod.number().describe('최대 조회 건수 (범위: 1 - 100)'),
-  "includeAll": zod.enum(['false', 'true']).optional().describe('전체 내역 조회 여부\n\n- false 일반 원화 입금만 (기본값)\n\n- true 원화 입금 외 예치금 이용료, 이벤트 보상 지급 등 포함'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listKrwRecentDepositsQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  limit: zod.number().describe("최대 조회 건수 (범위: 1 - 100)"),
+  includeAll: zod
+    .enum(["false", "true"])
+    .optional()
+    .describe(
+      "전체 내역 조회 여부\n\n- false 일반 원화 입금만 (기본값)\n\n- true 원화 입금 외 예치금 이용료, 이벤트 보상 지급 등 포함",
+    ),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listKrwRecentDepositsQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 최근 KRW 출금내역을 조회합니다.
@@ -273,12 +481,22 @@ export const ListKrwRecentDepositsQueryParams = zod.object({
 export const listKrwRecentWithdrawalsQueryRecvWindowDefault = 5000;
 
 export const ListKrwRecentWithdrawalsQueryParams = zod.object({
-  "limit": zod.number().describe('최대 조회 건수 (범위: 1 - 100)'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(listKrwRecentWithdrawalsQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  limit: zod.number().describe("최대 조회 건수 (범위: 1 - 100)"),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(listKrwRecentWithdrawalsQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 현재 회원 계정에 적용되는 거래수수료율을 조회합니다.
@@ -287,12 +505,27 @@ export const ListKrwRecentWithdrawalsQueryParams = zod.object({
 export const getTradingFeePolicyQueryRecvWindowDefault = 5000;
 
 export const GetTradingFeePolicyQueryParams = zod.object({
-  "symbol": zod.string().optional().describe('조회하려는 거래쌍을 입력합니다. 여러 거래쌍을 입력하려면 콤마(,)로 구분해 입력합니다. 입력하지 않으면 코빗에서 거래 가능한 모든 거래쌍의 정보를 응답합니다.'),
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getTradingFeePolicyQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
-
+  symbol: zod
+    .string()
+    .optional()
+    .describe(
+      "조회하려는 거래쌍을 입력합니다. 여러 거래쌍을 입력하려면 콤마(,)로 구분해 입력합니다. 입력하지 않으면 코빗에서 거래 가능한 모든 거래쌍의 정보를 응답합니다.",
+    ),
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getTradingFeePolicyQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});
 
 /**
  * 현재 사용중인 API 키의 정보를 조회합니다.
@@ -301,7 +534,18 @@ export const GetTradingFeePolicyQueryParams = zod.object({
 export const getCurrentKeyInfoQueryRecvWindowDefault = 5000;
 
 export const GetCurrentKeyInfoQueryParams = zod.object({
-  "timestamp": zod.number().describe('현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "signature": zod.string().describe('요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.'),
-  "recvWindow": zod.number().default(getCurrentKeyInfoQueryRecvWindowDefault).describe('허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다.')
-})
+  timestamp: zod
+    .number()
+    .describe(
+      "현재 시각의 Unix Timestamp (밀리초). 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  signature: zod
+    .string()
+    .describe(
+      "요청 변수들과 timestamp를 합친 문자열에 대해 HMAC-SHA256 또는 ED25519 방식으로 생성한 서명값. 인증이 필요한 REST API 요청에는 반드시 입력해야 합니다.",
+    ),
+  recvWindow: zod
+    .number()
+    .default(getCurrentKeyInfoQueryRecvWindowDefault)
+    .describe("허용 가능한 요청 시각 오차 범위(밀리초). 입력하지 않으면 기본값 5000이 적용됩니다."),
+});

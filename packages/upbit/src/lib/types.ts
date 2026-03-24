@@ -34,10 +34,10 @@ import type {
   GetOrderChanceParams,
   GetOrderParams,
   GetServiceStatus200Item,
-  GetWithdrawChance200,
-  GetWithdrawChanceParams,
   GetWithdrawal200,
   GetWithdrawalParams,
+  GetWithdrawChance200,
+  GetWithdrawChanceParams,
   ListApiKeys200Item,
   ListBalance200Item,
   ListClosedOrders200Item,
@@ -139,9 +139,7 @@ export interface UpbitClient {
     listOpenOrders: (params?: ListOpenOrdersParams) => Promise<ListOpenOrders200Item[]>;
     cancelOpenOrders: (params?: CancelOpenOrdersParams) => Promise<CancelOpenOrders200>;
     listClosedOrders: (params?: ListClosedOrdersParams) => Promise<ListClosedOrders200Item[]>;
-    cancelAndCreateOrder: (
-      body: CancelAndCreateOrderBody,
-    ) => Promise<CancelAndCreateOrder201>;
+    cancelAndCreateOrder: (body: CancelAndCreateOrderBody) => Promise<CancelAndCreateOrder201>;
   };
   withdrawals: {
     getWithdrawChance: (params: GetWithdrawChanceParams) => Promise<GetWithdrawChance200>;
