@@ -117,8 +117,7 @@ function createDefaultToolDescription(
   exchangeName: string,
   tool: Pick<ResolvedToolDefinition, "category" | "method" | "access">,
 ) {
-  const accessLabel = tool.access === "private" ? "private" : "public";
-  return `${exchangeName} ${accessLabel} API 메서드 ${tool.category}.${tool.method} 호출`;
+  return `${exchangeName} ${tool.access} API 메서드 ${tool.category}.${tool.method} 호출`;
 }
 
 function createToolError(message: string): CallToolResult {

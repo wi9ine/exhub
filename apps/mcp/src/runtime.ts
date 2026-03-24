@@ -85,6 +85,29 @@ export function requireNamedValidator(namespace: ValidatorNamespace, name: strin
   return validator as ZodTypeAny;
 }
 
+function createValidatorArgFactory(
+  getNamespace: () => ValidatorNamespace | undefined,
+  label: string,
+) {
+  return {
+    query(prefix: string, required = false) {
+      return paramsArg(
+        required,
+        requireNamedValidator(
+          requireLoadedNamespace(getNamespace(), label),
+          `${prefix}QueryParams`,
+        ),
+      );
+    },
+    body(prefix: string, required = true) {
+      return bodyArg(
+        required,
+        requireNamedValidator(requireLoadedNamespace(getNamespace(), label), `${prefix}Body`),
+      );
+    },
+  };
+}
+
 function requireLoadedNamespace(
   namespace: ValidatorNamespace | undefined,
   label: string,
@@ -97,158 +120,74 @@ function requireLoadedNamespace(
 }
 
 async function ensureUpbitZodLoaded() {
-  if (!upbitQuotationZod) {
-    upbitQuotationZod = await import("@exhub/upbit/zod/quotation");
-  }
-  if (!upbitExchangeZod) {
-    upbitExchangeZod = await import("@exhub/upbit/zod/exchange");
+  if (!upbitQuotationZod || !upbitExchangeZod) {
+    [upbitQuotationZod, upbitExchangeZod] = await Promise.all([
+      upbitQuotationZod ?? import("@exhub/upbit/zod/quotation"),
+      upbitExchangeZod ?? import("@exhub/upbit/zod/exchange"),
+    ]);
   }
 }
 
 async function ensureBithumbZodLoaded() {
-  if (!bithumbPublicZod) {
-    bithumbPublicZod = await import("@exhub/bithumb/zod/public");
-  }
-  if (!bithumbPrivateZod) {
-    bithumbPrivateZod = await import("@exhub/bithumb/zod/private");
+  if (!bithumbPublicZod || !bithumbPrivateZod) {
+    [bithumbPublicZod, bithumbPrivateZod] = await Promise.all([
+      bithumbPublicZod ?? import("@exhub/bithumb/zod/public"),
+      bithumbPrivateZod ?? import("@exhub/bithumb/zod/private"),
+    ]);
   }
 }
 
 async function ensureCoinoneZodLoaded() {
-  if (!coinonePublicZod) {
-    coinonePublicZod = await import("@exhub/coinone/zod/public");
-  }
-  if (!coinonePrivateZod) {
-    coinonePrivateZod = await import("@exhub/coinone/zod/private");
+  if (!coinonePublicZod || !coinonePrivateZod) {
+    [coinonePublicZod, coinonePrivateZod] = await Promise.all([
+      coinonePublicZod ?? import("@exhub/coinone/zod/public"),
+      coinonePrivateZod ?? import("@exhub/coinone/zod/private"),
+    ]);
   }
 }
 
 async function ensureGopaxZodLoaded() {
-  if (!gopaxPublicZod) {
-    gopaxPublicZod = await import("@exhub/gopax/zod/public");
-  }
-  if (!gopaxPrivateZod) {
-    gopaxPrivateZod = await import("@exhub/gopax/zod/private");
+  if (!gopaxPublicZod || !gopaxPrivateZod) {
+    [gopaxPublicZod, gopaxPrivateZod] = await Promise.all([
+      gopaxPublicZod ?? import("@exhub/gopax/zod/public"),
+      gopaxPrivateZod ?? import("@exhub/gopax/zod/private"),
+    ]);
   }
 }
 
 async function ensureKorbitZodLoaded() {
-  if (!korbitPublicZod) {
-    korbitPublicZod = await import("@exhub/korbit/zod/public");
-  }
-  if (!korbitPrivateZod) {
-    korbitPrivateZod = await import("@exhub/korbit/zod/private");
+  if (!korbitPublicZod || !korbitPrivateZod) {
+    [korbitPublicZod, korbitPrivateZod] = await Promise.all([
+      korbitPublicZod ?? import("@exhub/korbit/zod/public"),
+      korbitPrivateZod ?? import("@exhub/korbit/zod/private"),
+    ]);
   }
 }
 
-const upbitQuotationQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(upbitQuotationZod, "upbit quotation"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const upbitExchangeQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(upbitExchangeZod, "upbit exchange"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const upbitExchangeBody = (prefix: string, required = true) =>
-  bodyArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(upbitExchangeZod, "upbit exchange"),
-      `${prefix}Body`,
-    ),
-  );
+const upbitQuotationArgs = createValidatorArgFactory(() => upbitQuotationZod, "upbit quotation");
+const upbitExchangeArgs = createValidatorArgFactory(() => upbitExchangeZod, "upbit exchange");
+const bithumbPublicArgs = createValidatorArgFactory(() => bithumbPublicZod, "bithumb public");
+const bithumbPrivateArgs = createValidatorArgFactory(() => bithumbPrivateZod, "bithumb private");
+const coinonePublicArgs = createValidatorArgFactory(() => coinonePublicZod, "coinone public");
+const coinonePrivateArgs = createValidatorArgFactory(() => coinonePrivateZod, "coinone private");
+const gopaxPublicArgs = createValidatorArgFactory(() => gopaxPublicZod, "gopax public");
+const gopaxPrivateArgs = createValidatorArgFactory(() => gopaxPrivateZod, "gopax private");
+const korbitPublicArgs = createValidatorArgFactory(() => korbitPublicZod, "korbit public");
+const korbitPrivateArgs = createValidatorArgFactory(() => korbitPrivateZod, "korbit private");
 
-const bithumbPublicQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(bithumbPublicZod, "bithumb public"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const bithumbPrivateQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(bithumbPrivateZod, "bithumb private"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const bithumbPrivateBody = (prefix: string, required = true) =>
-  bodyArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(bithumbPrivateZod, "bithumb private"),
-      `${prefix}Body`,
-    ),
-  );
-
-const coinonePublicQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(coinonePublicZod, "coinone public"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const coinonePrivateBody = (prefix: string, required = true) =>
-  bodyArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(coinonePrivateZod, "coinone private"),
-      `${prefix}Body`,
-    ),
-  );
-
-const gopaxPublicQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(gopaxPublicZod, "gopax public"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const gopaxPrivateQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(gopaxPrivateZod, "gopax private"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const gopaxPrivateBody = (prefix: string, required = true) =>
-  bodyArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(gopaxPrivateZod, "gopax private"),
-      `${prefix}Body`,
-    ),
-  );
-
-const korbitPublicQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(korbitPublicZod, "korbit public"),
-      `${prefix}QueryParams`,
-    ),
-  );
-const korbitPrivateQuery = (prefix: string, required = false) =>
-  paramsArg(
-    required,
-    requireNamedValidator(
-      requireLoadedNamespace(korbitPrivateZod, "korbit private"),
-      `${prefix}QueryParams`,
-    ),
-  );
+const upbitQuotationQuery = upbitQuotationArgs.query.bind(upbitQuotationArgs);
+const upbitExchangeQuery = upbitExchangeArgs.query.bind(upbitExchangeArgs);
+const upbitExchangeBody = upbitExchangeArgs.body.bind(upbitExchangeArgs);
+const bithumbPublicQuery = bithumbPublicArgs.query.bind(bithumbPublicArgs);
+const bithumbPrivateQuery = bithumbPrivateArgs.query.bind(bithumbPrivateArgs);
+const bithumbPrivateBody = bithumbPrivateArgs.body.bind(bithumbPrivateArgs);
+const coinonePublicQuery = coinonePublicArgs.query.bind(coinonePublicArgs);
+const coinonePrivateBody = coinonePrivateArgs.body.bind(coinonePrivateArgs);
+const gopaxPublicQuery = gopaxPublicArgs.query.bind(gopaxPublicArgs);
+const gopaxPrivateQuery = gopaxPrivateArgs.query.bind(gopaxPrivateArgs);
+const gopaxPrivateBody = gopaxPrivateArgs.body.bind(gopaxPrivateArgs);
+const korbitPublicQuery = korbitPublicArgs.query.bind(korbitPublicArgs);
+const korbitPrivateQuery = korbitPrivateArgs.query.bind(korbitPrivateArgs);
 
 function tool(
   category: string,
