@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.6.1
  */
 
-export type VerifyTravelruleByTxid400Error = {
+export type VerifyTravelRuleByTxid400Error = {
   /** 에러명 */
   name: string;
   /** 에러 메세지 */

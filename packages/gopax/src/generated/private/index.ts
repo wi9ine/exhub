@@ -12,22 +12,22 @@ import type {
 } from 'axios';
 
 import type {
-  Deleteordersclientorderid200,
-  Deleteordersorderid200,
-  Getbalances200Item,
-  Getbalancesassetname200,
-  Getcryptodepositaddresses200Item,
-  Getcryptowithdrawaladdresses200Item,
-  GetdepositwithdrawalstatusParams,
-  Getorders200Item,
-  GetordersParams,
-  Getordersclientorderid200,
-  Getordersorderid200,
-  Gettrades200Item,
-  GettradesParams,
-  Postorders200,
-  PostordersBody,
-  PostwithdrawalsBody
+  CancelOrder200,
+  CancelOrderByClientOrderId200,
+  CreateOrder200,
+  CreateOrderBody,
+  CreateWithdrawalBody,
+  GetBalance200,
+  GetOrder200,
+  GetOrderByClientOrderId200,
+  ListBalances200Item,
+  ListCryptoDepositAddresses200Item,
+  ListCryptoWithdrawalAddresses200Item,
+  ListDepositWithdrawalStatusParams,
+  ListOrders200Item,
+  ListOrdersParams,
+  ListTrades200Item,
+  ListTradesParams
 } from './model';
 
 
@@ -36,9 +36,9 @@ import type {
   /**
  * @summary 잔고 조회
  */
-export const getbalances = (
+export const listBalances = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getbalances200Item[]>> => {
+ ): Promise<AxiosResponse<ListBalances200Item[]>> => {
     return axios.get(
       `/balances`,options
     );
@@ -47,9 +47,9 @@ export const getbalances = (
 /**
  * @summary 특정 자산 잔고 조회
  */
-export const getbalancesassetname = (
+export const getBalance = (
     assetName: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getbalancesassetname200>> => {
+ ): Promise<AxiosResponse<GetBalance200>> => {
     return axios.get(
       `/balances/${assetName}`,options
     );
@@ -59,9 +59,9 @@ export const getbalancesassetname = (
  * GET /orders에 한하여 쿼리스트링이 시그니쳐 생성 과정에 포함되어야 합니다. 문서 상단의 예시 코드를 참고하세요.
  * @summary 주문 조회
  */
-export const getorders = (
-    params?: GetordersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getorders200Item[]>> => {
+export const listOrders = (
+    params?: ListOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOrders200Item[]>> => {
     return axios.get(
       `/orders`,{
     ...options,
@@ -85,12 +85,12 @@ REST API를 통한 최소 주문 금액은 quote 자산이 KRW일 경우 1,000 K
 지정가 주문 유형에서 po(post only)는 즉시 체결되는 상대 주문이 있으면 주문을 취소하고 그렇지 않으면 주문을 전량 등록하는 조건(전량 오더북에 올림 or 전량 취소)입니다. ioc(immediate-or-cancel)는 즉시 체결할 수 있는 만큼 최대한 체결한 후에 잔량은 오더북에 올리지 않고 중도 취소하는 조건(즉시 체결 then 잔량 취소)입니다. fok(fill-or-kill)는 수량 전부를 즉시 체결할 수 있는 경우에만 주문을 넣고 그렇지 않은 경우에는 전량 취소하는 조건(전량 즉시 체결 or 전량 취소)입니다. 참고로, 시장가 주문일 경우 지정가 주문 유형은 무시되며, 프로텍션을 yes로 설정한 경우에는 ioc와 fok를 사용할 수 없습니다.
  * @summary 주문 등록
  */
-export const postorders = (
-    postordersBody: PostordersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Postorders200>> => {
+export const createOrder = (
+    createOrderBody: CreateOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateOrder200>> => {
     return axios.post(
       `/orders`,
-      postordersBody,options
+      createOrderBody,options
     );
   }
 
@@ -98,9 +98,9 @@ export const postorders = (
  * 완전 체결 혹은 취소된 주문은 완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능합니다.
  * @summary 특정 주문 조회
  */
-export const getordersorderid = (
+export const getOrder = (
     orderId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getordersorderid200>> => {
+ ): Promise<AxiosResponse<GetOrder200>> => {
     return axios.get(
       `/orders/${orderId}`,options
     );
@@ -110,9 +110,9 @@ export const getordersorderid = (
  * 해당하는 오더가 존재하지 않으면 404 에러가 반환됩니다.
  * @summary 주문 취소
  */
-export const deleteordersorderid = (
+export const cancelOrder = (
     orderId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Deleteordersorderid200>> => {
+ ): Promise<AxiosResponse<CancelOrder200>> => {
     return axios.delete(
       `/orders/${orderId}`,options
     );
@@ -122,9 +122,9 @@ export const deleteordersorderid = (
  * 해당 개인 API로는 본인 주문 관련 체결 내역만 조회됩니다. 본인 주문 가릴 것 없이 모든 체결 기록 조회를 위해서는 공개 API의 체결 기록 조회 기능을 사용하세요.
  * @summary 체결 기록 조회
  */
-export const gettrades = (
-    params?: GettradesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettrades200Item[]>> => {
+export const listTrades = (
+    params?: ListTradesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTrades200Item[]>> => {
     return axios.get(
       `/trades`,{
     ...options,
@@ -135,8 +135,8 @@ export const gettrades = (
 /**
  * @summary 입출금 기록 조회
  */
-export const getdepositwithdrawalstatus = (
-    params?: GetdepositwithdrawalstatusParams, options?: AxiosRequestConfig
+export const listDepositWithdrawalStatus = (
+    params?: ListDepositWithdrawalStatusParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<string[]>> => {
     return axios.get(
       `/deposit-withdrawal-status`,{
@@ -148,9 +148,9 @@ export const getdepositwithdrawalstatus = (
 /**
  * @summary 가상자산 입금 주소 조회
  */
-export const getcryptodepositaddresses = (
+export const listCryptoDepositAddresses = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getcryptodepositaddresses200Item[]>> => {
+ ): Promise<AxiosResponse<ListCryptoDepositAddresses200Item[]>> => {
     return axios.get(
       `/crypto-deposit-addresses`,options
     );
@@ -159,9 +159,9 @@ export const getcryptodepositaddresses = (
 /**
  * @summary 가상자산 출금 주소 조회
  */
-export const getcryptowithdrawaladdresses = (
+export const listCryptoWithdrawalAddresses = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getcryptowithdrawaladdresses200Item[]>> => {
+ ): Promise<AxiosResponse<ListCryptoWithdrawalAddresses200Item[]>> => {
     return axios.get(
       `/crypto-withdrawal-addresses`,options
     );
@@ -171,12 +171,12 @@ export const getcryptowithdrawaladdresses = (
  * 사전에 등록된 IP에서만 출금이 가능합니다.
  * @summary 가상자산 출금
  */
-export const postwithdrawals = (
-    postwithdrawalsBody: PostwithdrawalsBody, options?: AxiosRequestConfig
+export const createWithdrawal = (
+    createWithdrawalBody: CreateWithdrawalBody, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<void>> => {
     return axios.post(
       `/withdrawals`,
-      postwithdrawalsBody,options
+      createWithdrawalBody,options
     );
   }
 
@@ -184,9 +184,9 @@ export const postwithdrawals = (
  * 완전 체결 혹은 취소된 주문은 완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능합니다.
  * @summary 클라이언트 주문 ID로 특정 주문 조회
  */
-export const getordersclientorderid = (
+export const getOrderByClientOrderId = (
     clientOrderID: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getordersclientorderid200>> => {
+ ): Promise<AxiosResponse<GetOrderByClientOrderId200>> => {
     return axios.get(
       `/orders/clientOrderId/${clientOrderID}`,options
     );
@@ -196,24 +196,24 @@ export const getordersclientorderid = (
  * 해당하는 오더가 존재하지 않으면 404 에러가 반환됩니다.
  * @summary 클라이언트 주문 ID로 주문 취소
  */
-export const deleteordersclientorderid = (
+export const cancelOrderByClientOrderId = (
     clientOrderID: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Deleteordersclientorderid200>> => {
+ ): Promise<AxiosResponse<CancelOrderByClientOrderId200>> => {
     return axios.delete(
       `/orders/clientOrderId/${clientOrderID}`,options
     );
   }
 
-export type GetbalancesResult = AxiosResponse<Getbalances200Item[]>
-export type GetbalancesassetnameResult = AxiosResponse<Getbalancesassetname200>
-export type GetordersResult = AxiosResponse<Getorders200Item[]>
-export type PostordersResult = AxiosResponse<Postorders200>
-export type GetordersorderidResult = AxiosResponse<Getordersorderid200>
-export type DeleteordersorderidResult = AxiosResponse<Deleteordersorderid200>
-export type GettradesResult = AxiosResponse<Gettrades200Item[]>
-export type GetdepositwithdrawalstatusResult = AxiosResponse<string[]>
-export type GetcryptodepositaddressesResult = AxiosResponse<Getcryptodepositaddresses200Item[]>
-export type GetcryptowithdrawaladdressesResult = AxiosResponse<Getcryptowithdrawaladdresses200Item[]>
-export type PostwithdrawalsResult = AxiosResponse<void>
-export type GetordersclientorderidResult = AxiosResponse<Getordersclientorderid200>
-export type DeleteordersclientorderidResult = AxiosResponse<Deleteordersclientorderid200>
+export type ListBalancesResult = AxiosResponse<ListBalances200Item[]>
+export type GetBalanceResult = AxiosResponse<GetBalance200>
+export type ListOrdersResult = AxiosResponse<ListOrders200Item[]>
+export type CreateOrderResult = AxiosResponse<CreateOrder200>
+export type GetOrderResult = AxiosResponse<GetOrder200>
+export type CancelOrderResult = AxiosResponse<CancelOrder200>
+export type ListTradesResult = AxiosResponse<ListTrades200Item[]>
+export type ListDepositWithdrawalStatusResult = AxiosResponse<string[]>
+export type ListCryptoDepositAddressesResult = AxiosResponse<ListCryptoDepositAddresses200Item[]>
+export type ListCryptoWithdrawalAddressesResult = AxiosResponse<ListCryptoWithdrawalAddresses200Item[]>
+export type CreateWithdrawalResult = AxiosResponse<void>
+export type GetOrderByClientOrderIdResult = AxiosResponse<GetOrderByClientOrderId200>
+export type CancelOrderByClientOrderIdResult = AxiosResponse<CancelOrderByClientOrderId200>

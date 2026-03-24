@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.6.1
  */
 
-export type ListTravelruleVasps200Item = {
+export type ListTravelRuleVasps200Item = {
   /** 거래소 이름
 VASP(가상자산사업자)의 이름입니다.
  */

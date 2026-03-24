@@ -31,10 +31,10 @@ describe("bithumb private integration", () => {
       credentials: { apiKey, secretKey },
     });
 
-    const orders = await client.orders.getOrders({ market: "KRW-BTC", limit: 1 });
+    const orders = await client.orders.listOrders({ market: "KRW-BTC", limit: 1 });
     orderId = orders[0]?.uuid;
 
-    const withdrawals = await client.withdrawals.getWithdraws({ limit: 1 });
+    const withdrawals = await client.withdrawals.listWithdraws({ limit: 1 });
     currency = withdrawals[0]?.currency ?? currency;
     if (typeof withdrawals[0]?.net_type === "string") {
       netType = withdrawals[0].net_type;
@@ -42,12 +42,12 @@ describe("bithumb private integration", () => {
   });
 
   testIf("전체 계좌 조회", async () => {
-    const result = await client.accounts.getAccounts();
+    const result = await client.accounts.listAccounts();
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("주문 가능 정보 조회", async () => {
-    const result = await client.orders.getOrdersChance({ market });
+    const result = await client.orders.getOrderChance({ market });
     expect(result).toBeTruthy();
   });
 
@@ -61,27 +61,27 @@ describe("bithumb private integration", () => {
   });
 
   testIf("주문 리스트 조회", async () => {
-    const result = await client.orders.getOrders({ market, limit: 10 });
+    const result = await client.orders.listOrders({ market, limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("TWAP 주문 내역 조회", async () => {
-    const result = await client.orders.getTwapOrders({ market, limit: 10 });
+    const result = await client.orders.listTwapOrders({ market, limit: 10 });
     expect(result).toBeTruthy();
   });
 
   testIf("코인 출금 리스트 조회", async () => {
-    const result = await client.withdrawals.getWithdraws({ limit: 10 });
+    const result = await client.withdrawals.listWithdraws({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("원화 출금 리스트 조회", async () => {
-    const result = await client.withdrawals.getWithdrawsKrw({ limit: 10 });
+    const result = await client.withdrawals.listWithdrawsKrw({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("개별 출금 조회", async (context) => {
-    const withdrawals = await client.withdrawals.getWithdraws({ currency, limit: 1 });
+    const withdrawals = await client.withdrawals.listWithdraws({ currency, limit: 1 });
     const latest = withdrawals[0];
     if (!latest?.uuid && !latest?.txid) {
       context.skip();
@@ -96,27 +96,27 @@ describe("bithumb private integration", () => {
   });
 
   testIf("출금 가능 정보 조회", async () => {
-    const result = await client.withdrawals.getWithdrawsChance({ currency, net_type: netType });
+    const result = await client.withdrawals.getWithdrawChance({ currency, net_type: netType });
     expect(result).toBeTruthy();
   });
 
   testIf("출금 허용 주소 리스트 조회", async () => {
-    const result = await client.withdrawals.getWithdrawsCoinAddresses();
+    const result = await client.withdrawals.listWithdrawsCoinAddresses();
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("코인 입금 리스트 조회", async () => {
-    const result = await client.deposits.getDeposits({ limit: 10 });
+    const result = await client.deposits.listDeposits({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("원화 입금 리스트 조회", async () => {
-    const result = await client.deposits.getDepositsKrw({ limit: 10 });
+    const result = await client.deposits.listDepositsKrw({ limit: 10 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("개별 입금 조회", async (context) => {
-    const deposits = await client.deposits.getDeposits({ currency, limit: 1 });
+    const deposits = await client.deposits.listDeposits({ currency, limit: 1 });
     const latest = deposits[0];
     if (!latest?.uuid && !latest?.txid) {
       context.skip();
@@ -131,12 +131,12 @@ describe("bithumb private integration", () => {
   });
 
   testIf("코인 입금 주소 목록 조회", async () => {
-    const result = await client.deposits.getDepositsCoinAddresses();
+    const result = await client.deposits.listDepositsCoinAddresses();
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("코인 입금 주소 조회", async (context) => {
-    const addresses = await client.deposits.getDepositsCoinAddresses();
+    const addresses = await client.deposits.listDepositsCoinAddresses();
     const latest = addresses.find((item) => item.currency && item.net_type);
     if (!latest?.currency || !latest?.net_type) {
       context.skip();
@@ -150,12 +150,12 @@ describe("bithumb private integration", () => {
   });
 
   testIf("입출금 서비스 상태 조회", async () => {
-    const result = await client.service.getStatusWallet();
+    const result = await client.service.getWalletStatus();
     expect(Array.isArray(result)).toBe(true);
   });
 
   testIf("API 키 조회", async () => {
-    const result = await client.service.getApiKeys();
+    const result = await client.service.listApiKeys();
     expect(Array.isArray(result)).toBe(true);
   });
 });

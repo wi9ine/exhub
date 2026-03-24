@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.6.1
  */
 
-export type VerifyTravelruleByUuid404Error = {
+export type VerifyTravelRuleByUuid404Error = {
   /** 에러명 */
   name: string;
   /** 에러 메세지 */

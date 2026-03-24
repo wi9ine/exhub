@@ -1,40 +1,40 @@
 import type { ExHubClientOptions } from "@exhub/core";
 
 import type {
-  Deleteordersclientorderid200,
-  Deleteordersorderid200,
-  Getbalances200Item,
-  Getbalancesassetname200,
-  Getcryptodepositaddresses200Item,
-  Getcryptowithdrawaladdresses200Item,
-  GetdepositwithdrawalstatusParams,
-  Getorders200Item,
-  Getordersclientorderid200,
-  Getordersorderid200,
-  GetordersParams,
-  Gettrades200Item,
-  GettradesParams,
-  Postorders200,
-  PostordersBody,
-  PostwithdrawalsBody,
+  CancelOrder200,
+  CancelOrderByClientOrderId200,
+  CreateOrder200,
+  CreateOrderBody,
+  CreateWithdrawalBody,
+  GetBalance200,
+  GetOrder200,
+  GetOrderByClientOrderId200,
+  ListBalances200Item,
+  ListCryptoDepositAddresses200Item,
+  ListCryptoWithdrawalAddresses200Item,
+  ListDepositWithdrawalStatusParams,
+  ListOrders200Item,
+  ListOrdersParams,
+  ListTrades200Item,
+  ListTradesParams,
 } from "../generated/private/model";
 import type {
-  Getassets200Item,
-  GetnoticesParams,
-  Gettickers200Item,
-  Gettime200,
-  Gettradingpairs200Item,
-  Gettradingpairscautions200Item,
-  GettradingpairscautionsParams,
-  Gettradingpairsstats200Item,
-  Gettradingpairstradingpairbook200,
-  GettradingpairstradingpairbookParams,
-  GettradingpairstradingpaircandlesParams,
-  Gettradingpairstradingpairpriceticksize200Item,
-  Gettradingpairstradingpairstats200,
-  Gettradingpairstradingpairticker200,
-  Gettradingpairstradingpairtrades200Item,
-  GettradingpairstradingpairtradesParams,
+  GetTime200,
+  GetTradingPairBook200,
+  GetTradingPairBookParams,
+  GetTradingPairCandlesParams,
+  GetTradingPairPriceTickSize200Item,
+  GetTradingPairStats200,
+  GetTradingPairTicker200,
+  ListAssets200Item,
+  ListNoticesParams,
+  ListTickers200Item,
+  ListTradingPairs200Item,
+  ListTradingPairsCautions200Item,
+  ListTradingPairsCautionsParams,
+  ListTradingPairsStats200Item,
+  ListTradingPairTrades200Item,
+  ListTradingPairTradesParams,
 } from "../generated/public/model";
 
 export interface GopaxCredentials {
@@ -49,50 +49,47 @@ export type GopaxSignedQueryInput = Record<string, unknown> | undefined;
 
 export interface GopaxClient {
   market: {
-    assets: () => Promise<Getassets200Item[]>;
-    tradingPairs: () => Promise<Gettradingpairs200Item[]>;
-    priceTickSize: (
-      tradingPair: string,
-    ) => Promise<Gettradingpairstradingpairpriceticksize200Item[]>;
-    ticker: (tradingPair: string) => Promise<Gettradingpairstradingpairticker200>;
+    assets: () => Promise<ListAssets200Item[]>;
+    tradingPairs: () => Promise<ListTradingPairs200Item[]>;
+    priceTickSize: (tradingPair: string) => Promise<GetTradingPairPriceTickSize200Item[]>;
+    ticker: (tradingPair: string) => Promise<GetTradingPairTicker200>;
     orderbook: (
       tradingPair: string,
-      params?: GettradingpairstradingpairbookParams,
-    ) => Promise<Gettradingpairstradingpairbook200>;
+      params?: GetTradingPairBookParams,
+    ) => Promise<GetTradingPairBook200>;
     trades: (
       tradingPair: string,
-      params?: GettradingpairstradingpairtradesParams,
-    ) => Promise<Gettradingpairstradingpairtrades200Item[]>;
-    stats: (tradingPair: string) => Promise<Gettradingpairstradingpairstats200>;
-    allStats: () => Promise<Gettradingpairsstats200Item[]>;
-    candles: (
-      tradingPair: string,
-      params: GettradingpairstradingpaircandlesParams,
-    ) => Promise<number[][]>;
-    cautions: (params?: GettradingpairscautionsParams) => Promise<Gettradingpairscautions200Item[]>;
-    tickers: () => Promise<Gettickers200Item[]>;
-    time: () => Promise<Gettime200>;
-    notices: (params?: GetnoticesParams) => Promise<string[]>;
+      params?: ListTradingPairTradesParams,
+    ) => Promise<ListTradingPairTrades200Item[]>;
+    stats: (tradingPair: string) => Promise<GetTradingPairStats200>;
+    allStats: () => Promise<ListTradingPairsStats200Item[]>;
+    candles: (tradingPair: string, params: GetTradingPairCandlesParams) => Promise<number[][]>;
+    cautions: (
+      params?: ListTradingPairsCautionsParams,
+    ) => Promise<ListTradingPairsCautions200Item[]>;
+    tickers: () => Promise<ListTickers200Item[]>;
+    time: () => Promise<GetTime200>;
+    notices: (params?: ListNoticesParams) => Promise<string[]>;
   };
   account: {
-    getBalances: () => Promise<Getbalances200Item[]>;
-    getBalance: (assetName: string) => Promise<Getbalancesassetname200>;
+    listBalances: () => Promise<ListBalances200Item[]>;
+    getBalance: (assetName: string) => Promise<GetBalance200>;
   };
   orders: {
-    getOrders: (params?: GetordersParams) => Promise<Getorders200Item[]>;
-    placeOrder: (body: PostordersBody) => Promise<Postorders200>;
-    getOrder: (orderId: string) => Promise<Getordersorderid200>;
-    cancelOrder: (orderId: string) => Promise<Deleteordersorderid200>;
-    getOrderByClientOrderId: (clientOrderId: string) => Promise<Getordersclientorderid200>;
-    cancelOrderByClientOrderId: (clientOrderId: string) => Promise<Deleteordersclientorderid200>;
+    listOrders: (params?: ListOrdersParams) => Promise<ListOrders200Item[]>;
+    createOrder: (body: CreateOrderBody) => Promise<CreateOrder200>;
+    getOrder: (orderId: string) => Promise<GetOrder200>;
+    cancelOrder: (orderId: string) => Promise<CancelOrder200>;
+    getOrderByClientOrderId: (clientOrderId: string) => Promise<GetOrderByClientOrderId200>;
+    cancelOrderByClientOrderId: (clientOrderId: string) => Promise<CancelOrderByClientOrderId200>;
   };
   trades: {
-    getTrades: (params?: GettradesParams) => Promise<Gettrades200Item[]>;
+    listTrades: (params?: ListTradesParams) => Promise<ListTrades200Item[]>;
   };
   wallet: {
-    getDepositWithdrawalStatus: (params?: GetdepositwithdrawalstatusParams) => Promise<string[]>;
-    getCryptoDepositAddresses: () => Promise<Getcryptodepositaddresses200Item[]>;
-    getCryptoWithdrawalAddresses: () => Promise<Getcryptowithdrawaladdresses200Item[]>;
-    withdraw: (body: PostwithdrawalsBody) => Promise<void>;
+    listDepositWithdrawalStatus: (params?: ListDepositWithdrawalStatusParams) => Promise<string[]>;
+    listCryptoDepositAddresses: () => Promise<ListCryptoDepositAddresses200Item[]>;
+    listCryptoWithdrawalAddresses: () => Promise<ListCryptoWithdrawalAddresses200Item[]>;
+    withdraw: (body: CreateWithdrawalBody) => Promise<void>;
   };
 }

@@ -11,41 +11,41 @@ import * as zod from 'zod';
  * 빗썸에서 거래 가능한 마켓과 가상자산 정보를 제공합니다.
  * @summary 마켓 코드 조회
  */
-export const getMarketAllQueryIsDetailsDefault = false;
+export const getMarketsQueryIsDetailsDefault = false;
 
-export const GetMarketAllQueryParams = zod.object({
-  "isDetails": zod.boolean().default(getMarketAllQueryIsDetailsDefault).describe('유의종목 필드와 같은 상세 정보 노출 여부(선택 파라미터)')
+export const GetMarketsQueryParams = zod.object({
+  "isDetails": zod.boolean().default(getMarketsQueryIsDetailsDefault).describe('유의종목 필드와 같은 상세 정보 노출 여부(선택 파라미터)')
 })
 
 
 /**
  * @summary 분(Minute) 캔들
  */
-export const minutePathUnitDefault = 1;
+export const getMinuteCandlesPathUnitDefaultOne = 1;
 
-export const MinuteParams = zod.object({
-  "unit": zod.number().default(minutePathUnitDefault).describe('분 단위. 가능한 값 : 1, 3, 5, 10, 15, 30, 60, 240')
+export const GetMinuteCandlesParams = zod.object({
+  "unit": zod.number().default(getMinuteCandlesPathUnitDefaultOne).describe('분 단위. 가능한 값 : 1, 3, 5, 10, 15, 30, 60, 240')
 })
 
-export const minuteQueryMarketDefault = `KRW-BTC`;
-export const minuteQueryCountDefault = 1;
+export const getMinuteCandlesQueryMarketDefaultOne = `KRW-BTC`;
+export const getMinuteCandlesQueryCountDefaultOne = 1;
 
-export const MinuteQueryParams = zod.object({
-  "market": zod.string().default(minuteQueryMarketDefault).describe('마켓 코드 (ex. KRW-BTC)'),
+export const GetMinuteCandlesQueryParams = zod.object({
+  "market": zod.string().default(getMinuteCandlesQueryMarketDefaultOne).describe('마켓 코드 (ex. KRW-BTC)'),
   "to": zod.string().optional().describe('마지막 캔들 시각 (exclusive). 비워서 요청시 가장 최근 캔들'),
-  "count": zod.number().default(minuteQueryCountDefault).describe('캔들 개수(최대 200개까지 요청 가능)')
+  "count": zod.number().default(getMinuteCandlesQueryCountDefaultOne).describe('캔들 개수(최대 200개까지 요청 가능)')
 })
 
 
 /**
  * @summary 일(Day) 캔들
  */
-export const dayQueryCountDefault = 1;
+export const getDayCandlesQueryCountDefaultOne = 1;
 
-export const DayQueryParams = zod.object({
+export const GetDayCandlesQueryParams = zod.object({
   "market": zod.string().describe('마켓 코드 (ex. KRW-BTC)'),
   "to": zod.string().optional().describe('마지막 캔들 시각 (exclusive). 비워서 요청시 가장 최근 캔들'),
-  "count": zod.number().default(dayQueryCountDefault).describe('캔들 개수(최대 200개까지 요청 가능)'),
+  "count": zod.number().default(getDayCandlesQueryCountDefaultOne).describe('캔들 개수(최대 200개까지 요청 가능)'),
   "convertingPriceUnit": zod.string().optional().describe('종가 환산 화폐 단위 (생략 가능, KRW로 명시할 시 원화 환산 가격을 반환.)')
 })
 
@@ -53,36 +53,36 @@ export const DayQueryParams = zod.object({
 /**
  * @summary 주(Week) 캔들
  */
-export const weekQueryCountDefault = 1;
+export const getWeekCandlesQueryCountDefaultOne = 1;
 
-export const WeekQueryParams = zod.object({
+export const GetWeekCandlesQueryParams = zod.object({
   "market": zod.string().describe('마켓 코드 (ex. KRW-BTC)'),
   "to": zod.string().optional().describe('마지막 캔들 시각 (exclusive). 비워서 요청시 가장 최근 캔들'),
-  "count": zod.number().default(weekQueryCountDefault).describe('캔들 개수(최대 200개까지 요청 가능)')
+  "count": zod.number().default(getWeekCandlesQueryCountDefaultOne).describe('캔들 개수(최대 200개까지 요청 가능)')
 })
 
 
 /**
  * @summary 월(Month) 캔들
  */
-export const monthQueryCountDefault = 1;
+export const getMonthCandlesQueryCountDefaultOne = 1;
 
-export const MonthQueryParams = zod.object({
+export const GetMonthCandlesQueryParams = zod.object({
   "market": zod.string().describe('마켓 코드 (ex. KRW-BTC)'),
   "to": zod.string().optional().describe('마지막 캔들 시각 (exclusive). 비워서 요청시 가장 최근 캔들'),
-  "count": zod.number().default(monthQueryCountDefault).describe('캔들 개수(최대 200개까지 요청 가능)')
+  "count": zod.number().default(getMonthCandlesQueryCountDefaultOne).describe('캔들 개수(최대 200개까지 요청 가능)')
 })
 
 
 /**
  * @summary 최근 체결 내역
  */
-export const getTradesTicksQueryCountDefault = 1;
+export const listTradesTicksQueryCountDefaultOne = 1;
 
-export const GetTradesTicksQueryParams = zod.object({
+export const ListTradesTicksQueryParams = zod.object({
   "market": zod.string().describe('마켓 코드 (ex. KRW-BTC)'),
   "to": zod.string().optional().describe('마지막 체결 시각. 형식 : [HHmmss 또는 HH:mm:ss]. 비워서 요청시 가장 최근 데이터(00:00:00 ~ 23:59:59)'),
-  "count": zod.number().default(getTradesTicksQueryCountDefault).describe('체결 개수(1~500)'),
+  "count": zod.number().default(listTradesTicksQueryCountDefaultOne).describe('체결 개수(1~500)'),
   "cursor": zod.string().optional().describe('페이지네이션 커서 (sequentialId)'),
   "daysAgo": zod.number().optional().describe('최근 체결 날짜 기준 7일 이내의 이전 데이터 조회 가능. 비워서 요청 시 가장 최근 체결 날짜 반환. (범위: 1 ~ 7)')
 })

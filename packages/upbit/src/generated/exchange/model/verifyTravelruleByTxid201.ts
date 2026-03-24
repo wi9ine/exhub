@@ -5,9 +5,9 @@
  * 업비트 거래소 API. 공식 개발자 센터 v1.6.1 기준 스키마입니다.
  * OpenAPI spec version: 1.6.1
  */
-import type { VerifyTravelruleByTxid201DepositState } from './verifyTravelruleByTxid201DepositState';
+import type { VerifyTravelRuleByTxid201DepositState } from './verifyTravelRuleByTxid201DepositState';
 
-export type VerifyTravelruleByTxid201 = {
+export type VerifyTravelRuleByTxid201 = {
   /** 입금의 유일식별자(UUID) */
   deposit_uuid: string;
   /** 검증 결과 */
@@ -21,5 +21,5 @@ export type VerifyTravelruleByTxid201 = {
   - `REFUNDING`: 반환 절차 중
   - `REFUNDED`: 반환됨
  */
-  deposit_state: VerifyTravelruleByTxid201DepositState;
+  deposit_state: VerifyTravelRuleByTxid201DepositState;
 };

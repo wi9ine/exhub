@@ -23,7 +23,7 @@
   "paths": {
     "/accounts": {
       "get": {
-        "operationId": "get-balance",
+        "operationId": "list-balance",
         "summary": "계정 잔고 조회",
         "tags": [
           "자산(Asset)"
@@ -177,7 +177,7 @@
     "/orders/chance": {
       "get": {
         "summary": "페어별 주문 가능 정보 조회",
-        "operationId": "available-order-information",
+        "operationId": "get-order-chance",
         "tags": [
           "주문(Order)"
         ],
@@ -368,7 +368,7 @@
                                 "type": "number",
                                 "format": "double",
                                 "description": "주문 금액 단위.\n해당 필드는 더 이상 사용되지 않으며, 참조하지 않을 것을 권장합니다.  \n(deprecated)\n",
-                                "example": 1e-08
+                                "example": 1e-8
                               },
                               "min_total": {
                                 "type": "string",
@@ -395,7 +395,7 @@
                                 "type": "number",
                                 "format": "double",
                                 "description": "주문 금액 단위.\n해당 필드는 더 이상 사용되지 않으며, 참조하지 않을 것을 권장합니다.  \n(deprecated)\n",
-                                "example": 1e-08
+                                "example": 1e-8
                               },
                               "min_total": {
                                 "type": "string",
@@ -636,7 +636,7 @@
     "/orders": {
       "post": {
         "summary": "주문 생성",
-        "operationId": "new-order",
+        "operationId": "create-order",
         "tags": [
           "주문(Order)"
         ],
@@ -1072,7 +1072,7 @@
     "/orders/test": {
       "post": {
         "summary": "주문 생성 테스트",
-        "operationId": "test-order",
+        "operationId": "create-test-order",
         "tags": [
           "주문(Order)"
         ],
@@ -3277,7 +3277,7 @@
       },
       "delete": {
         "summary": "주문 일괄 취소 접수",
-        "operationId": "batch-cancel-orders",
+        "operationId": "cancel-open-orders",
         "tags": [
           "주문(Order)"
         ],
@@ -4078,7 +4078,7 @@
     },
     "/orders/cancel_and_new": {
       "post": {
-        "operationId": "cancel-and-new-order",
+        "operationId": "cancel-and-create-order",
         "summary": "취소 후 재주문",
         "tags": [
           "주문(Order)"
@@ -4489,7 +4489,7 @@
     },
     "/withdraws/chance": {
       "get": {
-        "operationId": "available-withdrawal-information",
+        "operationId": "get-withdraw-chance",
         "summary": "출금 가능 정보 조회",
         "tags": [
           "출금(Withdrawal)"
@@ -5027,7 +5027,7 @@
     "/withdraws/coin": {
       "post": {
         "summary": "디지털 자산 출금 요청",
-        "operationId": "withdraw",
+        "operationId": "create-withdrawal",
         "tags": [
           "출금(Withdrawal)"
         ],
@@ -5527,7 +5527,7 @@
     "/withdraws/fiat": {},
     "/withdraws/krw": {
       "post": {
-        "operationId": "withdraw-krw",
+        "operationId": "create-withdraw-krw",
         "summary": "원화 출금 요청",
         "tags": [
           "출금(Withdrawal)"
@@ -6335,7 +6335,7 @@
     },
     "/deposits/chance/coin": {
       "get": {
-        "operationId": "available-deposit-information",
+        "operationId": "get-deposit-chance",
         "summary": "디지털 자산 입금 가능 정보 조회",
         "tags": [
           "입금(Deposit)"
@@ -7019,7 +7019,7 @@
     },
     "/deposits/krw": {
       "post": {
-        "operationId": "deposit-krw",
+        "operationId": "create-deposit-krw",
         "summary": "원화 입금",
         "tags": [
           "입금(Deposit)"
@@ -7900,7 +7900,7 @@
     },
     "/travel_rule/vasps": {
       "get": {
-        "operationId": "list-travelrule-vasps",
+        "operationId": "list-travel-rule-vasps",
         "summary": "계정주 확인 서비스 지원 거래소 목록 조회",
         "tags": [
           "트래블룰 검증"
@@ -8005,7 +8005,7 @@
     },
     "/travel_rule/deposit/uuid": {
       "post": {
-        "operationId": "verify-travelrule-by-uuid",
+        "operationId": "verify-travel-rule-by-uuid",
         "summary": "입금 UUID로 계정주 검증 요청",
         "tags": [
           "트래블룰 검증"
@@ -8228,7 +8228,7 @@
     },
     "/travel_rule/deposit/txid": {
       "post": {
-        "operationId": "verify-travelrule-by-txid",
+        "operationId": "verify-travel-rule-by-txid",
         "summary": "입금 TxID로 계정주 검증 요청",
         "tags": [
           "트래블룰 검증"

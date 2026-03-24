@@ -131,8 +131,8 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
         requestPublic<AsyncResult<GopaxClient["market"]["notices"]>>("/notices", params),
     },
     account: {
-      getBalances: async () =>
-        requestPrivate<AsyncResult<GopaxClient["account"]["getBalances"]>>(
+      listBalances: async () =>
+        requestPrivate<AsyncResult<GopaxClient["account"]["listBalances"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.balances,
         ),
@@ -145,16 +145,16 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
       },
     },
     orders: {
-      getOrders: async (params) =>
-        requestPrivate<AsyncResult<GopaxClient["orders"]["getOrders"]>>(
+      listOrders: async (params) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["listOrders"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.orders,
           params,
           undefined,
           true,
         ),
-      placeOrder: async (body) =>
-        requestPrivate<AsyncResult<GopaxClient["orders"]["placeOrder"]>>(
+      createOrder: async (body) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["createOrder"]>>(
           "POST",
           GOPAX_PRIVATE_PATHS.orders,
           undefined,
@@ -190,27 +190,27 @@ export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient
       },
     },
     trades: {
-      getTrades: async (params) =>
-        requestPrivate<AsyncResult<GopaxClient["trades"]["getTrades"]>>(
+      listTrades: async (params) =>
+        requestPrivate<AsyncResult<GopaxClient["trades"]["listTrades"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.trades,
           params,
         ),
     },
     wallet: {
-      getDepositWithdrawalStatus: async (params) =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["getDepositWithdrawalStatus"]>>(
+      listDepositWithdrawalStatus: async (params) =>
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["listDepositWithdrawalStatus"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.depositWithdrawalStatus,
           params,
         ),
-      getCryptoDepositAddresses: async () =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["getCryptoDepositAddresses"]>>(
+      listCryptoDepositAddresses: async () =>
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["listCryptoDepositAddresses"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.cryptoDepositAddresses,
         ),
-      getCryptoWithdrawalAddresses: async () =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["getCryptoWithdrawalAddresses"]>>(
+      listCryptoWithdrawalAddresses: async () =>
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["listCryptoWithdrawalAddresses"]>>(
           "GET",
           GOPAX_PRIVATE_PATHS.cryptoWithdrawalAddresses,
         ),

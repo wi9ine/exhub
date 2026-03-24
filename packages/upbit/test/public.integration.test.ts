@@ -24,37 +24,37 @@ describe("@exhub/upbit public integration", () => {
   });
 
   it("초 캔들 조회", async () => {
-    const candles = await client.candles.listCandlesSeconds({ market, count: 1 });
+    const candles = await client.candles.getSecondCandles({ market, count: 1 });
     expect(Array.isArray(candles)).toBe(true);
   });
 
   it("분 캔들 조회", async () => {
-    const candles = await client.candles.listCandlesMinutes(1, { market, count: 1 });
+    const candles = await client.candles.getMinuteCandles(1, { market, count: 1 });
     expect(Array.isArray(candles)).toBe(true);
   });
 
   it("일 캔들 조회", async () => {
-    const candles = await client.candles.listCandlesDays({ market, count: 1 });
+    const candles = await client.candles.getDayCandles({ market, count: 1 });
     expect(Array.isArray(candles)).toBe(true);
   });
 
   it("주 캔들 조회", async () => {
-    const candles = await client.candles.listCandlesWeeks({ market, count: 1 });
+    const candles = await client.candles.getWeekCandles({ market, count: 1 });
     expect(Array.isArray(candles)).toBe(true);
   });
 
   it("월 캔들 조회", async () => {
-    const candles = await client.candles.listCandlesMonths({ market, count: 1 });
+    const candles = await client.candles.getMonthCandles({ market, count: 1 });
     expect(Array.isArray(candles)).toBe(true);
   });
 
   it("연 캔들 조회", async () => {
-    const candles = await client.candles.listCandlesYears({ market, count: 1 });
+    const candles = await client.candles.getYearCandles({ market, count: 1 });
     expect(Array.isArray(candles)).toBe(true);
   });
 
   it("최근 체결 내역 조회", async () => {
-    const trades = await client.trades.recentTradesHistory({ market, count: 1 });
+    const trades = await client.trades.listTradesTicks({ market, count: 1 });
     expect(Array.isArray(trades)).toBe(true);
   });
 
@@ -81,7 +81,7 @@ describe("@exhub/upbit public integration", () => {
   });
 
   it("호가 모아보기 단위 조회", async () => {
-    const levels = await client.orderbook.listOrderbookLevels({ markets: market });
+    const levels = await client.orderbook.listOrderbookSupportedLevels({ markets: market });
     expect(Array.isArray(levels)).toBe(true);
   });
 });

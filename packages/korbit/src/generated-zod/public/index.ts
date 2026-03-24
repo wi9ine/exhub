@@ -11,7 +11,7 @@ import * as zod from 'zod';
  * 하나 또는 여러 거래쌍의 현재가(Ticker) 정보를 조회합니다.
  * @summary 현재가 조회
  */
-export const GetTickersQueryParams = zod.object({
+export const ListTickersQueryParams = zod.object({
   "symbol": zod.string().optional().describe('조회하고자 하는 거래쌍의 심볼을 입력합니다. 여러 거래쌍을 한 번에 조회하고자 한다면 콤마(,)로 구분해 입력합니다.\n\n입력하지 않으면 코빗에서 거래 가능한 모든 거래쌍의 현재가 정보를 응답합니다.')
 })
 
@@ -30,7 +30,7 @@ export const GetOrderbookQueryParams = zod.object({
  * 최근 체결 내역을 조회합니다.
  * @summary 최근 체결 내역
  */
-export const GetTradesQueryParams = zod.object({
+export const ListTradesQueryParams = zod.object({
   "symbol": zod.string().describe('대상 거래쌍의 심볼'),
   "limit": zod.number().optional().describe('최대 조회 건수 (범위: 1 - 500)')
 })

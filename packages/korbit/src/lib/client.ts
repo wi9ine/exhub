@@ -115,8 +115,8 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
       time: async () => requestPublic<AsyncResult<KorbitClient["market"]["time"]>>("/v2/time"),
     },
     orders: {
-      placeOrder: async (body) =>
-        requestPrivatePost<AsyncResult<KorbitClient["orders"]["placeOrder"]>>("/v2/orders", body),
+      createOrder: async (body) =>
+        requestPrivatePost<AsyncResult<KorbitClient["orders"]["createOrder"]>>("/v2/orders", body),
       cancelOrder: async (params) =>
         requestPrivate<AsyncResult<KorbitClient["orders"]["cancelOrder"]>>(
           "DELETE",
@@ -129,36 +129,36 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
           "/v2/orders",
           params,
         ),
-      getOpenOrders: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["orders"]["getOpenOrders"]>>(
+      listOpenOrders: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["listOpenOrders"]>>(
           "GET",
           "/v2/openOrders",
           params,
         ),
-      getAllOrders: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["orders"]["getAllOrders"]>>(
+      listAllOrders: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["listAllOrders"]>>(
           "GET",
           "/v2/allOrders",
           params,
         ),
-      getMyTrades: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["orders"]["getMyTrades"]>>(
+      listMyTrades: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["orders"]["listMyTrades"]>>(
           "GET",
           "/v2/myTrades",
           params,
         ),
     },
     assets: {
-      getBalance: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["assets"]["getBalance"]>>(
+      listBalance: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["assets"]["listBalance"]>>(
           "GET",
           "/v2/balance",
           params,
         ),
     },
     cryptoDeposits: {
-      getDepositAddresses: async () =>
-        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["getDepositAddresses"]>>(
+      listDepositAddresses: async () =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["listDepositAddresses"]>>(
           "GET",
           "/v2/coin/depositAddresses",
         ),
@@ -173,8 +173,8 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
           "/v2/coin/depositAddress",
           params,
         ),
-      getRecentDeposits: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["getRecentDeposits"]>>(
+      listRecentDeposits: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoDeposits"]["listRecentDeposits"]>>(
           "GET",
           "/v2/coin/recentDeposits",
           params,
@@ -187,8 +187,8 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
         ),
     },
     cryptoWithdrawals: {
-      getWithdrawableAddresses: async () =>
-        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["getWithdrawableAddresses"]>>(
+      listWithdrawableAddresses: async () =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["listWithdrawableAddresses"]>>(
           "GET",
           "/v2/coin/withdrawableAddresses",
         ),
@@ -198,8 +198,8 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
           "/v2/coin/withdrawableAmount",
           params,
         ),
-      withdraw: async (body) =>
-        requestPrivatePost<AsyncResult<KorbitClient["cryptoWithdrawals"]["withdraw"]>>(
+      createWithdrawal: async (body) =>
+        requestPrivatePost<AsyncResult<KorbitClient["cryptoWithdrawals"]["createWithdrawal"]>>(
           "/v2/coin/withdrawal",
           body,
         ),
@@ -209,8 +209,8 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
           "/v2/coin/withdrawal",
           params,
         ),
-      getRecentWithdrawals: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["getRecentWithdrawals"]>>(
+      listRecentWithdrawals: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["cryptoWithdrawals"]["listRecentWithdrawals"]>>(
           "GET",
           "/v2/coin/recentWithdrawals",
           params,
@@ -223,24 +223,24 @@ export function createKorbitClient(options: KorbitClientOptions = {}): KorbitCli
         ),
     },
     krw: {
-      sendDepositPush: async (body) =>
-        requestPrivatePost<AsyncResult<KorbitClient["krw"]["sendDepositPush"]>>(
+      requestDepositPush: async (body) =>
+        requestPrivatePost<AsyncResult<KorbitClient["krw"]["requestDepositPush"]>>(
           "/v2/krw/sendKrwDepositPush",
           body,
         ),
-      sendWithdrawalPush: async (body) =>
-        requestPrivatePost<AsyncResult<KorbitClient["krw"]["sendWithdrawalPush"]>>(
+      requestWithdrawalPush: async (body) =>
+        requestPrivatePost<AsyncResult<KorbitClient["krw"]["requestWithdrawalPush"]>>(
           "/v2/krw/sendKrwWithdrawalPush",
           body,
         ),
-      getRecentDeposits: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["krw"]["getRecentDeposits"]>>(
+      listRecentDeposits: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["krw"]["listRecentDeposits"]>>(
           "GET",
           "/v2/krw/recentDeposits",
           params,
         ),
-      getRecentWithdrawals: async (params) =>
-        requestPrivate<AsyncResult<KorbitClient["krw"]["getRecentWithdrawals"]>>(
+      listRecentWithdrawals: async (params) =>
+        requestPrivate<AsyncResult<KorbitClient["krw"]["listRecentWithdrawals"]>>(
           "GET",
           "/v2/krw/recentWithdrawals",
           params,

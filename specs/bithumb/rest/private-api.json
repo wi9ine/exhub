@@ -34,7 +34,7 @@
       "get": {
         "summary": "전체 계좌 조회",
         "description": "보유 중인 자산 정보를 조회합니다.",
-        "operationId": "get-accounts",
+        "operationId": "list-accounts",
         "parameters": [
           {
             "name": "Authorization",
@@ -139,21 +139,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.util.EntityUtils;\n\nimport java.nio.charset.StandardCharsets;\nimport java.util.UUID;\n\npublic class GETNoArgs {\n\n    public static void main(String[] args) {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n        \n        // Generate access token\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/accounts\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A0%84%EC%B2%B4-%EA%B3%84%EC%A2%8C-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/전체-계좌-조회",
-        "tags": ["자산"]
+        "tags": [
+          "자산"
+        ]
       }
     },
     "/v1/orders/chance": {
       "get": {
         "summary": "주문 가능 정보",
         "description": "마켓별 주문 가능 정보를 조회합니다.",
-        "operationId": "get-orders-chance",
+        "operationId": "get-order-chance",
         "parameters": [
           {
             "name": "Authorization",
@@ -398,14 +404,20 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\n\npublic class GETArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"market\", \"KRW-BTC\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/orders/chance?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EA%B0%80%EB%8A%A5-%EC%A0%95%EB%B3%B4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/주문-가능-정보",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       }
     },
     "/v1/order": {
@@ -467,13 +479,20 @@
                       "type": "string",
                       "example": "bid",
                       "description": "주문 종류\n- `bid`: 매수\n- `ask`: 매도",
-                      "enum": ["bid", "ask"]
+                      "enum": [
+                        "bid",
+                        "ask"
+                      ]
                     },
                     "ord_type": {
                       "type": "string",
                       "example": "limit",
                       "description": "주문 방식\n- `limit`: 지정가\n- `price`: 시장가(매수)\n- `market`: 시장가(매도)",
-                      "enum": ["limit", "price", "market"]
+                      "enum": [
+                        "limit",
+                        "price",
+                        "market"
+                      ]
                     },
                     "price": {
                       "type": "string",
@@ -484,7 +503,12 @@
                       "type": "string",
                       "example": "done",
                       "description": "주문 상태\n- `wait`: 체결 대기 \n- `watch`: 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소",
-                      "enum": ["wait", "watch", "done", "cancel"]
+                      "enum": [
+                        "wait",
+                        "watch",
+                        "done",
+                        "cancel"
+                      ]
                     },
                     "market": {
                       "type": "string",
@@ -572,7 +596,10 @@
                             "type": "string",
                             "example": "bid",
                             "description": "체결 종류\n- `bid`: 매수\n- `ask`: 매도",
-                            "enum": ["bid", "ask"]
+                            "enum": [
+                              "bid",
+                              "ask"
+                            ]
                           },
                           "created_at": {
                             "type": "string",
@@ -635,7 +662,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
@@ -666,7 +695,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
@@ -697,7 +728,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
@@ -719,19 +752,25 @@
               "code": "  package com.example.sample;\n\n  // https://mvnrepository.com/artifact/com.auth0/java-jwt\n  import com.auth0.jwt.JWT;\n  import com.auth0.jwt.algorithms.Algorithm;\n  // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\n  import org.apache.http.client.methods.CloseableHttpResponse;\n  import org.apache.http.client.methods.HttpGet;\n  import org.apache.http.impl.client.CloseableHttpClient;\n  import org.apache.http.impl.client.HttpClients;\n  import org.apache.http.util.EntityUtils;\n\n  import java.math.BigInteger;\n  import java.nio.charset.StandardCharsets;\n  import java.security.MessageDigest;\n  import java.security.NoSuchAlgorithmException;\n  import java.util.ArrayList;\n  import java.util.List;\n  import java.util.UUID;\n\n  public class GETArgs {\n\n      public static void main(String[] args) throws NoSuchAlgorithmException {\n          String accessKey = \"발급받은 API KEY\";\n          String secretKey = \"발급받은 SECRET KEY\";\n          String apiUrl = \"https://api.bithumb.com\";\n\n          // Set API parameters (URL 인코딩 없이 수동 조합)\n          List<String> queryParts = new ArrayList<>();\n          queryParts.add(\"uuid=C0295000000000100020\");\n\n          // client_order_id는 선택 - 필요 시 아래 주석 해제\n          // queryParts.add(\"client_order_id=my-client-order-id-001\");\n\n          String query = String.join(\"&\", queryParts);\n\n          // Generate access token\n          MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n          md.update(query.getBytes(StandardCharsets.UTF_8));\n          String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n          Algorithm algorithm = Algorithm.HMAC256(secretKey);\n          String jwtToken = JWT.create()\n                  .withClaim(\"access_key\", accessKey)\n                  .withClaim(\"nonce\", UUID.randomUUID().toString())\n                  .withClaim(\"timestamp\", System.currentTimeMillis())\n                  .withClaim(\"query_hash\", queryHash)\n                  .withClaim(\"query_hash_alg\", \"SHA512\")\n                  .sign(algorithm);\n          String authenticationToken = \"Bearer \" + jwtToken;\n\n          // Call API\n          final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/order?\" + query);\n          httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n          try (CloseableHttpClient client = HttpClients.createDefault();\n               CloseableHttpResponse response = client.execute(httpRequest)) {\n              // handle to response\n              int httpStatus = response.getStatusLine().getStatusCode();\n              String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n              System.out.println(httpStatus);\n              System.out.println(responseBody);\n          } catch (Exception e) {\n              throw new RuntimeException(e);\n          }\n      }\n  }"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%A3%BC%EB%AC%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/개별-주문-조회",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       },
       "delete": {
         "summary": "주문 취소 접수",
         "description": "주문 취소를 요청합니다.",
-        "operationId": "delete-order",
+        "operationId": "cancel-order",
         "parameters": [
           {
             "name": "Authorization",
@@ -793,7 +832,10 @@
                       "format": "date-time"
                     }
                   },
-                  "required": ["order_id", "created_at"]
+                  "required": [
+                    "order_id",
+                    "created_at"
+                  ]
                 }
               }
             }
@@ -826,7 +868,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
@@ -859,7 +903,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
@@ -913,21 +959,27 @@
               "code": "  package com.example.sample;\n\n  // https://mvnrepository.com/artifact/com.auth0/java-jwt\n  import com.auth0.jwt.JWT;\n  import com.auth0.jwt.algorithms.Algorithm;\n  // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\n  import org.apache.http.NameValuePair;\n  import org.apache.http.client.methods.CloseableHttpResponse;\n  import org.apache.http.client.methods.HttpDelete;\n  import org.apache.http.client.utils.URLEncodedUtils;\n  import org.apache.http.impl.client.CloseableHttpClient;\n  import org.apache.http.impl.client.HttpClients;\n  import org.apache.http.message.BasicNameValuePair;\n  import org.apache.http.util.EntityUtils;\n\n  import java.math.BigInteger;\n  import java.nio.charset.StandardCharsets;\n  import java.security.MessageDigest;\n  import java.security.NoSuchAlgorithmException;\n  import java.util.ArrayList;\n  import java.util.List;\n  import java.util.UUID;\n\n  public class DELETEArgs {\n\n      public static void main(String[] args) throws NoSuchAlgorithmException {\n          String accessKey = \"발급받은 API KEY\";\n          String secretKey = \"발급받은 SECRET KEY\";\n          String apiUrl = \"https://api.bithumb.com\";\n\n          // Set API parameters\n          List<NameValuePair> queryParams = new ArrayList<>();\n\n          // [Option 1] 주문번호로 취소\n          queryParams.add(new BasicNameValuePair(\"order_id\", \"C0917000000000070001\"));\n\n          // [Option 2] 클라이언트 주문 ID로 취소 (Option 1 대신 사용)\n          // queryParams.add(new BasicNameValuePair(\"client_order_id\", \"my-order-001\"));\n\n          // Generate access token\n          String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n          MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n          md.update(query.getBytes(StandardCharsets.UTF_8));\n          String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n          Algorithm algorithm = Algorithm.HMAC256(secretKey);\n          String jwtToken = JWT.create()\n                  .withClaim(\"access_key\", accessKey)\n                  .withClaim(\"nonce\", UUID.randomUUID().toString())\n                  .withClaim(\"timestamp\", System.currentTimeMillis())\n                  .withClaim(\"query_hash\", queryHash)\n                  .withClaim(\"query_hash_alg\", \"SHA512\")\n                  .sign(algorithm);\n          String authenticationToken = \"Bearer \" + jwtToken;\n\n          // Call API\n          final HttpDelete httpRequest = new HttpDelete(apiUrl + \"/v2/order?\" + query);\n          httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n          try (CloseableHttpClient client = HttpClients.createDefault();\n               CloseableHttpResponse response = client.execute(httpRequest)) {\n              // handle to response\n              int httpStatus = response.getStatusLine().getStatusCode();\n              String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n              System.out.println(httpStatus);\n              System.out.println(responseBody);\n          } catch (Exception e) {\n              throw new RuntimeException(e);\n          }\n      }\n  }"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EC%B7%A8%EC%86%8C-%EC%A0%91%EC%88%98"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/주문-취소-접수",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       }
     },
     "/v1/orders": {
       "get": {
         "summary": "주문 리스트 조회",
         "description": "주문 목록을 조회합니다.",
-        "operationId": "get-orders",
+        "operationId": "list-orders",
         "parameters": [
           {
             "name": "Authorization",
@@ -953,7 +1005,12 @@
             "schema": {
               "type": "string",
               "default": "wait",
-              "enum": ["wait", "watch", "done", "cancel"]
+              "enum": [
+                "wait",
+                "watch",
+                "done",
+                "cancel"
+              ]
             }
           },
           {
@@ -1016,7 +1073,10 @@
             "schema": {
               "type": "string",
               "default": "desc",
-              "enum": ["asc", "desc"]
+              "enum": [
+                "asc",
+                "desc"
+              ]
             }
           }
         ],
@@ -1048,13 +1108,20 @@
                         "type": "string",
                         "example": "ask",
                         "description": "주문 종류\n- `bid`: 매수\n- `ask`: 매도",
-                        "enum": ["bid", "ask"]
+                        "enum": [
+                          "bid",
+                          "ask"
+                        ]
                       },
                       "ord_type": {
                         "type": "string",
                         "example": "limit",
                         "description": "주문 방식\n- `limit`: 지정가\n- `price`: 시장가(매수)\n- `market`: 시장가(매도)",
-                        "enum": ["limit", "price", "market"]
+                        "enum": [
+                          "limit",
+                          "price",
+                          "market"
+                        ]
                       },
                       "price": {
                         "type": "string",
@@ -1065,7 +1132,12 @@
                         "type": "string",
                         "example": "wait",
                         "description": "주문 상태\n- `wait`: 체결 대기 \n- `watch`: 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소",
-                        "enum": ["wait", "watch", "done", "cancel"]
+                        "enum": [
+                          "wait",
+                          "watch",
+                          "done",
+                          "cancel"
+                        ]
                       },
                       "market": {
                         "type": "string",
@@ -1169,7 +1241,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 }
               }
             }
@@ -1191,19 +1265,25 @@
               "code": "package com.example.sample;\n\n  // https://mvnrepository.com/artifact/com.auth0/java-jwt\n\n  import com.auth0.jwt.JWT;\n  import com.auth0.jwt.algorithms.Algorithm;\n  // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\n  import org.apache.http.NameValuePair;\n  import org.apache.http.client.methods.CloseableHttpResponse;\n  import org.apache.http.client.methods.HttpGet;\n  import org.apache.http.client.utils.URLEncodedUtils;\n  import org.apache.http.impl.client.CloseableHttpClient;\n  import org.apache.http.impl.client.HttpClients;\n  import org.apache.http.message.BasicNameValuePair;\n  import org.apache.http.util.EntityUtils;\n\n  import java.math.BigInteger;\n  import java.nio.charset.StandardCharsets;\n  import java.security.MessageDigest;\n  import java.security.NoSuchAlgorithmException;\n  import java.util.ArrayList;\n  import java.util.List;\n  import java.util.UUID;\n  import java.util.stream.Collectors;\n\n  public class GETArgsArray {\n\n      public static void main(String[] args) throws NoSuchAlgorithmException {\n          String accessKey = \"발급받은 API KEY\";\n          String secretKey = \"발급받은 SECRET KEY\";\n          String apiUrl = \"https://api.bithumb.com\";\n\n          // Set API parameters\n          List<NameValuePair> queryParams = new ArrayList<>();\n          queryParams.add(new BasicNameValuePair(\"market\", \"KRW-XRP\"));\n          queryParams.add(new BasicNameValuePair(\"limit\", \"100\"));\n          queryParams.add(new BasicNameValuePair(\"page\", \"1\"));\n          queryParams.add(new BasicNameValuePair(\"order_by\", \"desc\"));\n\n          // uuids 또는 client_order_ids 두 값 모두 전달하지 않은 경우 최신 주문 내역 조회\n          // 두 값이 모두 전달된 경우, uuids를 기준으로 조회\n          List<String> uuids = new ArrayList<>();\n          uuids.add(\"C0106000032400700021\");\n          uuids.add(\"C0106000043000097801\");\n          String uuidQuery = uuids.stream().map(uuid -> \"uuids[]=\" + uuid).collect(Collectors.joining(\"&\"));\n\n          List<String> clientOrderIds = new ArrayList<>();\n          clientOrderIds.add(\"my-order-001\");\n          clientOrderIds.add(\"my-order-002\");\n          String clientOrderIdQuery = clientOrderIds.stream().map(id -> \"client_order_ids[]=\" + id).collect(Collectors.joining(\"&\"));\n\n          // Generate access token\n          String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n          if (!uuidQuery.isEmpty()) {\n              query = query + \"&\" + uuidQuery;\n          }\n          if (!clientOrderIdQuery.isEmpty()) {\n              query = query + \"&\" + clientOrderIdQuery;\n          }\n          MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n          md.update(query.getBytes(StandardCharsets.UTF_8));\n          String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n          Algorithm algorithm = Algorithm.HMAC256(secretKey);\n          String jwtToken = JWT.create()\n                  .withClaim(\"access_key\", accessKey)\n                  .withClaim(\"nonce\", UUID.randomUUID().toString())\n                  .withClaim(\"timestamp\", System.currentTimeMillis())\n                  .withClaim(\"query_hash\", queryHash)\n                  .withClaim(\"query_hash_alg\", \"SHA512\")\n                  .sign(algorithm);\n          String authenticationToken = \"Bearer \" + jwtToken;\n\n          // Call API\n          final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/orders?\" + query);\n          httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n          try (CloseableHttpClient client = HttpClients.createDefault();\n               CloseableHttpResponse response = client.execute(httpRequest)) {\n              // handle to response\n              int httpStatus = response.getStatusLine().getStatusCode();\n              String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n              System.out.println(httpStatus);\n              System.out.println(responseBody);\n          } catch (Exception e) {\n              throw new RuntimeException(e);\n          }\n      }\n  }"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/주문-리스트-조회",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       },
       "post": {
         "summary": "주문 요청",
         "description": "주문을 요청합니다.",
-        "operationId": "post-orders",
+        "operationId": "create-order",
         "parameters": [
           {
             "name": "Authorization",
@@ -1220,7 +1300,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["market", "side", "order_type"],
+                "required": [
+                  "market",
+                  "side",
+                  "order_type"
+                ],
                 "properties": {
                   "market": {
                     "type": "string",
@@ -1231,7 +1315,10 @@
                     "type": "string",
                     "description": "주문 종류\n- `bid`: 매수\n- `ask`: 매도",
                     "x-readme-id": "0.1",
-                    "enum": ["bid", "ask"]
+                    "enum": [
+                      "bid",
+                      "ask"
+                    ]
                   },
                   "price": {
                     "type": "string",
@@ -1247,7 +1334,11 @@
                     "type": "string",
                     "description": "주문 방식(구 `ord_type`)\n- `limit`: 지정가\n- `price`: 시장가(매수)\n- `market`: 시장가(매도)",
                     "x-readme-id": "0.2",
-                    "enum": ["limit", "price", "market"]
+                    "enum": [
+                      "limit",
+                      "price",
+                      "market"
+                    ]
                   },
                   "client_order_id": {
                     "type": "string",
@@ -1290,7 +1381,10 @@
                       "type": "string",
                       "example": "bid",
                       "description": "주문 종류\n- `bid`: 매수\n- `ask`: 매도",
-                      "enum": ["bid", "ask"]
+                      "enum": [
+                        "bid",
+                        "ask"
+                      ]
                     },
                     "order_type": {
                       "type": "string",
@@ -1308,7 +1402,13 @@
                       "description": "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID"
                     }
                   },
-                  "required": ["order_id", "market", "side", "order_type", "created_at"]
+                  "required": [
+                    "order_id",
+                    "market",
+                    "side",
+                    "order_type",
+                    "created_at"
+                  ]
                 }
               }
             }
@@ -1362,21 +1462,27 @@
               "code": "  public class POSTArgs {\n\n      public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n          String accessKey = \"발급받은 API KEY\";\n          String secretKey = \"발급받은 SECRET KEY\";\n          String apiUrl = \"https://api.bithumb.com\";\n\n          // Set API parameters\n          Map<String, Object> requestBody = new LinkedHashMap<>();\n          requestBody.put(\"market\", \"KRW-BTC\");\n          requestBody.put(\"side\", \"bid\");\n          requestBody.put(\"order_type\", \"limit\");\n          requestBody.put(\"price\", 84000000);\n          requestBody.put(\"volume\", 0.001);\n          requestBody.put(\"client_order_id\", \"my-order-001\");  // 사용자 지정 주문 ID (선택)\n\n          // Generate access token\n          String query = requestBody.entrySet().stream()\n                  .map(entry -> entry.getKey() + \"=\" + entry.getValue())\n                  .collect(Collectors.joining(\"&\"));\n          MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n          md.update(query.getBytes(StandardCharsets.UTF_8));\n          String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n          Algorithm algorithm = Algorithm.HMAC256(secretKey);\n          String jwtToken = JWT.create()\n                  .withClaim(\"access_key\", accessKey)\n                  .withClaim(\"nonce\", UUID.randomUUID().toString())\n                  .withClaim(\"timestamp\", System.currentTimeMillis())\n                  .withClaim(\"query_hash\", queryHash)\n                  .withClaim(\"query_hash_alg\", \"SHA512\")\n                  .sign(algorithm);\n          String authenticationToken = \"Bearer \" + jwtToken;\n\n          // Call API\n          final HttpPost httpRequest = new HttpPost(apiUrl + \"/v2/orders\");\n          httpRequest.addHeader(\"Authorization\", authenticationToken);\n          httpRequest.addHeader(\"Content-type\", \"application/json\");\n          httpRequest.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(requestBody), StandardCharsets.UTF_8));\n\n          try (CloseableHttpClient client = HttpClients.createDefault();\n               CloseableHttpResponse response = client.execute(httpRequest)) {\n              // handle to response\n              int httpStatus = response.getStatusLine().getStatusCode();\n              String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n              System.out.println(httpStatus);\n              System.out.println(responseBody);\n          } catch (Exception e) {\n              throw new RuntimeException(e);\n          }\n      }\n  }"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EC%9A%94%EC%B2%AD"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/주문-요청",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       }
     },
     "/v1/orders/batch": {
       "post": {
         "summary": "다건 주문 요청",
         "description": "여러 건의 주문을 한 번의 요청으로 생성합니다. 요청당 최대 20건까지 가능합니다.",
-        "operationId": "post-orders-batch",
+        "operationId": "create-orders-batch",
         "parameters": [
           {
             "in": "header",
@@ -1393,14 +1499,20 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["batch_orders"],
+                "required": [
+                  "batch_orders"
+                ],
                 "properties": {
                   "batch_orders": {
                     "type": "array",
                     "description": "다건 주문 목록(min 1, max 20)",
                     "items": {
                       "type": "object",
-                      "required": ["order_type", "side", "market"],
+                      "required": [
+                        "order_type",
+                        "side",
+                        "market"
+                      ],
                       "properties": {
                         "client_order_id": {
                           "type": "string",
@@ -1413,12 +1525,19 @@
                         "side": {
                           "type": "string",
                           "description": "주문 종류\n- `bid`: 매수\n- `ask`: 매도",
-                          "enum": ["bid", "ask"]
+                          "enum": [
+                            "bid",
+                            "ask"
+                          ]
                         },
                         "order_type": {
                           "type": "string",
                           "description": "주문 방식(구 `ord_type`)\n- `limit`: 지정가\n- `price`: 시장가(매수)\n- `market`: 시장가(매도)",
-                          "enum": ["limit", "price", "market"]
+                          "enum": [
+                            "limit",
+                            "price",
+                            "market"
+                          ]
                         },
                         "price": {
                           "type": "string",
@@ -1486,7 +1605,9 @@
                       }
                     }
                   },
-                  "required": ["batch_orders_response"]
+                  "required": [
+                    "batch_orders_response"
+                  ]
                 },
                 "examples": {
                   "OK": {
@@ -1542,7 +1663,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 },
                 "examples": {
                   "Bad Request": {
@@ -1577,21 +1700,27 @@
               "name": ""
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%8B%A4%EA%B1%B4-%EC%A3%BC%EB%AC%B8-%EC%9A%94%EC%B2%AD"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/다건-주문-요청",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       }
     },
     "/v1/orders/cancel": {
       "post": {
         "summary": "다건 주문 취소 접수",
         "description": "여러 개의 주문을 일괄 취소 요청합니다. 요청당 최대 30건까지 처리할 수 있습니다.",
-        "operationId": "post-orders-cancel",
+        "operationId": "cancel-orders",
         "parameters": [
           {
             "in": "header",
@@ -1689,7 +1818,10 @@
                       }
                     }
                   },
-                  "required": ["success", "fail"]
+                  "required": [
+                    "success",
+                    "fail"
+                  ]
                 },
                 "examples": {
                   "OK": {
@@ -1752,7 +1884,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 },
                 "examples": {
                   "Bad Request": {
@@ -1789,7 +1923,9 @@
                       }
                     }
                   },
-                  "required": ["error"]
+                  "required": [
+                    "error"
+                  ]
                 },
                 "examples": {
                   "422": {
@@ -1824,21 +1960,27 @@
               "name": ""
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%8B%A4%EA%B1%B4-%EC%A3%BC%EB%AC%B8-%EC%B7%A8%EC%86%8C-%EC%A0%91%EC%88%98"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/다건-주문-취소-접수",
-        "tags": ["주문"]
+        "tags": [
+          "주문"
+        ]
       }
     },
     "/v1/twap": {
       "get": {
         "summary": "TWAP 주문 내역 조회",
         "description": "주문 목록을 조회합니다.",
-        "operationId": "get-twap-orders",
+        "operationId": "list-twap-orders",
         "parameters": [
           {
             "name": "Authorization",
@@ -1900,7 +2042,10 @@
             "description": "정렬방식",
             "schema": {
               "type": "string",
-              "enum": ["asc", "desc"],
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "default": "desc",
               "format": "string"
             }
@@ -2065,9 +2210,15 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport com.fasterxml.jackson.databind.ObjectMapper; // JSON 파싱을 위해 추가\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\nimport java.util.stream.Collectors;\n\npublic class TwapOrderQueryClient {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";   // 실제 발급받은 Access Key로 변경\n        String secretKey = \"발급받은 SECRET KEY\"; // 실제 발급받은 Secret Key로 변경\n        String apiUrl = \"https://api.bithumb.com\";\n        String twapQueryEndpoint = \"/v1/twap\"; // TWAP 주문내역 조회 엔드포인트\n\n        // --- 1. TWAP 주문내역 조회 파라미터 설정 (명세 반영) ---\n        // 기본 파라미터 (map 대신 List<NameValuePair> 사용)\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"market\", \"KRW-BTC\")); // 마켓 ID\n        queryParams.add(new BasicNameValuePair(\"state\", \"progress\")); // TWAP 주문 상태 (progress, done, cancel)\n        queryParams.add(new BasicNameValuePair(\"limit\", \"50\"));\n        queryParams.add(new BasicNameValuePair(\"order_by\", \"desc\"));\n        // queryParams.add(new BasicNameValuePair(\"next_key\", \"커서값\")); // 페이지네이션 커서\n\n        // TWAP 주문 ID 목록 (uuids)\n        List<String> uuids = new ArrayList<>();\n        uuids.add(\"TWAP-A01B02C03D04E05F06\");\n        uuids.add(\"TWAP-002-DONE\");\n        \n        // uuids 배열을 'uuids[]=' 형태로 쿼리 문자열에 추가\n        // Note: URLEncodedUtils.format은 Map이 아닌 List<NameValuePair>만 처리하므로,\n        // uuids[]는 별도의 문자열로 구성해야 합니다.\n        String uuidQuery = uuids.stream()\n                .map(uuid -> \"uuids[]=\" + uuid)\n                .collect(Collectors.joining(\"&\"));\n        \n        // --- 2. JWT 토큰 생성 ---\n        // 쿼리 문자열 인코딩 및 합치기 (서명에 사용)\n        String baseQuery = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        String finalQuery = baseQuery;\n        \n        if (!uuidQuery.isEmpty()) {\n             finalQuery = finalQuery + \"&\" + uuidQuery;\n        }\n\n        // SHA-512 해시 생성\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(finalQuery.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        \n        // JWT 페이로드 및 토큰 생성\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // --- 3. API 호출 (GET 메서드 및 TWAP 엔드포인트 사용) ---\n        // 최종 쿼리 문자열을 URL에 추가\n        final HttpGet httpRequest = new HttpGet(apiUrl + twapQueryEndpoint + \"?\" + finalQuery);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            \n            // 응답 처리\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            \n            System.out.println(\"--- TWAP 주문내역 조회 요청 결과 ---\");\n            System.out.println(\"상태 코드: \" + httpStatus);\n            System.out.println(\"응답 본문: \" + responseBody);\n            \n            if (httpStatus >= 200 && httpStatus < 300) {\n                 ObjectMapper mapper = new ObjectMapper();\n                 Map<String, Object> responseMap = mapper.readValue(responseBody, Map.class);\n                 List<?> dataList = (List<?>) responseMap.get(\"data\");\n                 \n                 if (dataList != null) {\n                     System.out.println(\"조회된 TWAP 주문 건수: \" + dataList.size());\n                 }\n            }\n        } catch (Exception e) {\n            throw new RuntimeException(\"API 요청 처리 중 예외 발생\", e);\n        }\n    }\n}"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
-        "tags": ["TWAP"]
+        "tags": [
+          "TWAP"
+        ]
       },
       "delete": {
         "summary": "TWAP 주문 취소",
@@ -2116,7 +2267,9 @@
                         "description": "취소된 TWAP 주문 ID"
                       }
                     },
-                    "required": ["algo_order_id"]
+                    "required": [
+                      "algo_order_id"
+                    ]
                   }
                 }
               }
@@ -2169,9 +2322,15 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpDelete; // HttpDelete 사용\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\n\npublic class TwapOrderCancelClient {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";   // 실제 발급받은 Access Key로 변경\n        String secretKey = \"발급받은 SECRET KEY\"; // 실제 발급받은 Secret Key로 변경\n        String apiUrl = \"https://api.bithumb.com\";\n        String twapCancelEndpoint = \"/v1/twap\"; // TWAP 주문 취소 엔드포인트\n\n        // --- 1. TWAP 주문 취소 파라미터 설정 (명세 반영) ---\n        List<NameValuePair> queryParams = new ArrayList<>();\n        // 'uuid' 대신 'algo_order_id' 사용\n        queryParams.add(new BasicNameValuePair(\"algo_order_id\", \"TWAP-A01B02C03D04E05F06\")); // 취소할 실제 TWAP 주문 ID로 변경\n\n        // --- 2. JWT 토큰 생성 ---\n        // 쿼리 문자열 인코딩 (서명에 사용)\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        \n        // SHA-512 해시 생성\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        \n        // JWT 페이로드 및 토큰 생성\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // --- 3. API 호출 (DELETE 메서드 및 TWAP 엔드포인트 사용) ---\n        // DELETE 요청 시 파라미터를 쿼리 문자열로 URL에 추가\n        final HttpDelete httpDeleteRequest = new HttpDelete(apiUrl + twapCancelEndpoint + \"?\" + query);\n        httpDeleteRequest.addHeader(\"Authorization\", authenticationToken);\n        // DELETE 요청은 Body가 없으므로 Content-Type 헤더는 필수가 아닐 수 있습니다.\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpDeleteRequest)) {\n            \n            // 응답 처리\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            \n            System.out.println(\"--- TWAP 주문 취소 요청 결과 ---\");\n            System.out.println(\"상태 코드: \" + httpStatus);\n            System.out.println(\"응답 본문: \" + responseBody);\n            \n            // 응답에 algo_order_id가 포함되어 있는지 확인 (JSON 파싱 로직 추가 필요)\n            // if (httpStatus == 200) { ... }\n            \n        } catch (IOException | RuntimeException e) {\n            throw new RuntimeException(\"API 요청 처리 중 예외 발생\", e);\n        }\n    }\n}"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
-        "tags": ["TWAP"]
+        "tags": [
+          "TWAP"
+        ]
       },
       "post": {
         "summary": "TWAP 주문하기",
@@ -2265,7 +2424,9 @@
                         "description": "TWAP 주문 ID"
                       }
                     },
-                    "required": ["algo_order_id"]
+                    "required": [
+                      "algo_order_id"
+                    ]
                   }
                 }
               }
@@ -2318,16 +2479,22 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpPost;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.entity.StringEntity;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind\nimport com.fasterxml.jackson.databind.ObjectMapper;\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\nimport java.util.stream.Collectors;\n\npublic class TwapOrderClient {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";   // 실제 발급받은 Access Key로 변경\n        String secretKey = \"발급받은 SECRET KEY\"; // 실제 발급받은 Secret Key로 변경\n        String apiUrl = \"https://api.bithumb.com\";\n        String twapEndpoint = \"/v1/twap\"; // TWAP 주문 엔드포인트\n\n        // --- 1. TWAP 주문 파라미터 설정 (명세 반영) ---\n        // 모든 NumberString 타입 필드는 String으로 전달되도록 Map에 String 값을 사용합니다.\n        Map<String, String> requestBody = new LinkedHashMap<>();\n        requestBody.put(\"market\", \"KRW-BTC\");\n        requestBody.put(\"side\", \"bid\");\n        requestBody.put(\"volume\", \"0.5\");       // 총 주문량 (NumberString)\n        requestBody.put(\"price\", \"100000000\");  // 주문 가격 (NumberString)\n        requestBody.put(\"duration\", \"3600\");    // TWAP 주문 총 시간 (필수, NumberString)\n        requestBody.put(\"frequency\", \"60\");     // TWAP 주문 간격 (필수, NumberString)\n\n        // --- 2. JWT 토큰 생성 ---\n        // 쿼리 파라미터 생성 (JWT 서명은 쿼리 문자열 기반으로 해시를 생성해야 함)\n        List<BasicNameValuePair> queryParams = requestBody.entrySet().stream()\n                .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))\n                .collect(Collectors.toList());\n\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        \n        // SHA-512 해시 생성\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        \n        // JWT 알고리즘 설정 (Bithumb은 HMAC256이 아니라 HMAC512로 알고리즘을 사용하기도 함. \n        // 여기서는 예시와 같이 HMAC256을 사용하되, 실제 거래소 문서를 확인해야 합니다.)\n        Algorithm algorithm = Algorithm.HMAC256(secretKey); \n        \n        // JWT 페이로드 및 토큰 생성\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // --- 3. API 호출 (TWAP 엔드포인트 사용) ---\n        final HttpPost httpRequest = new HttpPost(apiUrl + twapEndpoint);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n        httpRequest.addHeader(\"Content-type\", \"application/json\");\n\n        // 요청 본문 (requestBody)은 JSON 형태로 변환하여 엔티티에 설정\n        String jsonBody = new ObjectMapper().writeValueAsString(requestBody);\n        httpRequest.setEntity(new StringEntity(jsonBody, StandardCharsets.UTF_8));\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            \n            // 응답 처리\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            \n            System.out.println(\"--- TWAP 주문 요청 결과 ---\");\n            System.out.println(\"상태 코드: \" + httpStatus);\n            System.out.println(\"응답 본문: \" + responseBody);\n            \n            // Response 명세: algo_order_id 추출 (Jackson ObjectMapper 사용 가정)\n            if (httpStatus >= 200 && httpStatus < 300) {\n                 ObjectMapper mapper = new ObjectMapper();\n                 Map<String, Object> responseMap = mapper.readValue(responseBody, Map.class);\n                 String algoOrderId = (String) responseMap.get(\"algo_order_id\");\n                 if (algoOrderId != null) {\n                     System.out.println(\"TWAP 주문 ID (algo_order_id): \" + algoOrderId);\n                 }\n            }\n        } catch (Exception e) {\n            throw new RuntimeException(\"API 요청 중 예외 발생\", e);\n        }\n    }\n}"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
-        "tags": ["TWAP"]
+        "tags": [
+          "TWAP"
+        ]
       }
     },
     "/v1/withdraws": {
       "get": {
         "summary": "코인 출금 리스트 조회",
         "description": "가상자산 출금 목록을 조회합니다.",
-        "operationId": "get-withdraws",
+        "operationId": "list-withdraws",
         "parameters": [
           {
             "name": "currency",
@@ -2512,21 +2679,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\n\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\nimport java.util.stream.Collectors;\n\npublic class GETArgsArray {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"currency\", \"XRP\"));\n        queryParams.add(new BasicNameValuePair(\"limit\", \"100\"));\n        queryParams.add(new BasicNameValuePair(\"page\", \"1\"));\n        queryParams.add(new BasicNameValuePair(\"order_by\", \"desc\"));\n        List<String> uuids = new ArrayList<>();\n        uuids.add(\"200268229\");\n        uuids.add(\"200268132\");\n        String uuidQuery = uuids.stream().map(uuid -> \"uuids[]=\" + uuid).collect(Collectors.joining(\"&\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        if (uuidQuery.isEmpty()) {\n            query = query + \"&\" + uuidQuery;\n        }\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/withdraws?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%B6%9C%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/출금-리스트-조회",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       }
     },
     "/v1/withdraws/krw": {
       "get": {
         "summary": "원화 출금 리스트 조회",
         "description": "원화 출금 목록을 조회합니다.",
-        "operationId": "get-withdraws-krw",
+        "operationId": "list-withdraws-krw",
         "parameters": [
           {
             "name": "state",
@@ -2706,19 +2879,25 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\n\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\nimport java.util.stream.Collectors;\n\npublic class GETArgsArray {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"limit\", \"100\"));\n        queryParams.add(new BasicNameValuePair(\"page\", \"1\"));\n        queryParams.add(new BasicNameValuePair(\"order_by\", \"desc\"));\n        List<String> uuids = new ArrayList<>();\n        uuids.add(\"12704033\");\n        uuids.add(\"12812333\");\n        String uuidQuery = uuids.stream().map(uuid -> \"uuids[]=\" + uuid).collect(Collectors.joining(\"&\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        if (uuidQuery.isEmpty()) {\n            query = query + \"&\" + uuidQuery;\n        }\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/withdraws/krw?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%B6%9C%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/원화-출금-리스트-조회",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       },
       "post": {
         "summary": "원화 출금하기",
         "description": "등록된 출금 계좌로 원화 출금을 요청합니다.",
-        "operationId": "post-withdraws-krw",
+        "operationId": "create-withdraws-krw",
         "parameters": [
           {
             "name": "Authorization",
@@ -2735,7 +2914,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["amount", "two_factor_type"],
+                "required": [
+                  "amount",
+                  "two_factor_type"
+                ],
                 "properties": {
                   "amount": {
                     "type": "string",
@@ -2853,14 +3035,20 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpPost;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.entity.StringEntity;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\nimport com.fasterxml.jackson.databind.ObjectMapper;\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\n\npublic class POSTArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        Map<String, Object> requestBody = new LinkedHashMap<>();\n        requestBody.put(\"amount\", 60000);\n        requestBody.put(\"two_factor_type\", \"kakao\");\n\n        // Generate access token\n        List<BasicNameValuePair> queryParams = requestBody.entrySet().stream()\n                .map(entry -> new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())))\n                .toList();\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpPost httpRequest = new HttpPost(apiUrl + \"/v1/withdraws/krw\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n        httpRequest.addHeader(\"Content-type\", \"application/json\");\n        httpRequest.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(requestBody), StandardCharsets.UTF_8));\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%B6%9C%EA%B8%88%ED%95%98%EA%B8%B0"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/원화-출금하기",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       }
     },
     "/v1/withdraw": {
@@ -3010,21 +3198,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\n\npublic class GETArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"currency\", \"MTL\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/withdraw?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%B6%9C%EA%B8%88-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/개별-출금-조회",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       }
     },
     "/v1/withdraws/chance": {
       "get": {
         "summary": "출금 가능 정보",
         "description": "해당 통화의 출금 가능 정보를 조회합니다.",
-        "operationId": "get-withdraws-chance",
+        "operationId": "get-withdraw-chance",
         "parameters": [
           {
             "name": "Authorization",
@@ -3230,21 +3424,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\n\npublic class GETArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"currency\", \"BTC\"));\n        queryParams.add(new BasicNameValuePair(\"net_type\", \"BTC\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/withdraws/chance?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%B6%9C%EA%B8%88-%EA%B0%80%EB%8A%A5-%EC%A0%95%EB%B3%B4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/출금-가능-정보",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       }
     },
     "/v1/withdraws/coin": {
       "post": {
         "summary": "가상 자산 출금하기",
         "description": "가상 자산 출금을 요청합니다.",
-        "operationId": "post-withdraws-coin",
+        "operationId": "create-withdraws-coin",
         "parameters": [
           {
             "name": "Authorization",
@@ -3261,7 +3461,12 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["currency", "net_type", "amount", "address"],
+                "required": [
+                  "currency",
+                  "net_type",
+                  "amount",
+                  "address"
+                ],
                 "properties": {
                   "currency": {
                     "type": "string",
@@ -3416,21 +3621,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpPost;\nimport org.apache.http.entity.StringEntity;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.util.EntityUtils;\nimport com.fasterxml.jackson.databind.ObjectMapper;\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.LinkedHashMap;\nimport java.util.Map;\nimport java.util.UUID;\n\npublic class POSTArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        Map<String, Object> requestBody = new LinkedHashMap<>();\n        requestBody.put(\"currency\", \"XRP\");\n        requestBody.put(\"net_type\", \"XRP\");\n        requestBody.put(\"amount\", 100);\n        requestBody.put(\"address\", \"출금 주소\");\n        requestBody.put(\"secondary_address\", \"2차 출금 주소\");\n\n        // Generate access token\n        String query = requestBody.entrySet().stream()\n        .map(entry -> entry.getKey() + \"=\" + entry.getValue())\n        .collect(java.util.stream.Collectors.joining(\"&\"));\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpPost httpRequest = new HttpPost(apiUrl + \"/v1/withdraws/coin\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n        httpRequest.addHeader(\"Content-type\", \"application/json\");\n        httpRequest.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(requestBody), StandardCharsets.UTF_8));\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%94%94%EC%A7%80%ED%84%B8-%EC%9E%90%EC%82%B0-%EC%B6%9C%EA%B8%88%ED%95%98%EA%B8%B0"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/디지털-자산-출금하기",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       }
     },
     "/v1/withdraws/coin_addresses": {
       "get": {
         "summary": "출금 허용 주소 리스트 조회",
         "description": "등록된 출금 허용 주소(100만원 이상 출금 가능한 주소) 리스트를 조회합니다.",
-        "operationId": "get-withdraws-coin-addresses",
+        "operationId": "list-withdraws-coin-addresses",
         "parameters": [
           {
             "name": "Authorization",
@@ -3542,21 +3753,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.util.EntityUtils;\n\nimport java.nio.charset.StandardCharsets;\nimport java.util.UUID;\n\npublic class GETNoArgs {\n\n    public static void main(String[] args) {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Generate access token\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/withdraws/coin_addresses\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%B6%9C%EA%B8%88-%ED%97%88%EC%9A%A9-%EC%A3%BC%EC%86%8C-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/출금-허용-주소-리스트-조회",
-        "tags": ["출금"]
+        "tags": [
+          "출금"
+        ]
       }
     },
     "/v1/deposits": {
       "get": {
         "summary": "코인 입금 리스트 조회",
         "description": "가상자산 입금 목록을 조회합니다.",
-        "operationId": "get-deposits",
+        "operationId": "list-deposits",
         "parameters": [
           {
             "name": "currency",
@@ -3741,21 +3958,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\n\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\nimport java.util.stream.Collectors;\n\npublic class GETArgsArray {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"currency\", \"XRP\"));\n        queryParams.add(new BasicNameValuePair(\"limit\", \"100\"));\n        queryParams.add(new BasicNameValuePair(\"page\", \"1\"));\n        queryParams.add(new BasicNameValuePair(\"order_by\", \"desc\"));\n        List<String> uuids = new ArrayList<>();\n        uuids.add(\"202603087\");\n        uuids.add(\"202601491\");\n        String uuidQuery = uuids.stream().map(uuid -> \"uuids[]=\" + uuid).collect(Collectors.joining(\"&\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        if (uuidQuery.isEmpty()) {\n            query = query + \"&\" + uuidQuery;\n        }\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/deposits?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9E%85%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/입금-리스트-조회",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       }
     },
     "/v1/deposits/krw": {
       "get": {
         "summary": "원화 입금 리스트 조회",
         "description": "원화 입금 목록을 조회합니다.",
-        "operationId": "get-deposits-krw",
+        "operationId": "list-deposits-krw",
         "parameters": [
           {
             "name": "state",
@@ -3855,7 +4078,11 @@
                       "state": {
                         "type": "string",
                         "description": "입금 상태",
-                        "enum": ["PROCESSING", "ACCEPTED", "CANCELED"]
+                        "enum": [
+                          "PROCESSING",
+                          "ACCEPTED",
+                          "CANCELED"
+                        ]
                       },
                       "created_at": {
                         "type": "string",
@@ -3876,7 +4103,9 @@
                       "transaction_type": {
                         "type": "string",
                         "description": "입금 유형",
-                        "enum": ["default"]
+                        "enum": [
+                          "default"
+                        ]
                       }
                     }
                   }
@@ -3936,19 +4165,25 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\n\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\nimport java.util.stream.Collectors;\n\npublic class GETArgsArray {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"limit\", \"100\"));\n        queryParams.add(new BasicNameValuePair(\"page\", \"1\"));\n        queryParams.add(new BasicNameValuePair(\"order_by\", \"desc\"));\n        List<String> uuids = new ArrayList<>();\n        uuids.add(\"15371593\");\n        uuids.add(\"15371592\");\n        String uuidQuery = uuids.stream().map(uuid -> \"uuids[]=\" + uuid).collect(Collectors.joining(\"&\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        if (uuidQuery.isEmpty()) {\n            query = query + \"&\" + uuidQuery;\n        }\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/deposits/krw?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%9E%85%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/원화-입금-리스트-조회",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       },
       "post": {
         "summary": "원화 입금하기",
         "description": "원화 입금을 요청합니다.",
-        "operationId": "post-deposits-krw",
+        "operationId": "create-deposits-krw",
         "parameters": [
           {
             "name": "Authorization",
@@ -3965,7 +4200,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["amount", "two_factor_type"],
+                "required": [
+                  "amount",
+                  "two_factor_type"
+                ],
                 "properties": {
                   "amount": {
                     "type": "string",
@@ -4083,14 +4321,20 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpPost;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.entity.StringEntity;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\nimport com.fasterxml.jackson.databind.ObjectMapper;\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\n\npublic class POSTArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        Map<String, Object> requestBody = new LinkedHashMap<>();\n        requestBody.put(\"amount\", 60000);\n        requestBody.put(\"two_factor_type\", \"kakao\");\n\n        // Generate access token\n        List<BasicNameValuePair> queryParams = requestBody.entrySet().stream()\n                .map(entry -> new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())))\n                .toList();\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpPost httpRequest = new HttpPost(apiUrl + \"/v1/deposits/krw\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n        httpRequest.addHeader(\"Content-type\", \"application/json\");\n        httpRequest.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(requestBody), StandardCharsets.UTF_8));\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%9E%85%EA%B8%88%ED%95%98%EA%B8%B0"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/원화-입금하기",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       }
     },
     "/v1/deposit": {
@@ -4240,21 +4484,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\n\npublic class GETArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"currency\", \"BTC\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/deposit?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%9E%85%EA%B8%88-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/개별-입금-조회",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       }
     },
     "/v1/deposits/generate_coin_address": {
       "post": {
         "summary": "입금 주소 생성 요청",
         "description": "입금 주소 생성을 요청합니다.",
-        "operationId": "post-deposits-generate-coin-address",
+        "operationId": "create-deposit-address",
         "parameters": [
           {
             "name": "Authorization",
@@ -4271,7 +4521,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["currency", "net_type"],
+                "required": [
+                  "currency",
+                  "net_type"
+                ],
                 "properties": {
                   "currency": {
                     "type": "string",
@@ -4364,21 +4617,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpPost;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.entity.StringEntity;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\nimport com.fasterxml.jackson.databind.ObjectMapper;\n\nimport java.io.IOException;\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.LinkedHashMap;\nimport java.util.List;\nimport java.util.Map;\nimport java.util.UUID;\n\npublic class POSTArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        Map<String, Object> requestBody = new LinkedHashMap<>();\n        requestBody.put(\"currency\", \"KLAY\");\n        requestBody.put(\"net_type\", \"KLAY\");\n\n        // Generate access token\n        List<BasicNameValuePair> queryParams = requestBody.entrySet().stream()\n                .map(entry -> new BasicNameValuePair(entry.getKey(), String.valueOf(entry.getValue())))\n                .toList();\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpPost httpRequest = new HttpPost(apiUrl + \"/v1/deposits/generate_coin_address\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n        httpRequest.addHeader(\"Content-type\", \"application/json\");\n        httpRequest.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(requestBody), StandardCharsets.UTF_8));\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9E%85%EA%B8%88-%EC%A3%BC%EC%86%8C-%EC%83%9D%EC%84%B1-%EC%9A%94%EC%B2%AD"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/입금-주소-생성-요청",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       }
     },
     "/v1/deposits/coin_addresses": {
       "get": {
         "summary": "전체 입금 주소 조회",
         "description": "전체 입금 주소를 조회합니다.",
-        "operationId": "get-deposits-coin-addresses",
+        "operationId": "list-deposits-coin-addresses",
         "parameters": [
           {
             "name": "Authorization",
@@ -4471,14 +4730,20 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.util.EntityUtils;\n\nimport java.nio.charset.StandardCharsets;\nimport java.util.UUID;\n\npublic class GETNoArgs {\n\n    public static void main(String[] args) {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Generate access token\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/deposits/coin_addresses\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A0%84%EC%B2%B4-%EC%9E%85%EA%B8%88-%EC%A3%BC%EC%86%8C-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/전체-입금-주소-조회",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       }
     },
     "/v1/deposits/coin_address": {
@@ -4596,21 +4861,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.NameValuePair;\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.client.utils.URLEncodedUtils;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.message.BasicNameValuePair;\nimport org.apache.http.util.EntityUtils;\n\nimport java.math.BigInteger;\nimport java.nio.charset.StandardCharsets;\nimport java.security.MessageDigest;\nimport java.security.NoSuchAlgorithmException;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.UUID;\n\npublic class GETArgs {\n\n    public static void main(String[] args) throws NoSuchAlgorithmException {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Set API parameters\n        List<NameValuePair> queryParams = new ArrayList<>();\n        queryParams.add(new BasicNameValuePair(\"currency\", \"BTC\"));\n        queryParams.add(new BasicNameValuePair(\"net_type\", \"BTC\"));\n\n        // Generate access token\n        String query = URLEncodedUtils.format(queryParams, StandardCharsets.UTF_8);\n        MessageDigest md = MessageDigest.getInstance(\"SHA-512\");\n        md.update(query.getBytes(StandardCharsets.UTF_8));\n        String queryHash = String.format(\"%0128x\", new BigInteger(1, md.digest()));\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .withClaim(\"query_hash\", queryHash)\n                .withClaim(\"query_hash_alg\", \"SHA512\")\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/deposits/coin_address?\" + query);\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%9E%85%EA%B8%88-%EC%A3%BC%EC%86%8C-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/개별-입금-주소-조회",
-        "tags": ["입금"]
+        "tags": [
+          "입금"
+        ]
       }
     },
     "/v1/status/wallet": {
       "get": {
         "summary": "입출금 현황",
         "description": "입출금 현황과 블록 상태를 조회합니다.",
-        "operationId": "get-status-wallet",
+        "operationId": "get-wallet-status",
         "parameters": [
           {
             "name": "Authorization",
@@ -4724,21 +4995,27 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.util.EntityUtils;\n\nimport java.nio.charset.StandardCharsets;\nimport java.util.UUID;\n\npublic class GETNoArgs {\n\n    public static void main(String[] args) {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Generate access token\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/status/wallet\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9E%85%EC%B6%9C%EA%B8%88-%ED%98%84%ED%99%A9"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/입출금-현황",
-        "tags": ["서비스 정보"]
+        "tags": [
+          "서비스 정보"
+        ]
       }
     },
     "/v1/api_keys": {
       "get": {
         "summary": "API 키 리스트 조회",
         "description": "API 키 리스트와 만료 일자를 조회합니다.",
-        "operationId": "get-api-keys",
+        "operationId": "list-api-keys",
         "parameters": [
           {
             "name": "Authorization",
@@ -4826,14 +5103,20 @@
               "code": "package com.example.sample;\n\n// https://mvnrepository.com/artifact/com.auth0/java-jwt\nimport com.auth0.jwt.JWT;\nimport com.auth0.jwt.algorithms.Algorithm;\n// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient\nimport org.apache.http.client.methods.CloseableHttpResponse;\nimport org.apache.http.client.methods.HttpGet;\nimport org.apache.http.impl.client.CloseableHttpClient;\nimport org.apache.http.impl.client.HttpClients;\nimport org.apache.http.util.EntityUtils;\n\nimport java.nio.charset.StandardCharsets;\nimport java.util.UUID;\n\npublic class GETNoArgs {\n\n    public static void main(String[] args) {\n        String accessKey = \"발급받은 API KEY\";\n        String secretKey = \"발급받은 SECRET KEY\";\n        String apiUrl = \"https://api.bithumb.com\";\n\n        // Generate access token\n        Algorithm algorithm = Algorithm.HMAC256(secretKey);\n        String jwtToken = JWT.create()\n                .withClaim(\"access_key\", accessKey)\n                .withClaim(\"nonce\", UUID.randomUUID().toString())\n                .withClaim(\"timestamp\", System.currentTimeMillis())\n                .sign(algorithm);\n        String authenticationToken = \"Bearer \" + jwtToken;\n\n        // Call API\n        final HttpGet httpRequest = new HttpGet(apiUrl + \"/v1/api_keys\");\n        httpRequest.addHeader(\"Authorization\", authenticationToken);\n\n        try (CloseableHttpClient client = HttpClients.createDefault();\n             CloseableHttpResponse response = client.execute(httpRequest)) {\n            // handle to response\n            int httpStatus = response.getStatusLine().getStatusCode();\n            String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);\n            System.out.println(httpStatus);\n            System.out.println(responseBody);\n        } catch (Exception e) {\n            throw new RuntimeException(e);\n        }\n    }\n}\n"
             }
           ],
-          "samples-languages": ["javascript", "python", "java"]
+          "samples-languages": [
+            "javascript",
+            "python",
+            "java"
+          ]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/api-%ED%82%A4-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/api-키-리스트-조회",
-        "tags": ["서비스 정보"]
+        "tags": [
+          "서비스 정보"
+        ]
       }
     }
   },

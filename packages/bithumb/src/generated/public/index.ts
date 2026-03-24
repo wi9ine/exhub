@@ -12,25 +12,25 @@ import type {
 } from 'axios';
 
 import type {
-  Day200Item,
-  DayParams,
+  GetDayCandles200Item,
+  GetDayCandlesParams,
   GetFeeInfo200Item,
-  GetMarketAll200Item,
-  GetMarketAllParams,
   GetMarketVirtualAssetWarning200Item,
-  GetNotices200Item,
+  GetMarkets200Item,
+  GetMarketsParams,
+  GetMinuteCandles200Item,
+  GetMinuteCandlesParams,
+  GetMonthCandles200Item,
+  GetMonthCandlesParams,
   GetOrderbook200Item,
   GetOrderbookParams,
   GetTicker200Item,
   GetTickerParams,
-  GetTradesTicks200Item,
-  GetTradesTicksParams,
-  Minute200Item,
-  MinuteParams,
-  Month200Item,
-  MonthParams,
-  Week200Item,
-  WeekParams
+  GetWeekCandles200Item,
+  GetWeekCandlesParams,
+  ListNotices200Item,
+  ListTradesTicks200Item,
+  ListTradesTicksParams
 } from './model';
 
 
@@ -40,9 +40,9 @@ import type {
  * 빗썸에서 거래 가능한 마켓과 가상자산 정보를 제공합니다.
  * @summary 마켓 코드 조회
  */
-export const getMarketAll = (
-    params?: GetMarketAllParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetMarketAll200Item[]>> => {
+export const getMarkets = (
+    params?: GetMarketsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetMarkets200Item[]>> => {
     return axios.get(
       `/v1/market/all`,{
     ...options,
@@ -53,10 +53,10 @@ export const getMarketAll = (
 /**
  * @summary 분(Minute) 캔들
  */
-export const minute = (
-    params: MinuteParams,
+export const getMinuteCandles = (
+    params: GetMinuteCandlesParams,
     unit: number = 1, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Minute200Item[]>> => {
+ ): Promise<AxiosResponse<GetMinuteCandles200Item[]>> => {
     return axios.get(
       `/v1/candles/minutes/${unit}`,{
     ...options,
@@ -67,9 +67,9 @@ export const minute = (
 /**
  * @summary 일(Day) 캔들
  */
-export const day = (
-    params: DayParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Day200Item[]>> => {
+export const getDayCandles = (
+    params: GetDayCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetDayCandles200Item[]>> => {
     return axios.get(
       `/v1/candles/days`,{
     ...options,
@@ -80,9 +80,9 @@ export const day = (
 /**
  * @summary 주(Week) 캔들
  */
-export const week = (
-    params: WeekParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Week200Item[]>> => {
+export const getWeekCandles = (
+    params: GetWeekCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetWeekCandles200Item[]>> => {
     return axios.get(
       `/v1/candles/weeks`,{
     ...options,
@@ -93,9 +93,9 @@ export const week = (
 /**
  * @summary 월(Month) 캔들
  */
-export const month = (
-    params: MonthParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Month200Item[]>> => {
+export const getMonthCandles = (
+    params: GetMonthCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetMonthCandles200Item[]>> => {
     return axios.get(
       `/v1/candles/months`,{
     ...options,
@@ -106,9 +106,9 @@ export const month = (
 /**
  * @summary 최근 체결 내역
  */
-export const getTradesTicks = (
-    params: GetTradesTicksParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetTradesTicks200Item[]>> => {
+export const listTradesTicks = (
+    params: ListTradesTicksParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTradesTicks200Item[]>> => {
     return axios.get(
       `/v1/trades/ticks`,{
     ...options,
@@ -159,9 +159,9 @@ export const getMarketVirtualAssetWarning = (
  * 빗썸 공지사항을 조회합니다.
  * @summary 공지사항 조회
  */
-export const getNotices = (
+export const listNotices = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetNotices200Item[]>> => {
+ ): Promise<AxiosResponse<ListNotices200Item[]>> => {
     return axios.get(
       `/v1/notices`,options
     );
@@ -178,14 +178,14 @@ export const getFeeInfo = (
     );
   }
 
-export type GetMarketAllResult = AxiosResponse<GetMarketAll200Item[]>
-export type MinuteResult = AxiosResponse<Minute200Item[]>
-export type DayResult = AxiosResponse<Day200Item[]>
-export type WeekResult = AxiosResponse<Week200Item[]>
-export type MonthResult = AxiosResponse<Month200Item[]>
-export type GetTradesTicksResult = AxiosResponse<GetTradesTicks200Item[]>
+export type GetMarketsResult = AxiosResponse<GetMarkets200Item[]>
+export type GetMinuteCandlesResult = AxiosResponse<GetMinuteCandles200Item[]>
+export type GetDayCandlesResult = AxiosResponse<GetDayCandles200Item[]>
+export type GetWeekCandlesResult = AxiosResponse<GetWeekCandles200Item[]>
+export type GetMonthCandlesResult = AxiosResponse<GetMonthCandles200Item[]>
+export type ListTradesTicksResult = AxiosResponse<ListTradesTicks200Item[]>
 export type GetTickerResult = AxiosResponse<GetTicker200Item[]>
 export type GetOrderbookResult = AxiosResponse<GetOrderbook200Item[]>
 export type GetMarketVirtualAssetWarningResult = AxiosResponse<GetMarketVirtualAssetWarning200Item[]>
-export type GetNoticesResult = AxiosResponse<GetNotices200Item[]>
+export type ListNoticesResult = AxiosResponse<ListNotices200Item[]>
 export type GetFeeInfoResult = AxiosResponse<GetFeeInfo200Item[]>

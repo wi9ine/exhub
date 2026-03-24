@@ -7,7 +7,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { createUpbitClient } from "../src";
 import type { ListDeposits200Item } from "../src/generated/exchange/model/listDeposits200Item";
-import type { ListTravelruleVasps200Item } from "../src/generated/exchange/model/listTravelruleVasps200Item";
+import type { ListTravelRuleVasps200Item } from "../src/generated/exchange/model/listTravelRuleVasps200Item";
 import type { ListWithdrawals200Item } from "../src/generated/exchange/model/listWithdrawals200Item";
 
 const envPath = resolve(fileURLToPath(new URL(".", import.meta.url)), "../../../.env.local");
@@ -28,7 +28,7 @@ describe("upbit private integration", () => {
   let depositContext: ListDeposits200Item | undefined;
   let withdrawalContext: ListWithdrawals200Item | undefined;
   let orderContext: { uuid?: string } | undefined;
-  let travelRuleVasp: ListTravelruleVasps200Item | undefined;
+  let travelRuleVasp: ListTravelRuleVasps200Item | undefined;
   let travelRuleVaspUuid: string | undefined;
 
   beforeAll(async () => {
@@ -56,18 +56,18 @@ describe("upbit private integration", () => {
     const withdrawals = await client.withdrawals.listWithdrawals();
     withdrawalContext = withdrawals[0];
 
-    const vasps = await client.travelRule.listTravelruleVasps();
+    const vasps = await client.travelRule.listTravelRuleVasps();
     travelRuleVasp = vasps[0];
     travelRuleVaspUuid = travelRuleVasp?.vasp_uuid;
   });
 
   testIf("계정 잔고 조회", async () => {
-    const balances = await client.assets.getBalance();
+    const balances = await client.assets.listBalance();
     expect(Array.isArray(balances)).toBe(true);
   });
 
   testIf("페어별 주문 가능 정보 조회", async () => {
-    const result = await client.orders.availableOrderInformation({ market });
+    const result = await client.orders.getOrderChance({ market });
     expect(result).toBeTruthy();
     expect("market" in result).toBe(true);
   });
@@ -107,7 +107,7 @@ describe("upbit private integration", () => {
       context.skip();
       return;
     }
-    const result = await client.withdrawals.availableWithdrawalInformation({
+    const result = await client.withdrawals.getWithdrawChance({
       currency: withdrawalContext.currency,
       ...(withdrawalContext.net_type ? { net_type: withdrawalContext.net_type } : {}),
     });
@@ -134,7 +134,7 @@ describe("upbit private integration", () => {
       context.skip();
       return;
     }
-    const result = await client.deposits.availableDepositInformation({
+    const result = await client.deposits.getDepositChance({
       currency: depositContext.currency,
       net_type: depositContext.net_type,
     });
@@ -169,7 +169,7 @@ describe("upbit private integration", () => {
   });
 
   testIf("트래블룰 지원 거래소 목록 조회", async () => {
-    const vasps = await client.travelRule.listTravelruleVasps();
+    const vasps = await client.travelRule.listTravelRuleVasps();
     expect(Array.isArray(vasps)).toBe(true);
   });
 
@@ -179,7 +179,7 @@ describe("upbit private integration", () => {
       return;
     }
     try {
-      const result = await client.travelRule.verifyTravelruleByUuid({
+      const result = await client.travelRule.verifyTravelRuleByUuid({
         deposit_uuid: depositContext.uuid,
         vasp_uuid: travelRuleVaspUuid,
       });
@@ -199,7 +199,7 @@ describe("upbit private integration", () => {
       return;
     }
     try {
-      const result = await client.travelRule.verifyTravelruleByTxid({
+      const result = await client.travelRule.verifyTravelRuleByTxid({
         txid: depositContext.txid,
         currency: depositContext.currency ?? "BTC",
         net_type: depositContext.net_type ?? "BTC",

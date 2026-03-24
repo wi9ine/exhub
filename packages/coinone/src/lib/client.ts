@@ -52,107 +52,107 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
 
   return {
     market: {
-      rangeUnit: async (quoteCurrency = "KRW", targetCurrency = "BTC") =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["rangeUnit"]>>(
+      getRangeUnit: async (quoteCurrency = "KRW", targetCurrency = "BTC") =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getRangeUnit"]>>(
           `/public/v2/range_units/${quoteCurrency}/${targetCurrency}`,
         ),
-      markets: async (quoteCurrency = "KRW") =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["markets"]>>(
+      listMarkets: async (quoteCurrency = "KRW") =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["listMarkets"]>>(
           `/public/v2/markets/${quoteCurrency}`,
         ),
-      market: async (quoteCurrency = "KRW", targetCurrency = "BTC") =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["market"]>>(
+      getMarket: async (quoteCurrency = "KRW", targetCurrency = "BTC") =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getMarket"]>>(
           `/public/v2/markets/${quoteCurrency}/${targetCurrency}`,
         ),
-      orderbook: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["orderbook"]>>(
+      getOrderbook: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getOrderbook"]>>(
           `/public/v2/orderbook/${quoteCurrency}/${targetCurrency}`,
           params,
         ),
-      recentCompletedOrders: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["recentCompletedOrders"]>>(
+      listTrades: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["listTrades"]>>(
           `/public/v2/trades/${quoteCurrency}/${targetCurrency}`,
           params,
         ),
-      tickers: async (quoteCurrency = "KRW", params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["tickers"]>>(
+      listTickers: async (quoteCurrency = "KRW", params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["listTickers"]>>(
           `/public/v2/ticker_new/${quoteCurrency}`,
           params,
         ),
-      ticker: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["ticker"]>>(
+      getTicker: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getTicker"]>>(
           `/public/v2/ticker_new/${quoteCurrency}/${targetCurrency}`,
           params,
         ),
-      utcTickers: async (quoteCurrency = "KRW", params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["utcTickers"]>>(
+      listTickerUtc: async (quoteCurrency = "KRW", params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["listTickerUtc"]>>(
           `/public/v2/ticker_utc_new/${quoteCurrency}`,
           params,
         ),
-      utcTicker: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["utcTicker"]>>(
+      getTickerUtc: async (quoteCurrency = "KRW", targetCurrency = "BTC", params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getTickerUtc"]>>(
           `/public/v2/ticker_utc_new/${quoteCurrency}/${targetCurrency}`,
           params,
         ),
-      currencies: async () =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["currencies"]>>("/public/v2/currencies"),
-      currency: async (currency = "BTC") =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["currency"]>>(
+      listCurrencies: async () =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["listCurrencies"]>>("/public/v2/currencies"),
+      getCurrency: async (currency = "BTC") =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getCurrency"]>>(
           `/public/v2/currencies/${currency}`,
         ),
-      chart: async (quoteCurrency, targetCurrency, params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["chart"]>>(
+      getChart: async (quoteCurrency, targetCurrency, params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getChart"]>>(
           `/public/v2/chart/${quoteCurrency}/${targetCurrency}`,
           params,
         ),
-      orderbookDeprecated: async (params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["orderbookDeprecated"]>>(
+      getOrderbookDeprecated: async (params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getOrderbookDeprecated"]>>(
           "/orderbook",
           params,
         ),
-      tickerDeprecated: async (params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["tickerDeprecated"]>>("/ticker", params),
-      tickerUtcDeprecated: async (params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["tickerUtcDeprecated"]>>(
+      getTickerDeprecated: async (params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getTickerDeprecated"]>>("/ticker", params),
+      getTickerUtcDeprecated: async (params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["getTickerUtcDeprecated"]>>(
           "/ticker_utc",
           params,
         ),
-      recentCompletedOrdersDeprecated: async (params) =>
-        requestPublic<AsyncResult<CoinoneClient["market"]["recentCompletedOrdersDeprecated"]>>(
+      listTradesDeprecated: async (params) =>
+        requestPublic<AsyncResult<CoinoneClient["market"]["listTradesDeprecated"]>>(
           "/trades",
           params,
         ),
     },
     account: {
-      findBalance: async () =>
-        requestPrivate<AsyncResult<CoinoneClient["account"]["findBalance"]>>(
+      listBalance: async () =>
+        requestPrivate<AsyncResult<CoinoneClient["account"]["listBalance"]>>(
           "/v2.1/account/balance/all",
         ),
-      findBalanceByCurrencies: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["account"]["findBalanceByCurrencies"]>>(
+      listBalanceByCurrencies: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["account"]["listBalanceByCurrencies"]>>(
           "/v2.1/account/balance",
           body,
         ),
-      findAllTradeFees: async () =>
-        requestPrivate<AsyncResult<CoinoneClient["account"]["findAllTradeFees"]>>(
+      listTradeFees: async () =>
+        requestPrivate<AsyncResult<CoinoneClient["account"]["listTradeFees"]>>(
           "/v2.1/account/trade_fee",
         ),
-      findTradeFeeByPair: async (quoteCurrency = "KRW", targetCurrency = "BTC", body = {}) =>
-        requestPrivate<AsyncResult<CoinoneClient["account"]["findTradeFeeByPair"]>>(
+      getTradeFeeByPair: async (quoteCurrency = "KRW", targetCurrency = "BTC", body = {}) =>
+        requestPrivate<AsyncResult<CoinoneClient["account"]["getTradeFeeByPair"]>>(
           `/v2.1/account/trade_fee/${quoteCurrency}/${targetCurrency}`,
           body,
         ),
     },
     orders: {
-      findActiveOrders: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["findActiveOrders"]>>(
+      listActiveOrders: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["listActiveOrders"]>>(
           "/v2.1/order/active_orders",
           body,
         ),
-      placeOrder: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["placeOrder"]>>("/v2.1/order", body),
-      placeLimitOrder: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["placeLimitOrder"]>>(
+      createOrder: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["createOrder"]>>("/v2.1/order", body),
+      createLimitOrder: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["createLimitOrder"]>>(
           "/v2.1/order/limit",
           body,
         ),
@@ -166,77 +166,81 @@ export function createCoinoneClient(options: CoinoneClientOptions = {}): Coinone
           "/v2.1/order/cancel",
           body,
         ),
-      orderDetail: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["orderDetail"]>>(
+      getOrderDetail: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["getOrderDetail"]>>(
           "/v2.1/order/detail",
           body,
         ),
-      findAllCompletedOrders: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["findAllCompletedOrders"]>>(
+      listCompletedOrdersAll: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["listCompletedOrdersAll"]>>(
           "/v2.1/order/completed_orders/all",
           body,
         ),
-      findCompletedOrders: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["findCompletedOrders"]>>(
+      listCompletedOrders: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["listCompletedOrders"]>>(
           "/v2.1/order/completed_orders",
           body,
         ),
-      findAllOpenOrders: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["findAllOpenOrders"]>>(
+      listOpenOrdersAll: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["listOpenOrdersAll"]>>(
           "/v2.1/order/open_orders/all",
           body,
         ),
-      findOpenOrders: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["findOpenOrders"]>>(
+      listOpenOrders: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["listOpenOrders"]>>(
           "/v2.1/order/open_orders",
           body,
         ),
-      findOrderInfo: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["orders"]["findOrderInfo"]>>(
+      getOrderInfo: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["orders"]["getOrderInfo"]>>(
           "/v2.1/order/info",
           body,
         ),
     },
     transactions: {
-      krwTransactionHistory: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["transactions"]["krwTransactionHistory"]>>(
+      listKrwTransactionHistory: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["transactions"]["listKrwTransactionHistory"]>>(
           "/v2.1/transaction/krw/history",
           body,
         ),
-      coinTransactionHistory: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["transactions"]["coinTransactionHistory"]>>(
+      listCoinTransactionHistory: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["transactions"]["listCoinTransactionHistory"]>>(
           "/v2.1/transaction/coin/history",
           body,
         ),
-      singleCoinTransactionHistory: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["transactions"]["singleCoinTransactionHistory"]>>(
+      getCoinTransactionHistoryDetail: async (body) =>
+        requestPrivate<
+          AsyncResult<CoinoneClient["transactions"]["getCoinTransactionHistoryDetail"]>
+        >(
           "/v2.1/transaction/coin/history/detail",
           body,
         ),
-      coinWithdrawalLimit: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["transactions"]["coinWithdrawalLimit"]>>(
+      getCoinWithdrawalLimit: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["transactions"]["getCoinWithdrawalLimit"]>>(
           "/v2.1/transaction/coin/withdrawal/limit",
           body,
         ),
-      coinWithdrawalAddressBook: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["transactions"]["coinWithdrawalAddressBook"]>>(
+      listCoinWithdrawalAddressBook: async (body) =>
+        requestPrivate<
+          AsyncResult<CoinoneClient["transactions"]["listCoinWithdrawalAddressBook"]>
+        >(
           "/v2.1/transaction/coin/withdrawal/address_book",
           body,
         ),
-      coinWithdrawal: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["transactions"]["coinWithdrawal"]>>(
+      createCoinWithdrawal: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["transactions"]["createCoinWithdrawal"]>>(
           "/v2.1/transaction/coin/withdrawal",
           body,
         ),
     },
     rewards: {
-      orderRewardPrograms: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["rewards"]["orderRewardPrograms"]>>(
+      listOrderRewardPrograms: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["rewards"]["listOrderRewardPrograms"]>>(
           "/v2.1/event/order-reward/programs",
           body,
         ),
-      orderRewardHistory: async (body) =>
-        requestPrivate<AsyncResult<CoinoneClient["rewards"]["orderRewardHistory"]>>(
+      listOrderRewardHistory: async (body) =>
+        requestPrivate<AsyncResult<CoinoneClient["rewards"]["listOrderRewardHistory"]>>(
           "/v2.1/event/order-reward/history",
           body,
         ),

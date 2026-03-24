@@ -19,7 +19,7 @@
       "post": {
         "summary": "전체 잔고 조회",
         "description": "고객이 보유한 전체 잔고 조회",
-        "operationId": "find-balance",
+        "operationId": "list-balance",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -168,7 +168,7 @@
       "post": {
         "summary": "특정 자산 잔고 조회",
         "description": "고객이 보유한 특정 종목의 잔고 조회",
-        "operationId": "find-balance-by-currencies",
+        "operationId": "list-balance-by-currencies",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -329,7 +329,7 @@
       "post": {
         "summary": "전체 수수료 조회",
         "description": "거래 가능한 모든 종목의 수수료 조회",
-        "operationId": "find-all-trade-fees",
+        "operationId": "list-trade-fees",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -477,7 +477,7 @@
       "post": {
         "summary": "개별 종목 수수료 조회",
         "description": "개별 종목 별로 수수료 조회",
-        "operationId": "find-trade-fee-by-pair",
+        "operationId": "get-trade-fee-by-pair",
         "parameters": [
           {
             "name": "quote_currency",
@@ -645,7 +645,7 @@
       "post": {
         "summary": "미체결 주문 조회",
         "description": "종목 별 / 주문 방식 별로 미체결 주문 조회",
-        "operationId": "find-active-orders",
+        "operationId": "list-active-orders",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -984,7 +984,7 @@
       "post": {
         "summary": "주문 정보 조회",
         "description": "주문 식별 ID에 해당하는 주문 조회",
-        "operationId": "order-detail",
+        "operationId": "get-order-detail",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -1613,7 +1613,7 @@
       "post": {
         "summary": "전체 체결 주문 조회",
         "description": "체결된 모든 주문 조회",
-        "operationId": "find-all-completed-orders",
+        "operationId": "list-completed-orders-all",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -1834,7 +1834,7 @@
           "주문 조회"
         ],
         "description": "특정 종목의 체결된 주문 조회",
-        "operationId": "find-completed-orders",
+        "operationId": "list-completed-orders",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -2060,7 +2060,7 @@
       "post": {
         "summary": "전체 미체결 주문 조회",
         "description": "고객에게 걸려있는 모든 미체결 주문 조회",
-        "operationId": "find-all-open-orders",
+        "operationId": "list-open-orders-all",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -2264,7 +2264,7 @@
           "주문 조회"
         ],
         "description": "특정 종목에 걸려있는 모든 미체결 주문을 조회",
-        "operationId": "find-open-orders",
+        "operationId": "list-open-orders",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -2474,7 +2474,7 @@
       "post": {
         "summary": "특정 주문 정보 조회",
         "description": "주문 식별 ID에 해당되는 주문 정보 조회",
-        "operationId": "find-order-info",
+        "operationId": "get-order-info",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -2700,7 +2700,7 @@
       "post": {
         "summary": "매수/매도 주문",
         "description": "시장가, 지정가, 예약가 주문 유형으로 매수/매도 주문 등록",
-        "operationId": "place-order",
+        "operationId": "create-order",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -3222,7 +3222,7 @@
       "post": {
         "summary": "지정가 매매 주문",
         "description": "지정가 방식으로 매수/매도 주문 등록",
-        "operationId": "order-place-limit-order",
+        "operationId": "create-limit-order",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -3382,7 +3382,7 @@
       "post": {
         "summary": "원화 입출금 내역 조회",
         "description": "원화의 전체 입출금 내역 조회",
-        "operationId": "krw-transaction-history",
+        "operationId": "list-krw-transaction-history",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -3570,7 +3570,7 @@
       "post": {
         "summary": "가상자산 입출금 내역 조회",
         "description": "가상자산의 전체 입출금 내역 조회",
-        "operationId": "coin-transaction-history",
+        "operationId": "list-coin-transaction-history",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -3797,7 +3797,7 @@
           "입출금 조회"
         ],
         "description": "출금 API를 통해 받은 ID를 이용하여 가상자산의 입출금 내역의 진행상태를 조회할 수 있습니다.",
-        "operationId": "single-coin-transaction-history",
+        "operationId": "get-coin-transaction-history-detail",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -3994,7 +3994,7 @@
       "post": {
         "summary": "가상자산 출금 한도 조회",
         "description": "가상자산의 전일 종가를 기준으로 출금 가능 한도를 조회",
-        "operationId": "coin-withdrawal-limit",
+        "operationId": "get-coin-withdrawal-limit",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -4135,7 +4135,7 @@
       "post": {
         "summary": "출금 주소 목록 조회",
         "description": "2차 인증 및 수취인정보 등록이 완료된 주소 조회. (해당 주소로만 API출금이 가능합니다)",
-        "operationId": "coin-withdrawal-address-book",
+        "operationId": "list-coin-withdrawal-address-book",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -4288,7 +4288,7 @@
       "post": {
         "summary": "가상자산 출금",
         "description": "2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.",
-        "operationId": "coin-withdrawal",
+        "operationId": "create-coin-withdrawal",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -4467,7 +4467,7 @@
       "post": {
         "summary": "주문 리워드 종목 정보 조회",
         "description": "진행중인 주문 리워드 프로그램에 대한 정보 조회",
-        "operationId": "order-reward-programs",
+        "operationId": "list-order-reward-programs",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",
@@ -4641,7 +4641,7 @@
       "post": {
         "summary": "주문 리워드 내역 조회",
         "description": "수령한 리워드 내역 정보 조회 (최근일부터 역순 조회, 기간내 최대 30일치 조회 가능)",
-        "operationId": "order-reward-history",
+        "operationId": "list-order-reward-history",
         "parameters": [
           {
             "name": "X-COINONE-PAYLOAD",

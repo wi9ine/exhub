@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.6.1
  */
 
-export type VerifyTravelruleByUuidBody = {
+export type VerifyTravelRuleByUuidBody = {
   /** 입금의 유일식별자(UUID) */
   deposit_uuid: string;
   /** 자산을 출금한 상대 거래소의 유일식별자(UUID)

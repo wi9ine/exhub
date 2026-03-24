@@ -92,40 +92,40 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
         ),
     },
     candles: {
-      listCandlesSeconds: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["candles"]["listCandlesSeconds"]>>(
+      getSecondCandles: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["candles"]["getSecondCandles"]>>(
           "/candles/seconds",
           params,
         ),
-      listCandlesMinutes: async (unit, params) =>
-        requestPublic<AsyncResult<UpbitClient["candles"]["listCandlesMinutes"]>>(
+      getMinuteCandles: async (unit, params) =>
+        requestPublic<AsyncResult<UpbitClient["candles"]["getMinuteCandles"]>>(
           `/candles/minutes/${unit}`,
           params,
         ),
-      listCandlesDays: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["candles"]["listCandlesDays"]>>(
+      getDayCandles: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["candles"]["getDayCandles"]>>(
           "/candles/days",
           params,
         ),
-      listCandlesWeeks: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["candles"]["listCandlesWeeks"]>>(
+      getWeekCandles: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["candles"]["getWeekCandles"]>>(
           "/candles/weeks",
           params,
         ),
-      listCandlesMonths: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["candles"]["listCandlesMonths"]>>(
+      getMonthCandles: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["candles"]["getMonthCandles"]>>(
           "/candles/months",
           params,
         ),
-      listCandlesYears: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["candles"]["listCandlesYears"]>>(
+      getYearCandles: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["candles"]["getYearCandles"]>>(
           "/candles/years",
           params,
         ),
     },
     trades: {
-      recentTradesHistory: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["trades"]["recentTradesHistory"]>>(
+      listTradesTicks: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["trades"]["listTradesTicks"]>>(
           "/trades/ticks",
           params,
         ),
@@ -150,32 +150,32 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
           "/orderbook/instruments",
           params,
         ),
-      listOrderbookLevels: async (params) =>
-        requestPublic<AsyncResult<UpbitClient["orderbook"]["listOrderbookLevels"]>>(
+      listOrderbookSupportedLevels: async (params) =>
+        requestPublic<AsyncResult<UpbitClient["orderbook"]["listOrderbookSupportedLevels"]>>(
           "/orderbook/supported_levels",
           params,
         ),
     },
     assets: {
-      getBalance: async () =>
-        requestPrivate<AsyncResult<UpbitClient["assets"]["getBalance"]>>("GET", "/accounts"),
+      listBalance: async () =>
+        requestPrivate<AsyncResult<UpbitClient["assets"]["listBalance"]>>("GET", "/accounts"),
     },
     orders: {
-      availableOrderInformation: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["availableOrderInformation"]>>(
+      getOrderChance: async (params) =>
+        requestPrivate<AsyncResult<UpbitClient["orders"]["getOrderChance"]>>(
           "GET",
           "/orders/chance",
           params,
         ),
-      newOrder: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["newOrder"]>>(
+      createOrder: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["orders"]["createOrder"]>>(
           "POST",
           "/orders",
           undefined,
           body,
         ),
-      testOrder: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["testOrder"]>>(
+      createTestOrder: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["orders"]["createTestOrder"]>>(
           "POST",
           "/orders/test",
           undefined,
@@ -207,8 +207,8 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
           "/orders/open",
           params,
         ),
-      batchCancelOrders: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["batchCancelOrders"]>>(
+      cancelOpenOrders: async (params) =>
+        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOpenOrders"]>>(
           "DELETE",
           "/orders/open",
           params,
@@ -219,8 +219,8 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
           "/orders/closed",
           params,
         ),
-      cancelAndNewOrder: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelAndNewOrder"]>>(
+      cancelAndCreateOrder: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelAndCreateOrder"]>>(
           "POST",
           "/orders/cancel_replace",
           undefined,
@@ -228,8 +228,8 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
         ),
     },
     withdrawals: {
-      availableWithdrawalInformation: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["availableWithdrawalInformation"]>>(
+      getWithdrawChance: async (params) =>
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["getWithdrawChance"]>>(
           "GET",
           "/withdraws/chance",
           params,
@@ -252,8 +252,8 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
           "/withdraw",
           params,
         ),
-      withdrawKrw: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["withdrawKrw"]>>(
+      createWithdrawKrw: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["createWithdrawKrw"]>>(
           "POST",
           "/withdraws/krw",
           undefined,
@@ -273,8 +273,8 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
         ),
     },
     deposits: {
-      availableDepositInformation: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["availableDepositInformation"]>>(
+      getDepositChance: async (params) =>
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDepositChance"]>>(
           "GET",
           "/deposits/chance",
           params,
@@ -297,8 +297,8 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
           "GET",
           "/deposits/coin_addresses",
         ),
-      depositKrw: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["depositKrw"]>>(
+      createDepositKrw: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["createDepositKrw"]>>(
           "POST",
           "/deposits/krw",
           undefined,
@@ -318,20 +318,20 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
         ),
     },
     travelRule: {
-      listTravelruleVasps: async () =>
-        requestPrivate<AsyncResult<UpbitClient["travelRule"]["listTravelruleVasps"]>>(
+      listTravelRuleVasps: async () =>
+        requestPrivate<AsyncResult<UpbitClient["travelRule"]["listTravelRuleVasps"]>>(
           "GET",
           "/travel_rule/vasps",
         ),
-      verifyTravelruleByUuid: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelruleByUuid"]>>(
+      verifyTravelRuleByUuid: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelRuleByUuid"]>>(
           "POST",
           "/travel_rule/deposit/uuid",
           undefined,
           body,
         ),
-      verifyTravelruleByTxid: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelruleByTxid"]>>(
+      verifyTravelRuleByTxid: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelRuleByTxid"]>>(
           "POST",
           "/travel_rule/deposit/txid",
           undefined,

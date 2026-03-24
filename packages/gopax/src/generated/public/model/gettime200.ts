@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type Gettime200 = {
+export type GetTime200 = {
   /** 밀리세컨드 단위 타임스탬프 */
   serverTime: number;
 };

@@ -10,7 +10,7 @@ import * as zod from 'zod';
 /**
  * @summary 가격 틱 사이즈 조회
  */
-export const GettradingpairstradingpairpriceticksizeParams = zod.object({
+export const GetTradingPairPriceTickSizeParams = zod.object({
   "TradingPair": zod.string().describe('거래쌍 (예: BTC-KRW)')
 })
 
@@ -18,7 +18,7 @@ export const GettradingpairstradingpairpriceticksizeParams = zod.object({
 /**
  * @summary 티커 조회
  */
-export const GettradingpairstradingpairtickerParams = zod.object({
+export const GetTradingPairTickerParams = zod.object({
   "TradingPair": zod.string().describe('거래쌍 (예: BTC-KRW)')
 })
 
@@ -26,11 +26,11 @@ export const GettradingpairstradingpairtickerParams = zod.object({
 /**
  * @summary 오더북 조회
  */
-export const GettradingpairstradingpairbookParams = zod.object({
+export const GetTradingPairBookParams = zod.object({
   "TradingPair": zod.string().describe('거래쌍 (예: BTC-KRW)')
 })
 
-export const GettradingpairstradingpairbookQueryParams = zod.object({
+export const GetTradingPairBookQueryParams = zod.object({
   "level": zod.union([zod.literal(1),zod.literal(2),zod.literal(3)]).optional().describe('오더북 레벨. 1 = 1개 호가, 2 = 50개 호가, 3 = 전체 오더북')
 })
 
@@ -38,11 +38,11 @@ export const GettradingpairstradingpairbookQueryParams = zod.object({
 /**
  * @summary 체결 기록 조회
  */
-export const GettradingpairstradingpairtradesParams = zod.object({
+export const ListTradingPairTradesParams = zod.object({
   "TradingPair": zod.string().describe('거래쌍 (예: BTC-KRW)')
 })
 
-export const GettradingpairstradingpairtradesQueryParams = zod.object({
+export const ListTradingPairTradesQueryParams = zod.object({
   "limit": zod.number().optional().describe('반환되는 항목의 개수 (최대 100)'),
   "pastmax": zod.number().optional().describe('이 ID보다 오래된 데이터를 조회'),
   "latestmin": zod.number().optional().describe('이 ID보다 새로운 최신 데이터를 조회'),
@@ -54,7 +54,7 @@ export const GettradingpairstradingpairtradesQueryParams = zod.object({
 /**
  * @summary 최근 24시간 통계 조회
  */
-export const GettradingpairstradingpairstatsParams = zod.object({
+export const GetTradingPairStatsParams = zod.object({
   "TradingPair": zod.string().describe('거래쌍 (예: BTC-KRW)')
 })
 
@@ -63,19 +63,19 @@ export const GettradingpairstradingpairstatsParams = zod.object({
  * 1개의 구간은 1개의 차트 봉과 일치합니다.
  * @summary 차트 데이터 조회
  */
-export const GettradingpairstradingpaircandlesParams = zod.object({
+export const GetTradingPairCandlesParams = zod.object({
   "TradingPair": zod.string().describe('거래쌍 (예: BTC-KRW)')
 })
 
-export const gettradingpairstradingpaircandlesQueryLimitMax = 1024;
+export const getTradingPairCandlesQueryLimitMax = 1024;
 
 
 
-export const GettradingpairstradingpaircandlesQueryParams = zod.object({
+export const GetTradingPairCandlesQueryParams = zod.object({
   "start": zod.number().describe('시작 시점 타임스탬프 (밀리세컨드 단위)'),
   "end": zod.number().describe('종료 시점 타임스탬프 (밀리세컨드 단위)'),
   "interval": zod.union([zod.literal(1),zod.literal(5),zod.literal(30),zod.literal(1440)]).describe('캔들 시간 간격 (분 단위): 1, 5, 30, 1440 중 하나'),
-  "limit": zod.number().max(gettradingpairstradingpaircandlesQueryLimitMax).optional().describe('반환되는 항목의 개수 (최대 1024)')
+  "limit": zod.number().max(getTradingPairCandlesQueryLimitMax).optional().describe('반환되는 항목의 개수 (최대 1024)')
 })
 
 
@@ -83,7 +83,7 @@ export const GettradingpairstradingpaircandlesQueryParams = zod.object({
  * 여부 항목들이 모두 false이지만 alertLevel 이 정상(0)이 아닌 경우가 발생할 수 있습니다. 이는 한번 주의나 경고가 되면 24시간 동안 안전한 경우에만 정상으로 복귀 라는 룰에 의한 것이고 자연스러운 현상입니다.
  * @summary 투자유의 정보 조회
  */
-export const GettradingpairscautionsQueryParams = zod.object({
+export const ListTradingPairsCautionsQueryParams = zod.object({
   "showActive": zod.boolean().optional().describe('true이면 위험 항목만 표시, false이면 전체 표시')
 })
 
@@ -91,7 +91,7 @@ export const GettradingpairscautionsQueryParams = zod.object({
 /**
  * @summary 공지사항 조회
  */
-export const GetnoticesQueryParams = zod.object({
+export const ListNoticesQueryParams = zod.object({
   "limit": zod.number().optional().describe('페이지별 아이템 개수 (최대 20)'),
   "page": zod.number().optional().describe('페이지 번호 (0부터 시작)'),
   "type": zod.union([zod.literal(0),zod.literal(1),zod.literal(2),zod.literal(3)]).optional().describe('공지 유형. 0=전체, 1=일반, 2=신규상장, 3=이벤트'),

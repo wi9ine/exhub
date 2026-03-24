@@ -6,75 +6,75 @@ import type {
   CancelOrderBody,
   CancelOrders200,
   CancelOrdersBody,
-  CoinTransactionHistory200,
-  CoinTransactionHistoryBody,
-  CoinWithdrawal200,
-  CoinWithdrawalAddressBook200,
-  CoinWithdrawalAddressBookBody,
-  CoinWithdrawalBody,
-  CoinWithdrawalLimit200,
-  CoinWithdrawalLimitBody,
-  FindActiveOrders200,
-  FindActiveOrdersBody,
-  FindAllCompletedOrders200,
-  FindAllCompletedOrdersBody,
-  FindAllOpenOrders200,
-  FindAllOpenOrdersBody,
-  FindAllTradeFees200,
-  FindBalance200,
-  FindBalanceByCurrencies200,
-  FindBalanceByCurrenciesBody,
-  FindCompletedOrders200,
-  FindCompletedOrdersBody,
-  FindOpenOrders200,
-  FindOpenOrdersBody,
-  FindOrderInfo200,
-  FindOrderInfoBody,
-  FindTradeFeeByPair200,
-  FindTradeFeeByPairBody,
-  KrwTransactionHistory200,
-  KrwTransactionHistoryBody,
-  OrderDetail200,
-  OrderDetailBody,
-  OrderPlaceLimitOrder200,
-  OrderPlaceLimitOrderBody,
-  OrderRewardHistory200,
-  OrderRewardHistoryBody,
-  OrderRewardPrograms200,
-  OrderRewardProgramsBody,
-  PlaceOrder200,
-  PlaceOrderBody,
-  SingleCoinTransactionHistory200,
-  SingleCoinTransactionHistoryBody,
+  CreateCoinWithdrawal200,
+  CreateCoinWithdrawalBody,
+  CreateLimitOrder200,
+  CreateLimitOrderBody,
+  CreateOrder200,
+  CreateOrderBody,
+  GetCoinTransactionHistoryDetail200,
+  GetCoinTransactionHistoryDetailBody,
+  GetCoinWithdrawalLimit200,
+  GetCoinWithdrawalLimitBody,
+  GetOrderDetail200,
+  GetOrderDetailBody,
+  GetOrderInfo200,
+  GetOrderInfoBody,
+  GetTradeFeeByPair200,
+  GetTradeFeeByPairBody,
+  ListActiveOrders200,
+  ListActiveOrdersBody,
+  ListBalance200,
+  ListBalanceByCurrencies200,
+  ListBalanceByCurrenciesBody,
+  ListCoinTransactionHistory200,
+  ListCoinTransactionHistoryBody,
+  ListCoinWithdrawalAddressBook200,
+  ListCoinWithdrawalAddressBookBody,
+  ListCompletedOrders200,
+  ListCompletedOrdersAll200,
+  ListCompletedOrdersAllBody,
+  ListCompletedOrdersBody,
+  ListKrwTransactionHistory200,
+  ListKrwTransactionHistoryBody,
+  ListOpenOrders200,
+  ListOpenOrdersAll200,
+  ListOpenOrdersAllBody,
+  ListOpenOrdersBody,
+  ListOrderRewardHistory200,
+  ListOrderRewardHistoryBody,
+  ListOrderRewardPrograms200,
+  ListOrderRewardProgramsBody,
+  ListTradeFees200,
 } from "../generated/private/model";
 import type {
-  Chart200,
-  ChartParams,
-  Currencies200,
-  Currency200,
-  Market200,
-  Markets200,
-  Orderbook200,
-  OrderbookDeprecated200,
-  OrderbookDeprecatedParams,
-  OrderbookParams,
-  RangeUnit200,
-  RecentCompletedOrders200,
-  RecentCompletedOrdersParams,
-  RecentCompletedOrdersDeprecated200,
-  RecentCompletedOrdersDeprecatedParams,
-  TickerDeprecatedParams,
-  Ticker200,
-  TickerDeprecated200,
-  TickerParams,
-  Tickers200,
-  TickersParams,
-  TickerUtcDeprecated200,
-  TickerUtcDeprecatedParams,
-  UtcTicker200,
-  UtcTickerParams,
-  UtcTickers200,
-  UtcTickersParams,
+  GetChart200,
+  GetChartParams,
+  GetCurrency200,
+  GetMarket200,
+  GetOrderbook200,
+  GetOrderbookDeprecated200,
+  GetOrderbookDeprecatedParams,
+  GetOrderbookParams,
+  GetRangeUnit200,
+  GetTicker200,
+  GetTickerDeprecated200,
+  GetTickerDeprecatedParams,
+  GetTickerParams,
+  GetTickerUtc200,
+  GetTickerUtcDeprecated200,
+  GetTickerUtcDeprecatedParams,
+  GetTickerUtcParams,
+  ListCurrencies200,
+  ListMarkets200,
+  ListTickers200,
+  ListTickersParams,
+  ListTickerUtc200,
+  ListTickerUtcParams,
+  ListTrades200,
+  ListTradesDeprecated200,
+  ListTradesDeprecatedParams,
+  ListTradesParams,
 } from "../generated/public/model";
 
 export interface CoinoneCredentials {
@@ -88,113 +88,119 @@ export type CreateCoinoneSignedBodyInput = Record<string, unknown> | undefined;
 
 export interface CoinoneClient {
   market: {
-    rangeUnit: (quoteCurrency?: string, targetCurrency?: string) => Promise<RangeUnit200>;
-    markets: (quoteCurrency?: string) => Promise<Markets200>;
-    market: (quoteCurrency?: string, targetCurrency?: string) => Promise<Market200>;
-    orderbook: (
+    getRangeUnit: (quoteCurrency?: string, targetCurrency?: string) => Promise<GetRangeUnit200>;
+    listMarkets: (quoteCurrency?: string) => Promise<ListMarkets200>;
+    getMarket: (quoteCurrency?: string, targetCurrency?: string) => Promise<GetMarket200>;
+    getOrderbook: (
       quoteCurrency?: string,
       targetCurrency?: string,
-      params?: OrderbookParams,
-    ) => Promise<Orderbook200>;
-    recentCompletedOrders: (
+      params?: GetOrderbookParams,
+    ) => Promise<GetOrderbook200>;
+    listTrades: (
       quoteCurrency?: string,
       targetCurrency?: string,
-      params?: RecentCompletedOrdersParams,
-    ) => Promise<RecentCompletedOrders200>;
-    tickers: (quoteCurrency?: string, params?: TickersParams) => Promise<Tickers200>;
-    ticker: (
+      params?: ListTradesParams,
+    ) => Promise<ListTrades200>;
+    listTickers: (quoteCurrency?: string, params?: ListTickersParams) => Promise<ListTickers200>;
+    getTicker: (
       quoteCurrency?: string,
       targetCurrency?: string,
-      params?: TickerParams,
-    ) => Promise<Ticker200>;
-    utcTickers: (quoteCurrency?: string, params?: UtcTickersParams) => Promise<UtcTickers200>;
-    utcTicker: (
+      params?: GetTickerParams,
+    ) => Promise<GetTicker200>;
+    listTickerUtc: (quoteCurrency?: string, params?: ListTickerUtcParams) => Promise<ListTickerUtc200>;
+    getTickerUtc: (
       quoteCurrency?: string,
       targetCurrency?: string,
-      params?: UtcTickerParams,
-    ) => Promise<UtcTicker200>;
-    currencies: () => Promise<Currencies200>;
-    currency: (currency?: string) => Promise<Currency200>;
-    chart: (
+      params?: GetTickerUtcParams,
+    ) => Promise<GetTickerUtc200>;
+    listCurrencies: () => Promise<ListCurrencies200>;
+    getCurrency: (currency?: string) => Promise<GetCurrency200>;
+    getChart: (
       quoteCurrency: string | undefined,
       targetCurrency: string | undefined,
-      params: ChartParams,
-    ) => Promise<Chart200>;
-    orderbookDeprecated: (params?: OrderbookDeprecatedParams) => Promise<OrderbookDeprecated200>;
-    tickerDeprecated: (params?: TickerDeprecatedParams) => Promise<TickerDeprecated200>;
-    tickerUtcDeprecated: (params?: TickerUtcDeprecatedParams) => Promise<TickerUtcDeprecated200>;
-    recentCompletedOrdersDeprecated: (
-      params?: RecentCompletedOrdersDeprecatedParams,
-    ) => Promise<RecentCompletedOrdersDeprecated200>;
+      params: GetChartParams,
+    ) => Promise<GetChart200>;
+    getOrderbookDeprecated: (
+      params?: GetOrderbookDeprecatedParams,
+    ) => Promise<GetOrderbookDeprecated200>;
+    getTickerDeprecated: (params?: GetTickerDeprecatedParams) => Promise<GetTickerDeprecated200>;
+    getTickerUtcDeprecated: (
+      params?: GetTickerUtcDeprecatedParams,
+    ) => Promise<GetTickerUtcDeprecated200>;
+    listTradesDeprecated: (params?: ListTradesDeprecatedParams) => Promise<ListTradesDeprecated200>;
   };
   account: {
-    findBalance: () => Promise<FindBalance200>;
-    findBalanceByCurrencies: (
-      body: Omit<FindBalanceByCurrenciesBody, "access_token" | "nonce">,
-    ) => Promise<FindBalanceByCurrencies200>;
-    findAllTradeFees: () => Promise<FindAllTradeFees200>;
-    findTradeFeeByPair: (
+    listBalance: () => Promise<ListBalance200>;
+    listBalanceByCurrencies: (
+      body: Omit<ListBalanceByCurrenciesBody, "access_token" | "nonce">,
+    ) => Promise<ListBalanceByCurrencies200>;
+    listTradeFees: () => Promise<ListTradeFees200>;
+    getTradeFeeByPair: (
       quoteCurrency?: string,
       targetCurrency?: string,
-      body?: Omit<FindTradeFeeByPairBody, "access_token" | "nonce">,
-    ) => Promise<FindTradeFeeByPair200>;
+      body?: Omit<GetTradeFeeByPairBody, "access_token" | "nonce">,
+    ) => Promise<GetTradeFeeByPair200>;
   };
   orders: {
-    findActiveOrders: (
-      body?: Omit<FindActiveOrdersBody, "access_token" | "nonce">,
-    ) => Promise<FindActiveOrders200>;
-    placeOrder: (body: Omit<PlaceOrderBody, "access_token" | "nonce">) => Promise<PlaceOrder200>;
-    placeLimitOrder: (
-      body: Omit<OrderPlaceLimitOrderBody, "access_token" | "nonce">,
-    ) => Promise<OrderPlaceLimitOrder200>;
+    listActiveOrders: (
+      body?: Omit<ListActiveOrdersBody, "access_token" | "nonce">,
+    ) => Promise<ListActiveOrders200>;
+    createOrder: (body: Omit<CreateOrderBody, "access_token" | "nonce">) => Promise<CreateOrder200>;
+    createLimitOrder: (
+      body: Omit<CreateLimitOrderBody, "access_token" | "nonce">,
+    ) => Promise<CreateLimitOrder200>;
     cancelOrders: (
       body: Omit<CancelOrdersBody, "access_token" | "nonce">,
     ) => Promise<CancelOrders200>;
-    cancelOrder: (body: Omit<CancelOrderBody, "access_token" | "nonce">) => Promise<CancelOrder200>;
-    orderDetail: (body: Omit<OrderDetailBody, "access_token" | "nonce">) => Promise<OrderDetail200>;
-    findAllCompletedOrders: (
-      body: Omit<FindAllCompletedOrdersBody, "access_token" | "nonce">,
-    ) => Promise<FindAllCompletedOrders200>;
-    findCompletedOrders: (
-      body: Omit<FindCompletedOrdersBody, "access_token" | "nonce">,
-    ) => Promise<FindCompletedOrders200>;
-    findAllOpenOrders: (
-      body?: Omit<FindAllOpenOrdersBody, "access_token" | "nonce">,
-    ) => Promise<FindAllOpenOrders200>;
-    findOpenOrders: (
-      body: Omit<FindOpenOrdersBody, "access_token" | "nonce">,
-    ) => Promise<FindOpenOrders200>;
-    findOrderInfo: (
-      body: Omit<FindOrderInfoBody, "access_token" | "nonce">,
-    ) => Promise<FindOrderInfo200>;
+    cancelOrder: (
+      body: Omit<CancelOrderBody, "access_token" | "nonce">,
+    ) => Promise<CancelOrder200>;
+    getOrderDetail: (
+      body: Omit<GetOrderDetailBody, "access_token" | "nonce">,
+    ) => Promise<GetOrderDetail200>;
+    listCompletedOrdersAll: (
+      body: Omit<ListCompletedOrdersAllBody, "access_token" | "nonce">,
+    ) => Promise<ListCompletedOrdersAll200>;
+    listCompletedOrders: (
+      body: Omit<ListCompletedOrdersBody, "access_token" | "nonce">,
+    ) => Promise<ListCompletedOrders200>;
+    listOpenOrdersAll: (
+      body?: Omit<ListOpenOrdersAllBody, "access_token" | "nonce">,
+    ) => Promise<ListOpenOrdersAll200>;
+    listOpenOrders: (
+      body: Omit<ListOpenOrdersBody, "access_token" | "nonce">,
+    ) => Promise<ListOpenOrders200>;
+    getOrderInfo: (
+      body: Omit<GetOrderInfoBody, "access_token" | "nonce">,
+    ) => Promise<GetOrderInfo200>;
   };
   transactions: {
-    krwTransactionHistory: (
-      body?: Omit<KrwTransactionHistoryBody, "access_token" | "nonce">,
-    ) => Promise<KrwTransactionHistory200>;
-    coinTransactionHistory: (
-      body?: Omit<CoinTransactionHistoryBody, "access_token" | "nonce">,
-    ) => Promise<CoinTransactionHistory200>;
-    singleCoinTransactionHistory: (
-      body: Omit<SingleCoinTransactionHistoryBody, "access_token" | "nonce">,
-    ) => Promise<SingleCoinTransactionHistory200>;
-    coinWithdrawalLimit: (
-      body: Omit<CoinWithdrawalLimitBody, "access_token" | "nonce">,
-    ) => Promise<CoinWithdrawalLimit200>;
-    coinWithdrawalAddressBook: (
-      body?: Omit<CoinWithdrawalAddressBookBody, "access_token" | "nonce">,
-    ) => Promise<CoinWithdrawalAddressBook200>;
-    coinWithdrawal: (
-      body: Omit<CoinWithdrawalBody, "access_token" | "nonce">,
-    ) => Promise<CoinWithdrawal200>;
+    listKrwTransactionHistory: (
+      body?: Omit<ListKrwTransactionHistoryBody, "access_token" | "nonce">,
+    ) => Promise<ListKrwTransactionHistory200>;
+    listCoinTransactionHistory: (
+      body?: Omit<ListCoinTransactionHistoryBody, "access_token" | "nonce">,
+    ) => Promise<ListCoinTransactionHistory200>;
+    getCoinTransactionHistoryDetail: (
+      body: Omit<GetCoinTransactionHistoryDetailBody, "access_token" | "nonce">,
+    ) => Promise<GetCoinTransactionHistoryDetail200>;
+    getCoinWithdrawalLimit: (
+      body: Omit<GetCoinWithdrawalLimitBody, "access_token" | "nonce">,
+    ) => Promise<GetCoinWithdrawalLimit200>;
+    listCoinWithdrawalAddressBook: (
+      body?: Omit<ListCoinWithdrawalAddressBookBody, "access_token" | "nonce">,
+    ) => Promise<ListCoinWithdrawalAddressBook200>;
+    createCoinWithdrawal: (
+      body: Omit<CreateCoinWithdrawalBody, "access_token" | "nonce">,
+    ) => Promise<CreateCoinWithdrawal200>;
   };
   rewards: {
-    orderRewardPrograms: (
-      body?: Omit<OrderRewardProgramsBody, "access_token" | "nonce">,
-    ) => Promise<OrderRewardPrograms200>;
-    orderRewardHistory: (
-      body?: Omit<OrderRewardHistoryBody, "access_token" | "nonce">,
-    ) => Promise<OrderRewardHistory200>;
+    listOrderRewardPrograms: (
+      body?: Omit<ListOrderRewardProgramsBody, "access_token" | "nonce">,
+    ) => Promise<ListOrderRewardPrograms200>;
+    listOrderRewardHistory: (
+      body?: Omit<ListOrderRewardHistoryBody, "access_token" | "nonce">,
+    ) => Promise<ListOrderRewardHistory200>;
   };
 }
 

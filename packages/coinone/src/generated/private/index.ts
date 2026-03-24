@@ -16,48 +16,48 @@ import type {
   CancelOrderBody,
   CancelOrders200,
   CancelOrdersBody,
-  CoinTransactionHistory200,
-  CoinTransactionHistoryBody,
-  CoinWithdrawal200,
-  CoinWithdrawalAddressBook200,
-  CoinWithdrawalAddressBookBody,
-  CoinWithdrawalBody,
-  CoinWithdrawalLimit200,
-  CoinWithdrawalLimitBody,
-  FindActiveOrders200,
-  FindActiveOrdersBody,
-  FindAllCompletedOrders200,
-  FindAllCompletedOrdersBody,
-  FindAllOpenOrders200,
-  FindAllOpenOrdersBody,
-  FindAllTradeFees200,
-  FindAllTradeFeesBody,
-  FindBalance200,
-  FindBalanceBody,
-  FindBalanceByCurrencies200,
-  FindBalanceByCurrenciesBody,
-  FindCompletedOrders200,
-  FindCompletedOrdersBody,
-  FindOpenOrders200,
-  FindOpenOrdersBody,
-  FindOrderInfo200,
-  FindOrderInfoBody,
-  FindTradeFeeByPair200,
-  FindTradeFeeByPairBody,
-  KrwTransactionHistory200,
-  KrwTransactionHistoryBody,
-  OrderDetail200,
-  OrderDetailBody,
-  OrderPlaceLimitOrder200,
-  OrderPlaceLimitOrderBody,
-  OrderRewardHistory200,
-  OrderRewardHistoryBody,
-  OrderRewardPrograms200,
-  OrderRewardProgramsBody,
-  PlaceOrder200,
-  PlaceOrderBody,
-  SingleCoinTransactionHistory200,
-  SingleCoinTransactionHistoryBody
+  CreateCoinWithdrawal200,
+  CreateCoinWithdrawalBody,
+  CreateLimitOrder200,
+  CreateLimitOrderBody,
+  CreateOrder200,
+  CreateOrderBody,
+  GetCoinTransactionHistoryDetail200,
+  GetCoinTransactionHistoryDetailBody,
+  GetCoinWithdrawalLimit200,
+  GetCoinWithdrawalLimitBody,
+  GetOrderDetail200,
+  GetOrderDetailBody,
+  GetOrderInfo200,
+  GetOrderInfoBody,
+  GetTradeFeeByPair200,
+  GetTradeFeeByPairBody,
+  ListActiveOrders200,
+  ListActiveOrdersBody,
+  ListBalance200,
+  ListBalanceBody,
+  ListBalanceByCurrencies200,
+  ListBalanceByCurrenciesBody,
+  ListCoinTransactionHistory200,
+  ListCoinTransactionHistoryBody,
+  ListCoinWithdrawalAddressBook200,
+  ListCoinWithdrawalAddressBookBody,
+  ListCompletedOrders200,
+  ListCompletedOrdersAll200,
+  ListCompletedOrdersAllBody,
+  ListCompletedOrdersBody,
+  ListKrwTransactionHistory200,
+  ListKrwTransactionHistoryBody,
+  ListOpenOrders200,
+  ListOpenOrdersAll200,
+  ListOpenOrdersAllBody,
+  ListOpenOrdersBody,
+  ListOrderRewardHistory200,
+  ListOrderRewardHistoryBody,
+  ListOrderRewardPrograms200,
+  ListOrderRewardProgramsBody,
+  ListTradeFees200,
+  ListTradeFeesBody
 } from './model';
 
 
@@ -67,12 +67,12 @@ import type {
  * 고객이 보유한 전체 잔고 조회
  * @summary 전체 잔고 조회
  */
-export const findBalance = (
-    findBalanceBody: FindBalanceBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindBalance200>> => {
+export const listBalance = (
+    listBalanceBody: ListBalanceBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListBalance200>> => {
     return axios.post(
       `/v2.1/account/balance/all`,
-      findBalanceBody,options
+      listBalanceBody,options
     );
   }
 
@@ -80,12 +80,12 @@ export const findBalance = (
  * 고객이 보유한 특정 종목의 잔고 조회
  * @summary 특정 자산 잔고 조회
  */
-export const findBalanceByCurrencies = (
-    findBalanceByCurrenciesBody: FindBalanceByCurrenciesBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindBalanceByCurrencies200>> => {
+export const listBalanceByCurrencies = (
+    listBalanceByCurrenciesBody: ListBalanceByCurrenciesBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListBalanceByCurrencies200>> => {
     return axios.post(
       `/v2.1/account/balance`,
-      findBalanceByCurrenciesBody,options
+      listBalanceByCurrenciesBody,options
     );
   }
 
@@ -93,12 +93,12 @@ export const findBalanceByCurrencies = (
  * 거래 가능한 모든 종목의 수수료 조회
  * @summary 전체 수수료 조회
  */
-export const findAllTradeFees = (
-    findAllTradeFeesBody: FindAllTradeFeesBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindAllTradeFees200>> => {
+export const listTradeFees = (
+    listTradeFeesBody: ListTradeFeesBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTradeFees200>> => {
     return axios.post(
       `/v2.1/account/trade_fee`,
-      findAllTradeFeesBody,options
+      listTradeFeesBody,options
     );
   }
 
@@ -106,14 +106,14 @@ export const findAllTradeFees = (
  * 개별 종목 별로 수수료 조회
  * @summary 개별 종목 수수료 조회
  */
-export const findTradeFeeByPair = (
-    findTradeFeeByPairBody: FindTradeFeeByPairBody,
+export const getTradeFeeByPair = (
+    getTradeFeeByPairBody: GetTradeFeeByPairBody,
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindTradeFeeByPair200>> => {
+ ): Promise<AxiosResponse<GetTradeFeeByPair200>> => {
     return axios.post(
       `/v2.1/account/trade_fee/${quoteCurrency}/${targetCurrency}`,
-      findTradeFeeByPairBody,options
+      getTradeFeeByPairBody,options
     );
   }
 
@@ -121,12 +121,12 @@ export const findTradeFeeByPair = (
  * 종목 별 / 주문 방식 별로 미체결 주문 조회
  * @summary 미체결 주문 조회
  */
-export const findActiveOrders = (
-    findActiveOrdersBody: FindActiveOrdersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindActiveOrders200>> => {
+export const listActiveOrders = (
+    listActiveOrdersBody: ListActiveOrdersBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListActiveOrders200>> => {
     return axios.post(
       `/v2.1/order/active_orders`,
-      findActiveOrdersBody,options
+      listActiveOrdersBody,options
     );
   }
 
@@ -134,12 +134,12 @@ export const findActiveOrders = (
  * 주문 식별 ID에 해당하는 주문 조회
  * @summary 주문 정보 조회
  */
-export const orderDetail = (
-    orderDetailBody: OrderDetailBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<OrderDetail200>> => {
+export const getOrderDetail = (
+    getOrderDetailBody: GetOrderDetailBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrderDetail200>> => {
     return axios.post(
       `/v2.1/order/detail`,
-      orderDetailBody,options
+      getOrderDetailBody,options
     );
   }
 
@@ -147,12 +147,12 @@ export const orderDetail = (
  * 체결된 모든 주문 조회
  * @summary 전체 체결 주문 조회
  */
-export const findAllCompletedOrders = (
-    findAllCompletedOrdersBody: FindAllCompletedOrdersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindAllCompletedOrders200>> => {
+export const listCompletedOrdersAll = (
+    listCompletedOrdersAllBody: ListCompletedOrdersAllBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCompletedOrdersAll200>> => {
     return axios.post(
       `/v2.1/order/completed_orders/all`,
-      findAllCompletedOrdersBody,options
+      listCompletedOrdersAllBody,options
     );
   }
 
@@ -160,12 +160,12 @@ export const findAllCompletedOrders = (
  * 특정 종목의 체결된 주문 조회
  * @summary 종목 별 체결 주문 조회
  */
-export const findCompletedOrders = (
-    findCompletedOrdersBody: FindCompletedOrdersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindCompletedOrders200>> => {
+export const listCompletedOrders = (
+    listCompletedOrdersBody: ListCompletedOrdersBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCompletedOrders200>> => {
     return axios.post(
       `/v2.1/order/completed_orders`,
-      findCompletedOrdersBody,options
+      listCompletedOrdersBody,options
     );
   }
 
@@ -174,12 +174,12 @@ export const findCompletedOrders = (
  * @deprecated
  * @summary 전체 미체결 주문 조회
  */
-export const findAllOpenOrders = (
-    findAllOpenOrdersBody: FindAllOpenOrdersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindAllOpenOrders200>> => {
+export const listOpenOrdersAll = (
+    listOpenOrdersAllBody: ListOpenOrdersAllBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOpenOrdersAll200>> => {
     return axios.post(
       `/v2.1/order/open_orders/all`,
-      findAllOpenOrdersBody,options
+      listOpenOrdersAllBody,options
     );
   }
 
@@ -188,12 +188,12 @@ export const findAllOpenOrders = (
  * @deprecated
  * @summary 종목 별 미체결 주문 조회
  */
-export const findOpenOrders = (
-    findOpenOrdersBody: FindOpenOrdersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindOpenOrders200>> => {
+export const listOpenOrders = (
+    listOpenOrdersBody: ListOpenOrdersBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOpenOrders200>> => {
     return axios.post(
       `/v2.1/order/open_orders`,
-      findOpenOrdersBody,options
+      listOpenOrdersBody,options
     );
   }
 
@@ -202,12 +202,12 @@ export const findOpenOrders = (
  * @deprecated
  * @summary 특정 주문 정보 조회
  */
-export const findOrderInfo = (
-    findOrderInfoBody: FindOrderInfoBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<FindOrderInfo200>> => {
+export const getOrderInfo = (
+    getOrderInfoBody: GetOrderInfoBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrderInfo200>> => {
     return axios.post(
       `/v2.1/order/info`,
-      findOrderInfoBody,options
+      getOrderInfoBody,options
     );
   }
 
@@ -215,12 +215,12 @@ export const findOrderInfo = (
  * 시장가, 지정가, 예약가 주문 유형으로 매수/매도 주문 등록
  * @summary 매수/매도 주문
  */
-export const placeOrder = (
-    placeOrderBody: PlaceOrderBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PlaceOrder200>> => {
+export const createOrder = (
+    createOrderBody: CreateOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateOrder200>> => {
     return axios.post(
       `/v2.1/order`,
-      placeOrderBody,options
+      createOrderBody,options
     );
   }
 
@@ -255,12 +255,12 @@ export const cancelOrder = (
  * @deprecated
  * @summary 지정가 매매 주문
  */
-export const orderPlaceLimitOrder = (
-    orderPlaceLimitOrderBody: OrderPlaceLimitOrderBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<OrderPlaceLimitOrder200>> => {
+export const createLimitOrder = (
+    createLimitOrderBody: CreateLimitOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateLimitOrder200>> => {
     return axios.post(
       `/v2.1/order/limit`,
-      orderPlaceLimitOrderBody,options
+      createLimitOrderBody,options
     );
   }
 
@@ -268,12 +268,12 @@ export const orderPlaceLimitOrder = (
  * 원화의 전체 입출금 내역 조회
  * @summary 원화 입출금 내역 조회
  */
-export const krwTransactionHistory = (
-    krwTransactionHistoryBody: KrwTransactionHistoryBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<KrwTransactionHistory200>> => {
+export const listKrwTransactionHistory = (
+    listKrwTransactionHistoryBody: ListKrwTransactionHistoryBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListKrwTransactionHistory200>> => {
     return axios.post(
       `/v2.1/transaction/krw/history`,
-      krwTransactionHistoryBody,options
+      listKrwTransactionHistoryBody,options
     );
   }
 
@@ -281,12 +281,12 @@ export const krwTransactionHistory = (
  * 가상자산의 전체 입출금 내역 조회
  * @summary 가상자산 입출금 내역 조회
  */
-export const coinTransactionHistory = (
-    coinTransactionHistoryBody: CoinTransactionHistoryBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CoinTransactionHistory200>> => {
+export const listCoinTransactionHistory = (
+    listCoinTransactionHistoryBody: ListCoinTransactionHistoryBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCoinTransactionHistory200>> => {
     return axios.post(
       `/v2.1/transaction/coin/history`,
-      coinTransactionHistoryBody,options
+      listCoinTransactionHistoryBody,options
     );
   }
 
@@ -294,12 +294,12 @@ export const coinTransactionHistory = (
  * 출금 API를 통해 받은 ID를 이용하여 가상자산의 입출금 내역의 진행상태를 조회할 수 있습니다.
  * @summary 가상자산 입출금 내역 단건 조회
  */
-export const singleCoinTransactionHistory = (
-    singleCoinTransactionHistoryBody: SingleCoinTransactionHistoryBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<SingleCoinTransactionHistory200>> => {
+export const getCoinTransactionHistoryDetail = (
+    getCoinTransactionHistoryDetailBody: GetCoinTransactionHistoryDetailBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinTransactionHistoryDetail200>> => {
     return axios.post(
       `/v2.1/transaction/coin/history/detail`,
-      singleCoinTransactionHistoryBody,options
+      getCoinTransactionHistoryDetailBody,options
     );
   }
 
@@ -307,12 +307,12 @@ export const singleCoinTransactionHistory = (
  * 가상자산의 전일 종가를 기준으로 출금 가능 한도를 조회
  * @summary 가상자산 출금 한도 조회
  */
-export const coinWithdrawalLimit = (
-    coinWithdrawalLimitBody: CoinWithdrawalLimitBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CoinWithdrawalLimit200>> => {
+export const getCoinWithdrawalLimit = (
+    getCoinWithdrawalLimitBody: GetCoinWithdrawalLimitBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinWithdrawalLimit200>> => {
     return axios.post(
       `/v2.1/transaction/coin/withdrawal/limit`,
-      coinWithdrawalLimitBody,options
+      getCoinWithdrawalLimitBody,options
     );
   }
 
@@ -320,12 +320,12 @@ export const coinWithdrawalLimit = (
  * 2차 인증 및 수취인정보 등록이 완료된 주소 조회. (해당 주소로만 API출금이 가능합니다)
  * @summary 출금 주소 목록 조회
  */
-export const coinWithdrawalAddressBook = (
-    coinWithdrawalAddressBookBody: CoinWithdrawalAddressBookBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CoinWithdrawalAddressBook200>> => {
+export const listCoinWithdrawalAddressBook = (
+    listCoinWithdrawalAddressBookBody: ListCoinWithdrawalAddressBookBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCoinWithdrawalAddressBook200>> => {
     return axios.post(
       `/v2.1/transaction/coin/withdrawal/address_book`,
-      coinWithdrawalAddressBookBody,options
+      listCoinWithdrawalAddressBookBody,options
     );
   }
 
@@ -333,12 +333,12 @@ export const coinWithdrawalAddressBook = (
  * 2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.
  * @summary 가상자산 출금
  */
-export const coinWithdrawal = (
-    coinWithdrawalBody: CoinWithdrawalBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CoinWithdrawal200>> => {
+export const createCoinWithdrawal = (
+    createCoinWithdrawalBody: CreateCoinWithdrawalBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateCoinWithdrawal200>> => {
     return axios.post(
       `/v2.1/transaction/coin/withdrawal`,
-      coinWithdrawalBody,options
+      createCoinWithdrawalBody,options
     );
   }
 
@@ -346,12 +346,12 @@ export const coinWithdrawal = (
  * 진행중인 주문 리워드 프로그램에 대한 정보 조회
  * @summary 주문 리워드 종목 정보 조회
  */
-export const orderRewardPrograms = (
-    orderRewardProgramsBody: OrderRewardProgramsBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<OrderRewardPrograms200>> => {
+export const listOrderRewardPrograms = (
+    listOrderRewardProgramsBody: ListOrderRewardProgramsBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOrderRewardPrograms200>> => {
     return axios.post(
       `/v2.1/event/order-reward/programs`,
-      orderRewardProgramsBody,options
+      listOrderRewardProgramsBody,options
     );
   }
 
@@ -359,35 +359,35 @@ export const orderRewardPrograms = (
  * 수령한 리워드 내역 정보 조회 (최근일부터 역순 조회, 기간내 최대 30일치 조회 가능)
  * @summary 주문 리워드 내역 조회
  */
-export const orderRewardHistory = (
-    orderRewardHistoryBody: OrderRewardHistoryBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<OrderRewardHistory200>> => {
+export const listOrderRewardHistory = (
+    listOrderRewardHistoryBody: ListOrderRewardHistoryBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOrderRewardHistory200>> => {
     return axios.post(
       `/v2.1/event/order-reward/history`,
-      orderRewardHistoryBody,options
+      listOrderRewardHistoryBody,options
     );
   }
 
-export type FindBalanceResult = AxiosResponse<FindBalance200>
-export type FindBalanceByCurrenciesResult = AxiosResponse<FindBalanceByCurrencies200>
-export type FindAllTradeFeesResult = AxiosResponse<FindAllTradeFees200>
-export type FindTradeFeeByPairResult = AxiosResponse<FindTradeFeeByPair200>
-export type FindActiveOrdersResult = AxiosResponse<FindActiveOrders200>
-export type OrderDetailResult = AxiosResponse<OrderDetail200>
-export type FindAllCompletedOrdersResult = AxiosResponse<FindAllCompletedOrders200>
-export type FindCompletedOrdersResult = AxiosResponse<FindCompletedOrders200>
-export type FindAllOpenOrdersResult = AxiosResponse<FindAllOpenOrders200>
-export type FindOpenOrdersResult = AxiosResponse<FindOpenOrders200>
-export type FindOrderInfoResult = AxiosResponse<FindOrderInfo200>
-export type PlaceOrderResult = AxiosResponse<PlaceOrder200>
+export type ListBalanceResult = AxiosResponse<ListBalance200>
+export type ListBalanceByCurrenciesResult = AxiosResponse<ListBalanceByCurrencies200>
+export type ListTradeFeesResult = AxiosResponse<ListTradeFees200>
+export type GetTradeFeeByPairResult = AxiosResponse<GetTradeFeeByPair200>
+export type ListActiveOrdersResult = AxiosResponse<ListActiveOrders200>
+export type GetOrderDetailResult = AxiosResponse<GetOrderDetail200>
+export type ListCompletedOrdersAllResult = AxiosResponse<ListCompletedOrdersAll200>
+export type ListCompletedOrdersResult = AxiosResponse<ListCompletedOrders200>
+export type ListOpenOrdersAllResult = AxiosResponse<ListOpenOrdersAll200>
+export type ListOpenOrdersResult = AxiosResponse<ListOpenOrders200>
+export type GetOrderInfoResult = AxiosResponse<GetOrderInfo200>
+export type CreateOrderResult = AxiosResponse<CreateOrder200>
 export type CancelOrdersResult = AxiosResponse<CancelOrders200>
 export type CancelOrderResult = AxiosResponse<CancelOrder200>
-export type OrderPlaceLimitOrderResult = AxiosResponse<OrderPlaceLimitOrder200>
-export type KrwTransactionHistoryResult = AxiosResponse<KrwTransactionHistory200>
-export type CoinTransactionHistoryResult = AxiosResponse<CoinTransactionHistory200>
-export type SingleCoinTransactionHistoryResult = AxiosResponse<SingleCoinTransactionHistory200>
-export type CoinWithdrawalLimitResult = AxiosResponse<CoinWithdrawalLimit200>
-export type CoinWithdrawalAddressBookResult = AxiosResponse<CoinWithdrawalAddressBook200>
-export type CoinWithdrawalResult = AxiosResponse<CoinWithdrawal200>
-export type OrderRewardProgramsResult = AxiosResponse<OrderRewardPrograms200>
-export type OrderRewardHistoryResult = AxiosResponse<OrderRewardHistory200>
+export type CreateLimitOrderResult = AxiosResponse<CreateLimitOrder200>
+export type ListKrwTransactionHistoryResult = AxiosResponse<ListKrwTransactionHistory200>
+export type ListCoinTransactionHistoryResult = AxiosResponse<ListCoinTransactionHistory200>
+export type GetCoinTransactionHistoryDetailResult = AxiosResponse<GetCoinTransactionHistoryDetail200>
+export type GetCoinWithdrawalLimitResult = AxiosResponse<GetCoinWithdrawalLimit200>
+export type ListCoinWithdrawalAddressBookResult = AxiosResponse<ListCoinWithdrawalAddressBook200>
+export type CreateCoinWithdrawalResult = AxiosResponse<CreateCoinWithdrawal200>
+export type ListOrderRewardProgramsResult = AxiosResponse<ListOrderRewardPrograms200>
+export type ListOrderRewardHistoryResult = AxiosResponse<ListOrderRewardHistory200>

@@ -5,62 +5,65 @@ import type {
   CancelCoinWithdrawalParams,
   CancelOrder200,
   CancelOrderParams,
-  GetAllOrders200,
-  GetAllOrdersParams,
-  GetBalance200,
-  GetBalanceParams,
+  CreateCoinDepositAddress200,
+  CreateCoinDepositAddressBody,
+  CreateCoinWithdrawal200,
+  CreateCoinWithdrawalBody,
+  CreateOrder200,
+  CreateOrderBody,
   GetCoinDeposit200,
   GetCoinDepositAddress200,
-  GetCoinDepositAddresses200,
   GetCoinDepositAddressParams,
   GetCoinDepositParams,
-  GetCoinRecentDeposits200,
-  GetCoinRecentDepositsParams,
-  GetCoinRecentWithdrawals200,
-  GetCoinRecentWithdrawalsParams,
-  GetCoinWithdrawableAddresses200,
   GetCoinWithdrawableAmount200,
   GetCoinWithdrawableAmountParams,
   GetCoinWithdrawal200,
   GetCoinWithdrawalParams,
   GetCurrentKeyInfo200,
-  GetKrwRecentDeposits200,
-  GetKrwRecentDepositsParams,
-  GetKrwRecentWithdrawals200,
-  GetKrwRecentWithdrawalsParams,
-  GetMyTrades200,
-  GetMyTradesParams,
-  GetOpenOrders200,
-  GetOpenOrdersParams,
+  GetCurrentKeyInfoParams,
   GetOrder200,
   GetOrderParams,
   GetTradingFeePolicy200,
   GetTradingFeePolicyParams,
-  CreateCoinDepositAddress200,
-  CreateCoinDepositAddressBody,
-  CreateCoinWithdrawal200,
-  CreateCoinWithdrawalBody,
+  ListAllOrders200,
+  ListAllOrdersParams,
+  ListBalance200,
+  ListBalanceParams,
+  ListCoinDepositAddresses200,
+  ListCoinDepositAddressesParams,
+  ListCoinRecentDeposits200,
+  ListCoinRecentDepositsParams,
+  ListCoinRecentWithdrawals200,
+  ListCoinRecentWithdrawalsParams,
+  ListCoinWithdrawableAddresses200,
+  ListCoinWithdrawableAddressesParams,
+  ListKrwRecentDeposits200,
+  ListKrwRecentDepositsParams,
+  ListKrwRecentWithdrawals200,
+  ListKrwRecentWithdrawalsParams,
+  ListMyTrades200,
+  ListMyTradesParams,
+  ListOpenOrders200,
+  ListOpenOrdersParams,
   RequestKrwDeposit200,
   RequestKrwDepositBody,
   RequestKrwWithdrawal200,
   RequestKrwWithdrawalBody,
-  PlaceOrder200,
-  PlaceOrderBody,
 } from "../generated/private/model";
 import type {
   GetCandles200,
   GetCandlesParams,
-  GetCurrencies200,
-  GetCurrencyPairs200,
   GetOrderbook200,
   GetOrderbookParams,
-  GetTickers200,
-  GetTickersParams,
   GetTickSizePolicy200,
   GetTickSizePolicyParams,
   GetTime200,
-  GetTrades200,
-  GetTradesParams,
+  ListCurrencies200,
+  ListCurrencyPairs200,
+  ListTickers200,
+  ListTickersParams,
+  ListTrades200,
+  ListTradesParams,
 } from "../generated/public/model";
 
 export interface KorbitCredentials {
@@ -75,85 +78,91 @@ export type KorbitSignedParamsInput = Record<string, unknown> | undefined;
 
 export interface KorbitClient {
   market: {
-    tickers: (params?: GetTickersParams) => Promise<GetTickers200>;
+    tickers: (params?: ListTickersParams) => Promise<ListTickers200>;
     orderbook: (
       params: Omit<GetOrderbookParams, "level"> & { level?: string },
     ) => Promise<GetOrderbook200>;
-    trades: (params: GetTradesParams) => Promise<GetTrades200>;
+    trades: (params: ListTradesParams) => Promise<ListTrades200>;
     candles: (params: GetCandlesParams) => Promise<GetCandles200>;
-    currencyPairs: () => Promise<GetCurrencyPairs200>;
+    currencyPairs: () => Promise<ListCurrencyPairs200>;
     tickSizePolicy: (params: GetTickSizePolicyParams) => Promise<GetTickSizePolicy200>;
-    currencies: () => Promise<GetCurrencies200>;
+    currencies: () => Promise<ListCurrencies200>;
     time: () => Promise<GetTime200>;
   };
   orders: {
-    placeOrder: (body: PlaceOrderBody) => Promise<PlaceOrder200>;
+    createOrder: (body: CreateOrderBody) => Promise<CreateOrder200>;
     cancelOrder: (
       params: Omit<CancelOrderParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<CancelOrder200>;
     getOrder: (
       params: Omit<GetOrderParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<GetOrder200>;
-    getOpenOrders: (
-      params: Omit<GetOpenOrdersParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetOpenOrders200>;
-    getAllOrders: (
-      params: Omit<GetAllOrdersParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetAllOrders200>;
-    getMyTrades: (
-      params: Omit<GetMyTradesParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetMyTrades200>;
+    listOpenOrders: (
+      params: Omit<ListOpenOrdersParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListOpenOrders200>;
+    listAllOrders: (
+      params: Omit<ListAllOrdersParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListAllOrders200>;
+    listMyTrades: (
+      params: Omit<ListMyTradesParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListMyTrades200>;
   };
   assets: {
-    getBalance: (
-      params?: Omit<GetBalanceParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetBalance200>;
+    listBalance: (
+      params?: Omit<ListBalanceParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListBalance200>;
   };
   cryptoDeposits: {
-    getDepositAddresses: () => Promise<GetCoinDepositAddresses200>;
+    listDepositAddresses: (
+      params?: Omit<ListCoinDepositAddressesParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListCoinDepositAddresses200>;
     createDepositAddress: (
       body: CreateCoinDepositAddressBody,
     ) => Promise<CreateCoinDepositAddress200>;
     getDepositAddress: (
       params: Omit<GetCoinDepositAddressParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<GetCoinDepositAddress200>;
-    getRecentDeposits: (
-      params: Omit<GetCoinRecentDepositsParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetCoinRecentDeposits200>;
+    listRecentDeposits: (
+      params: Omit<ListCoinRecentDepositsParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListCoinRecentDeposits200>;
     getDeposit: (
       params: Omit<GetCoinDepositParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<GetCoinDeposit200>;
   };
   cryptoWithdrawals: {
-    getWithdrawableAddresses: () => Promise<GetCoinWithdrawableAddresses200>;
+    listWithdrawableAddresses: (
+      params?: Omit<ListCoinWithdrawableAddressesParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListCoinWithdrawableAddresses200>;
     getWithdrawableAmount: (
       params?: Omit<GetCoinWithdrawableAmountParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<GetCoinWithdrawableAmount200>;
-    withdraw: (body: CreateCoinWithdrawalBody) => Promise<CreateCoinWithdrawal200>;
+    createWithdrawal: (body: CreateCoinWithdrawalBody) => Promise<CreateCoinWithdrawal200>;
     cancelWithdrawal: (
       params: Omit<CancelCoinWithdrawalParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<CancelCoinWithdrawal200>;
-    getRecentWithdrawals: (
-      params: Omit<GetCoinRecentWithdrawalsParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetCoinRecentWithdrawals200>;
+    listRecentWithdrawals: (
+      params: Omit<ListCoinRecentWithdrawalsParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListCoinRecentWithdrawals200>;
     getWithdrawal: (
       params: Omit<GetCoinWithdrawalParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<GetCoinWithdrawal200>;
   };
   krw: {
-    sendDepositPush: (body: RequestKrwDepositBody) => Promise<RequestKrwDeposit200>;
-    sendWithdrawalPush: (body: RequestKrwWithdrawalBody) => Promise<RequestKrwWithdrawal200>;
-    getRecentDeposits: (
-      params: Omit<GetKrwRecentDepositsParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetKrwRecentDeposits200>;
-    getRecentWithdrawals: (
-      params: Omit<GetKrwRecentWithdrawalsParams, "timestamp" | "signature" | "recvWindow">,
-    ) => Promise<GetKrwRecentWithdrawals200>;
+    requestDepositPush: (body: RequestKrwDepositBody) => Promise<RequestKrwDeposit200>;
+    requestWithdrawalPush: (body: RequestKrwWithdrawalBody) => Promise<RequestKrwWithdrawal200>;
+    listRecentDeposits: (
+      params: Omit<ListKrwRecentDepositsParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListKrwRecentDeposits200>;
+    listRecentWithdrawals: (
+      params: Omit<ListKrwRecentWithdrawalsParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<ListKrwRecentWithdrawals200>;
   };
   service: {
     getTradingFeePolicy: (
       params?: Omit<GetTradingFeePolicyParams, "timestamp" | "signature" | "recvWindow">,
     ) => Promise<GetTradingFeePolicy200>;
-    getCurrentKeyInfo: () => Promise<GetCurrentKeyInfo200>;
+    getCurrentKeyInfo: (
+      params?: Omit<GetCurrentKeyInfoParams, "timestamp" | "signature" | "recvWindow">,
+    ) => Promise<GetCurrentKeyInfo200>;
   };
 }

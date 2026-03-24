@@ -18,40 +18,40 @@ export const ListTradingPairsQueryParams = zod.object({
 /**
  * @summary 초(Second) 캔들 조회
  */
-export const listCandlesSecondsQueryCountDefault = 1;
+export const getSecondCandlesQueryCountDefault = 1;
 
-export const ListCandlesSecondsQueryParams = zod.object({
+export const GetSecondCandlesQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(listCandlesSecondsQueryCountDefault)
+  "count": zod.number().default(getSecondCandlesQueryCountDefault)
 })
 
 
 /**
  * @summary 분(Minute) 캔들 조회
  */
-export const ListCandlesMinutesParams = zod.object({
+export const GetMinuteCandlesParams = zod.object({
   "unit": zod.union([zod.literal(1),zod.literal(3),zod.literal(5),zod.literal(10),zod.literal(15),zod.literal(30),zod.literal(60),zod.literal(240)])
 })
 
-export const listCandlesMinutesQueryCountDefault = 1;
+export const getMinuteCandlesQueryCountDefault = 1;
 
-export const ListCandlesMinutesQueryParams = zod.object({
+export const GetMinuteCandlesQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(listCandlesMinutesQueryCountDefault)
+  "count": zod.number().default(getMinuteCandlesQueryCountDefault)
 })
 
 
 /**
  * @summary 일(Day) 캔들 조회
  */
-export const listCandlesDaysQueryCountDefault = 1;
+export const getDayCandlesQueryCountDefault = 1;
 
-export const ListCandlesDaysQueryParams = zod.object({
+export const GetDayCandlesQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(listCandlesDaysQueryCountDefault),
+  "count": zod.number().default(getDayCandlesQueryCountDefault),
   "converting_price_unit": zod.string().optional()
 })
 
@@ -59,48 +59,48 @@ export const ListCandlesDaysQueryParams = zod.object({
 /**
  * @summary 주(Week) 캔들 조회
  */
-export const listCandlesWeeksQueryCountDefault = 1;
+export const getWeekCandlesQueryCountDefault = 1;
 
-export const ListCandlesWeeksQueryParams = zod.object({
+export const GetWeekCandlesQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(listCandlesWeeksQueryCountDefault)
+  "count": zod.number().default(getWeekCandlesQueryCountDefault)
 })
 
 
 /**
  * @summary 월(Month) 캔들 조회
  */
-export const listCandlesMonthsQueryCountDefault = 1;
+export const getMonthCandlesQueryCountDefault = 1;
 
-export const ListCandlesMonthsQueryParams = zod.object({
+export const GetMonthCandlesQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(listCandlesMonthsQueryCountDefault)
+  "count": zod.number().default(getMonthCandlesQueryCountDefault)
 })
 
 
 /**
  * @summary 연(Year) 캔들 조회
  */
-export const listCandlesYearsQueryCountDefault = 1;
+export const getYearCandlesQueryCountDefault = 1;
 
-export const ListCandlesYearsQueryParams = zod.object({
+export const GetYearCandlesQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(listCandlesYearsQueryCountDefault)
+  "count": zod.number().default(getYearCandlesQueryCountDefault)
 })
 
 
 /**
  * @summary 최근 체결 내역 조회
  */
-export const recentTradesHistoryQueryCountDefault = 1;
+export const listTradesTicksQueryCountDefault = 1;
 
-export const RecentTradesHistoryQueryParams = zod.object({
+export const ListTradesTicksQueryParams = zod.object({
   "market": zod.string(),
   "to": zod.string().optional(),
-  "count": zod.number().default(recentTradesHistoryQueryCountDefault),
+  "count": zod.number().default(listTradesTicksQueryCountDefault),
   "cursor": zod.string().optional(),
   "days_ago": zod.number().optional()
 })
@@ -147,6 +147,6 @@ export const ListOrderbookInstrumentsQueryParams = zod.object({
  * @deprecated
  * @summary 호가 모아보기 단위 조회
  */
-export const ListOrderbookLevelsQueryParams = zod.object({
+export const ListOrderbookSupportedLevelsQueryParams = zod.object({
   "markets": zod.string()
 })

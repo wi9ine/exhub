@@ -1,15 +1,9 @@
 import type { ExHubClientOptions } from "@exhub/core";
 import type {
-  AvailableDepositInformation200,
-  AvailableDepositInformationParams,
-  AvailableOrderInformation200Item,
-  AvailableOrderInformationParams,
-  AvailableWithdrawalInformation200,
-  AvailableWithdrawalInformationParams,
-  BatchCancelOrders200,
-  BatchCancelOrdersParams,
-  CancelAndNewOrder201,
-  CancelAndNewOrderBody,
+  CancelAndCreateOrder201,
+  CancelAndCreateOrderBody,
+  CancelOpenOrders200,
+  CancelOpenOrdersParams,
   CancelOrder200,
   CancelOrderParams,
   CancelOrdersByIds200,
@@ -19,19 +13,33 @@ import type {
   CreateDepositAddress200,
   CreateDepositAddress201,
   CreateDepositAddressBody,
-  DepositKrw201,
-  DepositKrwBody,
-  GetBalance200Item,
+  CreateDepositKrw201,
+  CreateDepositKrwBody,
+  CreateOrder201,
+  CreateOrderBody,
+  CreateTestOrder201,
+  CreateTestOrderBody,
+  CreateWithdrawal201,
+  CreateWithdrawalBody,
+  CreateWithdrawKrw201,
+  CreateWithdrawKrwBody,
   GetDeposit200,
   GetDepositAddress200,
   GetDepositAddressParams,
+  GetDepositChance200,
+  GetDepositChanceParams,
   GetDepositParams,
   GetOrder200,
+  GetOrderChance200Item,
+  GetOrderChanceParams,
   GetOrderParams,
   GetServiceStatus200Item,
+  GetWithdrawChance200,
+  GetWithdrawChanceParams,
   GetWithdrawal200,
   GetWithdrawalParams,
   ListApiKeys200Item,
+  ListBalance200Item,
   ListClosedOrders200Item,
   ListClosedOrdersParams,
   ListDepositAddresses200Item,
@@ -41,50 +49,42 @@ import type {
   ListOpenOrdersParams,
   ListOrdersByIds200Item,
   ListOrdersByIdsParams,
-  ListTravelruleVasps200Item,
+  ListTravelRuleVasps200Item,
   ListWithdrawalAddresses200Item,
   ListWithdrawals200Item,
   ListWithdrawalsParams,
-  NewOrder201,
-  NewOrderBody,
-  TestOrder201,
-  TestOrderBody,
-  VerifyTravelruleByTxid201,
-  VerifyTravelruleByTxidBody,
-  VerifyTravelruleByUuid201,
-  VerifyTravelruleByUuidBody,
-  Withdraw201,
-  WithdrawBody,
-  WithdrawKrw201,
-  WithdrawKrwBody,
+  VerifyTravelRuleByTxid201,
+  VerifyTravelRuleByTxidBody,
+  VerifyTravelRuleByUuid201,
+  VerifyTravelRuleByUuidBody,
 } from "../generated/exchange/model";
 import type {
-  ListCandlesDays200Item,
-  ListCandlesDaysParams,
-  ListCandlesMinutes200Item,
-  ListCandlesMinutesParams,
-  ListCandlesMonths200Item,
-  ListCandlesMonthsParams,
-  ListCandlesSeconds200Item,
-  ListCandlesSecondsParams,
-  ListCandlesWeeks200Item,
-  ListCandlesWeeksParams,
-  ListCandlesYears200Item,
-  ListCandlesYearsParams,
+  GetDayCandles200Item,
+  GetDayCandlesParams,
+  GetMinuteCandles200Item,
+  GetMinuteCandlesParams,
+  GetMonthCandles200Item,
+  GetMonthCandlesParams,
+  GetSecondCandles200Item,
+  GetSecondCandlesParams,
+  GetWeekCandles200Item,
+  GetWeekCandlesParams,
+  GetYearCandles200Item,
+  GetYearCandlesParams,
   ListOrderbookInstruments200Item,
   ListOrderbookInstrumentsParams,
-  ListOrderbookLevels200Item,
-  ListOrderbookLevelsParams,
+  ListOrderbookSupportedLevels200Item,
+  ListOrderbookSupportedLevelsParams,
   ListOrderbooks200Item,
   ListOrderbooksParams,
   ListQuoteTickers200Item,
   ListQuoteTickersParams,
   ListTickers200Item,
   ListTickersParams,
+  ListTradesTicks200Item,
+  ListTradesTicksParams,
   ListTradingPairs200Item,
   ListTradingPairsParams,
-  RecentTradesHistory200Item,
-  RecentTradesHistoryParams,
 } from "../generated/quotation/model";
 
 export interface UpbitCredentials {
@@ -99,20 +99,18 @@ export interface UpbitClient {
     listTradingPairs: (params?: ListTradingPairsParams) => Promise<ListTradingPairs200Item[]>;
   };
   candles: {
-    listCandlesSeconds: (params: ListCandlesSecondsParams) => Promise<ListCandlesSeconds200Item[]>;
-    listCandlesMinutes: (
+    getSecondCandles: (params: GetSecondCandlesParams) => Promise<GetSecondCandles200Item[]>;
+    getMinuteCandles: (
       unit: 1 | 3 | 5 | 10 | 15 | 30 | 60 | 240,
-      params: ListCandlesMinutesParams,
-    ) => Promise<ListCandlesMinutes200Item[]>;
-    listCandlesDays: (params: ListCandlesDaysParams) => Promise<ListCandlesDays200Item[]>;
-    listCandlesWeeks: (params: ListCandlesWeeksParams) => Promise<ListCandlesWeeks200Item[]>;
-    listCandlesMonths: (params: ListCandlesMonthsParams) => Promise<ListCandlesMonths200Item[]>;
-    listCandlesYears: (params: ListCandlesYearsParams) => Promise<ListCandlesYears200Item[]>;
+      params: GetMinuteCandlesParams,
+    ) => Promise<GetMinuteCandles200Item[]>;
+    getDayCandles: (params: GetDayCandlesParams) => Promise<GetDayCandles200Item[]>;
+    getWeekCandles: (params: GetWeekCandlesParams) => Promise<GetWeekCandles200Item[]>;
+    getMonthCandles: (params: GetMonthCandlesParams) => Promise<GetMonthCandles200Item[]>;
+    getYearCandles: (params: GetYearCandlesParams) => Promise<GetYearCandles200Item[]>;
   };
   trades: {
-    recentTradesHistory: (
-      params: RecentTradesHistoryParams,
-    ) => Promise<RecentTradesHistory200Item[]>;
+    listTradesTicks: (params: ListTradesTicksParams) => Promise<ListTradesTicks200Item[]>;
   };
   tickers: {
     listTickers: (params: ListTickersParams) => Promise<ListTickers200Item[]>;
@@ -123,60 +121,56 @@ export interface UpbitClient {
     listOrderbookInstruments: (
       params: ListOrderbookInstrumentsParams,
     ) => Promise<ListOrderbookInstruments200Item[]>;
-    listOrderbookLevels: (
-      params: ListOrderbookLevelsParams,
-    ) => Promise<ListOrderbookLevels200Item[]>;
+    listOrderbookSupportedLevels: (
+      params: ListOrderbookSupportedLevelsParams,
+    ) => Promise<ListOrderbookSupportedLevels200Item[]>;
   };
   assets: {
-    getBalance: () => Promise<GetBalance200Item[]>;
+    listBalance: () => Promise<ListBalance200Item[]>;
   };
   orders: {
-    availableOrderInformation: (
-      params: AvailableOrderInformationParams,
-    ) => Promise<AvailableOrderInformation200Item[]>;
-    newOrder: (body: NewOrderBody) => Promise<NewOrder201>;
-    testOrder: (body: TestOrderBody) => Promise<TestOrder201>;
+    getOrderChance: (params: GetOrderChanceParams) => Promise<GetOrderChance200Item[]>;
+    createOrder: (body: CreateOrderBody) => Promise<CreateOrder201>;
+    createTestOrder: (body: CreateTestOrderBody) => Promise<CreateTestOrder201>;
     getOrder: (params?: GetOrderParams) => Promise<GetOrder200>;
     cancelOrder: (params?: CancelOrderParams) => Promise<CancelOrder200>;
     listOrdersByIds: (params?: ListOrdersByIdsParams) => Promise<ListOrdersByIds200Item[]>;
     cancelOrdersByIds: (params?: CancelOrdersByIdsParams) => Promise<CancelOrdersByIds200>;
     listOpenOrders: (params?: ListOpenOrdersParams) => Promise<ListOpenOrders200Item[]>;
-    batchCancelOrders: (params?: BatchCancelOrdersParams) => Promise<BatchCancelOrders200>;
+    cancelOpenOrders: (params?: CancelOpenOrdersParams) => Promise<CancelOpenOrders200>;
     listClosedOrders: (params?: ListClosedOrdersParams) => Promise<ListClosedOrders200Item[]>;
-    cancelAndNewOrder: (body: CancelAndNewOrderBody) => Promise<CancelAndNewOrder201>;
+    cancelAndCreateOrder: (
+      body: CancelAndCreateOrderBody,
+    ) => Promise<CancelAndCreateOrder201>;
   };
   withdrawals: {
-    availableWithdrawalInformation: (
-      params: AvailableWithdrawalInformationParams,
-    ) => Promise<AvailableWithdrawalInformation200>;
+    getWithdrawChance: (params: GetWithdrawChanceParams) => Promise<GetWithdrawChance200>;
     listWithdrawalAddresses: () => Promise<ListWithdrawalAddresses200Item[]>;
-    withdraw: (body: WithdrawBody) => Promise<Withdraw201>;
+    withdraw: (body: CreateWithdrawalBody) => Promise<CreateWithdrawal201>;
     cancelWithdrawal: (params: CancelWithdrawalParams) => Promise<CancelWithdrawal200>;
-    withdrawKrw: (body: WithdrawKrwBody) => Promise<WithdrawKrw201>;
+    createWithdrawKrw: (body: CreateWithdrawKrwBody) => Promise<CreateWithdrawKrw201>;
     getWithdrawal: (params?: GetWithdrawalParams) => Promise<GetWithdrawal200>;
     listWithdrawals: (params?: ListWithdrawalsParams) => Promise<ListWithdrawals200Item[]>;
   };
   deposits: {
-    availableDepositInformation: (
-      params: AvailableDepositInformationParams,
-    ) => Promise<AvailableDepositInformation200>;
+    getDepositChance: (params: GetDepositChanceParams) => Promise<GetDepositChance200>;
     createDepositAddress: (
       body: CreateDepositAddressBody,
     ) => Promise<CreateDepositAddress200 | CreateDepositAddress201>;
     getDepositAddress: (params: GetDepositAddressParams) => Promise<GetDepositAddress200>;
     listDepositAddresses: () => Promise<ListDepositAddresses200Item[]>;
-    depositKrw: (body: DepositKrwBody) => Promise<DepositKrw201>;
+    createDepositKrw: (body: CreateDepositKrwBody) => Promise<CreateDepositKrw201>;
     getDeposit: (params?: GetDepositParams) => Promise<GetDeposit200>;
     listDeposits: (params?: ListDepositsParams) => Promise<ListDeposits200Item[]>;
   };
   travelRule: {
-    listTravelruleVasps: () => Promise<ListTravelruleVasps200Item[]>;
-    verifyTravelruleByUuid: (
-      body: VerifyTravelruleByUuidBody,
-    ) => Promise<VerifyTravelruleByUuid201>;
-    verifyTravelruleByTxid: (
-      body: VerifyTravelruleByTxidBody,
-    ) => Promise<VerifyTravelruleByTxid201>;
+    listTravelRuleVasps: () => Promise<ListTravelRuleVasps200Item[]>;
+    verifyTravelRuleByUuid: (
+      body: VerifyTravelRuleByUuidBody,
+    ) => Promise<VerifyTravelRuleByUuid201>;
+    verifyTravelRuleByTxid: (
+      body: VerifyTravelRuleByTxidBody,
+    ) => Promise<VerifyTravelRuleByTxid201>;
   };
   service: {
     getServiceStatus: () => Promise<GetServiceStatus200Item[]>;

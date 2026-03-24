@@ -5,8 +5,8 @@
  * 업비트 거래소 API. 공식 개발자 센터 v1.6.1 기준 스키마입니다.
  * OpenAPI spec version: 1.6.1
  */
-import type { VerifyTravelruleByTxid400Error } from './verifyTravelruleByTxid400Error';
+import type { VerifyTravelRuleByTxid400Error } from './verifyTravelRuleByTxid400Error';
 
-export type VerifyTravelruleByTxid400 = {
-  error?: VerifyTravelruleByTxid400Error;
+export type VerifyTravelRuleByTxid400 = {
+  error?: VerifyTravelRuleByTxid400Error;
 };

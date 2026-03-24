@@ -14,17 +14,17 @@ import type {
 import type {
   GetCandles200,
   GetCandlesParams,
-  GetCurrencies200,
-  GetCurrencyPairs200,
   GetOrderbook200,
   GetOrderbookParams,
   GetTickSizePolicy200,
   GetTickSizePolicyParams,
-  GetTickers200,
-  GetTickersParams,
   GetTime200,
-  GetTrades200,
-  GetTradesParams
+  ListCurrencies200,
+  ListCurrencyPairs200,
+  ListTickers200,
+  ListTickersParams,
+  ListTrades200,
+  ListTradesParams
 } from './model';
 
 
@@ -34,9 +34,9 @@ import type {
  * 하나 또는 여러 거래쌍의 현재가(Ticker) 정보를 조회합니다.
  * @summary 현재가 조회
  */
-export const getTickers = (
-    params?: GetTickersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetTickers200>> => {
+export const listTickers = (
+    params?: ListTickersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTickers200>> => {
     return axios.get(
       `/v2/tickers`,{
     ...options,
@@ -62,9 +62,9 @@ export const getOrderbook = (
  * 최근 체결 내역을 조회합니다.
  * @summary 최근 체결 내역
  */
-export const getTrades = (
-    params: GetTradesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetTrades200>> => {
+export const listTrades = (
+    params: ListTradesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTrades200>> => {
     return axios.get(
       `/v2/trades`,{
     ...options,
@@ -89,9 +89,9 @@ export const getCandles = (
 /**
  * @summary 거래지원 목록 조회
  */
-export const getCurrencyPairs = (
+export const listCurrencyPairs = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCurrencyPairs200>> => {
+ ): Promise<AxiosResponse<ListCurrencyPairs200>> => {
     return axios.get(
       `/v2/currencyPairs`,options
     );
@@ -115,9 +115,9 @@ export const getTickSizePolicy = (
  * 가상자산 정보를 조회합니다.
  * @summary 가상자산 정보 조회
  */
-export const getCurrencies = (
+export const listCurrencies = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCurrencies200>> => {
+ ): Promise<AxiosResponse<ListCurrencies200>> => {
     return axios.get(
       `/v2/currencies`,options
     );
@@ -135,11 +135,11 @@ export const getTime = (
     );
   }
 
-export type GetTickersResult = AxiosResponse<GetTickers200>
+export type ListTickersResult = AxiosResponse<ListTickers200>
 export type GetOrderbookResult = AxiosResponse<GetOrderbook200>
-export type GetTradesResult = AxiosResponse<GetTrades200>
+export type ListTradesResult = AxiosResponse<ListTrades200>
 export type GetCandlesResult = AxiosResponse<GetCandles200>
-export type GetCurrencyPairsResult = AxiosResponse<GetCurrencyPairs200>
+export type ListCurrencyPairsResult = AxiosResponse<ListCurrencyPairs200>
 export type GetTickSizePolicyResult = AxiosResponse<GetTickSizePolicy200>
-export type GetCurrenciesResult = AxiosResponse<GetCurrencies200>
+export type ListCurrenciesResult = AxiosResponse<ListCurrencies200>
 export type GetTimeResult = AxiosResponse<GetTime200>

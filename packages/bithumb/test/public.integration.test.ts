@@ -8,7 +8,7 @@ let market = "KRW-BTC";
 
 describe("@exhub/bithumb public integration", () => {
   beforeAll(async () => {
-    const markets = await client.markets.getMarketAll({ isDetails: true });
+    const markets = await client.markets.getMarkets({ isDetails: true });
     expect(Array.isArray(markets)).toBe(true);
     expect(markets.length).toBeGreaterThan(0);
     market =
@@ -16,32 +16,32 @@ describe("@exhub/bithumb public integration", () => {
   });
 
   it("마켓 코드 조회", async () => {
-    const result = await client.markets.getMarketAll({ isDetails: true });
+    const result = await client.markets.getMarkets({ isDetails: true });
     expect(Array.isArray(result)).toBe(true);
   });
 
   it("분 캔들 조회", async () => {
-    const result = await client.candles.minute({ market, count: 1 }, 1);
+    const result = await client.candles.getMinuteCandles({ market, count: 1 }, 1);
     expect(Array.isArray(result)).toBe(true);
   });
 
   it("일 캔들 조회", async () => {
-    const result = await client.candles.day({ market, count: 1 });
+    const result = await client.candles.getDayCandles({ market, count: 1 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   it("주 캔들 조회", async () => {
-    const result = await client.candles.week({ market, count: 1 });
+    const result = await client.candles.getWeekCandles({ market, count: 1 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   it("월 캔들 조회", async () => {
-    const result = await client.candles.month({ market, count: 1 });
+    const result = await client.candles.getMonthCandles({ market, count: 1 });
     expect(Array.isArray(result)).toBe(true);
   });
 
   it("최근 체결 내역 조회", async () => {
-    const result = await client.trades.getTradesTicks({ market, count: 1 });
+    const result = await client.trades.listTradesTicks({ market, count: 1 });
     expect(Array.isArray(result)).toBe(true);
   });
 
@@ -61,7 +61,7 @@ describe("@exhub/bithumb public integration", () => {
   });
 
   it("공지사항 조회", async () => {
-    const result = await client.service.getNotices();
+    const result = await client.service.listNotices();
     expect(Array.isArray(result)).toBe(true);
   });
 

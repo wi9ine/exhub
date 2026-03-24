@@ -35,19 +35,19 @@ describe("korbit private integration", () => {
     const pairs = await client.market.currencyPairs();
     symbol = pairs.data[0]?.symbol ?? symbol;
 
-    const openOrders = await client.orders.getOpenOrders({ symbol, limit: 10 });
+    const openOrders = await client.orders.listOpenOrders({ symbol, limit: 10 });
     orderId = openOrders.data[0]?.orderId;
 
-    const depositAddresses = await client.cryptoDeposits.getDepositAddresses();
+    const depositAddresses = await client.cryptoDeposits.listDepositAddresses();
     coinCurrency = depositAddresses.data[0]?.currency ?? coinCurrency;
 
-    const recentDeposits = await client.cryptoDeposits.getRecentDeposits({
+    const recentDeposits = await client.cryptoDeposits.listRecentDeposits({
       currency: coinCurrency,
       limit: 10,
     });
     coinDepositId = recentDeposits.data[0]?.id;
 
-    const recentWithdrawals = await client.cryptoWithdrawals.getRecentWithdrawals({
+    const recentWithdrawals = await client.cryptoWithdrawals.listRecentWithdrawals({
       currency: coinCurrency,
       limit: 10,
     });
@@ -61,30 +61,30 @@ describe("korbit private integration", () => {
   });
 
   testIf("미체결 주문 조회", async () => {
-    const result = await client.orders.getOpenOrders({ symbol, limit: 10 });
+    const result = await client.orders.listOpenOrders({ symbol, limit: 10 });
     expect(result.success).toBe(true);
     expect(Array.isArray(result.data)).toBe(true);
   });
 
   testIf("최근 주문 내역 조회", async () => {
-    const result = await client.orders.getAllOrders({ symbol, limit: 10 });
+    const result = await client.orders.listAllOrders({ symbol, limit: 10 });
     expect(result.success).toBe(true);
     expect(Array.isArray(result.data)).toBe(true);
   });
 
   testIf("최근 체결 내역 조회", async () => {
-    const result = await client.orders.getMyTrades({ symbol, limit: 10 });
+    const result = await client.orders.listMyTrades({ symbol, limit: 10 });
     expect(result.success).toBe(true);
     expect(Array.isArray(result.data)).toBe(true);
   });
 
   testIf("자산 현황", async () => {
-    const result = await client.assets.getBalance();
+    const result = await client.assets.listBalance();
     expect(result.success).toBe(true);
   });
 
   testIf("입금 주소 전체 조회", async () => {
-    const result = await client.cryptoDeposits.getDepositAddresses();
+    const result = await client.cryptoDeposits.listDepositAddresses();
     expect(result.success).toBe(true);
     expect(Array.isArray(result.data)).toBe(true);
   });
@@ -110,7 +110,7 @@ describe("korbit private integration", () => {
   });
 
   testIf("최근 입금내역 조회", async () => {
-    const result = await client.cryptoDeposits.getRecentDeposits({
+    const result = await client.cryptoDeposits.listRecentDeposits({
       currency: coinCurrency,
       limit: 10,
     });
@@ -127,7 +127,7 @@ describe("korbit private integration", () => {
   });
 
   testIf("출금 가능 주소 목록 조회", async () => {
-    const result = await client.cryptoWithdrawals.getWithdrawableAddresses();
+    const result = await client.cryptoWithdrawals.listWithdrawableAddresses();
     expect(result.success).toBe(true);
   });
 
@@ -137,7 +137,7 @@ describe("korbit private integration", () => {
   });
 
   testIf("최근 출금내역 조회", async () => {
-    const result = await client.cryptoWithdrawals.getRecentWithdrawals({
+    const result = await client.cryptoWithdrawals.listRecentWithdrawals({
       currency: coinCurrency,
       limit: 10,
     });
@@ -154,12 +154,12 @@ describe("korbit private integration", () => {
   });
 
   testIf("원화 최근 입금내역 조회", async () => {
-    const result = await client.krw.getRecentDeposits({ limit: 10 });
+    const result = await client.krw.listRecentDeposits({ limit: 10 });
     expect(result.success).toBe(true);
   });
 
   testIf("원화 최근 출금내역 조회", async () => {
-    const result = await client.krw.getRecentWithdrawals({ limit: 10 });
+    const result = await client.krw.listRecentWithdrawals({ limit: 10 });
     expect(result.success).toBe(true);
   });
 

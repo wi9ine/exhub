@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.6.1
  */
 
-export type VerifyTravelruleByTxidBody = {
+export type VerifyTravelRuleByTxidBody = {
   /** 자산을 출금한 상대 거래소의 유일식별자(UUID)
  */
   vasp_uuid: string;

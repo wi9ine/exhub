@@ -12,16 +12,10 @@ import type {
 } from 'axios';
 
 import type {
-  AvailableDepositInformation200,
-  AvailableDepositInformationParams,
-  AvailableOrderInformation200Item,
-  AvailableOrderInformationParams,
-  AvailableWithdrawalInformation200,
-  AvailableWithdrawalInformationParams,
-  BatchCancelOrders200,
-  BatchCancelOrdersParams,
-  CancelAndNewOrder201,
-  CancelAndNewOrderBody,
+  CancelAndCreateOrder201,
+  CancelAndCreateOrderBody,
+  CancelOpenOrders200,
+  CancelOpenOrdersParams,
   CancelOrder200,
   CancelOrderParams,
   CancelOrdersByIds200,
@@ -31,19 +25,33 @@ import type {
   CreateDepositAddress200,
   CreateDepositAddress201,
   CreateDepositAddressBody,
-  DepositKrw201,
-  DepositKrwBody,
-  GetBalance200Item,
+  CreateDepositKrw201,
+  CreateDepositKrwBody,
+  CreateOrder201,
+  CreateOrderBody,
+  CreateTestOrder201,
+  CreateTestOrderBody,
+  CreateWithdrawKrw201,
+  CreateWithdrawKrwBody,
+  CreateWithdrawal201,
+  CreateWithdrawalBody,
   GetDeposit200,
   GetDepositAddress200,
   GetDepositAddressParams,
+  GetDepositChance200,
+  GetDepositChanceParams,
   GetDepositParams,
   GetOrder200,
+  GetOrderChance200Item,
+  GetOrderChanceParams,
   GetOrderParams,
   GetServiceStatus200Item,
+  GetWithdrawChance200,
+  GetWithdrawChanceParams,
   GetWithdrawal200,
   GetWithdrawalParams,
   ListApiKeys200Item,
+  ListBalance200Item,
   ListClosedOrders200Item,
   ListClosedOrdersParams,
   ListDepositAddresses200Item,
@@ -53,22 +61,14 @@ import type {
   ListOpenOrdersParams,
   ListOrdersByIds200Item,
   ListOrdersByIdsParams,
-  ListTravelruleVasps200Item,
+  ListTravelRuleVasps200Item,
   ListWithdrawalAddresses200Item,
   ListWithdrawals200Item,
   ListWithdrawalsParams,
-  NewOrder201,
-  NewOrderBody,
-  TestOrder201,
-  TestOrderBody,
-  VerifyTravelruleByTxid201,
-  VerifyTravelruleByTxidBody,
-  VerifyTravelruleByUuid201,
-  VerifyTravelruleByUuidBody,
-  Withdraw201,
-  WithdrawBody,
-  WithdrawKrw201,
-  WithdrawKrwBody
+  VerifyTravelRuleByTxid201,
+  VerifyTravelRuleByTxidBody,
+  VerifyTravelRuleByUuid201,
+  VerifyTravelRuleByUuidBody
 } from './model';
 
 
@@ -77,9 +77,9 @@ import type {
   /**
  * @summary 계정 잔고 조회
  */
-export const getBalance = (
+export const listBalance = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetBalance200Item[]>> => {
+ ): Promise<AxiosResponse<ListBalance200Item[]>> => {
     return axios.get(
       `/accounts`,options
     );
@@ -88,9 +88,9 @@ export const getBalance = (
 /**
  * @summary 페어별 주문 가능 정보 조회
  */
-export const availableOrderInformation = (
-    params: AvailableOrderInformationParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<AvailableOrderInformation200Item[]>> => {
+export const getOrderChance = (
+    params: GetOrderChanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrderChance200Item[]>> => {
     return axios.get(
       `/orders/chance`,{
     ...options,
@@ -101,24 +101,24 @@ export const availableOrderInformation = (
 /**
  * @summary 주문 생성
  */
-export const newOrder = (
-    newOrderBody: NewOrderBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<NewOrder201>> => {
+export const createOrder = (
+    createOrderBody: CreateOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateOrder201>> => {
     return axios.post(
       `/orders`,
-      newOrderBody,options
+      createOrderBody,options
     );
   }
 
 /**
  * @summary 주문 생성 테스트
  */
-export const testOrder = (
-    testOrderBody: TestOrderBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TestOrder201>> => {
+export const createTestOrder = (
+    createTestOrderBody: CreateTestOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateTestOrder201>> => {
     return axios.post(
       `/orders/test`,
-      testOrderBody,options
+      createTestOrderBody,options
     );
   }
 
@@ -190,9 +190,9 @@ export const listOpenOrders = (
 /**
  * @summary 주문 일괄 취소 접수
  */
-export const batchCancelOrders = (
-    params?: BatchCancelOrdersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BatchCancelOrders200>> => {
+export const cancelOpenOrders = (
+    params?: CancelOpenOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelOpenOrders200>> => {
     return axios.delete(
       `/orders/open`,{
     ...options,
@@ -216,21 +216,21 @@ export const listClosedOrders = (
 /**
  * @summary 취소 후 재주문
  */
-export const cancelAndNewOrder = (
-    cancelAndNewOrderBody: CancelAndNewOrderBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CancelAndNewOrder201>> => {
+export const cancelAndCreateOrder = (
+    cancelAndCreateOrderBody: CancelAndCreateOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelAndCreateOrder201>> => {
     return axios.post(
       `/orders/cancel_and_new`,
-      cancelAndNewOrderBody,options
+      cancelAndCreateOrderBody,options
     );
   }
 
 /**
  * @summary 출금 가능 정보 조회
  */
-export const availableWithdrawalInformation = (
-    params: AvailableWithdrawalInformationParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<AvailableWithdrawalInformation200>> => {
+export const getWithdrawChance = (
+    params: GetWithdrawChanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetWithdrawChance200>> => {
     return axios.get(
       `/withdraws/chance`,{
     ...options,
@@ -252,12 +252,12 @@ export const listWithdrawalAddresses = (
 /**
  * @summary 디지털 자산 출금 요청
  */
-export const withdraw = (
-    withdrawBody: WithdrawBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Withdraw201>> => {
+export const createWithdrawal = (
+    createWithdrawalBody: CreateWithdrawalBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateWithdrawal201>> => {
     return axios.post(
       `/withdraws/coin`,
-      withdrawBody,options
+      createWithdrawalBody,options
     );
   }
 
@@ -277,12 +277,12 @@ export const cancelWithdrawal = (
 /**
  * @summary 원화 출금 요청
  */
-export const withdrawKrw = (
-    withdrawKrwBody: WithdrawKrwBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<WithdrawKrw201>> => {
+export const createWithdrawKrw = (
+    createWithdrawKrwBody: CreateWithdrawKrwBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateWithdrawKrw201>> => {
     return axios.post(
       `/withdraws/krw`,
-      withdrawKrwBody,options
+      createWithdrawKrwBody,options
     );
   }
 
@@ -315,9 +315,9 @@ export const listWithdrawals = (
 /**
  * @summary 디지털 자산 입금 가능 정보 조회
  */
-export const availableDepositInformation = (
-    params: AvailableDepositInformationParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<AvailableDepositInformation200>> => {
+export const getDepositChance = (
+    params: GetDepositChanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetDepositChance200>> => {
     return axios.get(
       `/deposits/chance/coin`,{
     ...options,
@@ -364,12 +364,12 @@ export const listDepositAddresses = (
 /**
  * @summary 원화 입금
  */
-export const depositKrw = (
-    depositKrwBody: DepositKrwBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<DepositKrw201>> => {
+export const createDepositKrw = (
+    createDepositKrwBody: CreateDepositKrwBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateDepositKrw201>> => {
     return axios.post(
       `/deposits/krw`,
-      depositKrwBody,options
+      createDepositKrwBody,options
     );
   }
 
@@ -402,9 +402,9 @@ export const listDeposits = (
 /**
  * @summary 계정주 확인 서비스 지원 거래소 목록 조회
  */
-export const listTravelruleVasps = (
+export const listTravelRuleVasps = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListTravelruleVasps200Item[]>> => {
+ ): Promise<AxiosResponse<ListTravelRuleVasps200Item[]>> => {
     return axios.get(
       `/travel_rule/vasps`,options
     );
@@ -413,24 +413,24 @@ export const listTravelruleVasps = (
 /**
  * @summary 입금 UUID로 계정주 검증 요청
  */
-export const verifyTravelruleByUuid = (
-    verifyTravelruleByUuidBody: VerifyTravelruleByUuidBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<VerifyTravelruleByUuid201>> => {
+export const verifyTravelRuleByUuid = (
+    verifyTravelRuleByUuidBody: VerifyTravelRuleByUuidBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<VerifyTravelRuleByUuid201>> => {
     return axios.post(
       `/travel_rule/deposit/uuid`,
-      verifyTravelruleByUuidBody,options
+      verifyTravelRuleByUuidBody,options
     );
   }
 
 /**
  * @summary 입금 TxID로 계정주 검증 요청
  */
-export const verifyTravelruleByTxid = (
-    verifyTravelruleByTxidBody: VerifyTravelruleByTxidBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<VerifyTravelruleByTxid201>> => {
+export const verifyTravelRuleByTxid = (
+    verifyTravelRuleByTxidBody: VerifyTravelRuleByTxidBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<VerifyTravelRuleByTxid201>> => {
     return axios.post(
       `/travel_rule/deposit/txid`,
-      verifyTravelruleByTxidBody,options
+      verifyTravelRuleByTxidBody,options
     );
   }
 
@@ -456,34 +456,34 @@ export const listApiKeys = (
     );
   }
 
-export type GetBalanceResult = AxiosResponse<GetBalance200Item[]>
-export type AvailableOrderInformationResult = AxiosResponse<AvailableOrderInformation200Item[]>
-export type NewOrderResult = AxiosResponse<NewOrder201>
-export type TestOrderResult = AxiosResponse<TestOrder201>
+export type ListBalanceResult = AxiosResponse<ListBalance200Item[]>
+export type GetOrderChanceResult = AxiosResponse<GetOrderChance200Item[]>
+export type CreateOrderResult = AxiosResponse<CreateOrder201>
+export type CreateTestOrderResult = AxiosResponse<CreateTestOrder201>
 export type GetOrderResult = AxiosResponse<GetOrder200>
 export type CancelOrderResult = AxiosResponse<CancelOrder200>
 export type ListOrdersByIdsResult = AxiosResponse<ListOrdersByIds200Item[]>
 export type CancelOrdersByIdsResult = AxiosResponse<CancelOrdersByIds200>
 export type ListOpenOrdersResult = AxiosResponse<ListOpenOrders200Item[]>
-export type BatchCancelOrdersResult = AxiosResponse<BatchCancelOrders200>
+export type CancelOpenOrdersResult = AxiosResponse<CancelOpenOrders200>
 export type ListClosedOrdersResult = AxiosResponse<ListClosedOrders200Item[]>
-export type CancelAndNewOrderResult = AxiosResponse<CancelAndNewOrder201>
-export type AvailableWithdrawalInformationResult = AxiosResponse<AvailableWithdrawalInformation200>
+export type CancelAndCreateOrderResult = AxiosResponse<CancelAndCreateOrder201>
+export type GetWithdrawChanceResult = AxiosResponse<GetWithdrawChance200>
 export type ListWithdrawalAddressesResult = AxiosResponse<ListWithdrawalAddresses200Item[]>
-export type WithdrawResult = AxiosResponse<Withdraw201>
+export type CreateWithdrawalResult = AxiosResponse<CreateWithdrawal201>
 export type CancelWithdrawalResult = AxiosResponse<CancelWithdrawal200>
-export type WithdrawKrwResult = AxiosResponse<WithdrawKrw201>
+export type CreateWithdrawKrwResult = AxiosResponse<CreateWithdrawKrw201>
 export type GetWithdrawalResult = AxiosResponse<GetWithdrawal200>
 export type ListWithdrawalsResult = AxiosResponse<ListWithdrawals200Item[]>
-export type AvailableDepositInformationResult = AxiosResponse<AvailableDepositInformation200>
+export type GetDepositChanceResult = AxiosResponse<GetDepositChance200>
 export type CreateDepositAddressResult = AxiosResponse<CreateDepositAddress200 | CreateDepositAddress201>
 export type GetDepositAddressResult = AxiosResponse<GetDepositAddress200>
 export type ListDepositAddressesResult = AxiosResponse<ListDepositAddresses200Item[]>
-export type DepositKrwResult = AxiosResponse<DepositKrw201>
+export type CreateDepositKrwResult = AxiosResponse<CreateDepositKrw201>
 export type GetDepositResult = AxiosResponse<GetDeposit200>
 export type ListDepositsResult = AxiosResponse<ListDeposits200Item[]>
-export type ListTravelruleVaspsResult = AxiosResponse<ListTravelruleVasps200Item[]>
-export type VerifyTravelruleByUuidResult = AxiosResponse<VerifyTravelruleByUuid201>
-export type VerifyTravelruleByTxidResult = AxiosResponse<VerifyTravelruleByTxid201>
+export type ListTravelRuleVaspsResult = AxiosResponse<ListTravelRuleVasps200Item[]>
+export type VerifyTravelRuleByUuidResult = AxiosResponse<VerifyTravelRuleByUuid201>
+export type VerifyTravelRuleByTxidResult = AxiosResponse<VerifyTravelRuleByTxid201>
 export type GetServiceStatusResult = AxiosResponse<GetServiceStatus200Item[]>
 export type ListApiKeysResult = AxiosResponse<ListApiKeys200Item[]>

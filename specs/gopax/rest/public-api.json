@@ -26,7 +26,7 @@
           "공개 API"
         ],
         "summary": "자산 목록 조회",
-        "operationId": "getAssets",
+        "operationId": "list-assets",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#f55085599b"
@@ -95,7 +95,7 @@
           "공개 API"
         ],
         "summary": "거래쌍 목록 조회",
-        "operationId": "getTradingPairs",
+        "operationId": "list-trading-pairs",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#bd57884325"
@@ -263,7 +263,7 @@
           "공개 API"
         ],
         "summary": "가격 틱 사이즈 조회",
-        "operationId": "getTradingPairsTradingPairPriceTickSize",
+        "operationId": "get-trading-pair-price-tick-size",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#8cbaa14a64"
@@ -317,7 +317,7 @@
           "공개 API"
         ],
         "summary": "티커 조회",
-        "operationId": "getTradingPairsTradingPairTicker",
+        "operationId": "get-trading-pair-ticker",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#c63d14aba7"
@@ -406,7 +406,7 @@
           "공개 API"
         ],
         "summary": "오더북 조회",
-        "operationId": "getTradingPairsTradingPairBook",
+        "operationId": "get-trading-pair-book",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#6ad081727e"
@@ -491,7 +491,7 @@
           "공개 API"
         ],
         "summary": "체결 기록 조회",
-        "operationId": "getTradingPairsTradingPairTrades",
+        "operationId": "list-trading-pair-trades",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#c3c0208b04-2"
@@ -616,7 +616,7 @@
           "공개 API"
         ],
         "summary": "최근 24시간 통계 조회",
-        "operationId": "getTradingPairsTradingPairStats",
+        "operationId": "get-trading-pair-stats",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#24"
@@ -693,7 +693,7 @@
           "공개 API"
         ],
         "summary": "최근 24시간 통계 조회 (모든 거래쌍)",
-        "operationId": "getTradingPairsStats",
+        "operationId": "list-trading-pairs-stats",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#24-2"
@@ -769,7 +769,7 @@
         ],
         "summary": "차트 데이터 조회",
         "description": "1개의 구간은 1개의 차트 봉과 일치합니다.",
-        "operationId": "getTradingPairsTradingPairCandles",
+        "operationId": "get-trading-pair-candles",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#10f99c8763"
@@ -858,7 +858,7 @@
         ],
         "summary": "투자유의 정보 조회",
         "description": "여부 항목들이 모두 false이지만 alertLevel 이 정상(0)이 아닌 경우가 발생할 수 있습니다. 이는 한번 주의나 경고가 되면 24시간 동안 안전한 경우에만 정상으로 복귀 라는 룰에 의한 것이고 자연스러운 현상입니다.",
-        "operationId": "getTradingPairsCautions",
+        "operationId": "list-trading-pairs-cautions",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#e4dbb6ad96"
@@ -962,7 +962,7 @@
           "공개 API"
         ],
         "summary": "전체 티커 조회",
-        "operationId": "getTickers",
+        "operationId": "list-tickers",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#5273f952f5"
@@ -1055,7 +1055,7 @@
           "공개 API"
         ],
         "summary": "서버 시간 조회",
-        "operationId": "getTime",
+        "operationId": "get-time",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#31180a60f1"
@@ -1091,7 +1091,7 @@
           "공개 API"
         ],
         "summary": "공지사항 조회",
-        "operationId": "getNotices",
+        "operationId": "list-notices",
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://gopax.github.io/API/index.html#53976d821f"

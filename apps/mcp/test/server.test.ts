@@ -6,22 +6,22 @@ import { getExchangeRuntime, listSupportedExchanges } from "../src/runtime";
 import { buildOrderedArguments } from "../src/server";
 
 const upbitListTickersMock = vi.fn(async () => ({ market: "KRW-BTC", price: "100" }));
-const upbitGetBalanceMock = vi.fn(async () => [{ currency: "BTC", balance: "1.0" }]);
+const upbitListBalanceMock = vi.fn(async () => [{ currency: "BTC", balance: "1.0" }]);
 vi.mock("@exhub/upbit", () => ({
   createUpbitClient: () => ({
     tradingPairs: {
       listTradingPairs: vi.fn(),
     },
     candles: {
-      listCandlesSeconds: vi.fn(),
-      listCandlesMinutes: vi.fn(),
-      listCandlesDays: vi.fn(),
-      listCandlesWeeks: vi.fn(),
-      listCandlesMonths: vi.fn(),
-      listCandlesYears: vi.fn(),
+      getSecondCandles: vi.fn(),
+      getMinuteCandles: vi.fn(),
+      getDayCandles: vi.fn(),
+      getWeekCandles: vi.fn(),
+      getMonthCandles: vi.fn(),
+      getYearCandles: vi.fn(),
     },
     trades: {
-      recentTradesHistory: vi.fn(),
+      listTradesTicks: vi.fn(),
     },
     tickers: {
       listTickers: upbitListTickersMock,
@@ -30,46 +30,46 @@ vi.mock("@exhub/upbit", () => ({
     orderbook: {
       listOrderbooks: vi.fn(),
       listOrderbookInstruments: vi.fn(),
-      listOrderbookLevels: vi.fn(),
+      listOrderbookSupportedLevels: vi.fn(),
     },
     assets: {
-      getBalance: upbitGetBalanceMock,
+      listBalance: upbitListBalanceMock,
     },
     orders: {
-      availableOrderInformation: vi.fn(),
-      newOrder: vi.fn(),
-      testOrder: vi.fn(),
+      getOrderChance: vi.fn(),
+      createOrder: vi.fn(),
+      createTestOrder: vi.fn(),
       getOrder: vi.fn(),
       cancelOrder: vi.fn(),
       listOrdersByIds: vi.fn(),
       cancelOrdersByIds: vi.fn(),
       listOpenOrders: vi.fn(),
-      batchCancelOrders: vi.fn(),
+      cancelOpenOrders: vi.fn(),
       listClosedOrders: vi.fn(),
-      cancelAndNewOrder: vi.fn(),
+      cancelAndCreateOrder: vi.fn(),
     },
     withdrawals: {
-      availableWithdrawalInformation: vi.fn(),
+      getWithdrawChance: vi.fn(),
       listWithdrawalAddresses: vi.fn(),
       withdraw: vi.fn(),
       cancelWithdrawal: vi.fn(),
-      withdrawKrw: vi.fn(),
+      createWithdrawKrw: vi.fn(),
       getWithdrawal: vi.fn(),
       listWithdrawals: vi.fn(),
     },
     deposits: {
-      availableDepositInformation: vi.fn(),
+      getDepositChance: vi.fn(),
       createDepositAddress: vi.fn(),
       getDepositAddress: vi.fn(),
       listDepositAddresses: vi.fn(),
-      depositKrw: vi.fn(),
+      createDepositKrw: vi.fn(),
       getDeposit: vi.fn(),
       listDeposits: vi.fn(),
     },
     travelRule: {
-      listTravelruleVasps: vi.fn(),
-      verifyTravelruleByUuid: vi.fn(),
-      verifyTravelruleByTxid: vi.fn(),
+      listTravelRuleVasps: vi.fn(),
+      verifyTravelRuleByUuid: vi.fn(),
+      verifyTravelRuleByTxid: vi.fn(),
     },
     service: {
       getServiceStatus: vi.fn(),
@@ -125,7 +125,7 @@ describe("exchange server", () => {
     await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
 
     const result = await client.callTool({
-      name: "getBalance",
+      name: "listBalance",
       arguments: {},
     });
     const typedResult = result as {
@@ -140,7 +140,7 @@ describe("exchange server", () => {
       expect(firstContent.text).toContain("EXHUB_UPBIT_ACCESS_KEY");
       expect(firstContent.text).toContain("EXHUB_UPBIT_SECRET_KEY");
     }
-    expect(upbitGetBalanceMock).not.toHaveBeenCalled();
+    expect(upbitListBalanceMock).not.toHaveBeenCalled();
   });
 
   it("no-arg 도구는 arguments 없이도 호출할 수 있다", async () => {
@@ -155,11 +155,11 @@ describe("exchange server", () => {
     await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
 
     const result = await client.callTool({
-      name: "getBalance",
+      name: "listBalance",
     });
 
     expect(result.isError).toBeFalsy();
-    expect(upbitGetBalanceMock).toHaveBeenCalledWith();
+    expect(upbitListBalanceMock).toHaveBeenCalledWith();
   });
 
   it("public 도구 호출이 선택한 거래소 클라이언트 메서드로 라우팅된다", async () => {

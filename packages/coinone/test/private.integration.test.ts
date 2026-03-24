@@ -42,25 +42,25 @@ describe("coinone private integration", () => {
       credentials: { accessToken, secretKey },
     });
 
-    const activeOrders = await client.orders.findActiveOrders();
+    const activeOrders = await client.orders.listActiveOrders();
     orderId = activeOrders.active_orders?.[0]?.order_id;
 
-    const coinHistory = await client.transactions.coinTransactionHistory();
+    const coinHistory = await client.transactions.listCoinTransactionHistory();
     transactionId = coinHistory.transactions?.[0]?.id;
 
-    const feeRates = await client.account.findAllTradeFees();
+    const feeRates = await client.account.listTradeFees();
     quoteCurrency = feeRates.fee_rates?.[0]?.quote_currency ?? quoteCurrency;
     targetCurrency = feeRates.fee_rates?.[0]?.target_currency ?? targetCurrency;
   });
 
   testIf("전체 잔고 조회", async (context) => {
-    const result = await client.account.findBalance();
+    const result = await client.account.listBalance();
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.balances)).toBe(true);
   });
 
   testIf("특정 자산 잔고 조회", async (context) => {
-    const result = await client.account.findBalanceByCurrencies({
+    const result = await client.account.listBalanceByCurrencies({
       currencies: [quoteCurrency, targetCurrency],
     });
     expectCoinoneSuccess(context, result);
@@ -68,19 +68,19 @@ describe("coinone private integration", () => {
   });
 
   testIf("전체 수수료 조회", async (context) => {
-    const result = await client.account.findAllTradeFees();
+    const result = await client.account.listTradeFees();
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.fee_rates)).toBe(true);
   });
 
   testIf("개별 종목 수수료 조회", async (context) => {
-    const result = await client.account.findTradeFeeByPair(quoteCurrency, targetCurrency);
+    const result = await client.account.getTradeFeeByPair(quoteCurrency, targetCurrency);
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.fee_rates)).toBe(true);
   });
 
   testIf("미체결 주문 조회", async (context) => {
-    const result = await client.orders.findActiveOrders();
+    const result = await client.orders.listActiveOrders();
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.active_orders)).toBe(true);
   });
@@ -90,7 +90,7 @@ describe("coinone private integration", () => {
       context.skip();
       return;
     }
-    const result = await client.orders.orderDetail({
+    const result = await client.orders.getOrderDetail({
       order_id: orderId,
       quote_currency: quoteCurrency,
       target_currency: targetCurrency,
@@ -100,7 +100,7 @@ describe("coinone private integration", () => {
   });
 
   testIf("전체 체결 주문 조회", async (context) => {
-    const result = await client.orders.findAllCompletedOrders({
+    const result = await client.orders.listCompletedOrdersAll({
       size: 10,
       from_ts: Date.now() - 7 * 24 * 60 * 60 * 1000,
       to_ts: Date.now(),
@@ -109,7 +109,7 @@ describe("coinone private integration", () => {
   });
 
   testIf("종목 별 체결 주문 조회", async (context) => {
-    const result = await client.orders.findCompletedOrders({
+    const result = await client.orders.listCompletedOrders({
       quote_currency: quoteCurrency,
       target_currency: targetCurrency,
       size: 10,
@@ -120,12 +120,12 @@ describe("coinone private integration", () => {
   });
 
   testIf("deprecated 전체 미체결 주문 조회", async (context) => {
-    const result = await client.orders.findAllOpenOrders();
+    const result = await client.orders.listOpenOrdersAll();
     expectCoinoneSuccess(context, result);
   });
 
   testIf("deprecated 종목 별 미체결 주문 조회", async (context) => {
-    const result = await client.orders.findOpenOrders({
+    const result = await client.orders.listOpenOrders({
       quote_currency: quoteCurrency,
       target_currency: targetCurrency,
     });
@@ -137,7 +137,7 @@ describe("coinone private integration", () => {
       context.skip();
       return;
     }
-    const result = await client.orders.findOrderInfo({
+    const result = await client.orders.getOrderInfo({
       order_id: orderId,
       quote_currency: quoteCurrency,
       target_currency: targetCurrency,
@@ -146,13 +146,13 @@ describe("coinone private integration", () => {
   });
 
   testIf("원화 입출금 내역 조회", async (context) => {
-    const result = await client.transactions.krwTransactionHistory({ size: 10 });
+    const result = await client.transactions.listKrwTransactionHistory({ size: 10 });
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.transactions)).toBe(true);
   });
 
   testIf("가상자산 입출금 내역 조회", async (context) => {
-    const result = await client.transactions.coinTransactionHistory({ size: 10 });
+    const result = await client.transactions.listCoinTransactionHistory({ size: 10 });
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.transactions)).toBe(true);
   });
@@ -162,31 +162,31 @@ describe("coinone private integration", () => {
       context.skip();
       return;
     }
-    const result = await client.transactions.singleCoinTransactionHistory({ id: transactionId });
+    const result = await client.transactions.getCoinTransactionHistoryDetail({ id: transactionId });
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.transactions)).toBe(true);
   });
 
   testIf("가상자산 출금 한도 조회", async (context) => {
-    const result = await client.transactions.coinWithdrawalLimit({ currency: targetCurrency });
+    const result = await client.transactions.getCoinWithdrawalLimit({ currency: targetCurrency });
     expectCoinoneSuccess(context, result);
   });
 
   testIf("가상자산 출금 주소록 조회", async (context) => {
-    const result = await client.transactions.coinWithdrawalAddressBook({
+    const result = await client.transactions.listCoinWithdrawalAddressBook({
       currency: targetCurrency,
     });
     expectCoinoneSuccess(context, result);
   });
 
   testIf("주문 리워드 프로그램 조회", async (context) => {
-    const result = await client.rewards.orderRewardPrograms();
+    const result = await client.rewards.listOrderRewardPrograms();
     expectCoinoneSuccess(context, result);
     expect(Array.isArray(result.programs)).toBe(true);
   });
 
   testIf("주문 리워드 내역 조회", async (context) => {
-    const result = await client.rewards.orderRewardHistory();
+    const result = await client.rewards.listOrderRewardHistory();
     expectCoinoneSuccess(context, result);
   });
 });

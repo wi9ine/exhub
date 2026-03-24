@@ -12,33 +12,33 @@ import type {
 } from 'axios';
 
 import type {
-  Chart200,
-  ChartParams,
-  Currencies200,
-  Currency200,
-  Market200,
-  Markets200,
-  Orderbook200,
-  OrderbookDeprecated200,
-  OrderbookDeprecatedParams,
-  OrderbookParams,
-  RangeUnit200,
-  RecentCompletedOrders200,
-  RecentCompletedOrdersDeprecated200,
-  RecentCompletedOrdersDeprecatedParams,
-  RecentCompletedOrdersParams,
-  Ticker200,
-  TickerDeprecated200,
-  TickerDeprecatedParams,
-  TickerParams,
-  TickerUtcDeprecated200,
-  TickerUtcDeprecatedParams,
-  Tickers200,
-  TickersParams,
-  UtcTicker200,
-  UtcTickerParams,
-  UtcTickers200,
-  UtcTickersParams
+  GetChart200,
+  GetChartParams,
+  GetCurrency200,
+  GetMarket200,
+  GetOrderbook200,
+  GetOrderbookDeprecated200,
+  GetOrderbookDeprecatedParams,
+  GetOrderbookParams,
+  GetRangeUnit200,
+  GetTicker200,
+  GetTickerDeprecated200,
+  GetTickerDeprecatedParams,
+  GetTickerParams,
+  GetTickerUtc200,
+  GetTickerUtcDeprecated200,
+  GetTickerUtcDeprecatedParams,
+  GetTickerUtcParams,
+  ListCurrencies200,
+  ListMarkets200,
+  ListTickerUtc200,
+  ListTickerUtcParams,
+  ListTickers200,
+  ListTickersParams,
+  ListTrades200,
+  ListTradesDeprecated200,
+  ListTradesDeprecatedParams,
+  ListTradesParams
 } from './model';
 
 
@@ -48,10 +48,10 @@ import type {
  * 개별 종목의 가격 단위 별 호가 단위 조회
  * @summary 개별 호가 단위 조회
  */
-export const rangeUnit = (
+export const getRangeUnit = (
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<RangeUnit200>> => {
+ ): Promise<AxiosResponse<GetRangeUnit200>> => {
     return axios.get(
       `/public/v2/range_units/${quoteCurrency}/${targetCurrency}`,options
     );
@@ -61,9 +61,9 @@ export const rangeUnit = (
  * 마켓 별로 거래 가능한 종목들의 정보 조회
  * @summary 전체 종목 정보 조회
  */
-export const markets = (
+export const listMarkets = (
     quoteCurrency: string = 'KRW', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Markets200>> => {
+ ): Promise<AxiosResponse<ListMarkets200>> => {
     return axios.get(
       `/public/v2/markets/${quoteCurrency}`,options
     );
@@ -73,10 +73,10 @@ export const markets = (
  * 마켓 별로 거래 가능한 개별 종목의 정보 조회
  * @summary 개별 종목 정보 조회
  */
-export const market = (
+export const getMarket = (
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Market200>> => {
+ ): Promise<AxiosResponse<GetMarket200>> => {
     return axios.get(
       `/public/v2/markets/${quoteCurrency}/${targetCurrency}`,options
     );
@@ -86,11 +86,11 @@ export const market = (
  * 특정 종목의 오더북 정보 조회 (호가 단위 별)
  * @summary 오더북 조회
  */
-export const orderbook = (
-    params?: OrderbookParams,
+export const getOrderbook = (
+    params?: GetOrderbookParams,
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Orderbook200>> => {
+ ): Promise<AxiosResponse<GetOrderbook200>> => {
     return axios.get(
       `/public/v2/orderbook/${quoteCurrency}/${targetCurrency}`,{
     ...options,
@@ -102,11 +102,11 @@ export const orderbook = (
  * 최신 순으로 체결된 주문 목록 조회
  * @summary 최근 체결 주문 조회
  */
-export const recentCompletedOrders = (
-    params?: RecentCompletedOrdersParams,
+export const listTrades = (
+    params?: ListTradesParams,
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<RecentCompletedOrders200>> => {
+ ): Promise<AxiosResponse<ListTrades200>> => {
     return axios.get(
       `/public/v2/trades/${quoteCurrency}/${targetCurrency}`,{
     ...options,
@@ -118,10 +118,10 @@ export const recentCompletedOrders = (
  * 마켓의 모든 티커 정보 조회
  * @summary 전체 티커 정보 조회
  */
-export const tickers = (
-    params?: TickersParams,
+export const listTickers = (
+    params?: ListTickersParams,
     quoteCurrency: string = 'KRW', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Tickers200>> => {
+ ): Promise<AxiosResponse<ListTickers200>> => {
     return axios.get(
       `/public/v2/ticker_new/${quoteCurrency}`,{
     ...options,
@@ -133,11 +133,11 @@ export const tickers = (
  * 특정 종목의 티커 정보 조회
  * @summary 개별 티커 정보 조회
  */
-export const ticker = (
-    params?: TickerParams,
+export const getTicker = (
+    params?: GetTickerParams,
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Ticker200>> => {
+ ): Promise<AxiosResponse<GetTicker200>> => {
     return axios.get(
       `/public/v2/ticker_new/${quoteCurrency}/${targetCurrency}`,{
     ...options,
@@ -149,10 +149,10 @@ export const ticker = (
  * UTC 기준으로 마켓의 모든 티커 정보 조회
  * @summary 전체 티커 정보 조회 (UTC)
  */
-export const utcTickers = (
-    params?: UtcTickersParams,
+export const listTickerUtc = (
+    params?: ListTickerUtcParams,
     quoteCurrency: string = 'KRW', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<UtcTickers200>> => {
+ ): Promise<AxiosResponse<ListTickerUtc200>> => {
     return axios.get(
       `/public/v2/ticker_utc_new/${quoteCurrency}`,{
     ...options,
@@ -164,11 +164,11 @@ export const utcTickers = (
  * UTC 기준으로 특정 종목의 티커 정보 조회
  * @summary 개별 티커 정보 조회 (UTC)
  */
-export const utcTicker = (
-    params?: UtcTickerParams,
+export const getTickerUtc = (
+    params?: GetTickerUtcParams,
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<UtcTicker200>> => {
+ ): Promise<AxiosResponse<GetTickerUtc200>> => {
     return axios.get(
       `/public/v2/ticker_utc_new/${quoteCurrency}/${targetCurrency}`,{
     ...options,
@@ -180,9 +180,9 @@ export const utcTicker = (
  * 마켓 별 종목들의 정보 조회 (심볼 정보, 입/출금 가능여부, 입/출금 수수료, 최소 출금 가능 금액 등)
  * @summary 전체 가상자산 정보 조회
  */
-export const currencies = (
+export const listCurrencies = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Currencies200>> => {
+ ): Promise<AxiosResponse<ListCurrencies200>> => {
     return axios.get(
       `/public/v2/currencies`,options
     );
@@ -192,9 +192,9 @@ export const currencies = (
  * 특정 종목의 정보 조회 (심볼 정보, 입/출금 가능여부, 입/출금 수수료, 최소 출금 가능 금액 등)
  * @summary 개별 가상자산 정보 조회
  */
-export const currency = (
+export const getCurrency = (
     currency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Currency200>> => {
+ ): Promise<AxiosResponse<GetCurrency200>> => {
     return axios.get(
       `/public/v2/currencies/${currency}`,options
     );
@@ -204,11 +204,11 @@ export const currency = (
  * 특정 종목의 캔들 차트 조회
  * @summary 캔들 차트 조회
  */
-export const chart = (
-    params: ChartParams,
+export const getChart = (
+    params: GetChartParams,
     quoteCurrency: string = 'KRW',
     targetCurrency: string = 'BTC', options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Chart200>> => {
+ ): Promise<AxiosResponse<GetChart200>> => {
     return axios.get(
       `/public/v2/chart/${quoteCurrency}/${targetCurrency}`,{
     ...options,
@@ -221,9 +221,9 @@ export const chart = (
  * @deprecated
  * @summary 오더북 조회
  */
-export const orderbookDeprecated = (
-    params?: OrderbookDeprecatedParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<OrderbookDeprecated200>> => {
+export const getOrderbookDeprecated = (
+    params?: GetOrderbookDeprecatedParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrderbookDeprecated200>> => {
     return axios.get(
       `/orderbook`,{
     ...options,
@@ -236,9 +236,9 @@ export const orderbookDeprecated = (
  * @deprecated
  * @summary 티커 정보 조회
  */
-export const tickerDeprecated = (
-    params?: TickerDeprecatedParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TickerDeprecated200>> => {
+export const getTickerDeprecated = (
+    params?: GetTickerDeprecatedParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTickerDeprecated200>> => {
     return axios.get(
       `/ticker`,{
     ...options,
@@ -251,9 +251,9 @@ export const tickerDeprecated = (
  * @deprecated
  * @summary 티커 정보 조회 UTC
  */
-export const tickerUtcDeprecated = (
-    params?: TickerUtcDeprecatedParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TickerUtcDeprecated200>> => {
+export const getTickerUtcDeprecated = (
+    params?: GetTickerUtcDeprecatedParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTickerUtcDeprecated200>> => {
     return axios.get(
       `/ticker_utc`,{
     ...options,
@@ -266,9 +266,9 @@ export const tickerUtcDeprecated = (
  * @deprecated
  * @summary 최근 체결 주문 조회
  */
-export const recentCompletedOrdersDeprecated = (
-    params?: RecentCompletedOrdersDeprecatedParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<RecentCompletedOrdersDeprecated200>> => {
+export const listTradesDeprecated = (
+    params?: ListTradesDeprecatedParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTradesDeprecated200>> => {
     return axios.get(
       `/trades`,{
     ...options,
@@ -276,19 +276,19 @@ export const recentCompletedOrdersDeprecated = (
     );
   }
 
-export type RangeUnitResult = AxiosResponse<RangeUnit200>
-export type MarketsResult = AxiosResponse<Markets200>
-export type MarketResult = AxiosResponse<Market200>
-export type OrderbookResult = AxiosResponse<Orderbook200>
-export type RecentCompletedOrdersResult = AxiosResponse<RecentCompletedOrders200>
-export type TickersResult = AxiosResponse<Tickers200>
-export type TickerResult = AxiosResponse<Ticker200>
-export type UtcTickersResult = AxiosResponse<UtcTickers200>
-export type UtcTickerResult = AxiosResponse<UtcTicker200>
-export type CurrenciesResult = AxiosResponse<Currencies200>
-export type CurrencyResult = AxiosResponse<Currency200>
-export type ChartResult = AxiosResponse<Chart200>
-export type OrderbookDeprecatedResult = AxiosResponse<OrderbookDeprecated200>
-export type TickerDeprecatedResult = AxiosResponse<TickerDeprecated200>
-export type TickerUtcDeprecatedResult = AxiosResponse<TickerUtcDeprecated200>
-export type RecentCompletedOrdersDeprecatedResult = AxiosResponse<RecentCompletedOrdersDeprecated200>
+export type GetRangeUnitResult = AxiosResponse<GetRangeUnit200>
+export type ListMarketsResult = AxiosResponse<ListMarkets200>
+export type GetMarketResult = AxiosResponse<GetMarket200>
+export type GetOrderbookResult = AxiosResponse<GetOrderbook200>
+export type ListTradesResult = AxiosResponse<ListTrades200>
+export type ListTickersResult = AxiosResponse<ListTickers200>
+export type GetTickerResult = AxiosResponse<GetTicker200>
+export type ListTickerUtcResult = AxiosResponse<ListTickerUtc200>
+export type GetTickerUtcResult = AxiosResponse<GetTickerUtc200>
+export type ListCurrenciesResult = AxiosResponse<ListCurrencies200>
+export type GetCurrencyResult = AxiosResponse<GetCurrency200>
+export type GetChartResult = AxiosResponse<GetChart200>
+export type GetOrderbookDeprecatedResult = AxiosResponse<GetOrderbookDeprecated200>
+export type GetTickerDeprecatedResult = AxiosResponse<GetTickerDeprecated200>
+export type GetTickerUtcDeprecatedResult = AxiosResponse<GetTickerUtcDeprecated200>
+export type ListTradesDeprecatedResult = AxiosResponse<ListTradesDeprecated200>

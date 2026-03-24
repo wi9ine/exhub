@@ -39,7 +39,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "publicPing",
+        "operationId": "send-public-ping",
         "message": {
           "$ref": "#/components/messages/PublicPingRequest"
         },
@@ -50,7 +50,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-ping"
       },
       "subscribe": {
-        "operationId": "publicPong",
+        "operationId": "receive-public-pong",
         "message": {
           "$ref": "#/components/messages/PublicPongResponse"
         },
@@ -66,7 +66,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribePublicOrderbook",
+        "operationId": "subscribe-public-orderbook",
         "message": {
           "$ref": "#/components/messages/PublicOrderbookRequest"
         },
@@ -77,7 +77,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-orderbook"
       },
       "subscribe": {
-        "operationId": "publicOrderbookMessages",
+        "operationId": "receive-public-orderbook",
         "message": {
           "oneOf": [
             {
@@ -100,7 +100,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribePublicTicker",
+        "operationId": "subscribe-public-ticker",
         "message": {
           "$ref": "#/components/messages/PublicTickerRequest"
         },
@@ -111,7 +111,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-ticker"
       },
       "subscribe": {
-        "operationId": "publicTickerMessages",
+        "operationId": "receive-public-ticker",
         "message": {
           "oneOf": [
             {
@@ -134,7 +134,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribePublicTrade",
+        "operationId": "subscribe-public-trade",
         "message": {
           "$ref": "#/components/messages/PublicTradeRequest"
         },
@@ -145,7 +145,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-trade"
       },
       "subscribe": {
-        "operationId": "publicTradeMessages",
+        "operationId": "receive-public-trade",
         "message": {
           "oneOf": [
             {
@@ -168,7 +168,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribePublicChart",
+        "operationId": "subscribe-public-chart",
         "message": {
           "$ref": "#/components/messages/PublicChartRequest"
         },
@@ -179,7 +179,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/public-websocket-chart"
       },
       "subscribe": {
-        "operationId": "publicChartMessages",
+        "operationId": "receive-public-chart",
         "message": {
           "oneOf": [
             {
@@ -202,7 +202,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "privatePing",
+        "operationId": "send-private-ping",
         "message": {
           "$ref": "#/components/messages/PrivatePingRequest"
         },
@@ -213,7 +213,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-ping"
       },
       "subscribe": {
-        "operationId": "privatePong",
+        "operationId": "receive-private-pong",
         "message": {
           "$ref": "#/components/messages/PrivatePongResponse"
         },
@@ -229,7 +229,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "subscribePrivateMyOrder",
+        "operationId": "subscribe-private-my-order",
         "message": {
           "$ref": "#/components/messages/PrivateMyOrderRequest"
         },
@@ -240,7 +240,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-myorder"
       },
       "subscribe": {
-        "operationId": "privateMyOrderMessages",
+        "operationId": "receive-private-my-order",
         "message": {
           "oneOf": [
             {
@@ -263,7 +263,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "subscribePrivateMyAsset",
+        "operationId": "subscribe-private-my-asset",
         "message": {
           "$ref": "#/components/messages/PrivateMyAssetRequest"
         },
@@ -274,7 +274,7 @@
         "x-doc-url": "https://docs.coinone.co.kr/reference/private-websocket-1-myasset"
       },
       "subscribe": {
-        "operationId": "privateMyAssetMessages",
+        "operationId": "receive-private-my-asset",
         "message": {
           "oneOf": [
             {

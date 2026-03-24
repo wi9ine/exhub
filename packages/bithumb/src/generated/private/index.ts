@@ -12,55 +12,55 @@ import type {
 } from 'axios';
 
 import type {
+  CancelOrder200,
+  CancelOrderParams,
+  CancelOrders200,
+  CancelOrdersBody,
   CancelTwapOrder200Item,
   CancelTwapOrderParams,
+  CreateDepositAddress201,
+  CreateDepositAddressBody,
+  CreateDepositsKrw201,
+  CreateDepositsKrwBody,
+  CreateOrder201,
+  CreateOrderBody,
+  CreateOrdersBatch200,
+  CreateOrdersBatchBody,
   CreateTwapOrder200Item,
   CreateTwapOrderParams,
-  DeleteOrder200,
-  DeleteOrderParams,
-  GetAccounts200Item,
-  GetApiKeys200Item,
+  CreateWithdrawsCoin201,
+  CreateWithdrawsCoinBody,
+  CreateWithdrawsKrw201,
+  CreateWithdrawsKrwBody,
   GetDeposit200,
   GetDepositParams,
-  GetDeposits200Item,
   GetDepositsCoinAddress200,
   GetDepositsCoinAddressParams,
-  GetDepositsCoinAddresses200Item,
-  GetDepositsKrw200Item,
-  GetDepositsKrwParams,
-  GetDepositsParams,
   GetOrder200,
+  GetOrderChance200,
+  GetOrderChanceParams,
   GetOrderParams,
-  GetOrders200Item,
-  GetOrdersChance200,
-  GetOrdersChanceParams,
-  GetOrdersParams,
-  GetStatusWallet200Item,
-  GetTwapOrders200Item,
-  GetTwapOrdersParams,
+  GetWalletStatus200Item,
   GetWithdraw200,
+  GetWithdrawChance200,
+  GetWithdrawChanceParams,
   GetWithdrawParams,
-  GetWithdraws200Item,
-  GetWithdrawsChance200,
-  GetWithdrawsChanceParams,
-  GetWithdrawsCoinAddresses200Item,
-  GetWithdrawsKrw200Item,
-  GetWithdrawsKrwParams,
-  GetWithdrawsParams,
-  PostDepositsGenerateCoinAddress201,
-  PostDepositsGenerateCoinAddressBody,
-  PostDepositsKrw201,
-  PostDepositsKrwBody,
-  PostOrders201,
-  PostOrdersBatch200,
-  PostOrdersBatchBody,
-  PostOrdersBody,
-  PostOrdersCancel200,
-  PostOrdersCancelBody,
-  PostWithdrawsCoin201,
-  PostWithdrawsCoinBody,
-  PostWithdrawsKrw201,
-  PostWithdrawsKrwBody
+  ListAccounts200Item,
+  ListApiKeys200Item,
+  ListDeposits200Item,
+  ListDepositsCoinAddresses200Item,
+  ListDepositsKrw200Item,
+  ListDepositsKrwParams,
+  ListDepositsParams,
+  ListOrders200Item,
+  ListOrdersParams,
+  ListTwapOrders200Item,
+  ListTwapOrdersParams,
+  ListWithdraws200Item,
+  ListWithdrawsCoinAddresses200Item,
+  ListWithdrawsKrw200Item,
+  ListWithdrawsKrwParams,
+  ListWithdrawsParams
 } from './model';
 
 
@@ -70,9 +70,9 @@ import type {
  * 보유 중인 자산 정보를 조회합니다.
  * @summary 전체 계좌 조회
  */
-export const getAccounts = (
+export const listAccounts = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetAccounts200Item[]>> => {
+ ): Promise<AxiosResponse<ListAccounts200Item[]>> => {
     return axios.get(
       `/v1/accounts`,options
     );
@@ -82,9 +82,9 @@ export const getAccounts = (
  * 마켓별 주문 가능 정보를 조회합니다.
  * @summary 주문 가능 정보
  */
-export const getOrdersChance = (
-    params: GetOrdersChanceParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetOrdersChance200>> => {
+export const getOrderChance = (
+    params: GetOrderChanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrderChance200>> => {
     return axios.get(
       `/v1/orders/chance`,{
     ...options,
@@ -110,9 +110,9 @@ export const getOrder = (
  * 주문 취소를 요청합니다.
  * @summary 주문 취소 접수
  */
-export const deleteOrder = (
-    params?: DeleteOrderParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<DeleteOrder200>> => {
+export const cancelOrder = (
+    params?: CancelOrderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelOrder200>> => {
     return axios.delete(
       `/v1/order`,{
     ...options,
@@ -124,9 +124,9 @@ export const deleteOrder = (
  * 주문 목록을 조회합니다.
  * @summary 주문 리스트 조회
  */
-export const getOrders = (
-    params?: GetOrdersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetOrders200Item[]>> => {
+export const listOrders = (
+    params?: ListOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOrders200Item[]>> => {
     return axios.get(
       `/v1/orders`,{
     ...options,
@@ -138,12 +138,12 @@ export const getOrders = (
  * 주문을 요청합니다.
  * @summary 주문 요청
  */
-export const postOrders = (
-    postOrdersBody: PostOrdersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostOrders201>> => {
+export const createOrder = (
+    createOrderBody: CreateOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateOrder201>> => {
     return axios.post(
       `/v1/orders`,
-      postOrdersBody,options
+      createOrderBody,options
     );
   }
 
@@ -151,12 +151,12 @@ export const postOrders = (
  * 여러 건의 주문을 한 번의 요청으로 생성합니다. 요청당 최대 20건까지 가능합니다.
  * @summary 다건 주문 요청
  */
-export const postOrdersBatch = (
-    postOrdersBatchBody: PostOrdersBatchBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostOrdersBatch200>> => {
+export const createOrdersBatch = (
+    createOrdersBatchBody: CreateOrdersBatchBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateOrdersBatch200>> => {
     return axios.post(
       `/v1/orders/batch`,
-      postOrdersBatchBody,options
+      createOrdersBatchBody,options
     );
   }
 
@@ -164,12 +164,12 @@ export const postOrdersBatch = (
  * 여러 개의 주문을 일괄 취소 요청합니다. 요청당 최대 30건까지 처리할 수 있습니다.
  * @summary 다건 주문 취소 접수
  */
-export const postOrdersCancel = (
-    postOrdersCancelBody: PostOrdersCancelBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostOrdersCancel200>> => {
+export const cancelOrders = (
+    cancelOrdersBody: CancelOrdersBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelOrders200>> => {
     return axios.post(
       `/v1/orders/cancel`,
-      postOrdersCancelBody,options
+      cancelOrdersBody,options
     );
   }
 
@@ -177,9 +177,9 @@ export const postOrdersCancel = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 내역 조회
  */
-export const getTwapOrders = (
-    params?: GetTwapOrdersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetTwapOrders200Item[]>> => {
+export const listTwapOrders = (
+    params?: ListTwapOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTwapOrders200Item[]>> => {
     return axios.get(
       `/v1/twap`,{
     ...options,
@@ -219,9 +219,9 @@ export const createTwapOrder = (
  * 가상자산 출금 목록을 조회합니다.
  * @summary 코인 출금 리스트 조회
  */
-export const getWithdraws = (
-    params?: GetWithdrawsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetWithdraws200Item[]>> => {
+export const listWithdraws = (
+    params?: ListWithdrawsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListWithdraws200Item[]>> => {
     return axios.get(
       `/v1/withdraws`,{
     ...options,
@@ -233,9 +233,9 @@ export const getWithdraws = (
  * 원화 출금 목록을 조회합니다.
  * @summary 원화 출금 리스트 조회
  */
-export const getWithdrawsKrw = (
-    params?: GetWithdrawsKrwParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetWithdrawsKrw200Item[]>> => {
+export const listWithdrawsKrw = (
+    params?: ListWithdrawsKrwParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListWithdrawsKrw200Item[]>> => {
     return axios.get(
       `/v1/withdraws/krw`,{
     ...options,
@@ -247,12 +247,12 @@ export const getWithdrawsKrw = (
  * 등록된 출금 계좌로 원화 출금을 요청합니다.
  * @summary 원화 출금하기
  */
-export const postWithdrawsKrw = (
-    postWithdrawsKrwBody: PostWithdrawsKrwBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostWithdrawsKrw201>> => {
+export const createWithdrawsKrw = (
+    createWithdrawsKrwBody: CreateWithdrawsKrwBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateWithdrawsKrw201>> => {
     return axios.post(
       `/v1/withdraws/krw`,
-      postWithdrawsKrwBody,options
+      createWithdrawsKrwBody,options
     );
   }
 
@@ -274,9 +274,9 @@ export const getWithdraw = (
  * 해당 통화의 출금 가능 정보를 조회합니다.
  * @summary 출금 가능 정보
  */
-export const getWithdrawsChance = (
-    params: GetWithdrawsChanceParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetWithdrawsChance200>> => {
+export const getWithdrawChance = (
+    params: GetWithdrawChanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetWithdrawChance200>> => {
     return axios.get(
       `/v1/withdraws/chance`,{
     ...options,
@@ -288,12 +288,12 @@ export const getWithdrawsChance = (
  * 가상 자산 출금을 요청합니다.
  * @summary 가상 자산 출금하기
  */
-export const postWithdrawsCoin = (
-    postWithdrawsCoinBody: PostWithdrawsCoinBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostWithdrawsCoin201>> => {
+export const createWithdrawsCoin = (
+    createWithdrawsCoinBody: CreateWithdrawsCoinBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateWithdrawsCoin201>> => {
     return axios.post(
       `/v1/withdraws/coin`,
-      postWithdrawsCoinBody,options
+      createWithdrawsCoinBody,options
     );
   }
 
@@ -301,9 +301,9 @@ export const postWithdrawsCoin = (
  * 등록된 출금 허용 주소(100만원 이상 출금 가능한 주소) 리스트를 조회합니다.
  * @summary 출금 허용 주소 리스트 조회
  */
-export const getWithdrawsCoinAddresses = (
+export const listWithdrawsCoinAddresses = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetWithdrawsCoinAddresses200Item[]>> => {
+ ): Promise<AxiosResponse<ListWithdrawsCoinAddresses200Item[]>> => {
     return axios.get(
       `/v1/withdraws/coin_addresses`,options
     );
@@ -313,9 +313,9 @@ export const getWithdrawsCoinAddresses = (
  * 가상자산 입금 목록을 조회합니다.
  * @summary 코인 입금 리스트 조회
  */
-export const getDeposits = (
-    params?: GetDepositsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetDeposits200Item[]>> => {
+export const listDeposits = (
+    params?: ListDepositsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListDeposits200Item[]>> => {
     return axios.get(
       `/v1/deposits`,{
     ...options,
@@ -327,9 +327,9 @@ export const getDeposits = (
  * 원화 입금 목록을 조회합니다.
  * @summary 원화 입금 리스트 조회
  */
-export const getDepositsKrw = (
-    params?: GetDepositsKrwParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetDepositsKrw200Item[]>> => {
+export const listDepositsKrw = (
+    params?: ListDepositsKrwParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListDepositsKrw200Item[]>> => {
     return axios.get(
       `/v1/deposits/krw`,{
     ...options,
@@ -341,12 +341,12 @@ export const getDepositsKrw = (
  * 원화 입금을 요청합니다.
  * @summary 원화 입금하기
  */
-export const postDepositsKrw = (
-    postDepositsKrwBody: PostDepositsKrwBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostDepositsKrw201>> => {
+export const createDepositsKrw = (
+    createDepositsKrwBody: CreateDepositsKrwBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateDepositsKrw201>> => {
     return axios.post(
       `/v1/deposits/krw`,
-      postDepositsKrwBody,options
+      createDepositsKrwBody,options
     );
   }
 
@@ -368,12 +368,12 @@ export const getDeposit = (
  * 입금 주소 생성을 요청합니다.
  * @summary 입금 주소 생성 요청
  */
-export const postDepositsGenerateCoinAddress = (
-    postDepositsGenerateCoinAddressBody: PostDepositsGenerateCoinAddressBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PostDepositsGenerateCoinAddress201>> => {
+export const createDepositAddress = (
+    createDepositAddressBody: CreateDepositAddressBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateDepositAddress201>> => {
     return axios.post(
       `/v1/deposits/generate_coin_address`,
-      postDepositsGenerateCoinAddressBody,options
+      createDepositAddressBody,options
     );
   }
 
@@ -381,9 +381,9 @@ export const postDepositsGenerateCoinAddress = (
  * 전체 입금 주소를 조회합니다.
  * @summary 전체 입금 주소 조회
  */
-export const getDepositsCoinAddresses = (
+export const listDepositsCoinAddresses = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetDepositsCoinAddresses200Item[]>> => {
+ ): Promise<AxiosResponse<ListDepositsCoinAddresses200Item[]>> => {
     return axios.get(
       `/v1/deposits/coin_addresses`,options
     );
@@ -407,9 +407,9 @@ export const getDepositsCoinAddress = (
  * 입출금 현황과 블록 상태를 조회합니다.
  * @summary 입출금 현황
  */
-export const getStatusWallet = (
+export const getWalletStatus = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetStatusWallet200Item[]>> => {
+ ): Promise<AxiosResponse<GetWalletStatus200Item[]>> => {
     return axios.get(
       `/v1/status/wallet`,options
     );
@@ -419,38 +419,38 @@ export const getStatusWallet = (
  * API 키 리스트와 만료 일자를 조회합니다.
  * @summary API 키 리스트 조회
  */
-export const getApiKeys = (
+export const listApiKeys = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetApiKeys200Item[]>> => {
+ ): Promise<AxiosResponse<ListApiKeys200Item[]>> => {
     return axios.get(
       `/v1/api_keys`,options
     );
   }
 
-export type GetAccountsResult = AxiosResponse<GetAccounts200Item[]>
-export type GetOrdersChanceResult = AxiosResponse<GetOrdersChance200>
+export type ListAccountsResult = AxiosResponse<ListAccounts200Item[]>
+export type GetOrderChanceResult = AxiosResponse<GetOrderChance200>
 export type GetOrderResult = AxiosResponse<GetOrder200>
-export type DeleteOrderResult = AxiosResponse<DeleteOrder200>
-export type GetOrdersResult = AxiosResponse<GetOrders200Item[]>
-export type PostOrdersResult = AxiosResponse<PostOrders201>
-export type PostOrdersBatchResult = AxiosResponse<PostOrdersBatch200>
-export type PostOrdersCancelResult = AxiosResponse<PostOrdersCancel200>
-export type GetTwapOrdersResult = AxiosResponse<GetTwapOrders200Item[]>
+export type CancelOrderResult = AxiosResponse<CancelOrder200>
+export type ListOrdersResult = AxiosResponse<ListOrders200Item[]>
+export type CreateOrderResult = AxiosResponse<CreateOrder201>
+export type CreateOrdersBatchResult = AxiosResponse<CreateOrdersBatch200>
+export type CancelOrdersResult = AxiosResponse<CancelOrders200>
+export type ListTwapOrdersResult = AxiosResponse<ListTwapOrders200Item[]>
 export type CancelTwapOrderResult = AxiosResponse<CancelTwapOrder200Item[]>
 export type CreateTwapOrderResult = AxiosResponse<CreateTwapOrder200Item[]>
-export type GetWithdrawsResult = AxiosResponse<GetWithdraws200Item[]>
-export type GetWithdrawsKrwResult = AxiosResponse<GetWithdrawsKrw200Item[]>
-export type PostWithdrawsKrwResult = AxiosResponse<PostWithdrawsKrw201>
+export type ListWithdrawsResult = AxiosResponse<ListWithdraws200Item[]>
+export type ListWithdrawsKrwResult = AxiosResponse<ListWithdrawsKrw200Item[]>
+export type CreateWithdrawsKrwResult = AxiosResponse<CreateWithdrawsKrw201>
 export type GetWithdrawResult = AxiosResponse<GetWithdraw200>
-export type GetWithdrawsChanceResult = AxiosResponse<GetWithdrawsChance200>
-export type PostWithdrawsCoinResult = AxiosResponse<PostWithdrawsCoin201>
-export type GetWithdrawsCoinAddressesResult = AxiosResponse<GetWithdrawsCoinAddresses200Item[]>
-export type GetDepositsResult = AxiosResponse<GetDeposits200Item[]>
-export type GetDepositsKrwResult = AxiosResponse<GetDepositsKrw200Item[]>
-export type PostDepositsKrwResult = AxiosResponse<PostDepositsKrw201>
+export type GetWithdrawChanceResult = AxiosResponse<GetWithdrawChance200>
+export type CreateWithdrawsCoinResult = AxiosResponse<CreateWithdrawsCoin201>
+export type ListWithdrawsCoinAddressesResult = AxiosResponse<ListWithdrawsCoinAddresses200Item[]>
+export type ListDepositsResult = AxiosResponse<ListDeposits200Item[]>
+export type ListDepositsKrwResult = AxiosResponse<ListDepositsKrw200Item[]>
+export type CreateDepositsKrwResult = AxiosResponse<CreateDepositsKrw201>
 export type GetDepositResult = AxiosResponse<GetDeposit200>
-export type PostDepositsGenerateCoinAddressResult = AxiosResponse<PostDepositsGenerateCoinAddress201>
-export type GetDepositsCoinAddressesResult = AxiosResponse<GetDepositsCoinAddresses200Item[]>
+export type CreateDepositAddressResult = AxiosResponse<CreateDepositAddress201>
+export type ListDepositsCoinAddressesResult = AxiosResponse<ListDepositsCoinAddresses200Item[]>
 export type GetDepositsCoinAddressResult = AxiosResponse<GetDepositsCoinAddress200>
-export type GetStatusWalletResult = AxiosResponse<GetStatusWallet200Item[]>
-export type GetApiKeysResult = AxiosResponse<GetApiKeys200Item[]>
+export type GetWalletStatusResult = AxiosResponse<GetWalletStatus200Item[]>
+export type ListApiKeysResult = AxiosResponse<ListApiKeys200Item[]>

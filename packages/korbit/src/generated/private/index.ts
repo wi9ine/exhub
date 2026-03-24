@@ -20,42 +20,42 @@ import type {
   CreateCoinDepositAddressBody,
   CreateCoinWithdrawal200,
   CreateCoinWithdrawalBody,
-  GetAllOrders200,
-  GetAllOrdersParams,
-  GetBalance200,
-  GetBalanceParams,
+  CreateOrder200,
+  CreateOrderBody,
   GetCoinDeposit200,
   GetCoinDepositAddress200,
   GetCoinDepositAddressParams,
-  GetCoinDepositAddresses200,
-  GetCoinDepositAddressesParams,
   GetCoinDepositParams,
-  GetCoinRecentDeposits200,
-  GetCoinRecentDepositsParams,
-  GetCoinRecentWithdrawals200,
-  GetCoinRecentWithdrawalsParams,
-  GetCoinWithdrawableAddresses200,
-  GetCoinWithdrawableAddressesParams,
   GetCoinWithdrawableAmount200,
   GetCoinWithdrawableAmountParams,
   GetCoinWithdrawal200,
   GetCoinWithdrawalParams,
   GetCurrentKeyInfo200,
   GetCurrentKeyInfoParams,
-  GetKrwRecentDeposits200,
-  GetKrwRecentDepositsParams,
-  GetKrwRecentWithdrawals200,
-  GetKrwRecentWithdrawalsParams,
-  GetMyTrades200,
-  GetMyTradesParams,
-  GetOpenOrders200,
-  GetOpenOrdersParams,
   GetOrder200,
   GetOrderParams,
   GetTradingFeePolicy200,
   GetTradingFeePolicyParams,
-  PlaceOrder200,
-  PlaceOrderBody,
+  ListAllOrders200,
+  ListAllOrdersParams,
+  ListBalance200,
+  ListBalanceParams,
+  ListCoinDepositAddresses200,
+  ListCoinDepositAddressesParams,
+  ListCoinRecentDeposits200,
+  ListCoinRecentDepositsParams,
+  ListCoinRecentWithdrawals200,
+  ListCoinRecentWithdrawalsParams,
+  ListCoinWithdrawableAddresses200,
+  ListCoinWithdrawableAddressesParams,
+  ListKrwRecentDeposits200,
+  ListKrwRecentDepositsParams,
+  ListKrwRecentWithdrawals200,
+  ListKrwRecentWithdrawalsParams,
+  ListMyTrades200,
+  ListMyTradesParams,
+  ListOpenOrders200,
+  ListOpenOrdersParams,
   RequestKrwDeposit200,
   RequestKrwDepositBody,
   RequestKrwWithdrawal200,
@@ -85,40 +85,40 @@ export const getOrder = (
  * 신규 주문을 생성합니다.
  * @summary 주문하기
  */
-export const placeOrder = (
-    placeOrderBody: PlaceOrderBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PlaceOrder200>> => {const formUrlEncoded = new URLSearchParams();
-formUrlEncoded.append(`symbol`, placeOrderBody.symbol);
-formUrlEncoded.append(`side`, placeOrderBody.side);
-if(placeOrderBody.price !== undefined) {
- formUrlEncoded.append(`price`, placeOrderBody.price);
+export const createOrder = (
+    createOrderBody: CreateOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateOrder200>> => {const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append(`symbol`, createOrderBody.symbol);
+formUrlEncoded.append(`side`, createOrderBody.side);
+if(createOrderBody.price !== undefined) {
+ formUrlEncoded.append(`price`, createOrderBody.price);
  }
-if(placeOrderBody.qty !== undefined) {
- formUrlEncoded.append(`qty`, placeOrderBody.qty);
+if(createOrderBody.qty !== undefined) {
+ formUrlEncoded.append(`qty`, createOrderBody.qty);
  }
-if(placeOrderBody.amt !== undefined) {
- formUrlEncoded.append(`amt`, placeOrderBody.amt);
+if(createOrderBody.amt !== undefined) {
+ formUrlEncoded.append(`amt`, createOrderBody.amt);
  }
-formUrlEncoded.append(`orderType`, placeOrderBody.orderType);
-if(placeOrderBody.bestNth !== undefined) {
- formUrlEncoded.append(`bestNth`, placeOrderBody.bestNth.toString())
+formUrlEncoded.append(`orderType`, createOrderBody.orderType);
+if(createOrderBody.bestNth !== undefined) {
+ formUrlEncoded.append(`bestNth`, createOrderBody.bestNth.toString())
  }
-if(placeOrderBody.timeInForce !== undefined) {
- formUrlEncoded.append(`timeInForce`, placeOrderBody.timeInForce);
+if(createOrderBody.timeInForce !== undefined) {
+ formUrlEncoded.append(`timeInForce`, createOrderBody.timeInForce);
  }
-if(placeOrderBody.clientOrderId !== undefined) {
- formUrlEncoded.append(`clientOrderId`, placeOrderBody.clientOrderId);
+if(createOrderBody.clientOrderId !== undefined) {
+ formUrlEncoded.append(`clientOrderId`, createOrderBody.clientOrderId);
  }
-if(placeOrderBody.pp !== undefined) {
- formUrlEncoded.append(`pp`, placeOrderBody.pp);
+if(createOrderBody.pp !== undefined) {
+ formUrlEncoded.append(`pp`, createOrderBody.pp);
  }
-if(placeOrderBody.ppPercent !== undefined) {
- formUrlEncoded.append(`ppPercent`, placeOrderBody.ppPercent);
+if(createOrderBody.ppPercent !== undefined) {
+ formUrlEncoded.append(`ppPercent`, createOrderBody.ppPercent);
  }
-formUrlEncoded.append(`timestamp`, placeOrderBody.timestamp.toString())
-formUrlEncoded.append(`signature`, placeOrderBody.signature);
-if(placeOrderBody.recvWindow !== undefined) {
- formUrlEncoded.append(`recvWindow`, placeOrderBody.recvWindow.toString())
+formUrlEncoded.append(`timestamp`, createOrderBody.timestamp.toString())
+formUrlEncoded.append(`signature`, createOrderBody.signature);
+if(createOrderBody.recvWindow !== undefined) {
+ formUrlEncoded.append(`recvWindow`, createOrderBody.recvWindow.toString())
  }
 
     return axios.post(
@@ -151,9 +151,9 @@ export const cancelOrder = (
 open, partiallyFilled 상태인 주문만 조회됩니다.
  * @summary 미체결 주문 조회
  */
-export const getOpenOrders = (
-    params: GetOpenOrdersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetOpenOrders200>> => {
+export const listOpenOrders = (
+    params: ListOpenOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOpenOrders200>> => {
     return axios.get(
       `/v2/openOrders`,{
     ...options,
@@ -169,9 +169,9 @@ export const getOpenOrders = (
 지연 없는 현재 상태의 데이터가 필요할 경우 개별 주문 조회 또는 미체결 주문 조회 API를 사용해주세요.
  * @summary 최근 주문 내역 조회
  */
-export const getAllOrders = (
-    params: GetAllOrdersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetAllOrders200>> => {
+export const listAllOrders = (
+    params: ListAllOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListAllOrders200>> => {
     return axios.get(
       `/v2/allOrders`,{
     ...options,
@@ -185,9 +185,9 @@ export const getAllOrders = (
 이 API는 체결 이력 확인을 위한 API로 제공되는 데이터에 수 초 가량의 지연이 발생할 수 있습니다.
  * @summary 최근 체결 내역 조회
  */
-export const getMyTrades = (
-    params: GetMyTradesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetMyTrades200>> => {
+export const listMyTrades = (
+    params: ListMyTradesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListMyTrades200>> => {
     return axios.get(
       `/v2/myTrades`,{
     ...options,
@@ -199,9 +199,9 @@ export const getMyTrades = (
  * 내가 가지고 있는 자산 목록을 조회합니다.
  * @summary 자산 현황
  */
-export const getBalance = (
-    params: GetBalanceParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetBalance200>> => {
+export const listBalance = (
+    params: ListBalanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListBalance200>> => {
     return axios.get(
       `/v2/balance`,{
     ...options,
@@ -213,9 +213,9 @@ export const getBalance = (
  * 가상자산 입금 주소 목록을 조회합니다.
  * @summary 입금 주소 전체 조회
  */
-export const getCoinDepositAddresses = (
-    params: GetCoinDepositAddressesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCoinDepositAddresses200>> => {
+export const listCoinDepositAddresses = (
+    params: ListCoinDepositAddressesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCoinDepositAddresses200>> => {
     return axios.get(
       `/v2/coin/depositAddresses`,{
     ...options,
@@ -264,9 +264,9 @@ if(createCoinDepositAddressBody.recvWindow !== undefined) {
  * 최근 가상자산 입금 내역을 조회합니다.
  * @summary 최근 입금내역 조회
  */
-export const getCoinRecentDeposits = (
-    params: GetCoinRecentDepositsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCoinRecentDeposits200>> => {
+export const listCoinRecentDeposits = (
+    params: ListCoinRecentDepositsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCoinRecentDeposits200>> => {
     return axios.get(
       `/v2/coin/recentDeposits`,{
     ...options,
@@ -292,9 +292,9 @@ export const getCoinDeposit = (
  * API 출금 가능 주소로 등록된 주소를 조회합니다.
  * @summary 출금 가능 주소 목록 조회
  */
-export const getCoinWithdrawableAddresses = (
-    params: GetCoinWithdrawableAddressesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCoinWithdrawableAddresses200>> => {
+export const listCoinWithdrawableAddresses = (
+    params: ListCoinWithdrawableAddressesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCoinWithdrawableAddresses200>> => {
     return axios.get(
       `/v2/coin/withdrawableAddresses`,{
     ...options,
@@ -382,9 +382,9 @@ export const getCoinWithdrawal = (
  * 최근 가상자산 출금내역을 조회합니다.
  * @summary 최근 출금내역 조회
  */
-export const getCoinRecentWithdrawals = (
-    params: GetCoinRecentWithdrawalsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetCoinRecentWithdrawals200>> => {
+export const listCoinRecentWithdrawals = (
+    params: ListCoinRecentWithdrawalsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListCoinRecentWithdrawals200>> => {
     return axios.get(
       `/v2/coin/recentWithdrawals`,{
     ...options,
@@ -444,9 +444,9 @@ if(requestKrwWithdrawalBody.recvWindow !== undefined) {
  * 최근 KRW 입금 내역을 조회합니다.
  * @summary 최근 입금내역 조회
  */
-export const getKrwRecentDeposits = (
-    params: GetKrwRecentDepositsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetKrwRecentDeposits200>> => {
+export const listKrwRecentDeposits = (
+    params: ListKrwRecentDepositsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListKrwRecentDeposits200>> => {
     return axios.get(
       `/v2/krw/recentDeposits`,{
     ...options,
@@ -458,9 +458,9 @@ export const getKrwRecentDeposits = (
  * 최근 KRW 출금내역을 조회합니다.
  * @summary 최근 출금내역 조회
  */
-export const getKrwRecentWithdrawals = (
-    params: GetKrwRecentWithdrawalsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetKrwRecentWithdrawals200>> => {
+export const listKrwRecentWithdrawals = (
+    params: ListKrwRecentWithdrawalsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListKrwRecentWithdrawals200>> => {
     return axios.get(
       `/v2/krw/recentWithdrawals`,{
     ...options,
@@ -497,26 +497,26 @@ export const getCurrentKeyInfo = (
   }
 
 export type GetOrderResult = AxiosResponse<GetOrder200>
-export type PlaceOrderResult = AxiosResponse<PlaceOrder200>
+export type CreateOrderResult = AxiosResponse<CreateOrder200>
 export type CancelOrderResult = AxiosResponse<CancelOrder200>
-export type GetOpenOrdersResult = AxiosResponse<GetOpenOrders200>
-export type GetAllOrdersResult = AxiosResponse<GetAllOrders200>
-export type GetMyTradesResult = AxiosResponse<GetMyTrades200>
-export type GetBalanceResult = AxiosResponse<GetBalance200>
-export type GetCoinDepositAddressesResult = AxiosResponse<GetCoinDepositAddresses200>
+export type ListOpenOrdersResult = AxiosResponse<ListOpenOrders200>
+export type ListAllOrdersResult = AxiosResponse<ListAllOrders200>
+export type ListMyTradesResult = AxiosResponse<ListMyTrades200>
+export type ListBalanceResult = AxiosResponse<ListBalance200>
+export type ListCoinDepositAddressesResult = AxiosResponse<ListCoinDepositAddresses200>
 export type GetCoinDepositAddressResult = AxiosResponse<GetCoinDepositAddress200>
 export type CreateCoinDepositAddressResult = AxiosResponse<CreateCoinDepositAddress200>
-export type GetCoinRecentDepositsResult = AxiosResponse<GetCoinRecentDeposits200>
+export type ListCoinRecentDepositsResult = AxiosResponse<ListCoinRecentDeposits200>
 export type GetCoinDepositResult = AxiosResponse<GetCoinDeposit200>
-export type GetCoinWithdrawableAddressesResult = AxiosResponse<GetCoinWithdrawableAddresses200>
+export type ListCoinWithdrawableAddressesResult = AxiosResponse<ListCoinWithdrawableAddresses200>
 export type GetCoinWithdrawableAmountResult = AxiosResponse<GetCoinWithdrawableAmount200>
 export type CreateCoinWithdrawalResult = AxiosResponse<CreateCoinWithdrawal200>
 export type CancelCoinWithdrawalResult = AxiosResponse<CancelCoinWithdrawal200>
 export type GetCoinWithdrawalResult = AxiosResponse<GetCoinWithdrawal200>
-export type GetCoinRecentWithdrawalsResult = AxiosResponse<GetCoinRecentWithdrawals200>
+export type ListCoinRecentWithdrawalsResult = AxiosResponse<ListCoinRecentWithdrawals200>
 export type RequestKrwDepositResult = AxiosResponse<RequestKrwDeposit200>
 export type RequestKrwWithdrawalResult = AxiosResponse<RequestKrwWithdrawal200>
-export type GetKrwRecentDepositsResult = AxiosResponse<GetKrwRecentDeposits200>
-export type GetKrwRecentWithdrawalsResult = AxiosResponse<GetKrwRecentWithdrawals200>
+export type ListKrwRecentDepositsResult = AxiosResponse<ListKrwRecentDeposits200>
+export type ListKrwRecentWithdrawalsResult = AxiosResponse<ListKrwRecentWithdrawals200>
 export type GetTradingFeePolicyResult = AxiosResponse<GetTradingFeePolicy200>
 export type GetCurrentKeyInfoResult = AxiosResponse<GetCurrentKeyInfo200>

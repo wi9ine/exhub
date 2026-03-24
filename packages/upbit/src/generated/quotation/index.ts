@@ -12,32 +12,32 @@ import type {
 } from 'axios';
 
 import type {
-  ListCandlesDays200Item,
-  ListCandlesDaysParams,
-  ListCandlesMinutes200Item,
-  ListCandlesMinutesParams,
-  ListCandlesMonths200Item,
-  ListCandlesMonthsParams,
-  ListCandlesSeconds200Item,
-  ListCandlesSecondsParams,
-  ListCandlesWeeks200Item,
-  ListCandlesWeeksParams,
-  ListCandlesYears200Item,
-  ListCandlesYearsParams,
+  GetDayCandles200Item,
+  GetDayCandlesParams,
+  GetMinuteCandles200Item,
+  GetMinuteCandlesParams,
+  GetMonthCandles200Item,
+  GetMonthCandlesParams,
+  GetSecondCandles200Item,
+  GetSecondCandlesParams,
+  GetWeekCandles200Item,
+  GetWeekCandlesParams,
+  GetYearCandles200Item,
+  GetYearCandlesParams,
   ListOrderbookInstruments200Item,
   ListOrderbookInstrumentsParams,
-  ListOrderbookLevels200Item,
-  ListOrderbookLevelsParams,
+  ListOrderbookSupportedLevels200Item,
+  ListOrderbookSupportedLevelsParams,
   ListOrderbooks200Item,
   ListOrderbooksParams,
   ListQuoteTickers200Item,
   ListQuoteTickersParams,
   ListTickers200Item,
   ListTickersParams,
+  ListTradesTicks200Item,
+  ListTradesTicksParams,
   ListTradingPairs200Item,
-  ListTradingPairsParams,
-  RecentTradesHistory200Item,
-  RecentTradesHistoryParams
+  ListTradingPairsParams
 } from './model';
 
 
@@ -59,9 +59,9 @@ export const listTradingPairs = (
 /**
  * @summary 초(Second) 캔들 조회
  */
-export const listCandlesSeconds = (
-    params: ListCandlesSecondsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCandlesSeconds200Item[]>> => {
+export const getSecondCandles = (
+    params: GetSecondCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetSecondCandles200Item[]>> => {
     return axios.get(
       `/candles/seconds`,{
     ...options,
@@ -72,10 +72,10 @@ export const listCandlesSeconds = (
 /**
  * @summary 분(Minute) 캔들 조회
  */
-export const listCandlesMinutes = (
+export const getMinuteCandles = (
     unit: 1 | 3 | 5 | 10 | 15 | 30 | 60 | 240,
-    params: ListCandlesMinutesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCandlesMinutes200Item[]>> => {
+    params: GetMinuteCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetMinuteCandles200Item[]>> => {
     return axios.get(
       `/candles/minutes/${unit}`,{
     ...options,
@@ -86,9 +86,9 @@ export const listCandlesMinutes = (
 /**
  * @summary 일(Day) 캔들 조회
  */
-export const listCandlesDays = (
-    params: ListCandlesDaysParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCandlesDays200Item[]>> => {
+export const getDayCandles = (
+    params: GetDayCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetDayCandles200Item[]>> => {
     return axios.get(
       `/candles/days`,{
     ...options,
@@ -99,9 +99,9 @@ export const listCandlesDays = (
 /**
  * @summary 주(Week) 캔들 조회
  */
-export const listCandlesWeeks = (
-    params: ListCandlesWeeksParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCandlesWeeks200Item[]>> => {
+export const getWeekCandles = (
+    params: GetWeekCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetWeekCandles200Item[]>> => {
     return axios.get(
       `/candles/weeks`,{
     ...options,
@@ -112,9 +112,9 @@ export const listCandlesWeeks = (
 /**
  * @summary 월(Month) 캔들 조회
  */
-export const listCandlesMonths = (
-    params: ListCandlesMonthsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCandlesMonths200Item[]>> => {
+export const getMonthCandles = (
+    params: GetMonthCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetMonthCandles200Item[]>> => {
     return axios.get(
       `/candles/months`,{
     ...options,
@@ -125,9 +125,9 @@ export const listCandlesMonths = (
 /**
  * @summary 연(Year) 캔들 조회
  */
-export const listCandlesYears = (
-    params: ListCandlesYearsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCandlesYears200Item[]>> => {
+export const getYearCandles = (
+    params: GetYearCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetYearCandles200Item[]>> => {
     return axios.get(
       `/candles/years`,{
     ...options,
@@ -138,9 +138,9 @@ export const listCandlesYears = (
 /**
  * @summary 최근 체결 내역 조회
  */
-export const recentTradesHistory = (
-    params: RecentTradesHistoryParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<RecentTradesHistory200Item[]>> => {
+export const listTradesTicks = (
+    params: ListTradesTicksParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTradesTicks200Item[]>> => {
     return axios.get(
       `/trades/ticks`,{
     ...options,
@@ -204,9 +204,9 @@ export const listOrderbookInstruments = (
  * @deprecated
  * @summary 호가 모아보기 단위 조회
  */
-export const listOrderbookLevels = (
-    params: ListOrderbookLevelsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListOrderbookLevels200Item[]>> => {
+export const listOrderbookSupportedLevels = (
+    params: ListOrderbookSupportedLevelsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListOrderbookSupportedLevels200Item[]>> => {
     return axios.get(
       `/orderbook/supported_levels`,{
     ...options,
@@ -215,15 +215,15 @@ export const listOrderbookLevels = (
   }
 
 export type ListTradingPairsResult = AxiosResponse<ListTradingPairs200Item[]>
-export type ListCandlesSecondsResult = AxiosResponse<ListCandlesSeconds200Item[]>
-export type ListCandlesMinutesResult = AxiosResponse<ListCandlesMinutes200Item[]>
-export type ListCandlesDaysResult = AxiosResponse<ListCandlesDays200Item[]>
-export type ListCandlesWeeksResult = AxiosResponse<ListCandlesWeeks200Item[]>
-export type ListCandlesMonthsResult = AxiosResponse<ListCandlesMonths200Item[]>
-export type ListCandlesYearsResult = AxiosResponse<ListCandlesYears200Item[]>
-export type RecentTradesHistoryResult = AxiosResponse<RecentTradesHistory200Item[]>
+export type GetSecondCandlesResult = AxiosResponse<GetSecondCandles200Item[]>
+export type GetMinuteCandlesResult = AxiosResponse<GetMinuteCandles200Item[]>
+export type GetDayCandlesResult = AxiosResponse<GetDayCandles200Item[]>
+export type GetWeekCandlesResult = AxiosResponse<GetWeekCandles200Item[]>
+export type GetMonthCandlesResult = AxiosResponse<GetMonthCandles200Item[]>
+export type GetYearCandlesResult = AxiosResponse<GetYearCandles200Item[]>
+export type ListTradesTicksResult = AxiosResponse<ListTradesTicks200Item[]>
 export type ListTickersResult = AxiosResponse<ListTickers200Item[]>
 export type ListQuoteTickersResult = AxiosResponse<ListQuoteTickers200Item[]>
 export type ListOrderbooksResult = AxiosResponse<ListOrderbooks200Item[]>
 export type ListOrderbookInstrumentsResult = AxiosResponse<ListOrderbookInstruments200Item[]>
-export type ListOrderbookLevelsResult = AxiosResponse<ListOrderbookLevels200Item[]>
+export type ListOrderbookSupportedLevelsResult = AxiosResponse<ListOrderbookSupportedLevels200Item[]>

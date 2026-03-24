@@ -17,10 +17,10 @@
   - `REFUNDED`: 반환됨
 
  */
-export type VerifyTravelruleByTxid201DepositState = typeof VerifyTravelruleByTxid201DepositState[keyof typeof VerifyTravelruleByTxid201DepositState];
+export type VerifyTravelRuleByTxid201DepositState = typeof VerifyTravelRuleByTxid201DepositState[keyof typeof VerifyTravelRuleByTxid201DepositState];
 
 
-export const VerifyTravelruleByTxid201DepositState = {
+export const VerifyTravelRuleByTxid201DepositState = {
   PROCESSING: 'PROCESSING',
   ACCEPTED: 'ACCEPTED',
   CANCELLED: 'CANCELLED',

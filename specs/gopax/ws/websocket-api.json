@@ -36,7 +36,7 @@
         "production"
       ],
       "publish": {
-        "operationId": "subscribe미체결주문구독",
+        "operationId": "subscribe-open-orders",
         "message": {
           "name": "private_미체결주문구독_request",
           "payload": {
@@ -67,7 +67,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "미체결주문구독Messages",
+        "operationId": "receive-open-orders",
         "message": {
           "oneOf": [
             {
@@ -397,7 +397,7 @@
         "production"
       ],
       "publish": {
-        "operationId": "subscribe잔고구독",
+        "operationId": "subscribe-balances",
         "message": {
           "name": "private_잔고구독_request",
           "payload": {
@@ -428,7 +428,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "잔고구독Messages",
+        "operationId": "receive-balances",
         "message": {
           "oneOf": [
             {
@@ -590,7 +590,7 @@
         "production"
       ],
       "publish": {
-        "operationId": "subscribe체결내역구독",
+        "operationId": "subscribe-my-trades",
         "message": {
           "name": "private_체결내역구독_request",
           "payload": {
@@ -621,7 +621,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "체결내역구독Messages",
+        "operationId": "receive-my-trades",
         "message": {
           "oneOf": [
             {
@@ -768,7 +768,7 @@
         "production"
       ],
       "publish": {
-        "operationId": "subscribe오더북구독",
+        "operationId": "subscribe-orderbook",
         "message": {
           "name": "public_오더북구독_request",
           "payload": {
@@ -808,7 +808,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "오더북구독Messages",
+        "operationId": "receive-orderbook",
         "message": {
           "oneOf": [
             {
@@ -1005,7 +1005,7 @@
         "production"
       ],
       "publish": {
-        "operationId": "subscribe거래쌍구독",
+        "operationId": "subscribe-trading-pair",
         "message": {
           "name": "public_거래쌍구독_request",
           "payload": {
@@ -1045,7 +1045,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "거래쌍구독Messages",
+        "operationId": "receive-trading-pair",
         "message": {
           "oneOf": [
             {
@@ -1143,7 +1143,7 @@
         "production"
       ],
       "publish": {
-        "operationId": "subscribe티커구독",
+        "operationId": "subscribe-ticker",
         "message": {
           "name": "public_티커구독_request",
           "payload": {
@@ -1174,7 +1174,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "티커구독Messages",
+        "operationId": "receive-ticker",
         "message": {
           "oneOf": [
             {

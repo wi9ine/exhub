@@ -11,12 +11,12 @@ import * as zod from 'zod';
  * 고객이 보유한 전체 잔고 조회
  * @summary 전체 잔고 조회
  */
-export const FindBalanceHeader = zod.object({
+export const ListBalanceHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body Object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const FindBalanceBody = zod.object({
+export const ListBalanceBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")')
 })
@@ -26,17 +26,17 @@ export const FindBalanceBody = zod.object({
  * 고객이 보유한 특정 종목의 잔고 조회
  * @summary 특정 자산 잔고 조회
  */
-export const FindBalanceByCurrenciesHeader = zod.object({
+export const ListBalanceByCurrenciesHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const findBalanceByCurrenciesBodyCurrenciesDefault = [`"BTC"`, `"KRW"`, `"ETH"`];
+export const listBalanceByCurrenciesBodyCurrenciesDefault = [`"BTC"`, `"KRW"`, `"ETH"`];
 
-export const FindBalanceByCurrenciesBody = zod.object({
+export const ListBalanceByCurrenciesBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
-  "currencies": zod.array(zod.string()).default(findBalanceByCurrenciesBodyCurrenciesDefault).describe('잔고 조회하려는 자산의 심볼 입력')
+  "currencies": zod.array(zod.string()).default(listBalanceByCurrenciesBodyCurrenciesDefault).describe('잔고 조회하려는 자산의 심볼 입력')
 })
 
 
@@ -44,12 +44,12 @@ export const FindBalanceByCurrenciesBody = zod.object({
  * 거래 가능한 모든 종목의 수수료 조회
  * @summary 전체 수수료 조회
  */
-export const FindAllTradeFeesHeader = zod.object({
+export const ListTradeFeesHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const FindAllTradeFeesBody = zod.object({
+export const ListTradeFeesBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")')
 })
@@ -59,20 +59,20 @@ export const FindAllTradeFeesBody = zod.object({
  * 개별 종목 별로 수수료 조회
  * @summary 개별 종목 수수료 조회
  */
-export const findTradeFeeByPairPathQuoteCurrencyDefault = `KRW`;
-export const findTradeFeeByPairPathTargetCurrencyDefault = `BTC`;
+export const getTradeFeeByPairPathQuoteCurrencyDefault = `KRW`;
+export const getTradeFeeByPairPathTargetCurrencyDefault = `BTC`;
 
-export const FindTradeFeeByPairParams = zod.object({
-  "quote_currency": zod.string().default(findTradeFeeByPairPathQuoteCurrencyDefault).describe('마켓 기준 통화'),
-  "target_currency": zod.string().default(findTradeFeeByPairPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+export const GetTradeFeeByPairParams = zod.object({
+  "quote_currency": zod.string().default(getTradeFeeByPairPathQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(getTradeFeeByPairPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
 })
 
-export const FindTradeFeeByPairHeader = zod.object({
+export const GetTradeFeeByPairHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const FindTradeFeeByPairBody = zod.object({
+export const GetTradeFeeByPairBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")')
 })
@@ -82,19 +82,19 @@ export const FindTradeFeeByPairBody = zod.object({
  * 종목 별 / 주문 방식 별로 미체결 주문 조회
  * @summary 미체결 주문 조회
  */
-export const FindActiveOrdersHeader = zod.object({
+export const ListActiveOrdersHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const findActiveOrdersBodyOrderTypeDefault = [`[]`];
+export const listActiveOrdersBodyOrderTypeDefault = [`[]`];
 
-export const FindActiveOrdersBody = zod.object({
+export const ListActiveOrdersBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "quote_currency": zod.string().optional().describe('마켓 기준 통화, 미입력 시 전체 종목에 해당되는 주문 목록 조회'),
   "target_currency": zod.string().optional().describe('조회하려는 종목의 심볼, 미입력 시 전체 종목에 해당되는 주문 목록 조회'),
-  "order_type": zod.array(zod.string()).default(findActiveOrdersBodyOrderTypeDefault).describe('조회하고자하는 주문 방식, [\"LIMIT\"], [\"STOP_LIMIT\"], [\"LIMIT\", \"STOP_LIMIT\"] 이 가능하며, [] 또는 생략시 모든 타입이 조회')
+  "order_type": zod.array(zod.string()).default(listActiveOrdersBodyOrderTypeDefault).describe('조회하고자하는 주문 방식, [\"LIMIT\"], [\"STOP_LIMIT\"], [\"LIMIT\", \"STOP_LIMIT\"] 이 가능하며, [] 또는 생략시 모든 타입이 조회')
 })
 
 
@@ -102,20 +102,20 @@ export const FindActiveOrdersBody = zod.object({
  * 주문 식별 ID에 해당하는 주문 조회
  * @summary 주문 정보 조회
  */
-export const OrderDetailHeader = zod.object({
+export const GetOrderDetailHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const orderDetailBodyQuoteCurrencyDefault = `KRW`;
-export const orderDetailBodyTargetCurrencyDefault = `BTC`;
+export const getOrderDetailBodyQuoteCurrencyDefault = `KRW`;
+export const getOrderDetailBodyTargetCurrencyDefault = `BTC`;
 
-export const OrderDetailBody = zod.object({
+export const GetOrderDetailBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "order_id": zod.string().describe('조회하려는 주문 식별 ID'),
-  "quote_currency": zod.string().default(orderDetailBodyQuoteCurrencyDefault).describe('조회하려는 주문의 마켓 기준 통화'),
-  "target_currency": zod.string().default(orderDetailBodyTargetCurrencyDefault).describe('조회하려는 주문의 종목 심볼'),
+  "quote_currency": zod.string().default(getOrderDetailBodyQuoteCurrencyDefault).describe('조회하려는 주문의 마켓 기준 통화'),
+  "target_currency": zod.string().default(getOrderDetailBodyTargetCurrencyDefault).describe('조회하려는 주문의 종목 심볼'),
   "user_order_id": zod.string().optional().describe('150자까지 지원 (알파벳 소문자 \/ 숫자 \/ 특수문자 - _ . 지원)')
 })
 
@@ -124,12 +124,12 @@ export const OrderDetailBody = zod.object({
  * 체결된 모든 주문 조회
  * @summary 전체 체결 주문 조회
  */
-export const FindAllCompletedOrdersHeader = zod.object({
+export const ListCompletedOrdersAllHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const FindAllCompletedOrdersBody = zod.object({
+export const ListCompletedOrdersAllBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "to_trade_id": zod.string().optional().describe('주문 ID 입력 시, 입력한 주문 ID 이전의 내역 조회'),
@@ -143,23 +143,23 @@ export const FindAllCompletedOrdersBody = zod.object({
  * 특정 종목의 체결된 주문 조회
  * @summary 종목 별 체결 주문 조회
  */
-export const FindCompletedOrdersHeader = zod.object({
+export const ListCompletedOrdersHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().optional().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const findCompletedOrdersBodyQuoteCurrencyDefault = `KRW`;
-export const findCompletedOrdersBodyTargetCurrencyDefault = `BTC`;
+export const listCompletedOrdersBodyQuoteCurrencyDefault = `KRW`;
+export const listCompletedOrdersBodyTargetCurrencyDefault = `BTC`;
 
-export const FindCompletedOrdersBody = zod.object({
+export const ListCompletedOrdersBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "to_trade_id": zod.string().optional().describe('주문 ID 입력 시, 입력한 주문 ID 이전의 내역 조회'),
   "size": zod.number().describe('한번에 조회할 목록 개수 (MAX: 100 MIN: 1)'),
   "from_ts": zod.number().describe('조회 시작 시점 입력 (UTC 기준 시간 입력, unit of time: millisecond)'),
   "to_ts": zod.number().describe('조회 종료 시점 입력 (UTC 기준 시간 입력, unit of time: millisecond)'),
-  "quote_currency": zod.string().default(findCompletedOrdersBodyQuoteCurrencyDefault).describe('마켓 기준 통화'),
-  "target_currency": zod.string().default(findCompletedOrdersBodyTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+  "quote_currency": zod.string().default(listCompletedOrdersBodyQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(listCompletedOrdersBodyTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
 })
 
 
@@ -168,12 +168,12 @@ export const FindCompletedOrdersBody = zod.object({
  * @deprecated
  * @summary 전체 미체결 주문 조회
  */
-export const FindAllOpenOrdersHeader = zod.object({
+export const ListOpenOrdersAllHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const FindAllOpenOrdersBody = zod.object({
+export const ListOpenOrdersAllBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")')
 })
@@ -184,19 +184,19 @@ export const FindAllOpenOrdersBody = zod.object({
  * @deprecated
  * @summary 종목 별 미체결 주문 조회
  */
-export const FindOpenOrdersHeader = zod.object({
+export const ListOpenOrdersHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const findOpenOrdersBodyQuoteCurrencyDefault = `KRW`;
-export const findOpenOrdersBodyTargetCurrencyDefault = `BTC`;
+export const listOpenOrdersBodyQuoteCurrencyDefault = `KRW`;
+export const listOpenOrdersBodyTargetCurrencyDefault = `BTC`;
 
-export const FindOpenOrdersBody = zod.object({
+export const ListOpenOrdersBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
-  "quote_currency": zod.string().default(findOpenOrdersBodyQuoteCurrencyDefault).describe('마켓 기준 통화'),
-  "target_currency": zod.string().default(findOpenOrdersBodyTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+  "quote_currency": zod.string().default(listOpenOrdersBodyQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(listOpenOrdersBodyTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
 })
 
 
@@ -205,20 +205,20 @@ export const FindOpenOrdersBody = zod.object({
  * @deprecated
  * @summary 특정 주문 정보 조회
  */
-export const FindOrderInfoHeader = zod.object({
+export const GetOrderInfoHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const findOrderInfoBodyQuoteCurrencyDefault = `KRW`;
-export const findOrderInfoBodyTargetCurrencyDefault = `BTC`;
+export const getOrderInfoBodyQuoteCurrencyDefault = `KRW`;
+export const getOrderInfoBodyTargetCurrencyDefault = `BTC`;
 
-export const FindOrderInfoBody = zod.object({
+export const GetOrderInfoBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "order_id": zod.string().describe('조회하려는 주문 식별 ID'),
-  "quote_currency": zod.string().default(findOrderInfoBodyQuoteCurrencyDefault).describe('조회하려는 주문의 마켓 기준 통화'),
-  "target_currency": zod.string().default(findOrderInfoBodyTargetCurrencyDefault).describe('조회하려는 주문의 종목 심볼')
+  "quote_currency": zod.string().default(getOrderInfoBodyQuoteCurrencyDefault).describe('조회하려는 주문의 마켓 기준 통화'),
+  "target_currency": zod.string().default(getOrderInfoBodyTargetCurrencyDefault).describe('조회하려는 주문의 종목 심볼')
 })
 
 
@@ -226,12 +226,12 @@ export const FindOrderInfoBody = zod.object({
  * 시장가, 지정가, 예약가 주문 유형으로 매수/매도 주문 등록
  * @summary 매수/매도 주문
  */
-export const PlaceOrderHeader = zod.object({
+export const CreateOrderHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const PlaceOrderBody = zod.object({
+export const CreateOrderBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "side": zod.string().describe('매수\/매도 여부 (Enum: \"BUY\", \"SELL\")'),
@@ -295,25 +295,25 @@ export const CancelOrderBody = zod.object({
  * @deprecated
  * @summary 지정가 매매 주문
  */
-export const OrderPlaceLimitOrderHeader = zod.object({
+export const CreateLimitOrderHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const orderPlaceLimitOrderBodyQuoteCurrencyDefault = `KRW`;
-export const orderPlaceLimitOrderBodyTargetCurrencyDefault = `BTC`;
-export const orderPlaceLimitOrderBodySideDefault = `BUY`;
-export const orderPlaceLimitOrderBodyLimitOrderTypeDefault = `LIMIT`;
+export const createLimitOrderBodyQuoteCurrencyDefault = `KRW`;
+export const createLimitOrderBodyTargetCurrencyDefault = `BTC`;
+export const createLimitOrderBodySideDefault = `BUY`;
+export const createLimitOrderBodyLimitOrderTypeDefault = `LIMIT`;
 
-export const OrderPlaceLimitOrderBody = zod.object({
+export const CreateLimitOrderBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
-  "quote_currency": zod.string().default(orderPlaceLimitOrderBodyQuoteCurrencyDefault).describe('마켓 기준 통화'),
-  "target_currency": zod.string().default(orderPlaceLimitOrderBodyTargetCurrencyDefault).describe('주문하려는 종목의 심볼'),
-  "side": zod.string().default(orderPlaceLimitOrderBodySideDefault).describe('매수\/매도 여부 (Enum: \"BUY\", \"SELL\")'),
+  "quote_currency": zod.string().default(createLimitOrderBodyQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(createLimitOrderBodyTargetCurrencyDefault).describe('주문하려는 종목의 심볼'),
+  "side": zod.string().default(createLimitOrderBodySideDefault).describe('매수\/매도 여부 (Enum: \"BUY\", \"SELL\")'),
   "price": zod.string().describe('주문하려는 금액'),
   "qty": zod.string().describe('주문하려는 수량'),
-  "limit_order_type": zod.string().default(orderPlaceLimitOrderBodyLimitOrderTypeDefault).describe('주문 방식 입력, POST_ONLY 주문 시 marker 주문으로만 실행 됨 (Enum: \"LIMIT\" \"POST_ONLY\")')
+  "limit_order_type": zod.string().default(createLimitOrderBodyLimitOrderTypeDefault).describe('주문 방식 입력, POST_ONLY 주문 시 marker 주문으로만 실행 됨 (Enum: \"LIMIT\" \"POST_ONLY\")')
 })
 
 
@@ -321,19 +321,19 @@ export const OrderPlaceLimitOrderBody = zod.object({
  * 원화의 전체 입출금 내역 조회
  * @summary 원화 입출금 내역 조회
  */
-export const KrwTransactionHistoryHeader = zod.object({
+export const ListKrwTransactionHistoryHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const krwTransactionHistoryBodySizeDefault = 100;
+export const listKrwTransactionHistoryBodySizeDefault = 100;
 
-export const KrwTransactionHistoryBody = zod.object({
+export const ListKrwTransactionHistoryBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "to_id": zod.string().optional().describe('입력한 ID 이전의 내역 조회'),
   "is_deposit": zod.boolean().optional().describe('true 입력 시 입금 내역만 조회, false 입력 시 출금 내역만 조회, null 입력 시 입금 출금 내역 모두 조회'),
-  "size": zod.number().default(krwTransactionHistoryBodySizeDefault).describe('한번에 조회할 목록 개수 (예: 1 ~ 100)'),
+  "size": zod.number().default(listKrwTransactionHistoryBodySizeDefault).describe('한번에 조회할 목록 개수 (예: 1 ~ 100)'),
   "from_ts": zod.number().optional().describe('조회 시작 시점 입력 (UTC 기준 시간 입력, unit of time: millisecond)'),
   "to_ts": zod.number().optional().describe('조회 종료 시점 입력 (UTC 기준 시간 입력, unit of time: millisecond)')
 })
@@ -343,21 +343,21 @@ export const KrwTransactionHistoryBody = zod.object({
  * 가상자산의 전체 입출금 내역 조회
  * @summary 가상자산 입출금 내역 조회
  */
-export const CoinTransactionHistoryHeader = zod.object({
+export const ListCoinTransactionHistoryHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const coinTransactionHistoryBodyCurrencyDefault = `BTC`;
-export const coinTransactionHistoryBodySizeDefault = 100;
+export const listCoinTransactionHistoryBodyCurrencyDefault = `BTC`;
+export const listCoinTransactionHistoryBodySizeDefault = 100;
 
-export const CoinTransactionHistoryBody = zod.object({
+export const ListCoinTransactionHistoryBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
-  "currency": zod.string().default(coinTransactionHistoryBodyCurrencyDefault).describe('조회하려는 종목의 심볼, 입력하지 않으면 모든 종목 조회'),
+  "currency": zod.string().default(listCoinTransactionHistoryBodyCurrencyDefault).describe('조회하려는 종목의 심볼, 입력하지 않으면 모든 종목 조회'),
   "to_id": zod.string().optional().describe('입력한 ID 이전의 내역 조회'),
   "is_deposit": zod.boolean().optional().describe('true 입력 시 입금 내역만 조회, false 입력 시 출금 내역만 조회, null 입력 시 입금 출금 내역 모두 조회'),
-  "size": zod.number().default(coinTransactionHistoryBodySizeDefault).describe('한번에 조회할 목록 개수 (예: 1 ~ 100)'),
+  "size": zod.number().default(listCoinTransactionHistoryBodySizeDefault).describe('한번에 조회할 목록 개수 (예: 1 ~ 100)'),
   "from_ts": zod.number().optional().describe('조회 시작 시점 입력 (UTC 기준 시간 입력, unit of time: millisecond)'),
   "to_ts": zod.number().optional().describe('조회 종료 시점 입력 (UTC 기준 시간 입력, unit of time: millisecond)')
 })
@@ -367,12 +367,12 @@ export const CoinTransactionHistoryBody = zod.object({
  * 출금 API를 통해 받은 ID를 이용하여 가상자산의 입출금 내역의 진행상태를 조회할 수 있습니다.
  * @summary 가상자산 입출금 내역 단건 조회
  */
-export const SingleCoinTransactionHistoryHeader = zod.object({
+export const GetCoinTransactionHistoryDetailHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const SingleCoinTransactionHistoryBody = zod.object({
+export const GetCoinTransactionHistoryDetailBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "id": zod.string().describe('입출금 거래 식별 id')
@@ -383,17 +383,17 @@ export const SingleCoinTransactionHistoryBody = zod.object({
  * 가상자산의 전일 종가를 기준으로 출금 가능 한도를 조회
  * @summary 가상자산 출금 한도 조회
  */
-export const CoinWithdrawalLimitHeader = zod.object({
+export const GetCoinWithdrawalLimitHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const coinWithdrawalLimitBodyCurrencyDefault = `BTC`;
+export const getCoinWithdrawalLimitBodyCurrencyDefault = `BTC`;
 
-export const CoinWithdrawalLimitBody = zod.object({
+export const GetCoinWithdrawalLimitBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
-  "currency": zod.string().default(coinWithdrawalLimitBodyCurrencyDefault).describe('출금한도를 조회하려는 종목의 심볼')
+  "currency": zod.string().default(getCoinWithdrawalLimitBodyCurrencyDefault).describe('출금한도를 조회하려는 종목의 심볼')
 })
 
 
@@ -401,12 +401,12 @@ export const CoinWithdrawalLimitBody = zod.object({
  * 2차 인증 및 수취인정보 등록이 완료된 주소 조회. (해당 주소로만 API출금이 가능합니다)
  * @summary 출금 주소 목록 조회
  */
-export const CoinWithdrawalAddressBookHeader = zod.object({
+export const ListCoinWithdrawalAddressBookHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const CoinWithdrawalAddressBookBody = zod.object({
+export const ListCoinWithdrawalAddressBookBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "currency": zod.string().optional().describe('출금 주소를 조회 하려는 종목')
@@ -417,12 +417,12 @@ export const CoinWithdrawalAddressBookBody = zod.object({
  * 2차 인증 및 수취인정보 입력이 완료된 주소에 대해 API를 이용한 출금을 요청합니다.
  * @summary 가상자산 출금
  */
-export const CoinWithdrawalHeader = zod.object({
+export const CreateCoinWithdrawalHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const CoinWithdrawalBody = zod.object({
+export const CreateCoinWithdrawalBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "currency": zod.string().describe('출금하려는 가상자산'),
@@ -436,12 +436,12 @@ export const CoinWithdrawalBody = zod.object({
  * 진행중인 주문 리워드 프로그램에 대한 정보 조회
  * @summary 주문 리워드 종목 정보 조회
  */
-export const OrderRewardProgramsHeader = zod.object({
+export const ListOrderRewardProgramsHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const OrderRewardProgramsBody = zod.object({
+export const ListOrderRewardProgramsBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")')
 })
@@ -451,12 +451,12 @@ export const OrderRewardProgramsBody = zod.object({
  * 수령한 리워드 내역 정보 조회 (최근일부터 역순 조회, 기간내 최대 30일치 조회 가능)
  * @summary 주문 리워드 내역 조회
  */
-export const OrderRewardHistoryHeader = zod.object({
+export const ListOrderRewardHistoryHeader = zod.object({
   "X-COINONE-PAYLOAD": zod.string().describe('Request body object -> JSON string -> base64'),
   "X-COINONE-SIGNATURE": zod.string().describe('HMAC(X-COINONE-PAYLOAD, SECRET_KEY, SHA512).hexdigest()')
 })
 
-export const OrderRewardHistoryBody = zod.object({
+export const ListOrderRewardHistoryBody = zod.object({
   "access_token": zod.string().describe('사용자의 액세스 토큰 (access token)'),
   "nonce": zod.string().optional().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
   "to_ts": zod.number().optional().describe('조회 종료 시점 타임스탬프 (UTC) \* unit of time: second (예: 1749513600)'),

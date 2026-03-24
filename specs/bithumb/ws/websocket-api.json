@@ -40,7 +40,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "requestTicker",
+        "operationId": "subscribe-ticker",
         "message": {
           "$ref": "#/components/messages/TickerRequestMessage"
         },
@@ -51,7 +51,7 @@
         "x-doc-url": "https://apidocs.bithumb.com/reference/현재가-ticker"
       },
       "subscribe": {
-        "operationId": "receiveTicker",
+        "operationId": "receive-ticker",
         "message": {
           "$ref": "#/components/messages/TickerMessage"
         },
@@ -71,7 +71,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "requestTrade",
+        "operationId": "subscribe-trade",
         "message": {
           "$ref": "#/components/messages/TradeRequestMessage"
         },
@@ -82,7 +82,7 @@
         "x-doc-url": "https://apidocs.bithumb.com/reference/체결-trade"
       },
       "subscribe": {
-        "operationId": "receiveTrade",
+        "operationId": "receive-trade",
         "message": {
           "$ref": "#/components/messages/TradeMessage"
         },
@@ -102,7 +102,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "requestOrderbook",
+        "operationId": "subscribe-orderbook",
         "message": {
           "$ref": "#/components/messages/OrderbookRequestMessage"
         },
@@ -113,7 +113,7 @@
         "x-doc-url": "https://apidocs.bithumb.com/reference/호가-orderbook"
       },
       "subscribe": {
-        "operationId": "receiveOrderbook",
+        "operationId": "receive-orderbook",
         "message": {
           "$ref": "#/components/messages/OrderbookMessage"
         },
@@ -133,7 +133,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "requestMyOrder",
+        "operationId": "subscribe-my-order",
         "message": {
           "$ref": "#/components/messages/MyOrderRequestMessage"
         },
@@ -144,7 +144,7 @@
         "x-doc-url": "https://apidocs.bithumb.com/reference/내-주문-및-체결-myorder"
       },
       "subscribe": {
-        "operationId": "receiveMyOrder",
+        "operationId": "receive-my-order",
         "message": {
           "$ref": "#/components/messages/MyOrderMessage"
         },
@@ -164,7 +164,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "requestMyAsset",
+        "operationId": "subscribe-my-asset",
         "message": {
           "$ref": "#/components/messages/MyAssetRequestMessage"
         },
@@ -175,7 +175,7 @@
         "x-doc-url": "https://apidocs.bithumb.com/reference/내-자산-myasset"
       },
       "subscribe": {
-        "operationId": "receiveMyAsset",
+        "operationId": "receive-my-asset",
         "message": {
           "$ref": "#/components/messages/MyAssetMessage"
         },
@@ -196,7 +196,7 @@
         "private"
       ],
       "subscribe": {
-        "operationId": "receiveStatus",
+        "operationId": "receive-status",
         "message": {
           "$ref": "#/components/messages/StatusMessage"
         },
@@ -217,7 +217,7 @@
         "private"
       ],
       "subscribe": {
-        "operationId": "receiveError",
+        "operationId": "receive-error",
         "message": {
           "$ref": "#/components/messages/ErrorMessage"
         },

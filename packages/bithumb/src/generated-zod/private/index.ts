@@ -11,7 +11,7 @@ import * as zod from 'zod';
  * 보유 중인 자산 정보를 조회합니다.
  * @summary 전체 계좌 조회
  */
-export const GetAccountsHeader = zod.object({
+export const ListAccountsHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -20,11 +20,11 @@ export const GetAccountsHeader = zod.object({
  * 마켓별 주문 가능 정보를 조회합니다.
  * @summary 주문 가능 정보
  */
-export const GetOrdersChanceQueryParams = zod.object({
+export const GetOrderChanceQueryParams = zod.object({
   "market": zod.string().describe('Market ID')
 })
 
-export const GetOrdersChanceHeader = zod.object({
+export const GetOrderChanceHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -47,14 +47,14 @@ export const GetOrderHeader = zod.object({
  * 주문 취소를 요청합니다.
  * @summary 주문 취소 접수
  */
-export const deleteOrderQueryOrderIdDefault = ``;
+export const cancelOrderQueryOrderIdDefault = ``;
 
-export const DeleteOrderQueryParams = zod.object({
-  "order_id": zod.string().default(deleteOrderQueryOrderIdDefault).describe('주문의 고유 ID(구 `uuid`)'),
+export const CancelOrderQueryParams = zod.object({
+  "order_id": zod.string().default(cancelOrderQueryOrderIdDefault).describe('주문의 고유 ID(구 `uuid`)'),
   "client_order_id": zod.string().optional().describe('서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자')
 })
 
-export const DeleteOrderHeader = zod.object({
+export const CancelOrderHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -63,23 +63,23 @@ export const DeleteOrderHeader = zod.object({
  * 주문 목록을 조회합니다.
  * @summary 주문 리스트 조회
  */
-export const getOrdersQueryStateDefault = `wait`;
-export const getOrdersQueryPageDefault = 1;
-export const getOrdersQueryLimitDefault = 100;
-export const getOrdersQueryOrderByDefault = `desc`;
+export const listOrdersQueryStateDefault = `wait`;
+export const listOrdersQueryPageDefault = 1;
+export const listOrdersQueryLimitDefault = 100;
+export const listOrdersQueryOrderByDefault = `desc`;
 
-export const GetOrdersQueryParams = zod.object({
+export const ListOrdersQueryParams = zod.object({
   "market": zod.string().optional().describe('거래 대상 페어의 고유 심볼\n\n예시) KRW-BTC'),
-  "state": zod.enum(['wait', 'watch', 'done', 'cancel']).default(getOrdersQueryStateDefault).describe('주문 상태\n- `wait`: 체결 대기(default) \n- `watch`: 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소'),
+  "state": zod.enum(['wait', 'watch', 'done', 'cancel']).default(listOrdersQueryStateDefault).describe('주문 상태\n- `wait`: 체결 대기(default) \n- `watch`: 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소'),
   "states": zod.array(zod.string()).optional().describe('주문 상태 목록\n- 일반주문(`wait`, `done`, `cancel`)과 자동주문(`watch`)은 혼합하여 조회하실 수 없습니다.'),
   "uuids": zod.array(zod.string()).optional().describe('주문 고유 ID 목록(max 30)'),
   "client_order_ids": zod.array(zod.string()).optional().describe('서버에서 부여하는 주문 ID(`uuid`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID 목록(max 30)'),
-  "page": zod.number().default(getOrdersQueryPageDefault).describe('페이지네이션 응답에서 조회할 페이지 번호'),
-  "limit": zod.number().default(getOrdersQueryLimitDefault).describe('조회할 주문 개수'),
-  "order_by": zod.enum(['asc', 'desc']).default(getOrdersQueryOrderByDefault).describe('조회 결과 정렬 방식\n- `asc`: 오름차순\n- `desc`: 내림차순(default)')
+  "page": zod.number().default(listOrdersQueryPageDefault).describe('페이지네이션 응답에서 조회할 페이지 번호'),
+  "limit": zod.number().default(listOrdersQueryLimitDefault).describe('조회할 주문 개수'),
+  "order_by": zod.enum(['asc', 'desc']).default(listOrdersQueryOrderByDefault).describe('조회 결과 정렬 방식\n- `asc`: 오름차순\n- `desc`: 내림차순(default)')
 })
 
-export const GetOrdersHeader = zod.object({
+export const ListOrdersHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -88,11 +88,11 @@ export const GetOrdersHeader = zod.object({
  * 주문을 요청합니다.
  * @summary 주문 요청
  */
-export const PostOrdersHeader = zod.object({
+export const CreateOrderHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostOrdersBody = zod.object({
+export const CreateOrderBody = zod.object({
   "market": zod.string().describe('거래 대상 페어의 고유 심볼\n\n예시) KRW-BTC'),
   "side": zod.enum(['bid', 'ask']).describe('주문 종류\n- `bid`: 매수\n- `ask`: 매도'),
   "price": zod.string().optional().describe('주문 가격(지정가 주문, 시장가 매수 주문 시 필수)\n- 지정가 주문: 주문 단가\n- 시장가 매수 주문: 주문 총액'),
@@ -106,11 +106,11 @@ export const PostOrdersBody = zod.object({
  * 여러 건의 주문을 한 번의 요청으로 생성합니다. 요청당 최대 20건까지 가능합니다.
  * @summary 다건 주문 요청
  */
-export const PostOrdersBatchHeader = zod.object({
+export const CreateOrdersBatchHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostOrdersBatchBody = zod.object({
+export const CreateOrdersBatchBody = zod.object({
   "batch_orders": zod.array(zod.object({
   "client_order_id": zod.string().optional().describe('서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자'),
   "market": zod.string().describe('거래 대상 페어의 고유 심볼\n\n예시) KRW-BTC'),
@@ -126,11 +126,11 @@ export const PostOrdersBatchBody = zod.object({
  * 여러 개의 주문을 일괄 취소 요청합니다. 요청당 최대 30건까지 처리할 수 있습니다.
  * @summary 다건 주문 취소 접수
  */
-export const PostOrdersCancelHeader = zod.object({
+export const CancelOrdersHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostOrdersCancelBody = zod.object({
+export const CancelOrdersBody = zod.object({
   "order_ids": zod.array(zod.string()).optional().describe('취소할 주문의 고유 ID(구 `uuid`) 목록(max 30)'),
   "client_order_ids": zod.array(zod.string()).optional().describe('서버에서 부여하는 주문 ID(구 `uuid`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID 목록(max 30)\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자')
 })
@@ -140,19 +140,19 @@ export const PostOrdersCancelBody = zod.object({
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 내역 조회
  */
-export const getTwapOrdersQueryLimitDefault = 100;
-export const getTwapOrdersQueryOrderByDefault = `desc`;
+export const listTwapOrdersQueryLimitDefault = 100;
+export const listTwapOrdersQueryOrderByDefault = `desc`;
 
-export const GetTwapOrdersQueryParams = zod.object({
+export const ListTwapOrdersQueryParams = zod.object({
   "market": zod.string().optional().describe('마켓 ID'),
   "uuids": zod.string().optional().describe('TWAP 주문 ID 목록'),
   "state": zod.string().optional().describe('주문 상태'),
   "next_key": zod.array(zod.string()).optional().describe('다음 페이지 조회를 위한 커서 값'),
-  "limit": zod.number().default(getTwapOrdersQueryLimitDefault).describe('개수 제한'),
-  "order_by": zod.enum(['asc', 'desc']).default(getTwapOrdersQueryOrderByDefault).describe('정렬방식')
+  "limit": zod.number().default(listTwapOrdersQueryLimitDefault).describe('개수 제한'),
+  "order_by": zod.enum(['asc', 'desc']).default(listTwapOrdersQueryOrderByDefault).describe('정렬방식')
 })
 
-export const GetTwapOrdersHeader = zod.object({
+export const ListTwapOrdersHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -195,21 +195,21 @@ export const CreateTwapOrderHeader = zod.object({
  * 가상자산 출금 목록을 조회합니다.
  * @summary 코인 출금 리스트 조회
  */
-export const getWithdrawsQueryPageDefault = 1;
-export const getWithdrawsQueryLimitDefault = 100;
-export const getWithdrawsQueryOrderByDefault = `desc`;
+export const listWithdrawsQueryPageDefault = 1;
+export const listWithdrawsQueryLimitDefault = 100;
+export const listWithdrawsQueryOrderByDefault = `desc`;
 
-export const GetWithdrawsQueryParams = zod.object({
+export const ListWithdrawsQueryParams = zod.object({
   "currency": zod.string().optional().describe('화폐를 의미하는 영문 대문자 코드'),
   "state": zod.string().optional().describe('출금 상태'),
   "uuids": zod.array(zod.string()).optional().describe('출금 UUID의 목록'),
   "txids": zod.array(zod.string()).optional().describe('출금 TXID의 목록'),
-  "page": zod.number().default(getWithdrawsQueryPageDefault).describe('페이지 수'),
-  "limit": zod.number().default(getWithdrawsQueryLimitDefault).describe('개수 제한'),
-  "order_by": zod.string().default(getWithdrawsQueryOrderByDefault).describe('정렬방식')
+  "page": zod.number().default(listWithdrawsQueryPageDefault).describe('페이지 수'),
+  "limit": zod.number().default(listWithdrawsQueryLimitDefault).describe('개수 제한'),
+  "order_by": zod.string().default(listWithdrawsQueryOrderByDefault).describe('정렬방식')
 })
 
-export const GetWithdrawsHeader = zod.object({
+export const ListWithdrawsHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -218,20 +218,20 @@ export const GetWithdrawsHeader = zod.object({
  * 원화 출금 목록을 조회합니다.
  * @summary 원화 출금 리스트 조회
  */
-export const getWithdrawsKrwQueryPageDefault = 1;
-export const getWithdrawsKrwQueryLimitDefault = 100;
-export const getWithdrawsKrwQueryOrderByDefault = `desc`;
+export const listWithdrawsKrwQueryPageDefault = 1;
+export const listWithdrawsKrwQueryLimitDefault = 100;
+export const listWithdrawsKrwQueryOrderByDefault = `desc`;
 
-export const GetWithdrawsKrwQueryParams = zod.object({
+export const ListWithdrawsKrwQueryParams = zod.object({
   "state": zod.string().optional().describe('출금 상태'),
   "uuids": zod.array(zod.string()).optional().describe('출금 UUID의 목록'),
   "txids": zod.array(zod.string()).optional().describe('출금 TXID의 목록'),
-  "page": zod.number().default(getWithdrawsKrwQueryPageDefault).describe('페이지 수'),
-  "limit": zod.number().default(getWithdrawsKrwQueryLimitDefault).describe('개수 제한'),
-  "order_by": zod.string().default(getWithdrawsKrwQueryOrderByDefault).describe('정렬방식')
+  "page": zod.number().default(listWithdrawsKrwQueryPageDefault).describe('페이지 수'),
+  "limit": zod.number().default(listWithdrawsKrwQueryLimitDefault).describe('개수 제한'),
+  "order_by": zod.string().default(listWithdrawsKrwQueryOrderByDefault).describe('정렬방식')
 })
 
-export const GetWithdrawsKrwHeader = zod.object({
+export const ListWithdrawsKrwHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -240,11 +240,11 @@ export const GetWithdrawsKrwHeader = zod.object({
  * 등록된 출금 계좌로 원화 출금을 요청합니다.
  * @summary 원화 출금하기
  */
-export const PostWithdrawsKrwHeader = zod.object({
+export const CreateWithdrawsKrwHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostWithdrawsKrwBody = zod.object({
+export const CreateWithdrawsKrwBody = zod.object({
   "amount": zod.string().describe('출금 원화 수량'),
   "two_factor_type": zod.string().describe('2차 인증 수단 (kakao)')
 })
@@ -269,12 +269,12 @@ export const GetWithdrawHeader = zod.object({
  * 해당 통화의 출금 가능 정보를 조회합니다.
  * @summary 출금 가능 정보
  */
-export const GetWithdrawsChanceQueryParams = zod.object({
+export const GetWithdrawChanceQueryParams = zod.object({
   "currency": zod.string().describe('화폐를 의미하는 영문 대문자 코드'),
   "net_type": zod.string().describe('출금 네트워크')
 })
 
-export const GetWithdrawsChanceHeader = zod.object({
+export const GetWithdrawChanceHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -283,11 +283,11 @@ export const GetWithdrawsChanceHeader = zod.object({
  * 가상 자산 출금을 요청합니다.
  * @summary 가상 자산 출금하기
  */
-export const PostWithdrawsCoinHeader = zod.object({
+export const CreateWithdrawsCoinHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostWithdrawsCoinBody = zod.object({
+export const CreateWithdrawsCoinBody = zod.object({
   "currency": zod.string().describe('화폐를 의미하는 영문 대문자 코드'),
   "net_type": zod.string().describe('출금 네트워크'),
   "amount": zod.string().describe('출금 디지털 자산 수량'),
@@ -306,7 +306,7 @@ export const PostWithdrawsCoinBody = zod.object({
  * 등록된 출금 허용 주소(100만원 이상 출금 가능한 주소) 리스트를 조회합니다.
  * @summary 출금 허용 주소 리스트 조회
  */
-export const GetWithdrawsCoinAddressesHeader = zod.object({
+export const ListWithdrawsCoinAddressesHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -315,21 +315,21 @@ export const GetWithdrawsCoinAddressesHeader = zod.object({
  * 가상자산 입금 목록을 조회합니다.
  * @summary 코인 입금 리스트 조회
  */
-export const getDepositsQueryPageDefault = 1;
-export const getDepositsQueryLimitDefault = 100;
-export const getDepositsQueryOrderByDefault = `desc`;
+export const listDepositsQueryPageDefaultOne = 1;
+export const listDepositsQueryLimitDefaultOne = 100;
+export const listDepositsQueryOrderByDefaultOne = `desc`;
 
-export const GetDepositsQueryParams = zod.object({
+export const ListDepositsQueryParams = zod.object({
   "currency": zod.string().optional().describe('화폐를 의미하는 영문 대문자 코드'),
   "state": zod.string().optional().describe('입금 상태'),
   "uuids": zod.array(zod.string()).optional().describe('입금 UUID의 목록'),
   "txids": zod.array(zod.string()).optional().describe('입금 TXID의 목록'),
-  "page": zod.number().default(getDepositsQueryPageDefault).describe('페이지 수'),
-  "limit": zod.number().default(getDepositsQueryLimitDefault).describe('개수 제한'),
-  "order_by": zod.string().default(getDepositsQueryOrderByDefault).describe('정렬방식')
+  "page": zod.number().default(listDepositsQueryPageDefaultOne).describe('페이지 수'),
+  "limit": zod.number().default(listDepositsQueryLimitDefaultOne).describe('개수 제한'),
+  "order_by": zod.string().default(listDepositsQueryOrderByDefaultOne).describe('정렬방식')
 })
 
-export const GetDepositsHeader = zod.object({
+export const ListDepositsHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -338,20 +338,20 @@ export const GetDepositsHeader = zod.object({
  * 원화 입금 목록을 조회합니다.
  * @summary 원화 입금 리스트 조회
  */
-export const getDepositsKrwQueryPageDefault = 1;
-export const getDepositsKrwQueryLimitDefault = 100;
-export const getDepositsKrwQueryOrderByDefault = `desc`;
+export const listDepositsKrwQueryPageDefault = 1;
+export const listDepositsKrwQueryLimitDefault = 100;
+export const listDepositsKrwQueryOrderByDefault = `desc`;
 
-export const GetDepositsKrwQueryParams = zod.object({
+export const ListDepositsKrwQueryParams = zod.object({
   "state": zod.string().optional().describe('입금 상태'),
   "uuids": zod.array(zod.string()).optional().describe('입금 UUID의 목록'),
   "txids": zod.array(zod.string()).optional().describe('입금 TXID의 목록'),
-  "page": zod.number().default(getDepositsKrwQueryPageDefault).describe('페이지 수'),
-  "limit": zod.number().default(getDepositsKrwQueryLimitDefault).describe('개수 제한'),
-  "order_by": zod.string().default(getDepositsKrwQueryOrderByDefault).describe('정렬방식')
+  "page": zod.number().default(listDepositsKrwQueryPageDefault).describe('페이지 수'),
+  "limit": zod.number().default(listDepositsKrwQueryLimitDefault).describe('개수 제한'),
+  "order_by": zod.string().default(listDepositsKrwQueryOrderByDefault).describe('정렬방식')
 })
 
-export const GetDepositsKrwHeader = zod.object({
+export const ListDepositsKrwHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -360,11 +360,11 @@ export const GetDepositsKrwHeader = zod.object({
  * 원화 입금을 요청합니다.
  * @summary 원화 입금하기
  */
-export const PostDepositsKrwHeader = zod.object({
+export const CreateDepositsKrwHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostDepositsKrwBody = zod.object({
+export const CreateDepositsKrwBody = zod.object({
   "amount": zod.string().describe('입금 금액'),
   "two_factor_type": zod.string().describe('2차 인증 수단 (kakao)')
 })
@@ -389,11 +389,11 @@ export const GetDepositHeader = zod.object({
  * 입금 주소 생성을 요청합니다.
  * @summary 입금 주소 생성 요청
  */
-export const PostDepositsGenerateCoinAddressHeader = zod.object({
+export const CreateDepositAddressHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
-export const PostDepositsGenerateCoinAddressBody = zod.object({
+export const CreateDepositAddressBody = zod.object({
   "currency": zod.string().describe('화폐를 의미하는 영문 대문자 코드'),
   "net_type": zod.string().describe('입금 네트워크')
 })
@@ -403,7 +403,7 @@ export const PostDepositsGenerateCoinAddressBody = zod.object({
  * 전체 입금 주소를 조회합니다.
  * @summary 전체 입금 주소 조회
  */
-export const GetDepositsCoinAddressesHeader = zod.object({
+export const ListDepositsCoinAddressesHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -426,7 +426,7 @@ export const GetDepositsCoinAddressHeader = zod.object({
  * 입출금 현황과 블록 상태를 조회합니다.
  * @summary 입출금 현황
  */
-export const GetStatusWalletHeader = zod.object({
+export const GetWalletStatusHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -435,6 +435,6 @@ export const GetStatusWalletHeader = zod.object({
  * API 키 리스트와 만료 일자를 조회합니다.
  * @summary API 키 리스트 조회
  */
-export const GetApiKeysHeader = zod.object({
+export const ListApiKeysHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })

@@ -10,36 +10,36 @@ import * as zod from 'zod';
 /**
  * @summary 잔고 조회
  */
-export const getbalancesHeaderReceiveWindowMin = 200;
-export const getbalancesHeaderReceiveWindowMax = 60000;
+export const listBalancesHeaderReceiveWindowMin = 200;
+export const listBalancesHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetbalancesHeader = zod.object({
+export const ListBalancesHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getbalancesHeaderReceiveWindowMin).max(getbalancesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(listBalancesHeaderReceiveWindowMin).max(listBalancesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
 /**
  * @summary 특정 자산 잔고 조회
  */
-export const GetbalancesassetnameParams = zod.object({
+export const GetBalanceParams = zod.object({
   "AssetName": zod.string().describe('자산 이름 (예: BTC)')
 })
 
-export const getbalancesassetnameHeaderReceiveWindowMin = 200;
-export const getbalancesassetnameHeaderReceiveWindowMax = 60000;
+export const getBalanceHeaderReceiveWindowMin = 200;
+export const getBalanceHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetbalancesassetnameHeader = zod.object({
+export const GetBalanceHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getbalancesassetnameHeaderReceiveWindowMin).max(getbalancesassetnameHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(getBalanceHeaderReceiveWindowMin).max(getBalanceHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
@@ -47,7 +47,7 @@ export const GetbalancesassetnameHeader = zod.object({
  * GET /orders에 한하여 쿼리스트링이 시그니쳐 생성 과정에 포함되어야 합니다. 문서 상단의 예시 코드를 참고하세요.
  * @summary 주문 조회
  */
-export const GetordersQueryParams = zod.object({
+export const ListOrdersQueryParams = zod.object({
   "includePast": zod.boolean().optional().describe('true일 경우 완전 체결 혹은 취소된 주문들도 조회 결과에 포함됨(완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능)'),
   "pagination": zod.boolean().optional().describe('리턴되는 주문 수가 3천 개를 초과할 경우에는true로 설정하여 페이지 별로 1천 개씩 접근 필요'),
   "tradingPairName": zod.string().optional().describe('해당 거래쌍 주문 조회 (BTC-KRW, ETH-KRW ...)'),
@@ -58,16 +58,16 @@ export const GetordersQueryParams = zod.object({
   "tail": zod.boolean().optional().describe('limit과 함께 사용 true: 최근 주문부터 limit 만큼 데이터 조회false: 오래된 주문부터 limit 만큼 데이터 조회')
 })
 
-export const getordersHeaderReceiveWindowMin = 200;
-export const getordersHeaderReceiveWindowMax = 60000;
+export const listOrdersHeaderReceiveWindowMin = 200;
+export const listOrdersHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetordersHeader = zod.object({
+export const ListOrdersHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getordersHeaderReceiveWindowMin).max(getordersHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(listOrdersHeaderReceiveWindowMin).max(listOrdersHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
@@ -87,19 +87,19 @@ REST API를 통한 최소 주문 금액은 quote 자산이 KRW일 경우 1,000 K
 지정가 주문 유형에서 po(post only)는 즉시 체결되는 상대 주문이 있으면 주문을 취소하고 그렇지 않으면 주문을 전량 등록하는 조건(전량 오더북에 올림 or 전량 취소)입니다. ioc(immediate-or-cancel)는 즉시 체결할 수 있는 만큼 최대한 체결한 후에 잔량은 오더북에 올리지 않고 중도 취소하는 조건(즉시 체결 then 잔량 취소)입니다. fok(fill-or-kill)는 수량 전부를 즉시 체결할 수 있는 경우에만 주문을 넣고 그렇지 않은 경우에는 전량 취소하는 조건(전량 즉시 체결 or 전량 취소)입니다. 참고로, 시장가 주문일 경우 지정가 주문 유형은 무시되며, 프로텍션을 yes로 설정한 경우에는 ioc와 fok를 사용할 수 없습니다.
  * @summary 주문 등록
  */
-export const postordersHeaderReceiveWindowMin = 200;
-export const postordersHeaderReceiveWindowMax = 60000;
+export const createOrderHeaderReceiveWindowMin = 200;
+export const createOrderHeaderReceiveWindowMax = 60000;
 
 
 
-export const PostordersHeader = zod.object({
+export const CreateOrderHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(postordersHeaderReceiveWindowMin).max(postordersHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(createOrderHeaderReceiveWindowMin).max(createOrderHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
-export const PostordersBody = zod.object({
+export const CreateOrderBody = zod.object({
   "clientOrderId": zod.string().optional().describe('클라이언트 오더 ID로 최대 20자이고 [a-zA-Z0-9_-] 문자 사용 가능'),
   "tradingPairName": zod.string().describe('오더북'),
   "side": zod.string().describe('buy(구매), sell(판매)'),
@@ -116,20 +116,20 @@ export const PostordersBody = zod.object({
  * 완전 체결 혹은 취소된 주문은 완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능합니다.
  * @summary 특정 주문 조회
  */
-export const GetordersorderidParams = zod.object({
+export const GetOrderParams = zod.object({
   "OrderId": zod.string().describe('주문 ID')
 })
 
-export const getordersorderidHeaderReceiveWindowMin = 200;
-export const getordersorderidHeaderReceiveWindowMax = 60000;
+export const getOrderHeaderReceiveWindowMin = 200;
+export const getOrderHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetordersorderidHeader = zod.object({
+export const GetOrderHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getordersorderidHeaderReceiveWindowMin).max(getordersorderidHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(getOrderHeaderReceiveWindowMin).max(getOrderHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
@@ -137,20 +137,20 @@ export const GetordersorderidHeader = zod.object({
  * 해당하는 오더가 존재하지 않으면 404 에러가 반환됩니다.
  * @summary 주문 취소
  */
-export const DeleteordersorderidParams = zod.object({
+export const CancelOrderParams = zod.object({
   "OrderId": zod.string().describe('주문 ID')
 })
 
-export const deleteordersorderidHeaderReceiveWindowMin = 200;
-export const deleteordersorderidHeaderReceiveWindowMax = 60000;
+export const cancelOrderHeaderReceiveWindowMin = 200;
+export const cancelOrderHeaderReceiveWindowMax = 60000;
 
 
 
-export const DeleteordersorderidHeader = zod.object({
+export const CancelOrderHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(deleteordersorderidHeaderReceiveWindowMin).max(deleteordersorderidHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(cancelOrderHeaderReceiveWindowMin).max(cancelOrderHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
@@ -158,7 +158,7 @@ export const DeleteordersorderidHeader = zod.object({
  * 해당 개인 API로는 본인 주문 관련 체결 내역만 조회됩니다. 본인 주문 가릴 것 없이 모든 체결 기록 조회를 위해서는 공개 API의 체결 기록 조회 기능을 사용하세요.
  * @summary 체결 기록 조회
  */
-export const GettradesQueryParams = zod.object({
+export const ListTradesQueryParams = zod.object({
   "limit": zod.number().optional().describe('반환되는 항목의 개수 (최대 100)'),
   "pastmax": zod.number().optional().describe('이 ID보다 오래된 데이터를 조회'),
   "latestmin": zod.number().optional().describe('이 ID보다 새로운 최신 데이터를 조회'),
@@ -168,23 +168,23 @@ export const GettradesQueryParams = zod.object({
   "tradingPairName": zod.string().optional().describe('해당 거래쌍의 데이터 조회 (BTC-KRW, ETH-KRW...)')
 })
 
-export const gettradesHeaderReceiveWindowMin = 200;
-export const gettradesHeaderReceiveWindowMax = 60000;
+export const listTradesHeaderReceiveWindowMin = 200;
+export const listTradesHeaderReceiveWindowMax = 60000;
 
 
 
-export const GettradesHeader = zod.object({
+export const ListTradesHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(gettradesHeaderReceiveWindowMin).max(gettradesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(listTradesHeaderReceiveWindowMin).max(listTradesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
 /**
  * @summary 입출금 기록 조회
  */
-export const GetdepositwithdrawalstatusQueryParams = zod.object({
+export const ListDepositWithdrawalStatusQueryParams = zod.object({
   "limit": zod.number().optional().describe('반환되는 항목의 개수 (최대 20)'),
   "latestmin": zod.number().optional().describe('이 ID보다 오래된 데이터를 조회'),
   "after": zod.number().optional().describe('이 타임스탬프 이후의 데이터를 조회 (ms 단위)'),
@@ -193,48 +193,48 @@ export const GetdepositwithdrawalstatusQueryParams = zod.object({
   "asset": zod.string().optional().describe('해당 자산의 입출금 내역 조회 (BTC, ETH ...)')
 })
 
-export const getdepositwithdrawalstatusHeaderReceiveWindowMin = 200;
-export const getdepositwithdrawalstatusHeaderReceiveWindowMax = 60000;
+export const listDepositWithdrawalStatusHeaderReceiveWindowMin = 200;
+export const listDepositWithdrawalStatusHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetdepositwithdrawalstatusHeader = zod.object({
+export const ListDepositWithdrawalStatusHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getdepositwithdrawalstatusHeaderReceiveWindowMin).max(getdepositwithdrawalstatusHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(listDepositWithdrawalStatusHeaderReceiveWindowMin).max(listDepositWithdrawalStatusHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
 /**
  * @summary 가상자산 입금 주소 조회
  */
-export const getcryptodepositaddressesHeaderReceiveWindowMin = 200;
-export const getcryptodepositaddressesHeaderReceiveWindowMax = 60000;
+export const listCryptoDepositAddressesHeaderReceiveWindowMin = 200;
+export const listCryptoDepositAddressesHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetcryptodepositaddressesHeader = zod.object({
+export const ListCryptoDepositAddressesHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getcryptodepositaddressesHeaderReceiveWindowMin).max(getcryptodepositaddressesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(listCryptoDepositAddressesHeaderReceiveWindowMin).max(listCryptoDepositAddressesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
 /**
  * @summary 가상자산 출금 주소 조회
  */
-export const getcryptowithdrawaladdressesHeaderReceiveWindowMin = 200;
-export const getcryptowithdrawaladdressesHeaderReceiveWindowMax = 60000;
+export const listCryptoWithdrawalAddressesHeaderReceiveWindowMin = 200;
+export const listCryptoWithdrawalAddressesHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetcryptowithdrawaladdressesHeader = zod.object({
+export const ListCryptoWithdrawalAddressesHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getcryptowithdrawaladdressesHeaderReceiveWindowMin).max(getcryptowithdrawaladdressesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(listCryptoWithdrawalAddressesHeaderReceiveWindowMin).max(listCryptoWithdrawalAddressesHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
@@ -242,19 +242,19 @@ export const GetcryptowithdrawaladdressesHeader = zod.object({
  * 사전에 등록된 IP에서만 출금이 가능합니다.
  * @summary 가상자산 출금
  */
-export const postwithdrawalsHeaderReceiveWindowMin = 200;
-export const postwithdrawalsHeaderReceiveWindowMax = 60000;
+export const createWithdrawalHeaderReceiveWindowMin = 200;
+export const createWithdrawalHeaderReceiveWindowMax = 60000;
 
 
 
-export const PostwithdrawalsHeader = zod.object({
+export const CreateWithdrawalHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(postwithdrawalsHeaderReceiveWindowMin).max(postwithdrawalsHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(createWithdrawalHeaderReceiveWindowMin).max(createWithdrawalHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
-export const PostwithdrawalsBody = zod.object({
+export const CreateWithdrawalBody = zod.object({
   "asset": zod.string().describe('자산 이름'),
   "nickname": zod.string().describe('출금 주소 별칭'),
   "amount": zod.string().describe('출금 수량')
@@ -265,20 +265,20 @@ export const PostwithdrawalsBody = zod.object({
  * 완전 체결 혹은 취소된 주문은 완전 체결 혹은 취소 시점부터 10분 동안만 조회가 가능합니다.
  * @summary 클라이언트 주문 ID로 특정 주문 조회
  */
-export const GetordersclientorderidParams = zod.object({
+export const GetOrderByClientOrderIdParams = zod.object({
   "ClientOrderID": zod.string().describe('클라이언트 오더 ID')
 })
 
-export const getordersclientorderidHeaderReceiveWindowMin = 200;
-export const getordersclientorderidHeaderReceiveWindowMax = 60000;
+export const getOrderByClientOrderIdHeaderReceiveWindowMin = 200;
+export const getOrderByClientOrderIdHeaderReceiveWindowMax = 60000;
 
 
 
-export const GetordersclientorderidHeader = zod.object({
+export const GetOrderByClientOrderIdHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(getordersclientorderidHeaderReceiveWindowMin).max(getordersclientorderidHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(getOrderByClientOrderIdHeaderReceiveWindowMin).max(getOrderByClientOrderIdHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })
 
 
@@ -286,18 +286,18 @@ export const GetordersclientorderidHeader = zod.object({
  * 해당하는 오더가 존재하지 않으면 404 에러가 반환됩니다.
  * @summary 클라이언트 주문 ID로 주문 취소
  */
-export const DeleteordersclientorderidParams = zod.object({
+export const CancelOrderByClientOrderIdParams = zod.object({
   "ClientOrderID": zod.string().describe('클라이언트 오더 ID')
 })
 
-export const deleteordersclientorderidHeaderReceiveWindowMin = 200;
-export const deleteordersclientorderidHeaderReceiveWindowMax = 60000;
+export const cancelOrderByClientOrderIdHeaderReceiveWindowMin = 200;
+export const cancelOrderByClientOrderIdHeaderReceiveWindowMax = 60000;
 
 
 
-export const DeleteordersclientorderidHeader = zod.object({
+export const CancelOrderByClientOrderIdHeader = zod.object({
   "timestamp": zod.string().optional().describe('밀리세컨드 단위 타임스탬프. nonce 대신 사용할 수 있습니다.'),
   "nonce": zod.string().optional().describe('timestamp 대신 사용할 수 있는 증가하는 난스 값.'),
   "signature": zod.string().describe('HMAC-SHA512 서명값(base64 인코딩).'),
-  "receive-window": zod.number().min(deleteordersclientorderidHeaderReceiveWindowMin).max(deleteordersclientorderidHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
+  "receive-window": zod.number().min(cancelOrderByClientOrderIdHeaderReceiveWindowMin).max(cancelOrderByClientOrderIdHeaderReceiveWindowMax).optional().describe('리시브 윈도 (200~60000 밀리세컨드).')
 })

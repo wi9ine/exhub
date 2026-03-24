@@ -12,22 +12,22 @@ import type {
 } from 'axios';
 
 import type {
-  Getassets200Item,
-  GetnoticesParams,
-  Gettickers200Item,
-  Gettime200,
-  Gettradingpairs200Item,
-  Gettradingpairscautions200Item,
-  GettradingpairscautionsParams,
-  Gettradingpairsstats200Item,
-  Gettradingpairstradingpairbook200,
-  GettradingpairstradingpairbookParams,
-  GettradingpairstradingpaircandlesParams,
-  Gettradingpairstradingpairpriceticksize200Item,
-  Gettradingpairstradingpairstats200,
-  Gettradingpairstradingpairticker200,
-  Gettradingpairstradingpairtrades200Item,
-  GettradingpairstradingpairtradesParams
+  GetTime200,
+  GetTradingPairBook200,
+  GetTradingPairBookParams,
+  GetTradingPairCandlesParams,
+  GetTradingPairPriceTickSize200Item,
+  GetTradingPairStats200,
+  GetTradingPairTicker200,
+  ListAssets200Item,
+  ListNoticesParams,
+  ListTickers200Item,
+  ListTradingPairTrades200Item,
+  ListTradingPairTradesParams,
+  ListTradingPairs200Item,
+  ListTradingPairsCautions200Item,
+  ListTradingPairsCautionsParams,
+  ListTradingPairsStats200Item
 } from './model';
 
 
@@ -36,9 +36,9 @@ import type {
   /**
  * @summary 자산 목록 조회
  */
-export const getassets = (
+export const listAssets = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getassets200Item[]>> => {
+ ): Promise<AxiosResponse<ListAssets200Item[]>> => {
     return axios.get(
       `/assets`,options
     );
@@ -47,9 +47,9 @@ export const getassets = (
 /**
  * @summary 거래쌍 목록 조회
  */
-export const gettradingpairs = (
+export const listTradingPairs = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairs200Item[]>> => {
+ ): Promise<AxiosResponse<ListTradingPairs200Item[]>> => {
     return axios.get(
       `/trading-pairs`,options
     );
@@ -58,9 +58,9 @@ export const gettradingpairs = (
 /**
  * @summary 가격 틱 사이즈 조회
  */
-export const gettradingpairstradingpairpriceticksize = (
+export const getTradingPairPriceTickSize = (
     tradingPair: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairstradingpairpriceticksize200Item[]>> => {
+ ): Promise<AxiosResponse<GetTradingPairPriceTickSize200Item[]>> => {
     return axios.get(
       `/trading-pairs/${tradingPair}/price-tick-size`,options
     );
@@ -69,9 +69,9 @@ export const gettradingpairstradingpairpriceticksize = (
 /**
  * @summary 티커 조회
  */
-export const gettradingpairstradingpairticker = (
+export const getTradingPairTicker = (
     tradingPair: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairstradingpairticker200>> => {
+ ): Promise<AxiosResponse<GetTradingPairTicker200>> => {
     return axios.get(
       `/trading-pairs/${tradingPair}/ticker`,options
     );
@@ -80,10 +80,10 @@ export const gettradingpairstradingpairticker = (
 /**
  * @summary 오더북 조회
  */
-export const gettradingpairstradingpairbook = (
+export const getTradingPairBook = (
     tradingPair: string,
-    params?: GettradingpairstradingpairbookParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairstradingpairbook200>> => {
+    params?: GetTradingPairBookParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTradingPairBook200>> => {
     return axios.get(
       `/trading-pairs/${tradingPair}/book`,{
     ...options,
@@ -94,10 +94,10 @@ export const gettradingpairstradingpairbook = (
 /**
  * @summary 체결 기록 조회
  */
-export const gettradingpairstradingpairtrades = (
+export const listTradingPairTrades = (
     tradingPair: string,
-    params?: GettradingpairstradingpairtradesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairstradingpairtrades200Item[]>> => {
+    params?: ListTradingPairTradesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTradingPairTrades200Item[]>> => {
     return axios.get(
       `/trading-pairs/${tradingPair}/trades`,{
     ...options,
@@ -108,9 +108,9 @@ export const gettradingpairstradingpairtrades = (
 /**
  * @summary 최근 24시간 통계 조회
  */
-export const gettradingpairstradingpairstats = (
+export const getTradingPairStats = (
     tradingPair: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairstradingpairstats200>> => {
+ ): Promise<AxiosResponse<GetTradingPairStats200>> => {
     return axios.get(
       `/trading-pairs/${tradingPair}/stats`,options
     );
@@ -119,9 +119,9 @@ export const gettradingpairstradingpairstats = (
 /**
  * @summary 최근 24시간 통계 조회 (모든 거래쌍)
  */
-export const gettradingpairsstats = (
+export const listTradingPairsStats = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairsstats200Item[]>> => {
+ ): Promise<AxiosResponse<ListTradingPairsStats200Item[]>> => {
     return axios.get(
       `/trading-pairs/stats`,options
     );
@@ -131,9 +131,9 @@ export const gettradingpairsstats = (
  * 1개의 구간은 1개의 차트 봉과 일치합니다.
  * @summary 차트 데이터 조회
  */
-export const gettradingpairstradingpaircandles = (
+export const getTradingPairCandles = (
     tradingPair: string,
-    params: GettradingpairstradingpaircandlesParams, options?: AxiosRequestConfig
+    params: GetTradingPairCandlesParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<number[][]>> => {
     return axios.get(
       `/trading-pairs/${tradingPair}/candles`,{
@@ -146,9 +146,9 @@ export const gettradingpairstradingpaircandles = (
  * 여부 항목들이 모두 false이지만 alertLevel 이 정상(0)이 아닌 경우가 발생할 수 있습니다. 이는 한번 주의나 경고가 되면 24시간 동안 안전한 경우에만 정상으로 복귀 라는 룰에 의한 것이고 자연스러운 현상입니다.
  * @summary 투자유의 정보 조회
  */
-export const gettradingpairscautions = (
-    params?: GettradingpairscautionsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettradingpairscautions200Item[]>> => {
+export const listTradingPairsCautions = (
+    params?: ListTradingPairsCautionsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ListTradingPairsCautions200Item[]>> => {
     return axios.get(
       `/trading-pairs/cautions`,{
     ...options,
@@ -159,9 +159,9 @@ export const gettradingpairscautions = (
 /**
  * @summary 전체 티커 조회
  */
-export const gettickers = (
+export const listTickers = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettickers200Item[]>> => {
+ ): Promise<AxiosResponse<ListTickers200Item[]>> => {
     return axios.get(
       `/tickers`,options
     );
@@ -170,9 +170,9 @@ export const gettickers = (
 /**
  * @summary 서버 시간 조회
  */
-export const gettime = (
+export const getTime = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettime200>> => {
+ ): Promise<AxiosResponse<GetTime200>> => {
     return axios.get(
       `/time`,options
     );
@@ -181,8 +181,8 @@ export const gettime = (
 /**
  * @summary 공지사항 조회
  */
-export const getnotices = (
-    params?: GetnoticesParams, options?: AxiosRequestConfig
+export const listNotices = (
+    params?: ListNoticesParams, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<string[]>> => {
     return axios.get(
       `/notices`,{
@@ -191,16 +191,16 @@ export const getnotices = (
     );
   }
 
-export type GetassetsResult = AxiosResponse<Getassets200Item[]>
-export type GettradingpairsResult = AxiosResponse<Gettradingpairs200Item[]>
-export type GettradingpairstradingpairpriceticksizeResult = AxiosResponse<Gettradingpairstradingpairpriceticksize200Item[]>
-export type GettradingpairstradingpairtickerResult = AxiosResponse<Gettradingpairstradingpairticker200>
-export type GettradingpairstradingpairbookResult = AxiosResponse<Gettradingpairstradingpairbook200>
-export type GettradingpairstradingpairtradesResult = AxiosResponse<Gettradingpairstradingpairtrades200Item[]>
-export type GettradingpairstradingpairstatsResult = AxiosResponse<Gettradingpairstradingpairstats200>
-export type GettradingpairsstatsResult = AxiosResponse<Gettradingpairsstats200Item[]>
-export type GettradingpairstradingpaircandlesResult = AxiosResponse<number[][]>
-export type GettradingpairscautionsResult = AxiosResponse<Gettradingpairscautions200Item[]>
-export type GettickersResult = AxiosResponse<Gettickers200Item[]>
-export type GettimeResult = AxiosResponse<Gettime200>
-export type GetnoticesResult = AxiosResponse<string[]>
+export type ListAssetsResult = AxiosResponse<ListAssets200Item[]>
+export type ListTradingPairsResult = AxiosResponse<ListTradingPairs200Item[]>
+export type GetTradingPairPriceTickSizeResult = AxiosResponse<GetTradingPairPriceTickSize200Item[]>
+export type GetTradingPairTickerResult = AxiosResponse<GetTradingPairTicker200>
+export type GetTradingPairBookResult = AxiosResponse<GetTradingPairBook200>
+export type ListTradingPairTradesResult = AxiosResponse<ListTradingPairTrades200Item[]>
+export type GetTradingPairStatsResult = AxiosResponse<GetTradingPairStats200>
+export type ListTradingPairsStatsResult = AxiosResponse<ListTradingPairsStats200Item[]>
+export type GetTradingPairCandlesResult = AxiosResponse<number[][]>
+export type ListTradingPairsCautionsResult = AxiosResponse<ListTradingPairsCautions200Item[]>
+export type ListTickersResult = AxiosResponse<ListTickers200Item[]>
+export type GetTimeResult = AxiosResponse<GetTime200>
+export type ListNoticesResult = AxiosResponse<string[]>

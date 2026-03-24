@@ -47,7 +47,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribeTicker",
+        "operationId": "subscribe-ticker",
         "message": {
           "$ref": "#/components/messages/TickerPublicRequest"
         },
@@ -61,7 +61,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "tickerMessages",
+        "operationId": "receive-ticker",
         "message": {
           "oneOf": [
             {
@@ -93,7 +93,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribeOrderbook",
+        "operationId": "subscribe-orderbook",
         "message": {
           "$ref": "#/components/messages/OrderbookPublicRequest"
         },
@@ -107,7 +107,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "orderbookMessages",
+        "operationId": "receive-orderbook",
         "message": {
           "oneOf": [
             {
@@ -139,7 +139,7 @@
         "public"
       ],
       "publish": {
-        "operationId": "subscribeTrade",
+        "operationId": "subscribe-trade",
         "message": {
           "$ref": "#/components/messages/TradePublicRequest"
         },
@@ -153,7 +153,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "tradeMessages",
+        "operationId": "receive-trade",
         "message": {
           "oneOf": [
             {
@@ -185,7 +185,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "subscribeMyOrder",
+        "operationId": "subscribe-my-order",
         "message": {
           "$ref": "#/components/messages/MyOrderPrivateRequest"
         },
@@ -199,7 +199,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "myOrderMessages",
+        "operationId": "receive-my-order",
         "message": {
           "oneOf": [
             {
@@ -231,7 +231,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "subscribeMyTrade",
+        "operationId": "subscribe-my-trade",
         "message": {
           "$ref": "#/components/messages/MyTradePrivateRequest"
         },
@@ -245,7 +245,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "myTradeMessages",
+        "operationId": "receive-my-trade",
         "message": {
           "oneOf": [
             {
@@ -277,7 +277,7 @@
         "private"
       ],
       "publish": {
-        "operationId": "subscribeMyAsset",
+        "operationId": "subscribe-my-asset",
         "message": {
           "$ref": "#/components/messages/MyAssetPrivateRequest"
         },
@@ -291,7 +291,7 @@
         ]
       },
       "subscribe": {
-        "operationId": "myAssetMessages",
+        "operationId": "receive-my-asset",
         "message": {
           "oneOf": [
             {
