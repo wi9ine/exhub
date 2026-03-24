@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type Canceltwaporder200Item = {
+export type CancelTwapOrder200Item = {
   /** 취소된 TWAP 주문 ID */
   algo_order_id: string;
 };

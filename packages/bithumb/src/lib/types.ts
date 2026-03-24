@@ -1,10 +1,10 @@
 import type { ExHubClientOptions } from "@exhub/core";
 import type {
-  Api200Item,
-  Canceltwaporder200Item,
-  CanceltwaporderParams,
-  Createtwaporder200Item,
-  CreatetwaporderParams,
+  GetApiKeys200Item,
+  CancelTwapOrder200Item,
+  CancelTwapOrderParams,
+  CreateTwapOrder200Item,
+  CreateTwapOrderParams,
   DeleteOrder200,
   DeleteOrderParams,
   GetAccounts200Item,
@@ -24,8 +24,8 @@ import type {
   GetOrdersChanceParams,
   GetOrdersParams,
   GetStatusWallet200Item,
-  Gettwaporders200Item,
-  GettwapordersParams,
+  GetTwapOrders200Item,
+  GetTwapOrdersParams,
   GetWithdraw200,
   GetWithdrawParams,
   GetWithdraws200Item,
@@ -64,8 +64,8 @@ import type {
   GetTickerParams,
   GetTradesTicks200Item,
   GetTradesTicksParams,
-  Minute1Params,
-  Minute1200Item,
+  MinuteParams,
+  Minute200Item,
   Month200Item,
   MonthParams,
   Week200Item,
@@ -85,7 +85,7 @@ export interface BithumbClient {
     getMarketVirtualAssetWarning: () => Promise<GetMarketVirtualAssetWarning200Item[]>;
   };
   candles: {
-    minute1: (params: Minute1Params, unit?: number) => Promise<Minute1200Item[]>;
+    minute: (params: MinuteParams, unit?: number) => Promise<Minute200Item[]>;
     day: (params: DayParams) => Promise<Day200Item[]>;
     week: (params: WeekParams) => Promise<Week200Item[]>;
     month: (params: MonthParams) => Promise<Month200Item[]>;
@@ -103,7 +103,7 @@ export interface BithumbClient {
     getNotices: () => Promise<GetNotices200Item[]>;
     getFeeInfo: (currency: string) => Promise<GetFeeInfo200Item[]>;
     getStatusWallet: () => Promise<GetStatusWallet200Item[]>;
-    api: () => Promise<Api200Item[]>;
+    getApiKeys: () => Promise<GetApiKeys200Item[]>;
   };
   accounts: {
     getAccounts: () => Promise<GetAccounts200Item[]>;
@@ -116,9 +116,9 @@ export interface BithumbClient {
     cancelOrder: (params?: DeleteOrderParams) => Promise<DeleteOrder200>;
     cancelOrders: (body: PostOrdersCancelBody) => Promise<PostOrdersCancel200>;
     getOrders: (params?: GetOrdersParams) => Promise<GetOrders200Item[]>;
-    getTwapOrders: (params?: GettwapordersParams) => Promise<Gettwaporders200Item[]>;
-    cancelTwapOrder: (params: CanceltwaporderParams) => Promise<Canceltwaporder200Item[]>;
-    createTwapOrder: (params: CreatetwaporderParams) => Promise<Createtwaporder200Item[]>;
+    getTwapOrders: (params?: GetTwapOrdersParams) => Promise<GetTwapOrders200Item[]>;
+    cancelTwapOrder: (params: CancelTwapOrderParams) => Promise<CancelTwapOrder200Item[]>;
+    createTwapOrder: (params: CreateTwapOrderParams) => Promise<CreateTwapOrder200Item[]>;
   };
   withdrawals: {
     getWithdraws: (params?: GetWithdrawsParams) => Promise<GetWithdraws200Item[]>;

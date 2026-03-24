@@ -6,10 +6,10 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type GettwapordersOrderBy = typeof GettwapordersOrderBy[keyof typeof GettwapordersOrderBy];
+export type GetTwapOrdersOrderBy = typeof GetTwapOrdersOrderBy[keyof typeof GetTwapOrdersOrderBy];
 
 
-export const GettwapordersOrderBy = {
+export const GetTwapOrdersOrderBy = {
   asc: 'asc',
   desc: 'desc',
 } as const;

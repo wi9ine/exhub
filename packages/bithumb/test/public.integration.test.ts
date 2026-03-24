@@ -21,7 +21,7 @@ describe("@exhub/bithumb public integration", () => {
   });
 
   it("분 캔들 조회", async () => {
-    const result = await client.candles.minute1({ market, count: 1 }, 1);
+    const result = await client.candles.minute({ market, count: 1 }, 1);
     expect(Array.isArray(result)).toBe(true);
   });
 

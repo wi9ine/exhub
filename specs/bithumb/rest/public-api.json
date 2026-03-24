@@ -19,7 +19,7 @@
       "get": {
         "summary": "마켓 코드 조회",
         "description": "빗썸에서 거래 가능한 마켓과 가상자산 정보를 제공합니다.",
-        "operationId": "마켓코드-조회",
+        "operationId": "get-market-all",
         "parameters": [
           {
             "name": "isDetails",
@@ -56,10 +56,7 @@
                       "market_warning": {
                         "type": "string",
                         "description": "유의 종목 여부",
-                        "enum": [
-                          "NONE",
-                          "CAUTION"
-                        ]
+                        "enum": ["NONE", "CAUTION"]
                       }
                     }
                   }
@@ -121,27 +118,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/market/all?isDetails=false\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%A7%88%EC%BC%93%EC%BD%94%EB%93%9C-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/마켓코드-조회",
-        "tags": [
-          "시세 종목 조회"
-        ]
+        "tags": ["시세 종목 조회"]
       }
     },
     "/v1/candles/minutes/{unit}": {
       "get": {
         "summary": "분(Minute) 캔들",
         "description": "",
-        "operationId": "분minute-캔들-1",
+        "operationId": "minute",
         "parameters": [
           {
             "name": "unit",
@@ -290,27 +281,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/minutes/1?market=KRW-BTC&count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%B6%84minute-%EC%BA%94%EB%93%A4-1"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/분minute-캔들-1",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/candles/days": {
       "get": {
         "summary": "일(Day) 캔들",
         "description": "",
-        "operationId": "일day-캔들",
+        "operationId": "day",
         "parameters": [
           {
             "name": "market",
@@ -465,27 +450,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/days?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9D%BCday-%EC%BA%94%EB%93%A4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/일day-캔들",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/candles/weeks": {
       "get": {
         "summary": "주(Week) 캔들",
         "description": "",
-        "operationId": "주week-캔들",
+        "operationId": "week",
         "parameters": [
           {
             "name": "market",
@@ -620,27 +599,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/weeks?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A3%BCweek-%EC%BA%94%EB%93%A4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/주week-캔들",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/candles/months": {
       "get": {
         "summary": "월(Month) 캔들",
         "description": "",
-        "operationId": "월month-캔들",
+        "operationId": "month",
         "parameters": [
           {
             "name": "market",
@@ -775,27 +748,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/months?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9B%94month-%EC%BA%94%EB%93%A4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/월month-캔들",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/trades/ticks": {
       "get": {
         "summary": "최근 체결 내역",
         "description": "",
-        "operationId": "최근-체결-내역",
+        "operationId": "get-trades-ticks",
         "parameters": [
           {
             "name": "market",
@@ -938,27 +905,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/trades/ticks?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%B5%9C%EA%B7%BC-%EC%B2%B4%EA%B2%B0-%EB%82%B4%EC%97%AD"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/최근-체결-내역",
-        "tags": [
-          "시세 체결 조회"
-        ]
+        "tags": ["시세 체결 조회"]
       }
     },
     "/v1/ticker": {
       "get": {
         "summary": "현재가 정보",
         "description": "요청 시점 종목의 스냅샷이 제공됩니다.",
-        "operationId": "현재가-정보",
+        "operationId": "get-ticker",
         "parameters": [
           {
             "name": "markets",
@@ -1147,27 +1108,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/ticker\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%ED%98%84%EC%9E%AC%EA%B0%80-%EC%A0%95%EB%B3%B4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/현재가-정보",
-        "tags": [
-          "시세 현재가(Ticker) 조회"
-        ]
+        "tags": ["시세 현재가(Ticker) 조회"]
       }
     },
     "/v1/orderbook": {
       "get": {
         "summary": "호가 정보 조회",
         "description": "",
-        "operationId": "호가-정보-조회",
+        "operationId": "get-orderbook",
         "parameters": [
           {
             "name": "markets",
@@ -1284,27 +1239,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/orderbook\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%ED%98%B8%EA%B0%80-%EC%A0%95%EB%B3%B4-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/호가-정보-조회",
-        "tags": [
-          "시세 호가 정보(Orderbook) 조회"
-        ]
+        "tags": ["시세 호가 정보(Orderbook) 조회"]
       }
     },
     "/v1/market/virtual_asset_warning": {
       "get": {
         "summary": "경보제",
         "description": "경보중인 마켓-코인 목록 조회",
-        "operationId": "경보제",
+        "operationId": "get-market-virtual-asset-warning",
         "responses": {
           "200": {
             "description": "200",
@@ -1409,27 +1358,21 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n        .url(\"https://api.bithumb.com/v1/market/virtual_asset_warning\")\n        .get()\n        .addHeader(\"accept\", \"application/json\")\n        .build();\n\nResponse response = client.newCall(request).execute();\n\nSystem.out.println(response.body().string());"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B2%BD%EB%B3%B4%EC%A0%9C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/경보제",
-        "tags": [
-          "서비스 정보"
-        ]
+        "tags": ["서비스 정보"]
       }
     },
     "/v1/notices": {
       "get": {
         "summary": "공지사항 조회",
         "description": "빗썸 공지사항을 조회합니다.",
-        "operationId": "공지사항-조회",
+        "operationId": "get-notices",
         "responses": {
           "200": {
             "description": "200",
@@ -1523,26 +1466,20 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/notices\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/공지사항-조회",
-        "tags": [
-          "서비스 정보"
-        ]
+        "tags": ["서비스 정보"]
       }
     },
     "/v2/fee/inout/{currency}": {
       "get": {
         "description": "",
-        "operationId": "get_fee_info",
+        "operationId": "get-fee-info",
         "responses": {
           "200": {
             "description": "200",
@@ -1703,17 +1640,10 @@
               "name": ""
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java",
-            "shell"
-          ]
+          "samples-languages": ["javascript", "python", "java", "shell"]
         },
         "summary": "입출금 수수료 조회",
-        "tags": [
-          "서비스 정보"
-        ]
+        "tags": ["서비스 정보"]
       }
     }
   },

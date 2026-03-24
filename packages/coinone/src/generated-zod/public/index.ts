@@ -204,10 +204,10 @@ export const OrderbookDeprecatedQueryParams = zod.object({
  * @deprecated
  * @summary 티커 정보 조회
  */
-export const ticker1QueryCurrencyDefault = `BTC`;
+export const tickerDeprecatedQueryCurrencyDefault = `BTC`;
 
-export const Ticker1QueryParams = zod.object({
-  "currency": zod.string().default(ticker1QueryCurrencyDefault).describe('조회하려는 종목의 심볼. 유효하지 않은 심볼 입력 시 전체 티커 정보가 조회 됨')
+export const TickerDeprecatedQueryParams = zod.object({
+  "currency": zod.string().default(tickerDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼. 유효하지 않은 심볼 입력 시 전체 티커 정보가 조회 됨')
 })
 
 
@@ -228,8 +228,8 @@ export const TickerUtcDeprecatedQueryParams = zod.object({
  * @deprecated
  * @summary 최근 체결 주문 조회
  */
-export const recentCompleteOrdersDeprecatedQueryCurrencyDefault = `BTC`;
+export const recentCompletedOrdersDeprecatedQueryCurrencyDefault = `BTC`;
 
-export const RecentCompleteOrdersDeprecatedQueryParams = zod.object({
-  "currency": zod.string().default(recentCompleteOrdersDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼')
+export const RecentCompletedOrdersDeprecatedQueryParams = zod.object({
+  "currency": zod.string().default(recentCompletedOrdersDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼')
 })

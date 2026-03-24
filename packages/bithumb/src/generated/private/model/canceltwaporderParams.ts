@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type CanceltwaporderParams = {
+export type CancelTwapOrderParams = {
 /**
  * 취소할 TWAP 주문 ID
  */

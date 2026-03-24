@@ -140,19 +140,19 @@ export const PostOrdersCancelBody = zod.object({
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 내역 조회
  */
-export const gettwapordersQueryLimitDefault = 100;
-export const gettwapordersQueryOrderByDefault = `desc`;
+export const getTwapOrdersQueryLimitDefault = 100;
+export const getTwapOrdersQueryOrderByDefault = `desc`;
 
-export const GettwapordersQueryParams = zod.object({
+export const GetTwapOrdersQueryParams = zod.object({
   "market": zod.string().optional().describe('마켓 ID'),
   "uuids": zod.string().optional().describe('TWAP 주문 ID 목록'),
   "state": zod.string().optional().describe('주문 상태'),
   "next_key": zod.array(zod.string()).optional().describe('다음 페이지 조회를 위한 커서 값'),
-  "limit": zod.number().default(gettwapordersQueryLimitDefault).describe('개수 제한'),
-  "order_by": zod.enum(['asc', 'desc']).default(gettwapordersQueryOrderByDefault).describe('정렬방식')
+  "limit": zod.number().default(getTwapOrdersQueryLimitDefault).describe('개수 제한'),
+  "order_by": zod.enum(['asc', 'desc']).default(getTwapOrdersQueryOrderByDefault).describe('정렬방식')
 })
 
-export const GettwapordersHeader = zod.object({
+export const GetTwapOrdersHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -161,11 +161,11 @@ export const GettwapordersHeader = zod.object({
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 취소
  */
-export const CanceltwaporderQueryParams = zod.object({
+export const CancelTwapOrderQueryParams = zod.object({
   "algo_order_id": zod.string().describe('취소할 TWAP 주문 ID')
 })
 
-export const CanceltwaporderHeader = zod.object({
+export const CancelTwapOrderHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -174,19 +174,19 @@ export const CanceltwaporderHeader = zod.object({
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문하기
  */
-export const createtwaporderQueryDurationDefault = ``;
-export const createtwaporderQueryFrequencyDefault = ``;
+export const createTwapOrderQueryDurationDefault = ``;
+export const createTwapOrderQueryFrequencyDefault = ``;
 
-export const CreatetwaporderQueryParams = zod.object({
+export const CreateTwapOrderQueryParams = zod.object({
   "market": zod.string().describe('Market ID'),
   "side": zod.string().describe('주문 종류 (bid 매수, ask 매도)'),
   "volume": zod.string().optional().describe('주문 수량 (매도시 필수)'),
   "price": zod.string().optional().describe('주문 가격 (매수시 필수)'),
-  "duration": zod.string().default(createtwaporderQueryDurationDefault).describe('주문 시간 (twap 주문이 진행되는 시간) - 초'),
-  "frequency": zod.string().default(createtwaporderQueryFrequencyDefault).describe('주문 간격 - 초')
+  "duration": zod.string().default(createTwapOrderQueryDurationDefault).describe('주문 시간 (twap 주문이 진행되는 시간) - 초'),
+  "frequency": zod.string().default(createTwapOrderQueryFrequencyDefault).describe('주문 간격 - 초')
 })
 
-export const CreatetwaporderHeader = zod.object({
+export const CreateTwapOrderHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })
 
@@ -435,6 +435,6 @@ export const GetStatusWalletHeader = zod.object({
  * API 키 리스트와 만료 일자를 조회합니다.
  * @summary API 키 리스트 조회
  */
-export const ApiHeader = zod.object({
+export const GetApiKeysHeader = zod.object({
   "Authorization": zod.string().describe('Authorization token (JWT)')
 })

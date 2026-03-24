@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type CreatetwaporderParams = {
+export type CreateTwapOrderParams = {
 /**
  * Market ID
  */

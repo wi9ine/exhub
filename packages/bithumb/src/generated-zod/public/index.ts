@@ -21,19 +21,19 @@ export const GetMarketAllQueryParams = zod.object({
 /**
  * @summary 분(Minute) 캔들
  */
-export const minute1PathUnitDefault = 1;
+export const minutePathUnitDefault = 1;
 
-export const Minute1Params = zod.object({
-  "unit": zod.number().default(minute1PathUnitDefault).describe('분 단위. 가능한 값 : 1, 3, 5, 10, 15, 30, 60, 240')
+export const MinuteParams = zod.object({
+  "unit": zod.number().default(minutePathUnitDefault).describe('분 단위. 가능한 값 : 1, 3, 5, 10, 15, 30, 60, 240')
 })
 
-export const minute1QueryMarketDefault = `KRW-BTC`;
-export const minute1QueryCountDefault = 1;
+export const minuteQueryMarketDefault = `KRW-BTC`;
+export const minuteQueryCountDefault = 1;
 
-export const Minute1QueryParams = zod.object({
-  "market": zod.string().default(minute1QueryMarketDefault).describe('마켓 코드 (ex. KRW-BTC)'),
+export const MinuteQueryParams = zod.object({
+  "market": zod.string().default(minuteQueryMarketDefault).describe('마켓 코드 (ex. KRW-BTC)'),
   "to": zod.string().optional().describe('마지막 캔들 시각 (exclusive). 비워서 요청시 가장 최근 캔들'),
-  "count": zod.number().default(minute1QueryCountDefault).describe('캔들 개수(최대 200개까지 요청 가능)')
+  "count": zod.number().default(minuteQueryCountDefault).describe('캔들 개수(최대 200개까지 요청 가능)')
 })
 
 

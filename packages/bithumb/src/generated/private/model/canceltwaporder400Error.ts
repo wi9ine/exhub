@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type Canceltwaporder400Error = {
+export type CancelTwapOrder400Error = {
   name?: string;
   message?: string;
 };

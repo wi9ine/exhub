@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type Createtwaporder200Item = {
+export type CreateTwapOrder200Item = {
   /** TWAP 주문 ID */
   algo_order_id: string;
 };

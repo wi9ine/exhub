@@ -23,13 +23,13 @@ import type {
   OrderbookDeprecatedParams,
   OrderbookParams,
   RangeUnit200,
-  RecentCompleteOrdersDeprecated200,
-  RecentCompleteOrdersDeprecatedParams,
   RecentCompletedOrders200,
+  RecentCompletedOrdersDeprecated200,
+  RecentCompletedOrdersDeprecatedParams,
   RecentCompletedOrdersParams,
-  Ticker1200,
-  Ticker1Params,
   Ticker200,
+  TickerDeprecated200,
+  TickerDeprecatedParams,
   TickerParams,
   TickerUtcDeprecated200,
   TickerUtcDeprecatedParams,
@@ -236,9 +236,9 @@ export const orderbookDeprecated = (
  * @deprecated
  * @summary 티커 정보 조회
  */
-export const ticker1 = (
-    params?: Ticker1Params, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Ticker1200>> => {
+export const tickerDeprecated = (
+    params?: TickerDeprecatedParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<TickerDeprecated200>> => {
     return axios.get(
       `/ticker`,{
     ...options,
@@ -266,9 +266,9 @@ export const tickerUtcDeprecated = (
  * @deprecated
  * @summary 최근 체결 주문 조회
  */
-export const recentCompleteOrdersDeprecated = (
-    params?: RecentCompleteOrdersDeprecatedParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<RecentCompleteOrdersDeprecated200>> => {
+export const recentCompletedOrdersDeprecated = (
+    params?: RecentCompletedOrdersDeprecatedParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RecentCompletedOrdersDeprecated200>> => {
     return axios.get(
       `/trades`,{
     ...options,
@@ -289,6 +289,6 @@ export type CurrenciesResult = AxiosResponse<Currencies200>
 export type CurrencyResult = AxiosResponse<Currency200>
 export type ChartResult = AxiosResponse<Chart200>
 export type OrderbookDeprecatedResult = AxiosResponse<OrderbookDeprecated200>
-export type Ticker1Result = AxiosResponse<Ticker1200>
+export type TickerDeprecatedResult = AxiosResponse<TickerDeprecated200>
 export type TickerUtcDeprecatedResult = AxiosResponse<TickerUtcDeprecated200>
-export type RecentCompleteOrdersDeprecatedResult = AxiosResponse<RecentCompleteOrdersDeprecated200>
+export type RecentCompletedOrdersDeprecatedResult = AxiosResponse<RecentCompletedOrdersDeprecated200>

@@ -5,9 +5,9 @@
  * 빗썸 공식 API 문서 v2.1.5 기준 Private REST API 스펙입니다.
  * OpenAPI spec version: 2.1.5
  */
-import type { GettwapordersOrderBy } from './gettwapordersOrderBy';
+import type { GetTwapOrdersOrderBy } from './getTwapOrdersOrderBy';
 
-export type GettwapordersParams = {
+export type GetTwapOrdersParams = {
 /**
  * 마켓 ID
  */
@@ -31,5 +31,5 @@ limit?: number;
 /**
  * 정렬방식
  */
-order_by?: GettwapordersOrderBy;
+order_by?: GetTwapOrdersOrderBy;
 };

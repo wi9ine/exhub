@@ -12,14 +12,14 @@ import type {
 } from 'axios';
 
 import type {
-  Api200Item,
-  Canceltwaporder200Item,
-  CanceltwaporderParams,
-  Createtwaporder200Item,
-  CreatetwaporderParams,
+  CancelTwapOrder200Item,
+  CancelTwapOrderParams,
+  CreateTwapOrder200Item,
+  CreateTwapOrderParams,
   DeleteOrder200,
   DeleteOrderParams,
   GetAccounts200Item,
+  GetApiKeys200Item,
   GetDeposit200,
   GetDepositParams,
   GetDeposits200Item,
@@ -36,6 +36,8 @@ import type {
   GetOrdersChanceParams,
   GetOrdersParams,
   GetStatusWallet200Item,
+  GetTwapOrders200Item,
+  GetTwapOrdersParams,
   GetWithdraw200,
   GetWithdrawParams,
   GetWithdraws200Item,
@@ -45,8 +47,6 @@ import type {
   GetWithdrawsKrw200Item,
   GetWithdrawsKrwParams,
   GetWithdrawsParams,
-  Gettwaporders200Item,
-  GettwapordersParams,
   PostDepositsGenerateCoinAddress201,
   PostDepositsGenerateCoinAddressBody,
   PostDepositsKrw201,
@@ -177,9 +177,9 @@ export const postOrdersCancel = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 내역 조회
  */
-export const gettwaporders = (
-    params?: GettwapordersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Gettwaporders200Item[]>> => {
+export const getTwapOrders = (
+    params?: GetTwapOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTwapOrders200Item[]>> => {
     return axios.get(
       `/v1/twap`,{
     ...options,
@@ -191,9 +191,9 @@ export const gettwaporders = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문 취소
  */
-export const canceltwaporder = (
-    params: CanceltwaporderParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Canceltwaporder200Item[]>> => {
+export const cancelTwapOrder = (
+    params: CancelTwapOrderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelTwapOrder200Item[]>> => {
     return axios.delete(
       `/v1/twap`,{
     ...options,
@@ -205,9 +205,9 @@ export const canceltwaporder = (
  * 주문 목록을 조회합니다.
  * @summary TWAP 주문하기
  */
-export const createtwaporder = (
-    params: CreatetwaporderParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Createtwaporder200Item[]>> => {
+export const createTwapOrder = (
+    params: CreateTwapOrderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateTwapOrder200Item[]>> => {
     return axios.post(
       `/v1/twap`,undefined,{
     ...options,
@@ -419,9 +419,9 @@ export const getStatusWallet = (
  * API 키 리스트와 만료 일자를 조회합니다.
  * @summary API 키 리스트 조회
  */
-export const api = (
+export const getApiKeys = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Api200Item[]>> => {
+ ): Promise<AxiosResponse<GetApiKeys200Item[]>> => {
     return axios.get(
       `/v1/api_keys`,options
     );
@@ -435,9 +435,9 @@ export type GetOrdersResult = AxiosResponse<GetOrders200Item[]>
 export type PostOrdersResult = AxiosResponse<PostOrders201>
 export type PostOrdersBatchResult = AxiosResponse<PostOrdersBatch200>
 export type PostOrdersCancelResult = AxiosResponse<PostOrdersCancel200>
-export type GettwapordersResult = AxiosResponse<Gettwaporders200Item[]>
-export type CanceltwaporderResult = AxiosResponse<Canceltwaporder200Item[]>
-export type CreatetwaporderResult = AxiosResponse<Createtwaporder200Item[]>
+export type GetTwapOrdersResult = AxiosResponse<GetTwapOrders200Item[]>
+export type CancelTwapOrderResult = AxiosResponse<CancelTwapOrder200Item[]>
+export type CreateTwapOrderResult = AxiosResponse<CreateTwapOrder200Item[]>
 export type GetWithdrawsResult = AxiosResponse<GetWithdraws200Item[]>
 export type GetWithdrawsKrwResult = AxiosResponse<GetWithdrawsKrw200Item[]>
 export type PostWithdrawsKrwResult = AxiosResponse<PostWithdrawsKrw201>
@@ -453,4 +453,4 @@ export type PostDepositsGenerateCoinAddressResult = AxiosResponse<PostDepositsGe
 export type GetDepositsCoinAddressesResult = AxiosResponse<GetDepositsCoinAddresses200Item[]>
 export type GetDepositsCoinAddressResult = AxiosResponse<GetDepositsCoinAddress200>
 export type GetStatusWalletResult = AxiosResponse<GetStatusWallet200Item[]>
-export type ApiResult = AxiosResponse<Api200Item[]>
+export type GetApiKeysResult = AxiosResponse<GetApiKeys200Item[]>

@@ -12,19 +12,19 @@ import type {
 } from 'axios';
 
 import type {
-  Getv2candles200,
-  Getv2candlesParams,
-  Getv2currencies200,
-  Getv2currencypairs200,
-  Getv2orderbook200,
-  Getv2orderbookParams,
-  Getv2tickers200,
-  Getv2tickersParams,
-  Getv2ticksizepolicy200,
-  Getv2ticksizepolicyParams,
-  Getv2time200,
-  Getv2trades200,
-  Getv2tradesParams
+  GetCandles200,
+  GetCandlesParams,
+  GetCurrencies200,
+  GetCurrencyPairs200,
+  GetOrderbook200,
+  GetOrderbookParams,
+  GetTickSizePolicy200,
+  GetTickSizePolicyParams,
+  GetTickers200,
+  GetTickersParams,
+  GetTime200,
+  GetTrades200,
+  GetTradesParams
 } from './model';
 
 
@@ -34,9 +34,9 @@ import type {
  * 하나 또는 여러 거래쌍의 현재가(Ticker) 정보를 조회합니다.
  * @summary 현재가 조회
  */
-export const getv2tickers = (
-    params?: Getv2tickersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2tickers200>> => {
+export const getTickers = (
+    params?: GetTickersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTickers200>> => {
     return axios.get(
       `/v2/tickers`,{
     ...options,
@@ -48,9 +48,9 @@ export const getv2tickers = (
  * 단일 거래쌍의 호가 정보를 조회합니다.
  * @summary 호가 조회
  */
-export const getv2orderbook = (
-    params: Getv2orderbookParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2orderbook200>> => {
+export const getOrderbook = (
+    params: GetOrderbookParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrderbook200>> => {
     return axios.get(
       `/v2/orderbook`,{
     ...options,
@@ -62,9 +62,9 @@ export const getv2orderbook = (
  * 최근 체결 내역을 조회합니다.
  * @summary 최근 체결 내역
  */
-export const getv2trades = (
-    params: Getv2tradesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2trades200>> => {
+export const getTrades = (
+    params: GetTradesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTrades200>> => {
     return axios.get(
       `/v2/trades`,{
     ...options,
@@ -76,9 +76,9 @@ export const getv2trades = (
  * 시세 캔들스틱 정보를 조회합니다.
  * @summary 캔들스틱 조회
  */
-export const getv2candles = (
-    params: Getv2candlesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2candles200>> => {
+export const getCandles = (
+    params: GetCandlesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCandles200>> => {
     return axios.get(
       `/v2/candles`,{
     ...options,
@@ -89,9 +89,9 @@ export const getv2candles = (
 /**
  * @summary 거래지원 목록 조회
  */
-export const getv2currencypairs = (
+export const getCurrencyPairs = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2currencypairs200>> => {
+ ): Promise<AxiosResponse<GetCurrencyPairs200>> => {
     return axios.get(
       `/v2/currencyPairs`,options
     );
@@ -101,9 +101,9 @@ export const getv2currencypairs = (
  * 지정한 거래쌍의 호가 정책 및 오더북 모아보기 단위를 조회합니다.
  * @summary 호가 정책 조회
  */
-export const getv2ticksizepolicy = (
-    params: Getv2ticksizepolicyParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2ticksizepolicy200>> => {
+export const getTickSizePolicy = (
+    params: GetTickSizePolicyParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTickSizePolicy200>> => {
     return axios.get(
       `/v2/tickSizePolicy`,{
     ...options,
@@ -115,9 +115,9 @@ export const getv2ticksizepolicy = (
  * 가상자산 정보를 조회합니다.
  * @summary 가상자산 정보 조회
  */
-export const getv2currencies = (
+export const getCurrencies = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2currencies200>> => {
+ ): Promise<AxiosResponse<GetCurrencies200>> => {
     return axios.get(
       `/v2/currencies`,options
     );
@@ -127,19 +127,19 @@ export const getv2currencies = (
  * 서버 시각을 조회합니다.
  * @summary 서버 시각 조회
  */
-export const getv2time = (
+export const getTime = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2time200>> => {
+ ): Promise<AxiosResponse<GetTime200>> => {
     return axios.get(
       `/v2/time`,options
     );
   }
 
-export type Getv2tickersResult = AxiosResponse<Getv2tickers200>
-export type Getv2orderbookResult = AxiosResponse<Getv2orderbook200>
-export type Getv2tradesResult = AxiosResponse<Getv2trades200>
-export type Getv2candlesResult = AxiosResponse<Getv2candles200>
-export type Getv2currencypairsResult = AxiosResponse<Getv2currencypairs200>
-export type Getv2ticksizepolicyResult = AxiosResponse<Getv2ticksizepolicy200>
-export type Getv2currenciesResult = AxiosResponse<Getv2currencies200>
-export type Getv2timeResult = AxiosResponse<Getv2time200>
+export type GetTickersResult = AxiosResponse<GetTickers200>
+export type GetOrderbookResult = AxiosResponse<GetOrderbook200>
+export type GetTradesResult = AxiosResponse<GetTrades200>
+export type GetCandlesResult = AxiosResponse<GetCandles200>
+export type GetCurrencyPairsResult = AxiosResponse<GetCurrencyPairs200>
+export type GetTickSizePolicyResult = AxiosResponse<GetTickSizePolicy200>
+export type GetCurrenciesResult = AxiosResponse<GetCurrencies200>
+export type GetTimeResult = AxiosResponse<GetTime200>

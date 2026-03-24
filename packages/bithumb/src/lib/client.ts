@@ -10,7 +10,7 @@ import {
 
 import type { BithumbClient, BithumbClientOptions, BithumbCredentials } from "./types";
 
-const BITHUMB_DEFAULT_BASE_URL = "https://api.bithumb.com";
+const BITHUMB_DEFAULT_BASE_URL = "https://getApiKeys.bithumb.com";
 
 type AsyncResult<TMethod> = TMethod extends (...args: never[]) => Promise<infer TResult>
   ? TResult
@@ -88,8 +88,8 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
         ),
     },
     candles: {
-      minute1: async (params, unit = 1) =>
-        requestPublic<AsyncResult<BithumbClient["candles"]["minute1"]>>(
+      minute: async (params, unit = 1) =>
+        requestPublic<AsyncResult<BithumbClient["candles"]["minute"]>>(
           `/v1/candles/minutes/${unit}`,
           params,
         ),
@@ -130,8 +130,8 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
           "GET",
           "/v1/status/wallet",
         ),
-      api: async () =>
-        requestPrivate<AsyncResult<BithumbClient["service"]["api"]>>("GET", "/v1/api_keys"),
+      getApiKeys: async () =>
+        requestPrivate<AsyncResult<BithumbClient["service"]["getApiKeys"]>>("GET", "/v1/api_keys"),
     },
     accounts: {
       getAccounts: async () =>

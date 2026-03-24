@@ -12,54 +12,54 @@ import type {
 } from 'axios';
 
 import type {
-  Deletev2coinwithdrawal200,
-  Deletev2coinwithdrawalParams,
-  Deletev2orders200,
-  Deletev2ordersParams,
-  Getv2allorders200,
-  Getv2allordersParams,
-  Getv2balance200,
-  Getv2balanceParams,
-  Getv2coindeposit200,
-  Getv2coindepositParams,
-  Getv2coindepositaddress200,
-  Getv2coindepositaddressParams,
-  Getv2coindepositaddresses200,
-  Getv2coindepositaddressesParams,
-  Getv2coinrecentdeposits200,
-  Getv2coinrecentdepositsParams,
-  Getv2coinrecentwithdrawals200,
-  Getv2coinrecentwithdrawalsParams,
-  Getv2coinwithdrawableaddresses200,
-  Getv2coinwithdrawableaddressesParams,
-  Getv2coinwithdrawableamount200,
-  Getv2coinwithdrawableamountParams,
-  Getv2coinwithdrawal200,
-  Getv2coinwithdrawalParams,
-  Getv2currentkeyinfo200,
-  Getv2currentkeyinfoParams,
-  Getv2krwrecentdeposits200,
-  Getv2krwrecentdepositsParams,
-  Getv2krwrecentwithdrawals200,
-  Getv2krwrecentwithdrawalsParams,
-  Getv2mytrades200,
-  Getv2mytradesParams,
-  Getv2openorders200,
-  Getv2openordersParams,
-  Getv2orders200,
-  Getv2ordersParams,
-  Getv2tradingfeepolicy200,
-  Getv2tradingfeepolicyParams,
-  Postv2coindepositaddress200,
-  Postv2coindepositaddressBody,
-  Postv2coinwithdrawal200,
-  Postv2coinwithdrawalBody,
-  Postv2krwsendkrwdepositpush200,
-  Postv2krwsendkrwdepositpushBody,
-  Postv2krwsendkrwwithdrawalpush200,
-  Postv2krwsendkrwwithdrawalpushBody,
-  Postv2orders200,
-  Postv2ordersBody
+  CancelCoinWithdrawal200,
+  CancelCoinWithdrawalParams,
+  CancelOrder200,
+  CancelOrderParams,
+  CreateCoinDepositAddress200,
+  CreateCoinDepositAddressBody,
+  CreateCoinWithdrawal200,
+  CreateCoinWithdrawalBody,
+  GetAllOrders200,
+  GetAllOrdersParams,
+  GetBalance200,
+  GetBalanceParams,
+  GetCoinDeposit200,
+  GetCoinDepositAddress200,
+  GetCoinDepositAddressParams,
+  GetCoinDepositAddresses200,
+  GetCoinDepositAddressesParams,
+  GetCoinDepositParams,
+  GetCoinRecentDeposits200,
+  GetCoinRecentDepositsParams,
+  GetCoinRecentWithdrawals200,
+  GetCoinRecentWithdrawalsParams,
+  GetCoinWithdrawableAddresses200,
+  GetCoinWithdrawableAddressesParams,
+  GetCoinWithdrawableAmount200,
+  GetCoinWithdrawableAmountParams,
+  GetCoinWithdrawal200,
+  GetCoinWithdrawalParams,
+  GetCurrentKeyInfo200,
+  GetCurrentKeyInfoParams,
+  GetKrwRecentDeposits200,
+  GetKrwRecentDepositsParams,
+  GetKrwRecentWithdrawals200,
+  GetKrwRecentWithdrawalsParams,
+  GetMyTrades200,
+  GetMyTradesParams,
+  GetOpenOrders200,
+  GetOpenOrdersParams,
+  GetOrder200,
+  GetOrderParams,
+  GetTradingFeePolicy200,
+  GetTradingFeePolicyParams,
+  PlaceOrder200,
+  PlaceOrderBody,
+  RequestKrwDeposit200,
+  RequestKrwDepositBody,
+  RequestKrwWithdrawal200,
+  RequestKrwWithdrawalBody
 } from './model';
 
 
@@ -71,9 +71,9 @@ import type {
 단, expired, canceled 상태의 주문은 종결 후 약 3일이 지난 후에는 조회할 수 없습니다.
  * @summary 개별 주문 조회
  */
-export const getv2orders = (
-    params: Getv2ordersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2orders200>> => {
+export const getOrder = (
+    params: GetOrderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOrder200>> => {
     return axios.get(
       `/v2/orders`,{
     ...options,
@@ -85,40 +85,40 @@ export const getv2orders = (
  * 신규 주문을 생성합니다.
  * @summary 주문하기
  */
-export const postv2orders = (
-    postv2ordersBody: Postv2ordersBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Postv2orders200>> => {const formUrlEncoded = new URLSearchParams();
-formUrlEncoded.append(`symbol`, postv2ordersBody.symbol);
-formUrlEncoded.append(`side`, postv2ordersBody.side);
-if(postv2ordersBody.price !== undefined) {
- formUrlEncoded.append(`price`, postv2ordersBody.price);
+export const placeOrder = (
+    placeOrderBody: PlaceOrderBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<PlaceOrder200>> => {const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append(`symbol`, placeOrderBody.symbol);
+formUrlEncoded.append(`side`, placeOrderBody.side);
+if(placeOrderBody.price !== undefined) {
+ formUrlEncoded.append(`price`, placeOrderBody.price);
  }
-if(postv2ordersBody.qty !== undefined) {
- formUrlEncoded.append(`qty`, postv2ordersBody.qty);
+if(placeOrderBody.qty !== undefined) {
+ formUrlEncoded.append(`qty`, placeOrderBody.qty);
  }
-if(postv2ordersBody.amt !== undefined) {
- formUrlEncoded.append(`amt`, postv2ordersBody.amt);
+if(placeOrderBody.amt !== undefined) {
+ formUrlEncoded.append(`amt`, placeOrderBody.amt);
  }
-formUrlEncoded.append(`orderType`, postv2ordersBody.orderType);
-if(postv2ordersBody.bestNth !== undefined) {
- formUrlEncoded.append(`bestNth`, postv2ordersBody.bestNth.toString())
+formUrlEncoded.append(`orderType`, placeOrderBody.orderType);
+if(placeOrderBody.bestNth !== undefined) {
+ formUrlEncoded.append(`bestNth`, placeOrderBody.bestNth.toString())
  }
-if(postv2ordersBody.timeInForce !== undefined) {
- formUrlEncoded.append(`timeInForce`, postv2ordersBody.timeInForce);
+if(placeOrderBody.timeInForce !== undefined) {
+ formUrlEncoded.append(`timeInForce`, placeOrderBody.timeInForce);
  }
-if(postv2ordersBody.clientOrderId !== undefined) {
- formUrlEncoded.append(`clientOrderId`, postv2ordersBody.clientOrderId);
+if(placeOrderBody.clientOrderId !== undefined) {
+ formUrlEncoded.append(`clientOrderId`, placeOrderBody.clientOrderId);
  }
-if(postv2ordersBody.pp !== undefined) {
- formUrlEncoded.append(`pp`, postv2ordersBody.pp);
+if(placeOrderBody.pp !== undefined) {
+ formUrlEncoded.append(`pp`, placeOrderBody.pp);
  }
-if(postv2ordersBody.ppPercent !== undefined) {
- formUrlEncoded.append(`ppPercent`, postv2ordersBody.ppPercent);
+if(placeOrderBody.ppPercent !== undefined) {
+ formUrlEncoded.append(`ppPercent`, placeOrderBody.ppPercent);
  }
-formUrlEncoded.append(`timestamp`, postv2ordersBody.timestamp.toString())
-formUrlEncoded.append(`signature`, postv2ordersBody.signature);
-if(postv2ordersBody.recvWindow !== undefined) {
- formUrlEncoded.append(`recvWindow`, postv2ordersBody.recvWindow.toString())
+formUrlEncoded.append(`timestamp`, placeOrderBody.timestamp.toString())
+formUrlEncoded.append(`signature`, placeOrderBody.signature);
+if(placeOrderBody.recvWindow !== undefined) {
+ formUrlEncoded.append(`recvWindow`, placeOrderBody.recvWindow.toString())
  }
 
     return axios.post(
@@ -135,9 +135,9 @@ API 요청이 성공한 경우 주문 취소 요청이 성공적으로 접수되
 오류 코드가 ORDER_ALREADY_CANCELED, ORDER_ALREADY_FILLED, ORDER_ALREADY_EXPIRED 중 하나인 경우, 지정한 주문이 이미 종결되었음을 뜻합니다.
  * @summary 주문 취소하기
  */
-export const deletev2orders = (
-    params: Deletev2ordersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Deletev2orders200>> => {
+export const cancelOrder = (
+    params: CancelOrderParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelOrder200>> => {
     return axios.delete(
       `/v2/orders`,{
     ...options,
@@ -151,9 +151,9 @@ export const deletev2orders = (
 open, partiallyFilled 상태인 주문만 조회됩니다.
  * @summary 미체결 주문 조회
  */
-export const getv2openorders = (
-    params: Getv2openordersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2openorders200>> => {
+export const getOpenOrders = (
+    params: GetOpenOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetOpenOrders200>> => {
     return axios.get(
       `/v2/openOrders`,{
     ...options,
@@ -169,9 +169,9 @@ export const getv2openorders = (
 지연 없는 현재 상태의 데이터가 필요할 경우 개별 주문 조회 또는 미체결 주문 조회 API를 사용해주세요.
  * @summary 최근 주문 내역 조회
  */
-export const getv2allorders = (
-    params: Getv2allordersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2allorders200>> => {
+export const getAllOrders = (
+    params: GetAllOrdersParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetAllOrders200>> => {
     return axios.get(
       `/v2/allOrders`,{
     ...options,
@@ -185,9 +185,9 @@ export const getv2allorders = (
 이 API는 체결 이력 확인을 위한 API로 제공되는 데이터에 수 초 가량의 지연이 발생할 수 있습니다.
  * @summary 최근 체결 내역 조회
  */
-export const getv2mytrades = (
-    params: Getv2mytradesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2mytrades200>> => {
+export const getMyTrades = (
+    params: GetMyTradesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetMyTrades200>> => {
     return axios.get(
       `/v2/myTrades`,{
     ...options,
@@ -199,9 +199,9 @@ export const getv2mytrades = (
  * 내가 가지고 있는 자산 목록을 조회합니다.
  * @summary 자산 현황
  */
-export const getv2balance = (
-    params: Getv2balanceParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2balance200>> => {
+export const getBalance = (
+    params: GetBalanceParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetBalance200>> => {
     return axios.get(
       `/v2/balance`,{
     ...options,
@@ -213,9 +213,9 @@ export const getv2balance = (
  * 가상자산 입금 주소 목록을 조회합니다.
  * @summary 입금 주소 전체 조회
  */
-export const getv2coindepositaddresses = (
-    params: Getv2coindepositaddressesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coindepositaddresses200>> => {
+export const getCoinDepositAddresses = (
+    params: GetCoinDepositAddressesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinDepositAddresses200>> => {
     return axios.get(
       `/v2/coin/depositAddresses`,{
     ...options,
@@ -227,9 +227,9 @@ export const getv2coindepositaddresses = (
  * 개별 가상자산의 입금 주소를 조회합니다.
  * @summary 입금 주소 조회
  */
-export const getv2coindepositaddress = (
-    params: Getv2coindepositaddressParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coindepositaddress200>> => {
+export const getCoinDepositAddress = (
+    params: GetCoinDepositAddressParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinDepositAddress200>> => {
     return axios.get(
       `/v2/coin/depositAddress`,{
     ...options,
@@ -241,17 +241,17 @@ export const getv2coindepositaddress = (
  * 가상자산을 입금할 주소를 발급합니다. 입금 주소가 이미 존재한다면 신규 발급 없이 기존 입금 주소를 응답합니다.
  * @summary 입금 주소 생성
  */
-export const postv2coindepositaddress = (
-    postv2coindepositaddressBody: Postv2coindepositaddressBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Postv2coindepositaddress200>> => {const formUrlEncoded = new URLSearchParams();
-formUrlEncoded.append(`currency`, postv2coindepositaddressBody.currency);
-if(postv2coindepositaddressBody.network !== undefined) {
- formUrlEncoded.append(`network`, postv2coindepositaddressBody.network);
+export const createCoinDepositAddress = (
+    createCoinDepositAddressBody: CreateCoinDepositAddressBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateCoinDepositAddress200>> => {const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append(`currency`, createCoinDepositAddressBody.currency);
+if(createCoinDepositAddressBody.network !== undefined) {
+ formUrlEncoded.append(`network`, createCoinDepositAddressBody.network);
  }
-formUrlEncoded.append(`timestamp`, postv2coindepositaddressBody.timestamp.toString())
-formUrlEncoded.append(`signature`, postv2coindepositaddressBody.signature);
-if(postv2coindepositaddressBody.recvWindow !== undefined) {
- formUrlEncoded.append(`recvWindow`, postv2coindepositaddressBody.recvWindow.toString())
+formUrlEncoded.append(`timestamp`, createCoinDepositAddressBody.timestamp.toString())
+formUrlEncoded.append(`signature`, createCoinDepositAddressBody.signature);
+if(createCoinDepositAddressBody.recvWindow !== undefined) {
+ formUrlEncoded.append(`recvWindow`, createCoinDepositAddressBody.recvWindow.toString())
  }
 
     return axios.post(
@@ -264,9 +264,9 @@ if(postv2coindepositaddressBody.recvWindow !== undefined) {
  * 최근 가상자산 입금 내역을 조회합니다.
  * @summary 최근 입금내역 조회
  */
-export const getv2coinrecentdeposits = (
-    params: Getv2coinrecentdepositsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coinrecentdeposits200>> => {
+export const getCoinRecentDeposits = (
+    params: GetCoinRecentDepositsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinRecentDeposits200>> => {
     return axios.get(
       `/v2/coin/recentDeposits`,{
     ...options,
@@ -278,9 +278,9 @@ export const getv2coinrecentdeposits = (
  * 가상자산 입금 진행 상태를 조회합니다.
  * @summary 입금 진행상황 조회
  */
-export const getv2coindeposit = (
-    params: Getv2coindepositParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coindeposit200>> => {
+export const getCoinDeposit = (
+    params: GetCoinDepositParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinDeposit200>> => {
     return axios.get(
       `/v2/coin/deposit`,{
     ...options,
@@ -292,9 +292,9 @@ export const getv2coindeposit = (
  * API 출금 가능 주소로 등록된 주소를 조회합니다.
  * @summary 출금 가능 주소 목록 조회
  */
-export const getv2coinwithdrawableaddresses = (
-    params: Getv2coinwithdrawableaddressesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coinwithdrawableaddresses200>> => {
+export const getCoinWithdrawableAddresses = (
+    params: GetCoinWithdrawableAddressesParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinWithdrawableAddresses200>> => {
     return axios.get(
       `/v2/coin/withdrawableAddresses`,{
     ...options,
@@ -306,9 +306,9 @@ export const getv2coinwithdrawableaddresses = (
  * 출금 가능 수량을 조회합니다.
  * @summary 출금 가능 수량 조회
  */
-export const getv2coinwithdrawableamount = (
-    params: Getv2coinwithdrawableamountParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coinwithdrawableamount200>> => {
+export const getCoinWithdrawableAmount = (
+    params: GetCoinWithdrawableAmountParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinWithdrawableAmount200>> => {
     return axios.get(
       `/v2/coin/withdrawableAmount`,{
     ...options,
@@ -320,22 +320,22 @@ export const getv2coinwithdrawableamount = (
  * 가상자산 출금을 요청합니다. 출금 API를 사용하기 위해서는, 코빗 개발자센터에서 API 출금 허용주소 등록이 필요합니다.
  * @summary 출금 요청
  */
-export const postv2coinwithdrawal = (
-    postv2coinwithdrawalBody: Postv2coinwithdrawalBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Postv2coinwithdrawal200>> => {const formUrlEncoded = new URLSearchParams();
-formUrlEncoded.append(`currency`, postv2coinwithdrawalBody.currency);
-if(postv2coinwithdrawalBody.network !== undefined) {
- formUrlEncoded.append(`network`, postv2coinwithdrawalBody.network);
+export const createCoinWithdrawal = (
+    createCoinWithdrawalBody: CreateCoinWithdrawalBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CreateCoinWithdrawal200>> => {const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append(`currency`, createCoinWithdrawalBody.currency);
+if(createCoinWithdrawalBody.network !== undefined) {
+ formUrlEncoded.append(`network`, createCoinWithdrawalBody.network);
  }
-formUrlEncoded.append(`amount`, postv2coinwithdrawalBody.amount);
-formUrlEncoded.append(`address`, postv2coinwithdrawalBody.address);
-if(postv2coinwithdrawalBody.secondaryAddress !== undefined) {
- formUrlEncoded.append(`secondaryAddress`, postv2coinwithdrawalBody.secondaryAddress);
+formUrlEncoded.append(`amount`, createCoinWithdrawalBody.amount);
+formUrlEncoded.append(`address`, createCoinWithdrawalBody.address);
+if(createCoinWithdrawalBody.secondaryAddress !== undefined) {
+ formUrlEncoded.append(`secondaryAddress`, createCoinWithdrawalBody.secondaryAddress);
  }
-formUrlEncoded.append(`timestamp`, postv2coinwithdrawalBody.timestamp.toString())
-formUrlEncoded.append(`signature`, postv2coinwithdrawalBody.signature);
-if(postv2coinwithdrawalBody.recvWindow !== undefined) {
- formUrlEncoded.append(`recvWindow`, postv2coinwithdrawalBody.recvWindow.toString())
+formUrlEncoded.append(`timestamp`, createCoinWithdrawalBody.timestamp.toString())
+formUrlEncoded.append(`signature`, createCoinWithdrawalBody.signature);
+if(createCoinWithdrawalBody.recvWindow !== undefined) {
+ formUrlEncoded.append(`recvWindow`, createCoinWithdrawalBody.recvWindow.toString())
  }
 
     return axios.post(
@@ -354,9 +354,9 @@ if(postv2coinwithdrawalBody.recvWindow !== undefined) {
 - reviewing
  * @summary 출금 취소
  */
-export const deletev2coinwithdrawal = (
-    params: Deletev2coinwithdrawalParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Deletev2coinwithdrawal200>> => {
+export const cancelCoinWithdrawal = (
+    params: CancelCoinWithdrawalParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<CancelCoinWithdrawal200>> => {
     return axios.delete(
       `/v2/coin/withdrawal`,{
     ...options,
@@ -368,9 +368,9 @@ export const deletev2coinwithdrawal = (
  * 요청한 출금의 진행 상황을 조회합니다.
  * @summary 출금 진행상황 조회
  */
-export const getv2coinwithdrawal = (
-    params: Getv2coinwithdrawalParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coinwithdrawal200>> => {
+export const getCoinWithdrawal = (
+    params: GetCoinWithdrawalParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinWithdrawal200>> => {
     return axios.get(
       `/v2/coin/withdrawal`,{
     ...options,
@@ -382,9 +382,9 @@ export const getv2coinwithdrawal = (
  * 최근 가상자산 출금내역을 조회합니다.
  * @summary 최근 출금내역 조회
  */
-export const getv2coinrecentwithdrawals = (
-    params: Getv2coinrecentwithdrawalsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2coinrecentwithdrawals200>> => {
+export const getCoinRecentWithdrawals = (
+    params: GetCoinRecentWithdrawalsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCoinRecentWithdrawals200>> => {
     return axios.get(
       `/v2/coin/recentWithdrawals`,{
     ...options,
@@ -400,14 +400,14 @@ export const getv2coinrecentwithdrawals = (
 알림 수신을 위해서는 앱 알림 설정에서 앱 푸시 알림 받기 설정이 되어 있어야 합니다.
  * @summary 입금 요청
  */
-export const postv2krwsendkrwdepositpush = (
-    postv2krwsendkrwdepositpushBody: Postv2krwsendkrwdepositpushBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Postv2krwsendkrwdepositpush200>> => {const formUrlEncoded = new URLSearchParams();
-formUrlEncoded.append(`amount`, postv2krwsendkrwdepositpushBody.amount);
-formUrlEncoded.append(`timestamp`, postv2krwsendkrwdepositpushBody.timestamp.toString())
-formUrlEncoded.append(`signature`, postv2krwsendkrwdepositpushBody.signature);
-if(postv2krwsendkrwdepositpushBody.recvWindow !== undefined) {
- formUrlEncoded.append(`recvWindow`, postv2krwsendkrwdepositpushBody.recvWindow.toString())
+export const requestKrwDeposit = (
+    requestKrwDepositBody: RequestKrwDepositBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RequestKrwDeposit200>> => {const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append(`amount`, requestKrwDepositBody.amount);
+formUrlEncoded.append(`timestamp`, requestKrwDepositBody.timestamp.toString())
+formUrlEncoded.append(`signature`, requestKrwDepositBody.signature);
+if(requestKrwDepositBody.recvWindow !== undefined) {
+ formUrlEncoded.append(`recvWindow`, requestKrwDepositBody.recvWindow.toString())
  }
 
     return axios.post(
@@ -424,14 +424,14 @@ if(postv2krwsendkrwdepositpushBody.recvWindow !== undefined) {
 알림 수신을 위해서는 앱 알림 설정에서 앱 푸시 알림 받기 설정이 되어 있어야 합니다.
  * @summary 출금 요청
  */
-export const postv2krwsendkrwwithdrawalpush = (
-    postv2krwsendkrwwithdrawalpushBody: Postv2krwsendkrwwithdrawalpushBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Postv2krwsendkrwwithdrawalpush200>> => {const formUrlEncoded = new URLSearchParams();
-formUrlEncoded.append(`amount`, postv2krwsendkrwwithdrawalpushBody.amount);
-formUrlEncoded.append(`timestamp`, postv2krwsendkrwwithdrawalpushBody.timestamp.toString())
-formUrlEncoded.append(`signature`, postv2krwsendkrwwithdrawalpushBody.signature);
-if(postv2krwsendkrwwithdrawalpushBody.recvWindow !== undefined) {
- formUrlEncoded.append(`recvWindow`, postv2krwsendkrwwithdrawalpushBody.recvWindow.toString())
+export const requestKrwWithdrawal = (
+    requestKrwWithdrawalBody: RequestKrwWithdrawalBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<RequestKrwWithdrawal200>> => {const formUrlEncoded = new URLSearchParams();
+formUrlEncoded.append(`amount`, requestKrwWithdrawalBody.amount);
+formUrlEncoded.append(`timestamp`, requestKrwWithdrawalBody.timestamp.toString())
+formUrlEncoded.append(`signature`, requestKrwWithdrawalBody.signature);
+if(requestKrwWithdrawalBody.recvWindow !== undefined) {
+ formUrlEncoded.append(`recvWindow`, requestKrwWithdrawalBody.recvWindow.toString())
  }
 
     return axios.post(
@@ -444,9 +444,9 @@ if(postv2krwsendkrwwithdrawalpushBody.recvWindow !== undefined) {
  * 최근 KRW 입금 내역을 조회합니다.
  * @summary 최근 입금내역 조회
  */
-export const getv2krwrecentdeposits = (
-    params: Getv2krwrecentdepositsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2krwrecentdeposits200>> => {
+export const getKrwRecentDeposits = (
+    params: GetKrwRecentDepositsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetKrwRecentDeposits200>> => {
     return axios.get(
       `/v2/krw/recentDeposits`,{
     ...options,
@@ -458,9 +458,9 @@ export const getv2krwrecentdeposits = (
  * 최근 KRW 출금내역을 조회합니다.
  * @summary 최근 출금내역 조회
  */
-export const getv2krwrecentwithdrawals = (
-    params: Getv2krwrecentwithdrawalsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2krwrecentwithdrawals200>> => {
+export const getKrwRecentWithdrawals = (
+    params: GetKrwRecentWithdrawalsParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetKrwRecentWithdrawals200>> => {
     return axios.get(
       `/v2/krw/recentWithdrawals`,{
     ...options,
@@ -472,9 +472,9 @@ export const getv2krwrecentwithdrawals = (
  * 현재 회원 계정에 적용되는 거래수수료율을 조회합니다.
  * @summary 거래수수료율 조회
  */
-export const getv2tradingfeepolicy = (
-    params: Getv2tradingfeepolicyParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2tradingfeepolicy200>> => {
+export const getTradingFeePolicy = (
+    params: GetTradingFeePolicyParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetTradingFeePolicy200>> => {
     return axios.get(
       `/v2/tradingFeePolicy`,{
     ...options,
@@ -486,9 +486,9 @@ export const getv2tradingfeepolicy = (
  * 현재 사용중인 API 키의 정보를 조회합니다.
  * @summary API 키 정보 조회
  */
-export const getv2currentkeyinfo = (
-    params: Getv2currentkeyinfoParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Getv2currentkeyinfo200>> => {
+export const getCurrentKeyInfo = (
+    params: GetCurrentKeyInfoParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetCurrentKeyInfo200>> => {
     return axios.get(
       `/v2/currentKeyInfo`,{
     ...options,
@@ -496,27 +496,27 @@ export const getv2currentkeyinfo = (
     );
   }
 
-export type Getv2ordersResult = AxiosResponse<Getv2orders200>
-export type Postv2ordersResult = AxiosResponse<Postv2orders200>
-export type Deletev2ordersResult = AxiosResponse<Deletev2orders200>
-export type Getv2openordersResult = AxiosResponse<Getv2openorders200>
-export type Getv2allordersResult = AxiosResponse<Getv2allorders200>
-export type Getv2mytradesResult = AxiosResponse<Getv2mytrades200>
-export type Getv2balanceResult = AxiosResponse<Getv2balance200>
-export type Getv2coindepositaddressesResult = AxiosResponse<Getv2coindepositaddresses200>
-export type Getv2coindepositaddressResult = AxiosResponse<Getv2coindepositaddress200>
-export type Postv2coindepositaddressResult = AxiosResponse<Postv2coindepositaddress200>
-export type Getv2coinrecentdepositsResult = AxiosResponse<Getv2coinrecentdeposits200>
-export type Getv2coindepositResult = AxiosResponse<Getv2coindeposit200>
-export type Getv2coinwithdrawableaddressesResult = AxiosResponse<Getv2coinwithdrawableaddresses200>
-export type Getv2coinwithdrawableamountResult = AxiosResponse<Getv2coinwithdrawableamount200>
-export type Postv2coinwithdrawalResult = AxiosResponse<Postv2coinwithdrawal200>
-export type Deletev2coinwithdrawalResult = AxiosResponse<Deletev2coinwithdrawal200>
-export type Getv2coinwithdrawalResult = AxiosResponse<Getv2coinwithdrawal200>
-export type Getv2coinrecentwithdrawalsResult = AxiosResponse<Getv2coinrecentwithdrawals200>
-export type Postv2krwsendkrwdepositpushResult = AxiosResponse<Postv2krwsendkrwdepositpush200>
-export type Postv2krwsendkrwwithdrawalpushResult = AxiosResponse<Postv2krwsendkrwwithdrawalpush200>
-export type Getv2krwrecentdepositsResult = AxiosResponse<Getv2krwrecentdeposits200>
-export type Getv2krwrecentwithdrawalsResult = AxiosResponse<Getv2krwrecentwithdrawals200>
-export type Getv2tradingfeepolicyResult = AxiosResponse<Getv2tradingfeepolicy200>
-export type Getv2currentkeyinfoResult = AxiosResponse<Getv2currentkeyinfo200>
+export type GetOrderResult = AxiosResponse<GetOrder200>
+export type PlaceOrderResult = AxiosResponse<PlaceOrder200>
+export type CancelOrderResult = AxiosResponse<CancelOrder200>
+export type GetOpenOrdersResult = AxiosResponse<GetOpenOrders200>
+export type GetAllOrdersResult = AxiosResponse<GetAllOrders200>
+export type GetMyTradesResult = AxiosResponse<GetMyTrades200>
+export type GetBalanceResult = AxiosResponse<GetBalance200>
+export type GetCoinDepositAddressesResult = AxiosResponse<GetCoinDepositAddresses200>
+export type GetCoinDepositAddressResult = AxiosResponse<GetCoinDepositAddress200>
+export type CreateCoinDepositAddressResult = AxiosResponse<CreateCoinDepositAddress200>
+export type GetCoinRecentDepositsResult = AxiosResponse<GetCoinRecentDeposits200>
+export type GetCoinDepositResult = AxiosResponse<GetCoinDeposit200>
+export type GetCoinWithdrawableAddressesResult = AxiosResponse<GetCoinWithdrawableAddresses200>
+export type GetCoinWithdrawableAmountResult = AxiosResponse<GetCoinWithdrawableAmount200>
+export type CreateCoinWithdrawalResult = AxiosResponse<CreateCoinWithdrawal200>
+export type CancelCoinWithdrawalResult = AxiosResponse<CancelCoinWithdrawal200>
+export type GetCoinWithdrawalResult = AxiosResponse<GetCoinWithdrawal200>
+export type GetCoinRecentWithdrawalsResult = AxiosResponse<GetCoinRecentWithdrawals200>
+export type RequestKrwDepositResult = AxiosResponse<RequestKrwDeposit200>
+export type RequestKrwWithdrawalResult = AxiosResponse<RequestKrwWithdrawal200>
+export type GetKrwRecentDepositsResult = AxiosResponse<GetKrwRecentDeposits200>
+export type GetKrwRecentWithdrawalsResult = AxiosResponse<GetKrwRecentWithdrawals200>
+export type GetTradingFeePolicyResult = AxiosResponse<GetTradingFeePolicy200>
+export type GetCurrentKeyInfoResult = AxiosResponse<GetCurrentKeyInfo200>

@@ -155,7 +155,7 @@ describe("bithumb private integration", () => {
   });
 
   testIf("API 키 조회", async () => {
-    const result = await client.service.api();
+    const result = await client.service.getApiKeys();
     expect(Array.isArray(result)).toBe(true);
   });
 });

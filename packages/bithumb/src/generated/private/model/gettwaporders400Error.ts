@@ -6,7 +6,7 @@
  * OpenAPI spec version: 2.1.5
  */
 
-export type Gettwaporders400Error = {
+export type GetTwapOrders400Error = {
   name?: string;
   message?: string;
 };

@@ -11,7 +11,7 @@ import * as zod from 'zod';
  * 하나 또는 여러 거래쌍의 현재가(Ticker) 정보를 조회합니다.
  * @summary 현재가 조회
  */
-export const Getv2tickersQueryParams = zod.object({
+export const GetTickersQueryParams = zod.object({
   "symbol": zod.string().optional().describe('조회하고자 하는 거래쌍의 심볼을 입력합니다. 여러 거래쌍을 한 번에 조회하고자 한다면 콤마(,)로 구분해 입력합니다.\n\n입력하지 않으면 코빗에서 거래 가능한 모든 거래쌍의 현재가 정보를 응답합니다.')
 })
 
@@ -20,7 +20,7 @@ export const Getv2tickersQueryParams = zod.object({
  * 단일 거래쌍의 호가 정보를 조회합니다.
  * @summary 호가 조회
  */
-export const Getv2orderbookQueryParams = zod.object({
+export const GetOrderbookQueryParams = zod.object({
   "symbol": zod.string().describe('대상 거래쌍의 심볼'),
   "level": zod.string().optional().describe('오더북 모아보기 단위. 모아보기 단위는 호가 정책 조회 API로 확인할 수 있습니다. 입력하지 않을 경우 모아보기를 적용하지 않습니다.')
 })
@@ -30,7 +30,7 @@ export const Getv2orderbookQueryParams = zod.object({
  * 최근 체결 내역을 조회합니다.
  * @summary 최근 체결 내역
  */
-export const Getv2tradesQueryParams = zod.object({
+export const GetTradesQueryParams = zod.object({
   "symbol": zod.string().describe('대상 거래쌍의 심볼'),
   "limit": zod.number().optional().describe('최대 조회 건수 (범위: 1 - 500)')
 })
@@ -40,7 +40,7 @@ export const Getv2tradesQueryParams = zod.object({
  * 시세 캔들스틱 정보를 조회합니다.
  * @summary 캔들스틱 조회
  */
-export const Getv2candlesQueryParams = zod.object({
+export const GetCandlesQueryParams = zod.object({
   "symbol": zod.string().describe('대상 거래쌍의 심볼'),
   "interval": zod.enum(['1', '5', '15', '30', '60', '240', '1D', '1W']).describe('각 캔들 주기(단위)\n\n허용되는 값:\n\n- 1 1분\n\n- 5 5분\n\n- 15 15분\n\n- 30 30분\n\n- 60 1시간\n\n- 240 4시간\n\n- 1D 1일\n\n- 1W 1주'),
   "start": zod.number().optional().describe('조회 시작 시각(timestamp). 입력하지 않으면 거래쌍 상장 시점부터 조회합니다.'),
@@ -53,6 +53,6 @@ export const Getv2candlesQueryParams = zod.object({
  * 지정한 거래쌍의 호가 정책 및 오더북 모아보기 단위를 조회합니다.
  * @summary 호가 정책 조회
  */
-export const Getv2ticksizepolicyQueryParams = zod.object({
+export const GetTickSizePolicyQueryParams = zod.object({
   "symbol": zod.string().describe('거래쌍 심볼')
 })

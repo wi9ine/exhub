@@ -25,8 +25,8 @@ import type {
   GetTickerParams,
   GetTradesTicks200Item,
   GetTradesTicksParams,
-  Minute1200Item,
-  Minute1Params,
+  Minute200Item,
+  MinuteParams,
   Month200Item,
   MonthParams,
   Week200Item,
@@ -53,10 +53,10 @@ export const getMarketAll = (
 /**
  * @summary 분(Minute) 캔들
  */
-export const minute1 = (
-    params: Minute1Params,
+export const minute = (
+    params: MinuteParams,
     unit: number = 1, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Minute1200Item[]>> => {
+ ): Promise<AxiosResponse<Minute200Item[]>> => {
     return axios.get(
       `/v1/candles/minutes/${unit}`,{
     ...options,
@@ -179,7 +179,7 @@ export const getFeeInfo = (
   }
 
 export type GetMarketAllResult = AxiosResponse<GetMarketAll200Item[]>
-export type Minute1Result = AxiosResponse<Minute1200Item[]>
+export type MinuteResult = AxiosResponse<Minute200Item[]>
 export type DayResult = AxiosResponse<Day200Item[]>
 export type WeekResult = AxiosResponse<Week200Item[]>
 export type MonthResult = AxiosResponse<Month200Item[]>

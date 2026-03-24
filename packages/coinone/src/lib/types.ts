@@ -61,11 +61,11 @@ import type {
   RangeUnit200,
   RecentCompletedOrders200,
   RecentCompletedOrdersParams,
-  RecentCompleteOrdersDeprecated200,
-  RecentCompleteOrdersDeprecatedParams,
-  Ticker1Params,
+  RecentCompletedOrdersDeprecated200,
+  RecentCompletedOrdersDeprecatedParams,
+  TickerDeprecatedParams,
   Ticker200,
-  Ticker1200,
+  TickerDeprecated200,
   TickerParams,
   Tickers200,
   TickersParams,
@@ -121,11 +121,11 @@ export interface CoinoneClient {
       params: ChartParams,
     ) => Promise<Chart200>;
     orderbookDeprecated: (params?: OrderbookDeprecatedParams) => Promise<OrderbookDeprecated200>;
-    tickerDeprecated: (params?: Ticker1Params) => Promise<Ticker1200>;
+    tickerDeprecated: (params?: TickerDeprecatedParams) => Promise<TickerDeprecated200>;
     tickerUtcDeprecated: (params?: TickerUtcDeprecatedParams) => Promise<TickerUtcDeprecated200>;
     recentCompletedOrdersDeprecated: (
-      params?: RecentCompleteOrdersDeprecatedParams,
-    ) => Promise<RecentCompleteOrdersDeprecated200>;
+      params?: RecentCompletedOrdersDeprecatedParams,
+    ) => Promise<RecentCompletedOrdersDeprecated200>;
   };
   account: {
     findBalance: () => Promise<FindBalance200>;
