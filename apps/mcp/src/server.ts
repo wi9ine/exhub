@@ -6,7 +6,7 @@ import {
   type ServerCapabilities,
 } from "@modelcontextprotocol/sdk/types.js";
 
-import { EXHUB_MCP_VERSION } from "./const";
+import packageJson from "../package.json";
 import { getExchangeRuntime } from "./runtime";
 import type {
   ExchangeKey,
@@ -31,7 +31,7 @@ export function createExchangeServer(exchange: ExchangeKey): Server {
   const server = new Server(
     {
       name: `exhub-mcp-${exchange}`,
-      version: EXHUB_MCP_VERSION,
+      version: packageJson.version,
     },
     {
       capabilities: SERVER_CAPABILITIES,

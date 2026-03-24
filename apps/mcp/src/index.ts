@@ -3,8 +3,8 @@
 import { pathToFileURL } from "node:url";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 
+import packageJson from "../package.json";
 import { formatUsage, parseCliArgs } from "./cli";
-import { EXHUB_MCP_VERSION } from "./const";
 import { createExchangeServer } from "./server";
 
 async function main() {
@@ -40,7 +40,7 @@ async function main() {
 
   await server.connect(transport);
   console.error(
-    `exhub-mcp ${EXHUB_MCP_VERSION} (${parsed.exchange}) 서버가 stdio에서 실행 중입니다.`,
+    `exhub-mcp ${packageJson.version} (${parsed.exchange}) 서버가 stdio에서 실행 중입니다.`,
   );
 }
 
