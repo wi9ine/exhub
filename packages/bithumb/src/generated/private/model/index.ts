@@ -86,6 +86,7 @@ export * from './getStatusWallet400Error';
 export * from './gettwaporders200Item';
 export * from './gettwaporders400';
 export * from './gettwaporders400Error';
+export * from './gettwapordersOrderBy';
 export * from './gettwapordersParams';
 export * from './getWithdraw200';
 export * from './getWithdraw400';

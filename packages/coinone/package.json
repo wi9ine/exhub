@@ -9,6 +9,12 @@
     ".": {
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
+    },
+    "./zod/public": {
+      "import": "./src/generated-zod/public/index.ts"
+    },
+    "./zod/private": {
+      "import": "./src/generated-zod/private/index.ts"
     }
   },
   "scripts": {

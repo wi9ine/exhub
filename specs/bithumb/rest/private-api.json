@@ -2041,9 +2041,13 @@
             "in": "query",
             "description": "정렬방식",
             "schema": {
-              "type": "integer",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
               "default": "desc",
-              "format": "int32"
+              "format": "string"
             }
           }
         ],

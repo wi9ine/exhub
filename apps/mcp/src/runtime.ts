@@ -3,12 +3,12 @@ import { createCoinoneClient } from "@exhub/coinone";
 import { createGopaxClient } from "@exhub/gopax";
 import { createKorbitClient } from "@exhub/korbit";
 import { createUpbitClient } from "@exhub/upbit";
+import type { ZodTypeAny } from "zod";
 
-import { buildToolInputSchema } from "./server";
+import { buildToolInputZodSchema } from "./schema";
 import type {
   ExchangeKey,
   ExchangeRuntimeDefinition,
-  JsonSchema,
   ResolvedToolDefinition,
   ToolArgumentDefinition,
   ToolMetadata,
@@ -19,36 +19,236 @@ type RuntimeOptions = {
   timeout?: number;
 };
 
-const objectSchema = (description: string): JsonSchema => ({
+type ValidatorNamespace = Record<string, unknown>;
+
+let upbitQuotationZod: ValidatorNamespace | undefined;
+let upbitExchangeZod: ValidatorNamespace | undefined;
+let bithumbPublicZod: ValidatorNamespace | undefined;
+let bithumbPrivateZod: ValidatorNamespace | undefined;
+let coinonePublicZod: ValidatorNamespace | undefined;
+let coinonePrivateZod: ValidatorNamespace | undefined;
+let gopaxPublicZod: ValidatorNamespace | undefined;
+let gopaxPrivateZod: ValidatorNamespace | undefined;
+let korbitPublicZod: ValidatorNamespace | undefined;
+let korbitPrivateZod: ValidatorNamespace | undefined;
+
+let upbitToolsCache: readonly ResolvedToolDefinition[] | undefined;
+let bithumbToolsCache: readonly ResolvedToolDefinition[] | undefined;
+let coinoneToolsCache: readonly ResolvedToolDefinition[] | undefined;
+let gopaxToolsCache: readonly ResolvedToolDefinition[] | undefined;
+let korbitToolsCache: readonly ResolvedToolDefinition[] | undefined;
+
+const runtimeCache = new Map<ExchangeKey, ExchangeRuntimeDefinition>();
+
+const objectSchema = (description: string): ToolArgumentDefinition["schema"] => ({
   type: "object",
   description,
-  additionalProperties: true,
 });
 
-const stringSchema = (description: string): JsonSchema => ({
+const stringSchema = (description: string): ToolArgumentDefinition["schema"] => ({
   type: "string",
   description,
 });
 
-const numberSchema = (description: string): JsonSchema => ({
+const numberSchema = (description: string): ToolArgumentDefinition["schema"] => ({
   type: "number",
   description,
 });
 
-const arg = (name: string, schema: JsonSchema, required = false): ToolArgumentDefinition => ({
+const arg = (
+  name: string,
+  schema: ToolArgumentDefinition["schema"],
+  required = false,
+  validator?: ZodTypeAny,
+): ToolArgumentDefinition => ({
   name,
   schema,
   required,
+  ...(validator ? { validator } : {}),
 });
 
-const paramsArg = (required = false) =>
-  arg("params", objectSchema("SDK 메서드에 전달할 query/params 객체"), required);
-const bodyArg = (required = true) =>
-  arg("body", objectSchema("SDK 메서드에 전달할 body 객체"), required);
+const paramsArg = (required = false, validator?: ZodTypeAny) =>
+  arg("params", objectSchema("SDK 메서드에 전달할 query/params 객체"), required, validator);
+const bodyArg = (required = true, validator?: ZodTypeAny) =>
+  arg("body", objectSchema("SDK 메서드에 전달할 body 객체"), required, validator);
 const stringArg = (name: string, description: string, required = true) =>
   arg(name, stringSchema(description), required);
 const numberArg = (name: string, description: string, required = true) =>
   arg(name, numberSchema(description), required);
+
+export function requireNamedValidator(namespace: ValidatorNamespace, name: string): ZodTypeAny {
+  const validator = namespace[name];
+  if (!validator) {
+    throw new Error(`generated-zod validator를 찾지 못했습니다: ${name}`);
+  }
+
+  return validator as ZodTypeAny;
+}
+
+function requireLoadedNamespace(
+  namespace: ValidatorNamespace | undefined,
+  label: string,
+): ValidatorNamespace {
+  if (!namespace) {
+    throw new Error(`${label} zod namespace가 아직 로드되지 않았습니다.`);
+  }
+
+  return namespace;
+}
+
+async function ensureUpbitZodLoaded() {
+  if (!upbitQuotationZod) {
+    upbitQuotationZod = await import("@exhub/upbit/zod/quotation");
+  }
+  if (!upbitExchangeZod) {
+    upbitExchangeZod = await import("@exhub/upbit/zod/exchange");
+  }
+}
+
+async function ensureBithumbZodLoaded() {
+  if (!bithumbPublicZod) {
+    bithumbPublicZod = await import("@exhub/bithumb/zod/public");
+  }
+  if (!bithumbPrivateZod) {
+    bithumbPrivateZod = await import("@exhub/bithumb/zod/private");
+  }
+}
+
+async function ensureCoinoneZodLoaded() {
+  if (!coinonePublicZod) {
+    coinonePublicZod = await import("@exhub/coinone/zod/public");
+  }
+  if (!coinonePrivateZod) {
+    coinonePrivateZod = await import("@exhub/coinone/zod/private");
+  }
+}
+
+async function ensureGopaxZodLoaded() {
+  if (!gopaxPublicZod) {
+    gopaxPublicZod = await import("@exhub/gopax/zod/public");
+  }
+  if (!gopaxPrivateZod) {
+    gopaxPrivateZod = await import("@exhub/gopax/zod/private");
+  }
+}
+
+async function ensureKorbitZodLoaded() {
+  if (!korbitPublicZod) {
+    korbitPublicZod = await import("@exhub/korbit/zod/public");
+  }
+  if (!korbitPrivateZod) {
+    korbitPrivateZod = await import("@exhub/korbit/zod/private");
+  }
+}
+
+const upbitQuotationQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(upbitQuotationZod, "upbit quotation"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const upbitExchangeQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(upbitExchangeZod, "upbit exchange"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const upbitExchangeBody = (prefix: string, required = true) =>
+  bodyArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(upbitExchangeZod, "upbit exchange"),
+      `${prefix}Body`,
+    ),
+  );
+
+const bithumbPublicQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(bithumbPublicZod, "bithumb public"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const bithumbPrivateQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(bithumbPrivateZod, "bithumb private"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const bithumbPrivateBody = (prefix: string, required = true) =>
+  bodyArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(bithumbPrivateZod, "bithumb private"),
+      `${prefix}Body`,
+    ),
+  );
+
+const coinonePublicQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(coinonePublicZod, "coinone public"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const coinonePrivateBody = (prefix: string, required = true) =>
+  bodyArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(coinonePrivateZod, "coinone private"),
+      `${prefix}Body`,
+    ),
+  );
+
+const gopaxPublicQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(gopaxPublicZod, "gopax public"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const gopaxPrivateQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(gopaxPrivateZod, "gopax private"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const gopaxPrivateBody = (prefix: string, required = true) =>
+  bodyArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(gopaxPrivateZod, "gopax private"),
+      `${prefix}Body`,
+    ),
+  );
+
+const korbitPublicQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(korbitPublicZod, "korbit public"),
+      `${prefix}QueryParams`,
+    ),
+  );
+const korbitPrivateQuery = (prefix: string, required = false) =>
+  paramsArg(
+    required,
+    requireNamedValidator(
+      requireLoadedNamespace(korbitPrivateZod, "korbit private"),
+      `${prefix}QueryParams`,
+    ),
+  );
 
 function tool(
   category: string,
@@ -77,12 +277,14 @@ export function resolveTools(tools: readonly ToolMetadata[]): readonly ResolvedT
       (duplicates.get(candidate.method) ?? 0) > 1
         ? `${candidate.category}.${candidate.method}`
         : candidate.method;
-
-    return {
+    const inputZodSchema = buildToolInputZodSchema(candidate.args);
+    const resolvedTool = {
       ...candidate,
       name,
-      inputSchema: buildToolInputSchema(candidate.args),
+      ...(inputZodSchema ? { inputZodSchema } : {}),
     };
+
+    return resolvedTool;
   });
 
   // 최종 도구명 유일성 검증
@@ -155,247 +357,360 @@ function parseOptionalNumberEnv(name: string): number | undefined {
   return parsed;
 }
 
-const UPBIT_TOOLS = resolveTools([
-  tool("tradingPairs", "listTradingPairs", "public", [paramsArg()]),
-  tool("candles", "listCandlesSeconds", "public", [paramsArg(true)]),
-  tool("candles", "listCandlesMinutes", "public", [
-    numberArg("unit", "분 캔들 단위", true),
-    paramsArg(true),
-  ]),
-  tool("candles", "listCandlesDays", "public", [paramsArg(true)]),
-  tool("candles", "listCandlesWeeks", "public", [paramsArg(true)]),
-  tool("candles", "listCandlesMonths", "public", [paramsArg(true)]),
-  tool("candles", "listCandlesYears", "public", [paramsArg(true)]),
-  tool("trades", "recentTradesHistory", "public", [paramsArg(true)]),
-  tool("tickers", "listTickers", "public", [paramsArg(true)]),
-  tool("tickers", "listQuoteTickers", "public", [paramsArg(true)]),
-  tool("orderbook", "listOrderbooks", "public", [paramsArg(true)]),
-  tool("orderbook", "listOrderbookInstruments", "public", [paramsArg(true)]),
-  tool("orderbook", "listOrderbookLevels", "public", [paramsArg(true)]),
-  tool("assets", "getBalance", "private"),
-  tool("orders", "availableOrderInformation", "private", [paramsArg(true)]),
-  tool("orders", "newOrder", "private", [bodyArg()]),
-  tool("orders", "testOrder", "private", [bodyArg()]),
-  tool("orders", "getOrder", "private", [paramsArg()]),
-  tool("orders", "cancelOrder", "private", [paramsArg()]),
-  tool("orders", "listOrdersByIds", "private", [paramsArg()]),
-  tool("orders", "cancelOrdersByIds", "private", [paramsArg()]),
-  tool("orders", "listOpenOrders", "private", [paramsArg()]),
-  tool("orders", "batchCancelOrders", "private", [paramsArg()]),
-  tool("orders", "listClosedOrders", "private", [paramsArg()]),
-  tool("orders", "cancelAndNewOrder", "private", [bodyArg()]),
-  tool("withdrawals", "availableWithdrawalInformation", "private", [paramsArg(true)]),
-  tool("withdrawals", "listWithdrawalAddresses", "private"),
-  tool("withdrawals", "withdraw", "private", [bodyArg()]),
-  tool("withdrawals", "cancelWithdrawal", "private", [paramsArg(true)]),
-  tool("withdrawals", "withdrawKrw", "private", [bodyArg()]),
-  tool("withdrawals", "getWithdrawal", "private", [paramsArg()]),
-  tool("withdrawals", "listWithdrawals", "private", [paramsArg()]),
-  tool("deposits", "availableDepositInformation", "private", [paramsArg(true)]),
-  tool("deposits", "createDepositAddress", "private", [bodyArg()]),
-  tool("deposits", "getDepositAddress", "private", [paramsArg(true)]),
-  tool("deposits", "listDepositAddresses", "private"),
-  tool("deposits", "depositKrw", "private", [bodyArg()]),
-  tool("deposits", "getDeposit", "private", [paramsArg()]),
-  tool("deposits", "listDeposits", "private", [paramsArg()]),
-  tool("travelRule", "listTravelruleVasps", "private"),
-  tool("travelRule", "verifyTravelruleByUuid", "private", [bodyArg()]),
-  tool("travelRule", "verifyTravelruleByTxid", "private", [bodyArg()]),
-  tool("service", "getServiceStatus", "private"),
-  tool("service", "listApiKeys", "private"),
-]);
+function getUpbitTools() {
+  if (upbitToolsCache) return upbitToolsCache;
 
-const BITHUMB_TOOLS = resolveTools([
-  tool("markets", "getMarketAll", "public", [paramsArg()]),
-  tool("markets", "getMarketVirtualAssetWarning", "public"),
-  tool("candles", "minute1", "public", [paramsArg(true), numberArg("unit", "분 캔들 단위", false)]),
-  tool("candles", "day", "public", [paramsArg(true)]),
-  tool("candles", "week", "public", [paramsArg(true)]),
-  tool("candles", "month", "public", [paramsArg(true)]),
-  tool("trades", "getTradesTicks", "public", [paramsArg(true)]),
-  tool("tickers", "getTicker", "public", [paramsArg(true)]),
-  tool("orderbook", "getOrderbook", "public", [paramsArg(true)]),
-  tool("service", "getNotices", "public"),
-  tool("service", "getFeeInfo", "public", [stringArg("currency", "조회할 통화 코드", true)]),
-  tool("service", "getStatusWallet", "private"),
-  tool("service", "api", "private"),
-  tool("accounts", "getAccounts", "private"),
-  tool("orders", "getOrdersChance", "private", [paramsArg(true)]),
-  tool("orders", "placeOrder", "private", [bodyArg()]),
-  tool("orders", "placeBatchOrders", "private", [bodyArg()]),
-  tool("orders", "getOrder", "private", [paramsArg()]),
-  tool("orders", "cancelOrder", "private", [paramsArg()]),
-  tool("orders", "cancelOrders", "private", [bodyArg()]),
-  tool("orders", "getOrders", "private", [paramsArg()]),
-  tool("orders", "getTwapOrders", "private", [paramsArg()]),
-  tool("orders", "cancelTwapOrder", "private", [paramsArg(true)]),
-  tool("orders", "createTwapOrder", "private", [paramsArg(true)]),
-  tool("withdrawals", "getWithdraws", "private", [paramsArg()]),
-  tool("withdrawals", "getWithdrawsKrw", "private", [paramsArg()]),
-  tool("withdrawals", "getWithdraw", "private", [paramsArg(true)]),
-  tool("withdrawals", "getWithdrawsChance", "private", [paramsArg(true)]),
-  tool("withdrawals", "getWithdrawsCoinAddresses", "private"),
-  tool("withdrawals", "withdrawCoin", "private", [bodyArg()]),
-  tool("withdrawals", "withdrawKrw", "private", [bodyArg()]),
-  tool("deposits", "getDeposits", "private", [paramsArg()]),
-  tool("deposits", "getDepositsKrw", "private", [paramsArg()]),
-  tool("deposits", "getDeposit", "private", [paramsArg(true)]),
-  tool("deposits", "getDepositsCoinAddresses", "private"),
-  tool("deposits", "getDepositsCoinAddress", "private", [paramsArg(true)]),
-  tool("deposits", "depositKrw", "private", [bodyArg()]),
-  tool("deposits", "generateCoinAddress", "private", [bodyArg()]),
-]);
+  upbitToolsCache = resolveTools([
+    tool("tradingPairs", "listTradingPairs", "public", [upbitQuotationQuery("ListTradingPairs")]),
+    tool("candles", "listCandlesSeconds", "public", [
+      upbitQuotationQuery("ListCandlesSeconds", true),
+    ]),
+    tool("candles", "listCandlesMinutes", "public", [
+      numberArg("unit", "분 캔들 단위", true),
+      upbitQuotationQuery("ListCandlesMinutes", true),
+    ]),
+    tool("candles", "listCandlesDays", "public", [upbitQuotationQuery("ListCandlesDays", true)]),
+    tool("candles", "listCandlesWeeks", "public", [upbitQuotationQuery("ListCandlesWeeks", true)]),
+    tool("candles", "listCandlesMonths", "public", [
+      upbitQuotationQuery("ListCandlesMonths", true),
+    ]),
+    tool("candles", "listCandlesYears", "public", [upbitQuotationQuery("ListCandlesYears", true)]),
+    tool("trades", "recentTradesHistory", "public", [
+      upbitQuotationQuery("RecentTradesHistory", true),
+    ]),
+    tool("tickers", "listTickers", "public", [upbitQuotationQuery("ListTickers", true)]),
+    tool("tickers", "listQuoteTickers", "public", [upbitQuotationQuery("ListQuoteTickers", true)]),
+    tool("orderbook", "listOrderbooks", "public", [upbitQuotationQuery("ListOrderbooks", true)]),
+    tool("orderbook", "listOrderbookInstruments", "public", [
+      upbitQuotationQuery("ListOrderbookInstruments", true),
+    ]),
+    tool("orderbook", "listOrderbookLevels", "public", [
+      upbitQuotationQuery("ListOrderbookLevels", true),
+    ]),
+    tool("assets", "getBalance", "private"),
+    tool("orders", "availableOrderInformation", "private", [
+      upbitExchangeQuery("AvailableOrderInformation", true),
+    ]),
+    tool("orders", "newOrder", "private", [upbitExchangeBody("NewOrder")]),
+    tool("orders", "testOrder", "private", [upbitExchangeBody("TestOrder")]),
+    tool("orders", "getOrder", "private", [upbitExchangeQuery("GetOrder")]),
+    tool("orders", "cancelOrder", "private", [upbitExchangeQuery("CancelOrder")]),
+    tool("orders", "listOrdersByIds", "private", [upbitExchangeQuery("ListOrdersByIds")]),
+    tool("orders", "cancelOrdersByIds", "private", [upbitExchangeQuery("CancelOrdersByIds")]),
+    tool("orders", "listOpenOrders", "private", [upbitExchangeQuery("ListOpenOrders")]),
+    tool("orders", "batchCancelOrders", "private", [upbitExchangeQuery("BatchCancelOrders")]),
+    tool("orders", "listClosedOrders", "private", [upbitExchangeQuery("ListClosedOrders")]),
+    tool("orders", "cancelAndNewOrder", "private", [upbitExchangeBody("CancelAndNewOrder")]),
+    tool("withdrawals", "availableWithdrawalInformation", "private", [
+      upbitExchangeQuery("AvailableWithdrawalInformation", true),
+    ]),
+    tool("withdrawals", "listWithdrawalAddresses", "private"),
+    tool("withdrawals", "withdraw", "private", [upbitExchangeBody("Withdraw")]),
+    tool("withdrawals", "cancelWithdrawal", "private", [
+      upbitExchangeQuery("CancelWithdrawal", true),
+    ]),
+    tool("withdrawals", "withdrawKrw", "private", [upbitExchangeBody("WithdrawKrw")]),
+    tool("withdrawals", "getWithdrawal", "private", [upbitExchangeQuery("GetWithdrawal")]),
+    tool("withdrawals", "listWithdrawals", "private", [upbitExchangeQuery("ListWithdrawals")]),
+    tool("deposits", "availableDepositInformation", "private", [
+      upbitExchangeQuery("AvailableDepositInformation", true),
+    ]),
+    tool("deposits", "createDepositAddress", "private", [
+      upbitExchangeBody("CreateDepositAddress"),
+    ]),
+    tool("deposits", "getDepositAddress", "private", [
+      upbitExchangeQuery("GetDepositAddress", true),
+    ]),
+    tool("deposits", "listDepositAddresses", "private"),
+    tool("deposits", "depositKrw", "private", [upbitExchangeBody("DepositKrw")]),
+    tool("deposits", "getDeposit", "private", [upbitExchangeQuery("GetDeposit")]),
+    tool("deposits", "listDeposits", "private", [upbitExchangeQuery("ListDeposits")]),
+    tool("travelRule", "listTravelruleVasps", "private"),
+    tool("travelRule", "verifyTravelruleByUuid", "private", [
+      upbitExchangeBody("VerifyTravelruleByUuid"),
+    ]),
+    tool("travelRule", "verifyTravelruleByTxid", "private", [
+      upbitExchangeBody("VerifyTravelruleByTxid"),
+    ]),
+    tool("service", "getServiceStatus", "private"),
+    tool("service", "listApiKeys", "private"),
+  ]);
 
-const COINONE_TOOLS = resolveTools([
-  tool("market", "rangeUnit", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-  ]),
-  tool("market", "markets", "public", [stringArg("quoteCurrency", "quote currency", false)]),
-  tool("market", "market", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-  ]),
-  tool("market", "orderbook", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-    paramsArg(),
-  ]),
-  tool("market", "recentCompletedOrders", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-    paramsArg(),
-  ]),
-  tool("market", "tickers", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    paramsArg(),
-  ]),
-  tool("market", "ticker", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-    paramsArg(),
-  ]),
-  tool("market", "utcTickers", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    paramsArg(),
-  ]),
-  tool("market", "utcTicker", "public", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-    paramsArg(),
-  ]),
-  tool("market", "currencies", "public"),
-  tool("market", "currency", "public", [stringArg("currency", "통화 코드", false)]),
-  tool("market", "chart", "public", [
-    stringArg("quoteCurrency", "quote currency", true),
-    stringArg("targetCurrency", "target currency", true),
-    paramsArg(true),
-  ]),
-  tool("market", "orderbookDeprecated", "public", [paramsArg()]),
-  tool("market", "tickerDeprecated", "public", [paramsArg()]),
-  tool("market", "tickerUtcDeprecated", "public", [paramsArg()]),
-  tool("market", "recentCompletedOrdersDeprecated", "public", [paramsArg()]),
-  tool("account", "findBalance", "private"),
-  tool("account", "findBalanceByCurrencies", "private", [bodyArg()]),
-  tool("account", "findAllTradeFees", "private"),
-  tool("account", "findTradeFeeByPair", "private", [
-    stringArg("quoteCurrency", "quote currency", false),
-    stringArg("targetCurrency", "target currency", false),
-    bodyArg(false),
-  ]),
-  tool("orders", "findActiveOrders", "private", [bodyArg(false)]),
-  tool("orders", "placeOrder", "private", [bodyArg()]),
-  tool("orders", "placeLimitOrder", "private", [bodyArg()]),
-  tool("orders", "cancelOrders", "private", [bodyArg()]),
-  tool("orders", "cancelOrder", "private", [bodyArg()]),
-  tool("orders", "orderDetail", "private", [bodyArg()]),
-  tool("orders", "findAllCompletedOrders", "private", [bodyArg()]),
-  tool("orders", "findCompletedOrders", "private", [bodyArg()]),
-  tool("orders", "findAllOpenOrders", "private", [bodyArg(false)]),
-  tool("orders", "findOpenOrders", "private", [bodyArg()]),
-  tool("orders", "findOrderInfo", "private", [bodyArg()]),
-  tool("transactions", "krwTransactionHistory", "private", [bodyArg(false)]),
-  tool("transactions", "coinTransactionHistory", "private", [bodyArg(false)]),
-  tool("transactions", "singleCoinTransactionHistory", "private", [bodyArg()]),
-  tool("transactions", "coinWithdrawalLimit", "private", [bodyArg()]),
-  tool("transactions", "coinWithdrawalAddressBook", "private", [bodyArg(false)]),
-  tool("transactions", "coinWithdrawal", "private", [bodyArg()]),
-  tool("rewards", "orderRewardPrograms", "private", [bodyArg(false)]),
-  tool("rewards", "orderRewardHistory", "private", [bodyArg(false)]),
-]);
+  return upbitToolsCache;
+}
 
-const GOPAX_TOOLS = resolveTools([
-  tool("market", "assets", "public"),
-  tool("market", "tradingPairs", "public"),
-  tool("market", "priceTickSize", "public", [stringArg("tradingPair", "거래 페어", true)]),
-  tool("market", "ticker", "public", [stringArg("tradingPair", "거래 페어", true)]),
-  tool("market", "orderbook", "public", [stringArg("tradingPair", "거래 페어", true), paramsArg()]),
-  tool("market", "trades", "public", [stringArg("tradingPair", "거래 페어", true), paramsArg()]),
-  tool("market", "stats", "public", [stringArg("tradingPair", "거래 페어", true)]),
-  tool("market", "allStats", "public"),
-  tool("market", "candles", "public", [
-    stringArg("tradingPair", "거래 페어", true),
-    paramsArg(true),
-  ]),
-  tool("market", "cautions", "public", [paramsArg()]),
-  tool("market", "tickers", "public"),
-  tool("market", "time", "public"),
-  tool("market", "notices", "public", [paramsArg()]),
-  tool("account", "getBalances", "private"),
-  tool("account", "getBalance", "private", [stringArg("assetName", "자산 코드", true)]),
-  tool("orders", "getOrders", "private", [paramsArg()]),
-  tool("orders", "placeOrder", "private", [bodyArg()]),
-  tool("orders", "getOrder", "private", [stringArg("orderId", "주문 ID", true)]),
-  tool("orders", "cancelOrder", "private", [stringArg("orderId", "주문 ID", true)]),
-  tool("orders", "getOrderByClientOrderId", "private", [
-    stringArg("clientOrderId", "클라이언트 주문 ID", true),
-  ]),
-  tool("orders", "cancelOrderByClientOrderId", "private", [
-    stringArg("clientOrderId", "클라이언트 주문 ID", true),
-  ]),
-  tool("trades", "getTrades", "private", [paramsArg()]),
-  tool("wallet", "getDepositWithdrawalStatus", "private", [paramsArg()]),
-  tool("wallet", "getCryptoDepositAddresses", "private"),
-  tool("wallet", "getCryptoWithdrawalAddresses", "private"),
-  tool("wallet", "withdraw", "private", [bodyArg()]),
-]);
+function getBithumbTools() {
+  if (bithumbToolsCache) return bithumbToolsCache;
 
-const KORBIT_TOOLS = resolveTools([
-  tool("market", "tickers", "public", [paramsArg()]),
-  tool("market", "orderbook", "public", [paramsArg(true)]),
-  tool("market", "trades", "public", [paramsArg(true)]),
-  tool("market", "candles", "public", [paramsArg(true)]),
-  tool("market", "currencyPairs", "public"),
-  tool("market", "tickSizePolicy", "public", [paramsArg(true)]),
-  tool("market", "currencies", "public"),
-  tool("market", "time", "public"),
-  tool("orders", "placeOrder", "private", [bodyArg()]),
-  tool("orders", "cancelOrder", "private", [paramsArg(true)]),
-  tool("orders", "getOrder", "private", [paramsArg(true)]),
-  tool("orders", "getOpenOrders", "private", [paramsArg(true)]),
-  tool("orders", "getAllOrders", "private", [paramsArg(true)]),
-  tool("orders", "getMyTrades", "private", [paramsArg(true)]),
-  tool("assets", "getBalance", "private", [paramsArg()]),
-  tool("cryptoDeposits", "getDepositAddresses", "private"),
-  tool("cryptoDeposits", "createDepositAddress", "private", [bodyArg()]),
-  tool("cryptoDeposits", "getDepositAddress", "private", [paramsArg(true)]),
-  tool("cryptoDeposits", "getRecentDeposits", "private", [paramsArg(true)]),
-  tool("cryptoDeposits", "getDeposit", "private", [paramsArg(true)]),
-  tool("cryptoWithdrawals", "getWithdrawableAddresses", "private"),
-  tool("cryptoWithdrawals", "getWithdrawableAmount", "private", [paramsArg()]),
-  tool("cryptoWithdrawals", "withdraw", "private", [bodyArg()]),
-  tool("cryptoWithdrawals", "cancelWithdrawal", "private", [paramsArg(true)]),
-  tool("cryptoWithdrawals", "getRecentWithdrawals", "private", [paramsArg(true)]),
-  tool("cryptoWithdrawals", "getWithdrawal", "private", [paramsArg(true)]),
-  tool("krw", "sendDepositPush", "private", [bodyArg()]),
-  tool("krw", "sendWithdrawalPush", "private", [bodyArg()]),
-  tool("krw", "getRecentDeposits", "private", [paramsArg(true)]),
-  tool("krw", "getRecentWithdrawals", "private", [paramsArg(true)]),
-  tool("service", "getTradingFeePolicy", "private", [paramsArg()]),
-  tool("service", "getCurrentKeyInfo", "private"),
-]);
+  bithumbToolsCache = resolveTools([
+    tool("markets", "getMarketAll", "public", [bithumbPublicQuery("GetMarketAll")]),
+    tool("markets", "getMarketVirtualAssetWarning", "public"),
+    tool("candles", "minute1", "public", [
+      bithumbPublicQuery("Minute1", true),
+      numberArg("unit", "분 캔들 단위", false),
+    ]),
+    tool("candles", "day", "public", [bithumbPublicQuery("Day", true)]),
+    tool("candles", "week", "public", [bithumbPublicQuery("Week", true)]),
+    tool("candles", "month", "public", [bithumbPublicQuery("Month", true)]),
+    tool("trades", "getTradesTicks", "public", [bithumbPublicQuery("GetTradesTicks", true)]),
+    tool("tickers", "getTicker", "public", [bithumbPublicQuery("GetTicker", true)]),
+    tool("orderbook", "getOrderbook", "public", [bithumbPublicQuery("GetOrderbook", true)]),
+    tool("service", "getNotices", "public"),
+    tool("service", "getFeeInfo", "public", [stringArg("currency", "조회할 통화 코드", true)]),
+    tool("service", "getStatusWallet", "private"),
+    tool("service", "api", "private"),
+    tool("accounts", "getAccounts", "private"),
+    tool("orders", "getOrdersChance", "private", [bithumbPrivateQuery("GetOrdersChance", true)]),
+    tool("orders", "placeOrder", "private", [bithumbPrivateBody("PostOrders")]),
+    tool("orders", "placeBatchOrders", "private", [bithumbPrivateBody("PostOrdersBatch")]),
+    tool("orders", "getOrder", "private", [bithumbPrivateQuery("GetOrder")]),
+    tool("orders", "cancelOrder", "private", [bithumbPrivateQuery("DeleteOrder")]),
+    tool("orders", "cancelOrders", "private", [bithumbPrivateBody("PostOrdersCancel")]),
+    tool("orders", "getOrders", "private", [bithumbPrivateQuery("GetOrders")]),
+    tool("orders", "getTwapOrders", "private", [bithumbPrivateQuery("Gettwaporders")]),
+    tool("orders", "cancelTwapOrder", "private", [bithumbPrivateQuery("Canceltwaporder", true)]),
+    tool("orders", "createTwapOrder", "private", [bithumbPrivateQuery("Createtwaporder", true)]),
+    tool("withdrawals", "getWithdraws", "private", [bithumbPrivateQuery("GetWithdraws")]),
+    tool("withdrawals", "getWithdrawsKrw", "private", [bithumbPrivateQuery("GetWithdrawsKrw")]),
+    tool("withdrawals", "getWithdraw", "private", [bithumbPrivateQuery("GetWithdraw", true)]),
+    tool("withdrawals", "getWithdrawsChance", "private", [
+      bithumbPrivateQuery("GetWithdrawsChance", true),
+    ]),
+    tool("withdrawals", "getWithdrawsCoinAddresses", "private"),
+    tool("withdrawals", "withdrawCoin", "private", [bithumbPrivateBody("PostWithdrawsCoin")]),
+    tool("withdrawals", "withdrawKrw", "private", [bithumbPrivateBody("PostWithdrawsKrw")]),
+    tool("deposits", "getDeposits", "private", [bithumbPrivateQuery("GetDeposits")]),
+    tool("deposits", "getDepositsKrw", "private", [bithumbPrivateQuery("GetDepositsKrw")]),
+    tool("deposits", "getDeposit", "private", [bithumbPrivateQuery("GetDeposit", true)]),
+    tool("deposits", "getDepositsCoinAddresses", "private"),
+    tool("deposits", "getDepositsCoinAddress", "private", [
+      bithumbPrivateQuery("GetDepositsCoinAddress", true),
+    ]),
+    tool("deposits", "depositKrw", "private", [bithumbPrivateBody("PostDepositsKrw")]),
+    tool("deposits", "generateCoinAddress", "private", [
+      bithumbPrivateBody("PostDepositsGenerateCoinAddress"),
+    ]),
+  ]);
 
-const EXCHANGE_RUNTIMES: Record<ExchangeKey, ExchangeRuntimeDefinition> = {
+  return bithumbToolsCache;
+}
+
+function getCoinoneTools() {
+  if (coinoneToolsCache) return coinoneToolsCache;
+
+  coinoneToolsCache = resolveTools([
+    tool("market", "rangeUnit", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+    ]),
+    tool("market", "markets", "public", [stringArg("quoteCurrency", "quote currency", false)]),
+    tool("market", "market", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+    ]),
+    tool("market", "orderbook", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+      coinonePublicQuery("Orderbook"),
+    ]),
+    tool("market", "recentCompletedOrders", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+      coinonePublicQuery("RecentCompletedOrders"),
+    ]),
+    tool("market", "tickers", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      coinonePublicQuery("Tickers"),
+    ]),
+    tool("market", "ticker", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+      coinonePublicQuery("Ticker"),
+    ]),
+    tool("market", "utcTickers", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      coinonePublicQuery("UtcTickers"),
+    ]),
+    tool("market", "utcTicker", "public", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+      coinonePublicQuery("UtcTicker"),
+    ]),
+    tool("market", "currencies", "public"),
+    tool("market", "currency", "public", [stringArg("currency", "통화 코드", false)]),
+    tool("market", "chart", "public", [
+      stringArg("quoteCurrency", "quote currency", true),
+      stringArg("targetCurrency", "target currency", true),
+      coinonePublicQuery("Chart", true),
+    ]),
+    tool("market", "orderbookDeprecated", "public", [coinonePublicQuery("OrderbookDeprecated")]),
+    tool("market", "tickerDeprecated", "public", [coinonePublicQuery("Ticker1")]),
+    tool("market", "tickerUtcDeprecated", "public", [coinonePublicQuery("TickerUtcDeprecated")]),
+    tool("market", "recentCompletedOrdersDeprecated", "public", [
+      coinonePublicQuery("RecentCompleteOrdersDeprecated"),
+    ]),
+    tool("account", "findBalance", "private"),
+    tool("account", "findBalanceByCurrencies", "private", [
+      coinonePrivateBody("FindBalanceByCurrencies"),
+    ]),
+    tool("account", "findAllTradeFees", "private"),
+    tool("account", "findTradeFeeByPair", "private", [
+      stringArg("quoteCurrency", "quote currency", false),
+      stringArg("targetCurrency", "target currency", false),
+      coinonePrivateBody("FindTradeFeeByPair", false),
+    ]),
+    tool("orders", "findActiveOrders", "private", [coinonePrivateBody("FindActiveOrders", false)]),
+    tool("orders", "placeOrder", "private", [coinonePrivateBody("PlaceOrder")]),
+    tool("orders", "placeLimitOrder", "private", [coinonePrivateBody("OrderPlaceLimitOrder")]),
+    tool("orders", "cancelOrders", "private", [coinonePrivateBody("CancelOrders")]),
+    tool("orders", "cancelOrder", "private", [coinonePrivateBody("CancelOrder")]),
+    tool("orders", "orderDetail", "private", [coinonePrivateBody("OrderDetail")]),
+    tool("orders", "findAllCompletedOrders", "private", [
+      coinonePrivateBody("FindAllCompletedOrders"),
+    ]),
+    tool("orders", "findCompletedOrders", "private", [coinonePrivateBody("FindCompletedOrders")]),
+    tool("orders", "findAllOpenOrders", "private", [
+      coinonePrivateBody("FindAllOpenOrders", false),
+    ]),
+    tool("orders", "findOpenOrders", "private", [coinonePrivateBody("FindOpenOrders")]),
+    tool("orders", "findOrderInfo", "private", [coinonePrivateBody("FindOrderInfo")]),
+    tool("transactions", "krwTransactionHistory", "private", [
+      coinonePrivateBody("KrwTransactionHistory", false),
+    ]),
+    tool("transactions", "coinTransactionHistory", "private", [
+      coinonePrivateBody("CoinTransactionHistory", false),
+    ]),
+    tool("transactions", "singleCoinTransactionHistory", "private", [
+      coinonePrivateBody("SingleCoinTransactionHistory"),
+    ]),
+    tool("transactions", "coinWithdrawalLimit", "private", [
+      coinonePrivateBody("CoinWithdrawalLimit"),
+    ]),
+    tool("transactions", "coinWithdrawalAddressBook", "private", [
+      coinonePrivateBody("CoinWithdrawalAddressBook", false),
+    ]),
+    tool("transactions", "coinWithdrawal", "private", [coinonePrivateBody("CoinWithdrawal")]),
+    tool("rewards", "orderRewardPrograms", "private", [
+      coinonePrivateBody("OrderRewardPrograms", false),
+    ]),
+    tool("rewards", "orderRewardHistory", "private", [
+      coinonePrivateBody("OrderRewardHistory", false),
+    ]),
+  ]);
+
+  return coinoneToolsCache;
+}
+
+function getGopaxTools() {
+  if (gopaxToolsCache) return gopaxToolsCache;
+
+  gopaxToolsCache = resolveTools([
+    tool("market", "assets", "public"),
+    tool("market", "tradingPairs", "public"),
+    tool("market", "priceTickSize", "public", [stringArg("tradingPair", "거래 페어", true)]),
+    tool("market", "ticker", "public", [stringArg("tradingPair", "거래 페어", true)]),
+    tool("market", "orderbook", "public", [
+      stringArg("tradingPair", "거래 페어", true),
+      gopaxPublicQuery("Gettradingpairstradingpairbook"),
+    ]),
+    tool("market", "trades", "public", [
+      stringArg("tradingPair", "거래 페어", true),
+      gopaxPublicQuery("Gettradingpairstradingpairtrades"),
+    ]),
+    tool("market", "stats", "public", [stringArg("tradingPair", "거래 페어", true)]),
+    tool("market", "allStats", "public"),
+    tool("market", "candles", "public", [
+      stringArg("tradingPair", "거래 페어", true),
+      gopaxPublicQuery("Gettradingpairstradingpaircandles", true),
+    ]),
+    tool("market", "cautions", "public", [gopaxPublicQuery("Gettradingpairscautions")]),
+    tool("market", "tickers", "public"),
+    tool("market", "time", "public"),
+    tool("market", "notices", "public", [gopaxPublicQuery("Getnotices")]),
+    tool("account", "getBalances", "private"),
+    tool("account", "getBalance", "private", [stringArg("assetName", "자산 코드", true)]),
+    tool("orders", "getOrders", "private", [gopaxPrivateQuery("Getorders")]),
+    tool("orders", "placeOrder", "private", [gopaxPrivateBody("Postorders")]),
+    tool("orders", "getOrder", "private", [stringArg("orderId", "주문 ID", true)]),
+    tool("orders", "cancelOrder", "private", [stringArg("orderId", "주문 ID", true)]),
+    tool("orders", "getOrderByClientOrderId", "private", [
+      stringArg("clientOrderId", "클라이언트 주문 ID", true),
+    ]),
+    tool("orders", "cancelOrderByClientOrderId", "private", [
+      stringArg("clientOrderId", "클라이언트 주문 ID", true),
+    ]),
+    tool("trades", "getTrades", "private", [gopaxPrivateQuery("Gettrades")]),
+    tool("wallet", "getDepositWithdrawalStatus", "private", [
+      gopaxPrivateQuery("Getdepositwithdrawalstatus"),
+    ]),
+    tool("wallet", "getCryptoDepositAddresses", "private"),
+    tool("wallet", "getCryptoWithdrawalAddresses", "private"),
+    tool("wallet", "withdraw", "private", [gopaxPrivateBody("Postwithdrawals")]),
+  ]);
+
+  return gopaxToolsCache;
+}
+
+function getKorbitTools() {
+  if (korbitToolsCache) return korbitToolsCache;
+
+  korbitToolsCache = resolveTools([
+    tool("market", "tickers", "public", [korbitPublicQuery("Getv2tickers")]),
+    tool("market", "orderbook", "public", [korbitPublicQuery("Getv2orderbook", true)]),
+    tool("market", "trades", "public", [korbitPublicQuery("Getv2trades", true)]),
+    tool("market", "candles", "public", [korbitPublicQuery("Getv2candles", true)]),
+    tool("market", "currencyPairs", "public"),
+    tool("market", "tickSizePolicy", "public", [korbitPublicQuery("Getv2ticksizepolicy", true)]),
+    tool("market", "currencies", "public"),
+    tool("market", "time", "public"),
+    tool("orders", "placeOrder", "private", [bodyArg()]),
+    tool("orders", "cancelOrder", "private", [korbitPrivateQuery("Deletev2orders", true)]),
+    tool("orders", "getOrder", "private", [korbitPrivateQuery("Getv2orders", true)]),
+    tool("orders", "getOpenOrders", "private", [korbitPrivateQuery("Getv2openorders", true)]),
+    tool("orders", "getAllOrders", "private", [korbitPrivateQuery("Getv2allorders", true)]),
+    tool("orders", "getMyTrades", "private", [korbitPrivateQuery("Getv2mytrades", true)]),
+    tool("assets", "getBalance", "private", [korbitPrivateQuery("Getv2balance")]),
+    tool("cryptoDeposits", "getDepositAddresses", "private"),
+    tool("cryptoDeposits", "createDepositAddress", "private", [bodyArg()]),
+    tool("cryptoDeposits", "getDepositAddress", "private", [
+      korbitPrivateQuery("Getv2coindepositaddress", true),
+    ]),
+    tool("cryptoDeposits", "getRecentDeposits", "private", [
+      korbitPrivateQuery("Getv2coinrecentdeposits", true),
+    ]),
+    tool("cryptoDeposits", "getDeposit", "private", [korbitPrivateQuery("Getv2coindeposit", true)]),
+    tool("cryptoWithdrawals", "getWithdrawableAddresses", "private"),
+    tool("cryptoWithdrawals", "getWithdrawableAmount", "private", [
+      korbitPrivateQuery("Getv2coinwithdrawableamount"),
+    ]),
+    tool("cryptoWithdrawals", "withdraw", "private", [bodyArg()]),
+    tool("cryptoWithdrawals", "cancelWithdrawal", "private", [
+      korbitPrivateQuery("Deletev2coinwithdrawal", true),
+    ]),
+    tool("cryptoWithdrawals", "getRecentWithdrawals", "private", [
+      korbitPrivateQuery("Getv2coinrecentwithdrawals", true),
+    ]),
+    tool("cryptoWithdrawals", "getWithdrawal", "private", [
+      korbitPrivateQuery("Getv2coinwithdrawal", true),
+    ]),
+    tool("krw", "sendDepositPush", "private", [bodyArg()]),
+    tool("krw", "sendWithdrawalPush", "private", [bodyArg()]),
+    tool("krw", "getRecentDeposits", "private", [
+      korbitPrivateQuery("Getv2krwrecentdeposits", true),
+    ]),
+    tool("krw", "getRecentWithdrawals", "private", [
+      korbitPrivateQuery("Getv2krwrecentwithdrawals", true),
+    ]),
+    tool("service", "getTradingFeePolicy", "private", [
+      korbitPrivateQuery("Getv2tradingfeepolicy"),
+    ]),
+    tool("service", "getCurrentKeyInfo", "private"),
+  ]);
+
+  return korbitToolsCache;
+}
+
+const EXCHANGE_RUNTIME_BASE: Record<ExchangeKey, Omit<ExchangeRuntimeDefinition, "tools">> = {
   upbit: {
     key: "upbit",
     displayName: "Upbit",
@@ -419,7 +734,6 @@ const EXCHANGE_RUNTIMES: Record<ExchangeKey, ExchangeRuntimeDefinition> = {
     },
     getMissingCredentialEnv: () =>
       resolveCredentialState(["EXHUB_UPBIT_ACCESS_KEY", "EXHUB_UPBIT_SECRET_KEY"]).missing,
-    tools: UPBIT_TOOLS,
   },
   bithumb: {
     key: "bithumb",
@@ -444,7 +758,6 @@ const EXCHANGE_RUNTIMES: Record<ExchangeKey, ExchangeRuntimeDefinition> = {
     },
     getMissingCredentialEnv: () =>
       resolveCredentialState(["EXHUB_BITHUMB_API_KEY", "EXHUB_BITHUMB_SECRET_KEY"]).missing,
-    tools: BITHUMB_TOOLS,
   },
   coinone: {
     key: "coinone",
@@ -472,7 +785,6 @@ const EXCHANGE_RUNTIMES: Record<ExchangeKey, ExchangeRuntimeDefinition> = {
     },
     getMissingCredentialEnv: () =>
       resolveCredentialState(["EXHUB_COINONE_ACCESS_TOKEN", "EXHUB_COINONE_SECRET_KEY"]).missing,
-    tools: COINONE_TOOLS,
   },
   gopax: {
     key: "gopax",
@@ -499,7 +811,6 @@ const EXCHANGE_RUNTIMES: Record<ExchangeKey, ExchangeRuntimeDefinition> = {
     },
     getMissingCredentialEnv: () =>
       resolveCredentialState(["EXHUB_GOPAX_API_KEY", "EXHUB_GOPAX_SECRET_KEY"]).missing,
-    tools: GOPAX_TOOLS,
   },
   korbit: {
     key: "korbit",
@@ -526,14 +837,47 @@ const EXCHANGE_RUNTIMES: Record<ExchangeKey, ExchangeRuntimeDefinition> = {
     },
     getMissingCredentialEnv: () =>
       resolveCredentialState(["EXHUB_KORBIT_API_KEY", "EXHUB_KORBIT_SECRET_KEY"]).missing,
-    tools: KORBIT_TOOLS,
   },
 };
 
 export function listSupportedExchanges(): readonly ExchangeKey[] {
-  return Object.keys(EXCHANGE_RUNTIMES) as ExchangeKey[];
+  return Object.keys(EXCHANGE_RUNTIME_BASE) as ExchangeKey[];
 }
 
-export function getExchangeRuntime(exchange: ExchangeKey): ExchangeRuntimeDefinition {
-  return EXCHANGE_RUNTIMES[exchange];
+export async function getExchangeRuntime(
+  exchange: ExchangeKey,
+): Promise<ExchangeRuntimeDefinition> {
+  const cached = runtimeCache.get(exchange);
+  if (cached) return cached;
+
+  let tools: readonly ResolvedToolDefinition[];
+  switch (exchange) {
+    case "upbit":
+      await ensureUpbitZodLoaded();
+      tools = getUpbitTools();
+      break;
+    case "bithumb":
+      await ensureBithumbZodLoaded();
+      tools = getBithumbTools();
+      break;
+    case "coinone":
+      await ensureCoinoneZodLoaded();
+      tools = getCoinoneTools();
+      break;
+    case "gopax":
+      await ensureGopaxZodLoaded();
+      tools = getGopaxTools();
+      break;
+    case "korbit":
+      await ensureKorbitZodLoaded();
+      tools = getKorbitTools();
+      break;
+  }
+
+  const runtime: ExchangeRuntimeDefinition = {
+    ...EXCHANGE_RUNTIME_BASE[exchange],
+    tools,
+  };
+  runtimeCache.set(exchange, runtime);
+  return runtime;
 }

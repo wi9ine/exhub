@@ -14,7 +14,7 @@ async function main() {
     process.exit(1);
   }
 
-  const server = createExchangeServer(parsed.exchange);
+  const server = await createExchangeServer(parsed.exchange);
   const transport = new StdioServerTransport();
 
   let isClosing = false;

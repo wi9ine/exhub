@@ -3,11 +3,10 @@ import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getExchangeRuntime, listSupportedExchanges } from "../src/runtime";
+import { buildOrderedArguments } from "../src/server";
 
 const upbitListTickersMock = vi.fn(async () => ({ market: "KRW-BTC", price: "100" }));
 const upbitGetBalanceMock = vi.fn(async () => [{ currency: "BTC", balance: "1.0" }]);
-const upbitListCandlesMinutesMock = vi.fn(async () => [{ candle: "data" }]);
-
 vi.mock("@exhub/upbit", () => ({
   createUpbitClient: () => ({
     tradingPairs: {
@@ -15,7 +14,7 @@ vi.mock("@exhub/upbit", () => ({
     },
     candles: {
       listCandlesSeconds: vi.fn(),
-      listCandlesMinutes: upbitListCandlesMinutesMock,
+      listCandlesMinutes: vi.fn(),
       listCandlesDays: vi.fn(),
       listCandlesWeeks: vi.fn(),
       listCandlesMonths: vi.fn(),
@@ -89,7 +88,7 @@ describe("exchange server", () => {
 
   it("선택한 거래소 도구만 노출한다", async () => {
     const { createExchangeServer } = await import("../src/server");
-    const server = createExchangeServer("upbit");
+    const server = await createExchangeServer("upbit");
     const client = new Client({ name: "test-client", version: "1.0.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
@@ -104,7 +103,7 @@ describe("exchange server", () => {
 
   it("private 도구는 필수 환경 변수가 없으면 명확한 오류를 반환한다", async () => {
     const { createExchangeServer } = await import("../src/server");
-    const server = createExchangeServer("upbit");
+    const server = await createExchangeServer("upbit");
     const client = new Client({ name: "test-client", version: "1.0.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
@@ -129,9 +128,28 @@ describe("exchange server", () => {
     expect(upbitGetBalanceMock).not.toHaveBeenCalled();
   });
 
+  it("no-arg 도구는 arguments 없이도 호출할 수 있다", async () => {
+    process.env.EXHUB_UPBIT_ACCESS_KEY = "test-access-key";
+    process.env.EXHUB_UPBIT_SECRET_KEY = "test-secret-key";
+
+    const { createExchangeServer } = await import("../src/server");
+    const server = await createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const result = await client.callTool({
+      name: "getBalance",
+    });
+
+    expect(result.isError).toBeFalsy();
+    expect(upbitGetBalanceMock).toHaveBeenCalledWith();
+  });
+
   it("public 도구 호출이 선택한 거래소 클라이언트 메서드로 라우팅된다", async () => {
     const { createExchangeServer } = await import("../src/server");
-    const server = createExchangeServer("upbit");
+    const server = await createExchangeServer("upbit");
     const client = new Client({ name: "test-client", version: "1.0.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
@@ -156,29 +174,59 @@ describe("exchange server", () => {
     });
   });
 
-  it("optional 인자를 생략하면 trailing undefined 없이 호출된다", async () => {
+  it("generated-zod로 params 내부 필드도 검증한다", async () => {
     const { createExchangeServer } = await import("../src/server");
-    const server = createExchangeServer("upbit");
+    const server = await createExchangeServer("upbit");
     const client = new Client({ name: "test-client", version: "1.0.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
     await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
 
-    // listCandlesMinutes는 args: [unit(required), params(required)] 이지만
-    // unit만 전달하고 params를 생략
-    await client.callTool({
-      name: "listCandlesMinutes",
-      arguments: { unit: 1 },
+    const result = await client.callTool({
+      name: "listTickers",
+      arguments: {
+        params: {},
+      },
     });
+    const typedResult = result as {
+      content?: Array<{ type: string; text?: string }>;
+      isError?: boolean;
+    };
+    const firstContent = typedResult.content?.[0];
 
-    // trailing undefined가 제거되어 인자 1개만 전달되어야 함
-    expect(upbitListCandlesMinutesMock).toHaveBeenCalledWith(1);
+    expect(typedResult.isError).toBe(true);
+    expect(upbitListTickersMock).not.toHaveBeenCalled();
+    if (firstContent?.type === "text") {
+      expect(firstContent.text).toContain("markets");
+    }
+  });
+
+  it("optional trailing undefined 인자를 제거한다", () => {
+    const args = buildOrderedArguments(
+      {
+        currency: "BTC",
+      },
+      [
+        {
+          name: "currency",
+          required: true,
+          schema: { type: "string" },
+        },
+        {
+          name: "unit",
+          required: false,
+          schema: { type: "number" },
+        },
+      ],
+    );
+
+    expect(args).toEqual(["BTC"]);
   });
 
   it("listTools 도구 수가 런타임 정의와 일치한다", async () => {
     const { createExchangeServer } = await import("../src/server");
-    const runtime = getExchangeRuntime("upbit");
-    const server = createExchangeServer("upbit");
+    const runtime = await getExchangeRuntime("upbit");
+    const server = await createExchangeServer("upbit");
     const client = new Client({ name: "test-client", version: "1.0.0" });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
 
@@ -193,8 +241,8 @@ describe("exchange server", () => {
 describe("거래소별 도구명 유일성", () => {
   it.each(
     listSupportedExchanges().map((key) => [key]),
-  )("%s 거래소의 도구명이 모두 고유하다", (exchange) => {
-    const runtime = getExchangeRuntime(exchange);
+  )("%s 거래소의 도구명이 모두 고유하다", async (exchange) => {
+    const runtime = await getExchangeRuntime(exchange);
     const names = runtime.tools.map((tool) => tool.name);
     const unique = new Set(names);
 

@@ -27,7 +27,8 @@
     "@exhub/gopax": "workspace:*",
     "@exhub/korbit": "workspace:*",
     "@exhub/upbit": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.27.1"
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@modelcontextprotocol/inspector": "^0.21.0"

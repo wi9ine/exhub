@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { resolveTools } from "../src/runtime";
+import { requireNamedValidator, resolveTools } from "../src/runtime";
 import type { ToolMetadata } from "../src/types";
 
 function tool(
@@ -33,5 +33,11 @@ describe("resolveTools", () => {
 
   it("빈 배열을 전달하면 빈 결과를 반환한다", () => {
     expect(resolveTools([])).toEqual([]);
+  });
+
+  it("연결된 validator 이름이 잘못되면 즉시 에러를 throw한다", () => {
+    expect(() => requireNamedValidator({}, "MissingValidator")).toThrow(
+      "generated-zod validator를 찾지 못했습니다",
+    );
   });
 });

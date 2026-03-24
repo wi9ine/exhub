@@ -1,19 +1,9 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import {
-  CallToolRequestSchema,
-  type CallToolResult,
-  ListToolsRequestSchema,
-  type ServerCapabilities,
-} from "@modelcontextprotocol/sdk/types.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { CallToolResult, ServerCapabilities } from "@modelcontextprotocol/sdk/types.js";
 
 import packageJson from "../package.json";
 import { getExchangeRuntime } from "./runtime";
-import type {
-  ExchangeKey,
-  JsonSchema,
-  ResolvedToolDefinition,
-  ToolArgumentDefinition,
-} from "./types";
+import type { ExchangeKey, ResolvedToolDefinition, ToolArgumentDefinition } from "./types";
 
 const SERVER_CAPABILITIES: ServerCapabilities = {
   tools: {
@@ -21,14 +11,14 @@ const SERVER_CAPABILITIES: ServerCapabilities = {
   },
 };
 
-export function createExchangeServer(exchange: ExchangeKey): Server {
-  const runtime = getExchangeRuntime(exchange);
+export async function createExchangeServer(exchange: ExchangeKey): Promise<McpServer> {
+  const runtime = await getExchangeRuntime(exchange);
   const client = runtime.createClient();
   const missingCredentialEnv = runtime.getMissingCredentialEnv();
 
   validateToolPaths(client, runtime.tools, runtime.displayName);
 
-  const server = new Server(
+  const server = new McpServer(
     {
       name: `exhub-mcp-${exchange}`,
       version: packageJson.version,
@@ -39,66 +29,73 @@ export function createExchangeServer(exchange: ExchangeKey): Server {
     },
   );
 
-  server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: runtime.tools.map((tool) => ({
-      name: tool.name,
-      description: tool.description ?? createDefaultToolDescription(runtime.displayName, tool),
-      inputSchema: tool.inputSchema,
-    })),
-  }));
+  for (const tool of runtime.tools) {
+    server.registerTool(
+      tool.name,
+      {
+        description: tool.description ?? createDefaultToolDescription(runtime.displayName, tool),
+        ...(tool.inputZodSchema ? { inputSchema: tool.inputZodSchema } : {}),
+      },
+      async (input): Promise<CallToolResult> => {
+        if (tool.access === "private") {
+          if (missingCredentialEnv.length > 0) {
+            return createToolError(
+              `${runtime.displayName} private API를 사용하려면 다음 환경 변수가 필요합니다: ${missingCredentialEnv.join(", ")}`,
+            );
+          }
+        }
 
-  server.setRequestHandler(CallToolRequestSchema, async (request): Promise<CallToolResult> => {
-    const tool = runtime.tools.find((candidate) => candidate.name === request.params.name);
-    if (!tool) {
-      return createToolError(`알 수 없는 도구입니다: ${request.params.name}`);
-    }
+        try {
+          const category = client[tool.category];
+          const method = category?.[tool.method];
+          if (typeof method !== "function") {
+            return createToolError(
+              `클라이언트 메서드를 찾지 못했습니다: ${tool.category}.${tool.method}`,
+            );
+          }
 
-    if (tool.access === "private") {
-      if (missingCredentialEnv.length > 0) {
-        return createToolError(
-          `${runtime.displayName} private API를 사용하려면 다음 환경 변수가 필요합니다: ${missingCredentialEnv.join(", ")}`,
-        );
-      }
-    }
+          const orderedArguments = buildOrderedArguments(
+            input as Record<string, unknown>,
+            tool.args,
+          );
 
-    try {
-      const category = client[tool.category];
-      const method = category?.[tool.method];
-      if (typeof method !== "function") {
-        return createToolError(
-          `클라이언트 메서드를 찾지 못했습니다: ${tool.category}.${tool.method}`,
-        );
-      }
+          const result = await method(...orderedArguments);
+          const structuredContent =
+            result && typeof result === "object" && !Array.isArray(result)
+              ? (result as Record<string, unknown>)
+              : undefined;
 
-      const input = toInputRecord(request.params.arguments);
-      const orderedArguments = tool.args.map((argument) => input[argument.name]);
-
-      while (orderedArguments.length > 0 && orderedArguments.at(-1) === undefined) {
-        orderedArguments.pop();
-      }
-
-      const result = await method(...orderedArguments);
-      const structuredContent =
-        result && typeof result === "object" && !Array.isArray(result)
-          ? (result as Record<string, unknown>)
-          : undefined;
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: JSON.stringify(result, null, 2),
-          },
-        ],
-        ...(structuredContent ? { structuredContent } : {}),
-      };
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : String(error);
-      return createToolError(message);
-    }
-  });
+          return {
+            content: [
+              {
+                type: "text",
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+            ...(structuredContent ? { structuredContent } : {}),
+          };
+        } catch (error: unknown) {
+          const message = error instanceof Error ? error.message : String(error);
+          return createToolError(message);
+        }
+      },
+    );
+  }
 
   return server;
+}
+
+export function buildOrderedArguments(
+  input: Record<string, unknown>,
+  args: readonly ToolArgumentDefinition[],
+) {
+  const orderedArguments = args.map((argument) => input[argument.name]);
+
+  while (orderedArguments.length > 0 && orderedArguments.at(-1) === undefined) {
+    orderedArguments.pop();
+  }
+
+  return orderedArguments;
 }
 
 function validateToolPaths(
@@ -124,14 +121,6 @@ function createDefaultToolDescription(
   return `${exchangeName} ${accessLabel} API 메서드 ${tool.category}.${tool.method} 호출`;
 }
 
-function toInputRecord(input: unknown): Record<string, unknown> {
-  if (!input || typeof input !== "object" || Array.isArray(input)) {
-    return {};
-  }
-
-  return input as Record<string, unknown>;
-}
-
 function createToolError(message: string): CallToolResult {
   return {
     isError: true,
@@ -141,21 +130,5 @@ function createToolError(message: string): CallToolResult {
         text: message,
       },
     ],
-  };
-}
-
-export function buildToolInputSchema(properties: readonly ToolArgumentDefinition[]): JsonSchema {
-  const mappedProperties = Object.fromEntries(
-    properties.map((property) => [property.name, property.schema]),
-  );
-  const required = properties
-    .filter((property) => property.required)
-    .map((property) => property.name);
-
-  return {
-    type: "object",
-    properties: mappedProperties,
-    additionalProperties: false,
-    ...(required.length > 0 ? { required } : {}),
   };
 }

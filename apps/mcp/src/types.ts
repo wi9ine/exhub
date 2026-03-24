@@ -1,19 +1,17 @@
+import type { ZodTypeAny } from "zod";
+
 export type ExchangeKey = "upbit" | "bithumb" | "coinone" | "gopax" | "korbit";
 
 export interface JsonSchema {
   type?: "object" | "string" | "number" | "integer" | "boolean" | "array";
   description?: string;
-  properties?: Record<string, JsonSchema>;
-  items?: JsonSchema;
-  required?: string[];
-  additionalProperties?: boolean | JsonSchema;
-  enum?: readonly string[];
 }
 
 export interface ToolArgumentDefinition {
   name: string;
   required?: boolean;
   schema: JsonSchema;
+  validator?: ZodTypeAny;
 }
 
 export interface ToolMetadata {
@@ -26,7 +24,7 @@ export interface ToolMetadata {
 
 export interface ResolvedToolDefinition extends ToolMetadata {
   name: string;
-  inputSchema: JsonSchema;
+  inputZodSchema?: ZodTypeAny;
 }
 
 export interface ExchangeRuntimeDefinition {
