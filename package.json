@@ -4,7 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@10.28.2",
   "scripts": {
-    "generate": "pnpm exec orval --config ./scripts/orval.config.ts",
+    "generate": "pnpm exec orval --config ./scripts/orval.config.ts && node ./scripts/generate-mcp-tool-summaries.mjs",
     "build": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' build",
     "lint": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' lint",
     "format": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' format",

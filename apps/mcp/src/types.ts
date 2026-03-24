@@ -19,6 +19,7 @@ export interface ToolMetadata {
   method: string;
   access: "public" | "private";
   args: readonly ToolArgumentDefinition[];
+  specOperationId?: string;
   description?: string;
 }
 

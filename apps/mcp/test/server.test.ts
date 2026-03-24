@@ -101,6 +101,21 @@ describe("exchange server", () => {
     expect(toolNames).not.toContain("getMarketAll");
   });
 
+  it("tool description에 스펙 summary를 사용한다", async () => {
+    const { createExchangeServer } = await import("../src/server");
+    const server = await createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const result = await client.listTools();
+    const listTickersTool = result.tools.find((tool) => tool.name === "listTickers");
+
+    expect(listTickersTool?.description).toBe("페어 단위 현재가 조회");
+    expect(listTickersTool?.description).not.toContain("호출");
+  });
+
   it("private 도구는 필수 환경 변수가 없으면 명확한 오류를 반환한다", async () => {
     const { createExchangeServer } = await import("../src/server");
     const server = await createExchangeServer("upbit");
