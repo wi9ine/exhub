@@ -5,12 +5,12 @@
   "packageManager": "pnpm@10.28.2",
   "scripts": {
     "generate": "pnpm exec orval --config ./scripts/orval.config.ts",
-    "build": "pnpm -r --filter './core' --filter './packages/*' build",
-    "lint": "pnpm -r --filter './core' --filter './packages/*' lint",
-    "format": "pnpm -r --filter './core' --filter './packages/*' format",
-    "format:check": "pnpm -r --filter './core' --filter './packages/*' format:check",
-    "typecheck": "pnpm -r --filter './core' --filter './packages/*' typecheck",
-    "test": "pnpm -r --filter './core' --filter './packages/*' test",
+    "build": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' build",
+    "lint": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' lint",
+    "format": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' format",
+    "format:check": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' format:check",
+    "typecheck": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' typecheck",
+    "test": "pnpm -r --filter './core' --filter './packages/*' --filter './apps/*' test",
     "test:integration:private": "pnpm -r --filter './packages/*' test:integration:private"
   },
   "devDependencies": {

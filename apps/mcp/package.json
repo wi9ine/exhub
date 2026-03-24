@@ -1,0 +1,35 @@
+{
+  "name": "@exhub/mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "bin": {
+    "exhub-mcp": "./dist/index.mjs"
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --format esm --dts --out-dir dist",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "format:check": "biome format --check .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "inspect:upbit": "mcp-inspector node dist/index.mjs --exchange upbit",
+    "inspect:bithumb": "mcp-inspector node dist/index.mjs --exchange bithumb",
+    "inspect:coinone": "mcp-inspector node dist/index.mjs --exchange coinone",
+    "inspect:gopax": "mcp-inspector node dist/index.mjs --exchange gopax",
+    "inspect:korbit": "mcp-inspector node dist/index.mjs --exchange korbit"
+  },
+  "dependencies": {
+    "@exhub/bithumb": "workspace:*",
+    "@exhub/coinone": "workspace:*",
+    "@exhub/gopax": "workspace:*",
+    "@exhub/korbit": "workspace:*",
+    "@exhub/upbit": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.27.1"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.21.0"
+  }
+}

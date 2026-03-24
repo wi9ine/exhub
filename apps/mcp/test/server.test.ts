@@ -1,0 +1,203 @@
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { getExchangeRuntime, listSupportedExchanges } from "../src/runtime";
+
+const upbitListTickersMock = vi.fn(async () => ({ market: "KRW-BTC", price: "100" }));
+const upbitGetBalanceMock = vi.fn(async () => [{ currency: "BTC", balance: "1.0" }]);
+const upbitListCandlesMinutesMock = vi.fn(async () => [{ candle: "data" }]);
+
+vi.mock("@exhub/upbit", () => ({
+  createUpbitClient: () => ({
+    tradingPairs: {
+      listTradingPairs: vi.fn(),
+    },
+    candles: {
+      listCandlesSeconds: vi.fn(),
+      listCandlesMinutes: upbitListCandlesMinutesMock,
+      listCandlesDays: vi.fn(),
+      listCandlesWeeks: vi.fn(),
+      listCandlesMonths: vi.fn(),
+      listCandlesYears: vi.fn(),
+    },
+    trades: {
+      recentTradesHistory: vi.fn(),
+    },
+    tickers: {
+      listTickers: upbitListTickersMock,
+      listQuoteTickers: vi.fn(),
+    },
+    orderbook: {
+      listOrderbooks: vi.fn(),
+      listOrderbookInstruments: vi.fn(),
+      listOrderbookLevels: vi.fn(),
+    },
+    assets: {
+      getBalance: upbitGetBalanceMock,
+    },
+    orders: {
+      availableOrderInformation: vi.fn(),
+      newOrder: vi.fn(),
+      testOrder: vi.fn(),
+      getOrder: vi.fn(),
+      cancelOrder: vi.fn(),
+      listOrdersByIds: vi.fn(),
+      cancelOrdersByIds: vi.fn(),
+      listOpenOrders: vi.fn(),
+      batchCancelOrders: vi.fn(),
+      listClosedOrders: vi.fn(),
+      cancelAndNewOrder: vi.fn(),
+    },
+    withdrawals: {
+      availableWithdrawalInformation: vi.fn(),
+      listWithdrawalAddresses: vi.fn(),
+      withdraw: vi.fn(),
+      cancelWithdrawal: vi.fn(),
+      withdrawKrw: vi.fn(),
+      getWithdrawal: vi.fn(),
+      listWithdrawals: vi.fn(),
+    },
+    deposits: {
+      availableDepositInformation: vi.fn(),
+      createDepositAddress: vi.fn(),
+      getDepositAddress: vi.fn(),
+      listDepositAddresses: vi.fn(),
+      depositKrw: vi.fn(),
+      getDeposit: vi.fn(),
+      listDeposits: vi.fn(),
+    },
+    travelRule: {
+      listTravelruleVasps: vi.fn(),
+      verifyTravelruleByUuid: vi.fn(),
+      verifyTravelruleByTxid: vi.fn(),
+    },
+    service: {
+      getServiceStatus: vi.fn(),
+      listApiKeys: vi.fn(),
+    },
+  }),
+}));
+
+describe("exchange server", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    vi.clearAllMocks();
+    delete process.env.EXHUB_UPBIT_ACCESS_KEY;
+    delete process.env.EXHUB_UPBIT_SECRET_KEY;
+  });
+
+  it("선택한 거래소 도구만 노출한다", async () => {
+    const { createExchangeServer } = await import("../src/server");
+    const server = createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const result = await client.listTools();
+    const toolNames = result.tools.map((tool) => tool.name);
+
+    expect(toolNames).toContain("listTickers");
+    expect(toolNames).not.toContain("getMarketAll");
+  });
+
+  it("private 도구는 필수 환경 변수가 없으면 명확한 오류를 반환한다", async () => {
+    const { createExchangeServer } = await import("../src/server");
+    const server = createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const result = await client.callTool({
+      name: "getBalance",
+      arguments: {},
+    });
+    const typedResult = result as {
+      content?: Array<{ type: string; text?: string }>;
+      isError?: boolean;
+    };
+    const firstContent = typedResult.content?.[0];
+
+    expect(typedResult.isError).toBe(true);
+    expect(firstContent?.type).toBe("text");
+    if (firstContent?.type === "text") {
+      expect(firstContent.text).toContain("EXHUB_UPBIT_ACCESS_KEY");
+      expect(firstContent.text).toContain("EXHUB_UPBIT_SECRET_KEY");
+    }
+    expect(upbitGetBalanceMock).not.toHaveBeenCalled();
+  });
+
+  it("public 도구 호출이 선택한 거래소 클라이언트 메서드로 라우팅된다", async () => {
+    const { createExchangeServer } = await import("../src/server");
+    const server = createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const result = await client.callTool({
+      name: "listTickers",
+      arguments: {
+        params: {
+          markets: "KRW-BTC",
+        },
+      },
+    });
+
+    expect(result.isError).toBeFalsy();
+    expect(upbitListTickersMock).toHaveBeenCalledWith({
+      markets: "KRW-BTC",
+    });
+    expect(result.structuredContent).toEqual({
+      market: "KRW-BTC",
+      price: "100",
+    });
+  });
+
+  it("optional 인자를 생략하면 trailing undefined 없이 호출된다", async () => {
+    const { createExchangeServer } = await import("../src/server");
+    const server = createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    // listCandlesMinutes는 args: [unit(required), params(required)] 이지만
+    // unit만 전달하고 params를 생략
+    await client.callTool({
+      name: "listCandlesMinutes",
+      arguments: { unit: 1 },
+    });
+
+    // trailing undefined가 제거되어 인자 1개만 전달되어야 함
+    expect(upbitListCandlesMinutesMock).toHaveBeenCalledWith(1);
+  });
+
+  it("listTools 도구 수가 런타임 정의와 일치한다", async () => {
+    const { createExchangeServer } = await import("../src/server");
+    const runtime = getExchangeRuntime("upbit");
+    const server = createExchangeServer("upbit");
+    const client = new Client({ name: "test-client", version: "1.0.0" });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    const result = await client.listTools();
+
+    expect(result.tools).toHaveLength(runtime.tools.length);
+  });
+});
+
+describe("거래소별 도구명 유일성", () => {
+  it.each(
+    listSupportedExchanges().map((key) => [key]),
+  )("%s 거래소의 도구명이 모두 고유하다", (exchange) => {
+    const runtime = getExchangeRuntime(exchange);
+    const names = runtime.tools.map((tool) => tool.name);
+    const unique = new Set(names);
+
+    expect(unique.size).toBe(names.length);
+  });
+});
