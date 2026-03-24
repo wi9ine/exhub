@@ -12,7 +12,7 @@
     "build": "tsdown src/index.ts --format esm --dts --out-dir dist",
     "lint": "biome check .",
     "format": "biome format --write .",
-    "format:check": "biome format --check .",
+    "format:check": "biome format .",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "inspect:upbit": "mcp-inspector node dist/index.mjs --exchange upbit",
