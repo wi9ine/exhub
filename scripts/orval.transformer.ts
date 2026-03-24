@@ -43,6 +43,17 @@ export default defineTransformer((inputSchema) => {
       if (Array.isArray(parameters)) {
         operation.parameters = parameters.map((parameter) => {
           const next = { ...parameter };
+          const schema =
+            "schema" in next && next.schema && typeof next.schema === "object" ? next.schema : undefined;
+          if (
+            (!("description" in next) || !next.description) &&
+            schema &&
+            "description" in schema &&
+            typeof schema.description === "string" &&
+            schema.description.trim()
+          ) {
+            next.description = schema.description;
+          }
           delete next.allowReserved;
           return next;
         });

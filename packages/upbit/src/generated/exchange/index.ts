@@ -75,6 +75,7 @@ import type {
 
 
   /**
+ * 계정이 보유하고 있는 자산 목록과 잔고를 조회합니다.
  * @summary 계정 잔고 조회
  */
 export const listBalance = (
@@ -86,6 +87,7 @@ export const listBalance = (
   }
 
 /**
+ * 지정한 페어의 주문 가능 정보를 조회합니다.
  * @summary 페어별 주문 가능 정보 조회
  */
 export const getOrderChance = (
@@ -99,6 +101,7 @@ export const getOrderChance = (
   }
 
 /**
+ * 특정 페어를 매수/매도하기 위한 주문을 생성합니다.
  * @summary 주문 생성
  */
 export const createOrder = (
@@ -111,6 +114,7 @@ export const createOrder = (
   }
 
 /**
+ * 실제 주문을 생성하지 않고 주문 요청 형식과 주문 가능 여부를 검증합니다.
  * @summary 주문 생성 테스트
  */
 export const createTestOrder = (
@@ -123,6 +127,7 @@ export const createTestOrder = (
   }
 
 /**
+ * 주문의 UUID 또는 Identifier로 단일 주문 정보를 조회합니다.
  * @summary 개별 주문 조회
  */
 export const getOrder = (
@@ -136,6 +141,7 @@ export const getOrder = (
   }
 
 /**
+ * UUID 또는 Identifier로 주문을 취소합니다.
  * @summary 개별 주문 취소 접수
  */
 export const cancelOrder = (
@@ -149,6 +155,7 @@ export const cancelOrder = (
   }
 
 /**
+ * UUID 또는 Identifier 목록으로 주문을 조회합니다.
  * @summary id로 주문 목록 조회
  */
 export const listOrdersByIds = (
@@ -162,6 +169,7 @@ export const listOrdersByIds = (
   }
 
 /**
+ * UUID 또는 Identifier 목록으로 취소 대상 주문을 지정 취소합니다. 한 번의 요청으로 최대 20개의 주문을 취소할 수 있습니다.
  * @summary id로 주문 목록 취소 접수
  */
 export const cancelOrdersByIds = (
@@ -175,6 +183,7 @@ export const cancelOrdersByIds = (
   }
 
 /**
+ * 체결 대기 중인 주문(Open Orders) 목록을 조회합니다.
  * @summary 체결 대기 주문 목록 조회
  */
 export const listOpenOrders = (
@@ -188,6 +197,7 @@ export const listOpenOrders = (
   }
 
 /**
+ * 조건을 지정하여 해당 조건을 만족하는 최대 300개의 주문을 일괄 취소합니다.
  * @summary 주문 일괄 취소 접수
  */
 export const cancelOpenOrders = (
@@ -201,6 +211,7 @@ export const cancelOpenOrders = (
   }
 
 /**
+ * 종료 주문(Closed Order) 목록을 조회합니다.
  * @summary 종료 주문 목록 조회
  */
 export const listClosedOrders = (
@@ -214,6 +225,7 @@ export const listClosedOrders = (
   }
 
 /**
+ * 한 번의 요청으로 기존 주문을 취소하고 신규 주문을 생성합니다.
  * @summary 취소 후 재주문
  */
 export const cancelAndCreateOrder = (
@@ -226,6 +238,7 @@ export const cancelAndCreateOrder = (
   }
 
 /**
+ * 지정한 통화에 대한 출금 가능 정보를 조회합니다. 해당 통화의 출금 정책과 사용자 잔고를 확인할 수 있습니다.
  * @summary 출금 가능 정보 조회
  */
 export const getWithdrawChance = (
@@ -239,6 +252,7 @@ export const getWithdrawChance = (
   }
 
 /**
+ * 계정에 등록된 출금 허용 주소 목록을 조회합니다.
  * @summary 출금 허용 주소 목록 조회
  */
 export const listWithdrawalAddresses = (
@@ -250,6 +264,7 @@ export const listWithdrawalAddresses = (
   }
 
 /**
+ * 디지털 자산 출금을 요청합니다.
  * @summary 디지털 자산 출금 요청
  */
 export const createWithdrawal = (
@@ -262,6 +277,7 @@ export const createWithdrawal = (
   }
 
 /**
+ * 출금 UUID로 요청이 완료된 디지털 자산 출금 건의 취소를 요청합니다.
  * @summary 디지털 자산 출금 취소 요청
  */
 export const cancelWithdrawal = (
@@ -275,6 +291,7 @@ export const cancelWithdrawal = (
   }
 
 /**
+ * 원화(KRW) 출금을 요청합니다.
  * @summary 원화 출금 요청
  */
 export const createWithdrawKrw = (
@@ -287,6 +304,7 @@ export const createWithdrawKrw = (
   }
 
 /**
+ * 최신 단일 출금 정보를 조회합니다. 특정 출금 정보를 조회하고자 하는 경우 출금의 UUID 또는 트랜잭션 ID(TXID)로 지정할 수 있습니다.
  * @summary 개별 출금 조회
  */
 export const getWithdrawal = (
@@ -300,6 +318,7 @@ export const getWithdrawal = (
   }
 
 /**
+ * 최신 출금 목록을 조회합니다.
  * @summary 출금 목록 조회
  */
 export const listWithdrawals = (
@@ -313,6 +332,7 @@ export const listWithdrawals = (
   }
 
 /**
+ * 지정한 통화에 대한 입금 가능 정보를 조회합니다.
  * @summary 디지털 자산 입금 가능 정보 조회
  */
 export const getDepositChance = (
@@ -326,6 +346,7 @@ export const getDepositChance = (
   }
 
 /**
+ * 개인 지갑 또는 타 거래소 자산을 업비트로 입금 하기 위한 입금 주소 생성을 요청합니다.
  * @summary 입금 주소 생성 요청
  */
 export const createDepositAddress = (
@@ -338,6 +359,7 @@ export const createDepositAddress = (
   }
 
 /**
+ * 지정한 통화의 입금 주소 정보를 조회힙니다.
  * @summary 개별 입금 주소 조회
  */
 export const getDepositAddress = (
@@ -351,6 +373,7 @@ export const getDepositAddress = (
   }
 
 /**
+ * 계정의 모든 입금 주소 목록을 조회합니다. 정상적으로 생성된 모든 입금 주소 목록이 반환됩니다.
  * @summary 입금 주소 목록 조회
  */
 export const listDepositAddresses = (
@@ -362,6 +385,7 @@ export const listDepositAddresses = (
   }
 
 /**
+ * 입출금 계좌로부터 원화를 지정한 금액만큼 입금합니다.
  * @summary 원화 입금
  */
 export const createDepositKrw = (
@@ -374,6 +398,7 @@ export const createDepositKrw = (
   }
 
 /**
+ * 최신 입금 이력을 조회합니다. 특정 입금 정보를 조회하고자 하는 경우 입금의 UUID 또는 트랜잭션 ID(TXID), 통화 코드로 지정할 수 있습니다.
  * @summary 개별 입금 조회
  */
 export const getDeposit = (
@@ -387,6 +412,7 @@ export const getDeposit = (
   }
 
 /**
+ * 최신 입금 목록을 조회합니다.
  * @summary 입금 목록 조회
  */
 export const listDeposits = (
@@ -400,6 +426,7 @@ export const listDeposits = (
   }
 
 /**
+ * 계정주 확인 서비스를 지원하는 거래소 목록을 조회합니다.
  * @summary 계정주 확인 서비스 지원 거래소 목록 조회
  */
 export const listTravelRuleVasps = (
@@ -411,6 +438,7 @@ export const listTravelRuleVasps = (
   }
 
 /**
+ * 입금의 UUID로 트래블룰 검증(입금 계정주 확인)을 요청합니다.
  * @summary 입금 UUID로 계정주 검증 요청
  */
 export const verifyTravelRuleByUuid = (
@@ -423,6 +451,7 @@ export const verifyTravelRuleByUuid = (
   }
 
 /**
+ * 입금의 TxID로 트래블룰 검증(입금 계정주 확인)을 요청합니다.
  * @summary 입금 TxID로 계정주 검증 요청
  */
 export const verifyTravelRuleByTxid = (
@@ -435,6 +464,7 @@ export const verifyTravelRuleByTxid = (
   }
 
 /**
+ * 전체 통화에 대해 입출금 서비스 상태를 조회합니다.
  * @summary 입출금 서비스 상태 조회
  */
 export const getServiceStatus = (
@@ -446,6 +476,7 @@ export const getServiceStatus = (
   }
 
 /**
+ * 계정의 모든 API Key 목록과 각 Key의 만료일자를 조회합니다.
  * @summary API Key 목록 조회
  */
 export const listApiKeys = (

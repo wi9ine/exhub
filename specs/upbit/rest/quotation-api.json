@@ -193,7 +193,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-trading-pairs"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-trading-pairs"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-trading-pairs",
+        "description": "업비트에서 지원하는 모든 페어 목록을 조회합니다."
       }
     },
     "/candles/seconds": {
@@ -440,7 +441,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-candles-seconds"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-seconds"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-seconds",
+        "description": "업비트 Open API로 초 단위 캔들 데이터를 조회할 수 있습니다."
       }
     },
     "/candles/minutes/{unit}": {
@@ -737,7 +739,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-candles-minutes"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-minutes"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-minutes",
+        "description": "분 단위 캔들 목록을 조회합니다."
       }
     },
     "/candles/days": {
@@ -1026,7 +1029,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-candles-days"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-days"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-days",
+        "description": "일 단위 캔들 목록을 조회합니다."
       }
     },
     "/candles/weeks": {
@@ -1280,7 +1284,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-candles-weeks"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-weeks"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-weeks",
+        "description": "주 단위 캔들 목록을 조회합니다."
       }
     },
     "/candles/months": {
@@ -1534,7 +1539,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-candles-months"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-months"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-months",
+        "description": "월 단위 캔들 목록을 조회합니다."
       }
     },
     "/candles/years": {
@@ -1788,7 +1794,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-candles-years"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-years"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-candles-years",
+        "description": "연 단위 캔들 목록을 조회합니다."
       }
     },
     "/trades/ticks": {
@@ -2055,7 +2062,8 @@
               }
             }
           }
-        }
+        },
+        "description": "지정한 페어의 최근 체결 목록을 조회합니다."
       }
     },
     "/ticker": {
@@ -2428,7 +2436,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-tickers"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-tickers"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-tickers",
+        "description": "지정한 페어의 현재가를 조회합니다. 요청 시점 기준으로 해당 페어의 티커 스냅샷이 반환됩니다."
       }
     },
     "/ticker/all": {
@@ -2770,7 +2779,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-quote-tickers"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-quote-tickers"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-quote-tickers",
+        "description": "지정한 마켓(호가 자산) 내 모든 페어들의 현재가 정보를 조회합니다."
       }
     },
     "/orderbook": {
@@ -3213,7 +3223,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-orderbooks"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-orderbooks"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-orderbooks",
+        "description": "지정한 종목들의 실시간 호가(Orderbook) 정보를 조회합니다."
       }
     },
     "/orderbook/instruments": {
@@ -3428,7 +3439,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-orderbook-instruments"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-orderbook-instruments"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-orderbook-instruments",
+        "description": "지정한 페어들의 호가 단위(tick_size)와 호가 모아보기 단위(supported_levels) 정보를 조회합니다."
       }
     },
     "/orderbook/supported_levels": {
@@ -3627,7 +3639,8 @@
           "description": "공식 문서",
           "url": "https://docs.upbit.com/kr/reference/list-orderbook-levels"
         },
-        "x-doc-url": "https://docs.upbit.com/kr/reference/list-orderbook-levels"
+        "x-doc-url": "https://docs.upbit.com/kr/reference/list-orderbook-levels",
+        "description": "종목별로 지원하는 모아보기 단위 목록을 조회합니다. 반환된 지원 단위를 호가 조회 API 사용 시 지정하여 호가를 원하는 단위로 조회할 수 있습니다."
       }
     }
   },

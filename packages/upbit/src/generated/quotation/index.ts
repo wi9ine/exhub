@@ -44,6 +44,7 @@ import type {
 
 
   /**
+ * 업비트에서 지원하는 모든 페어 목록을 조회합니다.
  * @summary 페어 목록 조회
  */
 export const listTradingPairs = (
@@ -57,6 +58,7 @@ export const listTradingPairs = (
   }
 
 /**
+ * 업비트 Open API로 초 단위 캔들 데이터를 조회할 수 있습니다.
  * @summary 초(Second) 캔들 조회
  */
 export const getSecondCandles = (
@@ -70,6 +72,7 @@ export const getSecondCandles = (
   }
 
 /**
+ * 분 단위 캔들 목록을 조회합니다.
  * @summary 분(Minute) 캔들 조회
  */
 export const getMinuteCandles = (
@@ -84,6 +87,7 @@ export const getMinuteCandles = (
   }
 
 /**
+ * 일 단위 캔들 목록을 조회합니다.
  * @summary 일(Day) 캔들 조회
  */
 export const getDayCandles = (
@@ -97,6 +101,7 @@ export const getDayCandles = (
   }
 
 /**
+ * 주 단위 캔들 목록을 조회합니다.
  * @summary 주(Week) 캔들 조회
  */
 export const getWeekCandles = (
@@ -110,6 +115,7 @@ export const getWeekCandles = (
   }
 
 /**
+ * 월 단위 캔들 목록을 조회합니다.
  * @summary 월(Month) 캔들 조회
  */
 export const getMonthCandles = (
@@ -123,6 +129,7 @@ export const getMonthCandles = (
   }
 
 /**
+ * 연 단위 캔들 목록을 조회합니다.
  * @summary 연(Year) 캔들 조회
  */
 export const getYearCandles = (
@@ -136,6 +143,7 @@ export const getYearCandles = (
   }
 
 /**
+ * 지정한 페어의 최근 체결 목록을 조회합니다.
  * @summary 최근 체결 내역 조회
  */
 export const listTradesTicks = (
@@ -149,6 +157,7 @@ export const listTradesTicks = (
   }
 
 /**
+ * 지정한 페어의 현재가를 조회합니다. 요청 시점 기준으로 해당 페어의 티커 스냅샷이 반환됩니다.
  * @summary 페어 단위 현재가 조회
  */
 export const listTickers = (
@@ -162,6 +171,7 @@ export const listTickers = (
   }
 
 /**
+ * 지정한 마켓(호가 자산) 내 모든 페어들의 현재가 정보를 조회합니다.
  * @summary 마켓 단위 현재가 조회
  */
 export const listQuoteTickers = (
@@ -175,6 +185,7 @@ export const listQuoteTickers = (
   }
 
 /**
+ * 지정한 종목들의 실시간 호가(Orderbook) 정보를 조회합니다.
  * @summary 호가 조회
  */
 export const listOrderbooks = (
@@ -188,6 +199,7 @@ export const listOrderbooks = (
   }
 
 /**
+ * 지정한 페어들의 호가 단위(tick_size)와 호가 모아보기 단위(supported_levels) 정보를 조회합니다.
  * @summary 호가 정책 조회
  */
 export const listOrderbookInstruments = (
@@ -201,6 +213,7 @@ export const listOrderbookInstruments = (
   }
 
 /**
+ * 종목별로 지원하는 모아보기 단위 목록을 조회합니다. 반환된 지원 단위를 호가 조회 API 사용 시 지정하여 호가를 원하는 단위로 조회할 수 있습니다.
  * @deprecated
  * @summary 호가 모아보기 단위 조회
  */

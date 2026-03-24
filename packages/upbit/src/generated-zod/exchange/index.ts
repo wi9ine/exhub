@@ -8,14 +8,16 @@
 import * as zod from 'zod';
 
 /**
+ * 지정한 페어의 주문 가능 정보를 조회합니다.
  * @summary 페어별 주문 가능 정보 조회
  */
 export const GetOrderChanceQueryParams = zod.object({
-  "market": zod.string()
+  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)')
 })
 
 
 /**
+ * 특정 페어를 매수/매도하기 위한 주문을 생성합니다.
  * @summary 주문 생성
  */
 export const createOrderBodyOrdTypeDefault = `limit`;
@@ -33,6 +35,7 @@ export const CreateOrderBody = zod.object({
 
 
 /**
+ * 실제 주문을 생성하지 않고 주문 요청 형식과 주문 가능 여부를 검증합니다.
  * @summary 주문 생성 테스트
  */
 export const createTestOrderBodyOrdTypeDefault = `limit`;
@@ -50,46 +53,51 @@ export const CreateTestOrderBody = zod.object({
 
 
 /**
+ * 주문의 UUID 또는 Identifier로 단일 주문 정보를 조회합니다.
  * @summary 개별 주문 조회
  */
 export const GetOrderQueryParams = zod.object({
-  "uuid": zod.string().optional(),
-  "identifier": zod.string().optional()
+  "uuid": zod.string().optional().describe('조회하고자 하는 주문의 유일식별자(UUID)'),
+  "identifier": zod.string().optional().describe('조회하고자 하는 주문의 클라이언트 지정 식별자.\n사용자 또는 클라이언트가 주문 생성 시 부여한 주문 식별자로 조회하는 경우 사용합니다.\n')
 })
 
 
 /**
+ * UUID 또는 Identifier로 주문을 취소합니다.
  * @summary 개별 주문 취소 접수
  */
 export const CancelOrderQueryParams = zod.object({
-  "uuid": zod.string().optional(),
-  "identifier": zod.string().optional()
+  "uuid": zod.string().optional().describe('취소하고자 하는 주문의 유일식별자(UUID)'),
+  "identifier": zod.string().optional().describe('취소하고자 하는 주문의 클라이언트 지정 식별자.\n사용자 또는 클라이언트가 주문 생성 시 부여한 주문 식별자로 취소하는 경우 사용합니다.\n')
 })
 
 
 /**
+ * UUID 또는 Identifier 목록으로 주문을 조회합니다.
  * @summary id로 주문 목록 조회
  */
 export const listOrdersByIdsQueryOrderByDefault = `desc`;
 
 export const ListOrdersByIdsQueryParams = zod.object({
-  "market": zod.string().optional(),
-  "uuids[]": zod.array(zod.string()).optional(),
-  "identifiers[]": zod.array(zod.string()).optional(),
-  "order_by": zod.enum(['asc', 'desc']).default(listOrdersByIdsQueryOrderByDefault)
+  "market": zod.string().optional().describe('조회하고자 하는 페어(거래쌍)'),
+  "uuids[]": zod.array(zod.string()).optional().describe('조회하고자 하는 주문의 UUID 목록.\n조회 가능한 최대 주문 개수는 100개입니다. 2개 이상의 UUID로 조회하는 경우 쿼리 파라미터를 다음과 같이 요청합니다.\n\n[예시] uuids[]=uuid1&uuids[]=uuid2…\n'),
+  "identifiers[]": zod.array(zod.string()).optional().describe('조회하고자 하는 주문의 클라이언트 지정 식별자 목록.\n조회 가능한 최대 주문 개수는 100개입니다. 2개 이상의 identifiers로 조회하는 경우 쿼리 파라미터를 다음과 같이 요청합니다.\n\n[예시] identifiers[]=id1&identifiers[]=id2…\n'),
+  "order_by": zod.enum(['asc', 'desc']).default(listOrdersByIdsQueryOrderByDefault).describe('결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n')
 })
 
 
 /**
+ * UUID 또는 Identifier 목록으로 취소 대상 주문을 지정 취소합니다. 한 번의 요청으로 최대 20개의 주문을 취소할 수 있습니다.
  * @summary id로 주문 목록 취소 접수
  */
 export const CancelOrdersByIdsQueryParams = zod.object({
-  "uuids[]": zod.array(zod.string()).optional(),
-  "identifiers[]": zod.array(zod.string()).optional()
+  "uuids[]": zod.array(zod.string()).optional().describe('취소하고자 하는 주문의 UUID 목록.\n취소 가능한 최대 주문 개수는 20개입니다. 2개 이상의 UUID로 조회하는 경우 쿼리 파라미터를 다음과 같이 요청합니다.\n\n[예시] uuids[]=uuid1&uuids[]=uuid2…\n'),
+  "identifiers[]": zod.array(zod.string()).optional().describe('취소하고자 하는 주문의 클라이언트 지정 식별자 목록.\n취소 가능한 최대 주문 개수는 20개입니다. 2개 이상의 identifiers로 조회하는 경우 쿼리 파라미터를 다음과 같이 요청합니다.\n\n[예시] identifiers[]=id1&identifiers[]=id2…\n')
 })
 
 
 /**
+ * 체결 대기 중인 주문(Open Orders) 목록을 조회합니다.
  * @summary 체결 대기 주문 목록 조회
  */
 export const listOpenOrdersQueryStateDefault = `wait`;
@@ -98,16 +106,17 @@ export const listOpenOrdersQueryLimitDefault = 100;
 export const listOpenOrdersQueryOrderByDefault = `desc`;
 
 export const ListOpenOrdersQueryParams = zod.object({
-  "market": zod.string().optional(),
-  "state": zod.enum(['wait', 'watch']).default(listOpenOrdersQueryStateDefault),
-  "states[]": zod.array(zod.enum(['wait', 'watch'])).optional(),
-  "page": zod.number().default(listOpenOrdersQueryPageDefault),
-  "limit": zod.number().default(listOpenOrdersQueryLimitDefault),
-  "order_by": zod.enum(['asc', 'desc']).default(listOpenOrdersQueryOrderByDefault)
+  "market": zod.string().optional().describe('조회하고자 하는 페어(거래쌍)'),
+  "state": zod.enum(['wait', 'watch']).default(listOpenOrdersQueryStateDefault).describe('주문의 상태. \n지정한 상태의 주문만을 조회하기 위한 필터 파라미터입니다. 사용 가능한 값은 “wait”(체결 대기), “watch”(예약 주문 대기)입니다. 미지정시 기본값은 “wait”입니다.\n'),
+  "states[]": zod.array(zod.enum(['wait', 'watch'])).optional().describe('주문의 상태. \n지정한 상태의 주문만을 조회하기 위한 필터 파라미터입니다. 배열 형식이며 사용 가능한 값은 “wait”(체결 대기), “watch”(예약 주문 대기)입니다. 미지정시 기본값은 “wait”입니다.\n\n[예시] states[]=wait&states[]=watch\n'),
+  "page": zod.number().default(listOpenOrdersQueryPageDefault).describe('조회할 페이지 번호.\nPagination을 위한 파라미터로, 조회하고자 하는 페이지를 지정할 수 있습니다. 미지정시 기본값은 1입니다.\n'),
+  "limit": zod.number().default(listOpenOrdersQueryLimitDefault).describe('요청 개수(default: 100, max: 100)\n요청 당 조회할 주문 개수를 지정합니다. 한번에 최대 100개의 항목을 조회할 수 있으며, 미지정시 기본값은 100입니다.\n'),
+  "order_by": zod.enum(['asc', 'desc']).default(listOpenOrdersQueryOrderByDefault).describe('결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n')
 })
 
 
 /**
+ * 조건을 지정하여 해당 조건을 만족하는 최대 300개의 주문을 일괄 취소합니다.
  * @summary 주문 일괄 취소 접수
  */
 export const cancelOpenOrdersQueryCancelSideDefault = `all`;
@@ -115,34 +124,36 @@ export const cancelOpenOrdersQueryCountDefault = 20;
 export const cancelOpenOrdersQueryOrderByDefault = `desc`;
 
 export const CancelOpenOrdersQueryParams = zod.object({
-  "quote_currencies": zod.array(zod.string()).optional(),
-  "cancel_side": zod.enum(['bid', 'ask', 'all']).default(cancelOpenOrdersQueryCancelSideDefault),
-  "count": zod.number().default(cancelOpenOrdersQueryCountDefault),
-  "order_by": zod.enum(['asc', 'desc']).default(cancelOpenOrdersQueryOrderByDefault),
-  "pairs": zod.string().optional(),
-  "exclude_pairs": zod.string().optional()
+  "quote_currencies": zod.array(zod.string()).optional().describe('주문 취소 대상 마켓 목록.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)로 취소 대상 주문을 한정할 수 있는 필터 파라미터입니다. 지정한 마켓에 속한 미체결 주문을 일괄 취소합니다. \n\n[예시] \"KRW\"로 지정시 원화마켓의 모든 미체결 매수 주문 취소\n'),
+  "cancel_side": zod.enum(['bid', 'ask', 'all']).default(cancelOpenOrdersQueryCancelSideDefault).describe('취소하고자 하는 주문의 매수\/매도 방향 구분. \n매수\/매도 구분으로 취소 대상을 한정할 수 있는 필터 파라미터입니다. 사용 가능한 값은 “all”(매수, 매도 전체), “ask”(매도), “bid”(매수)입니다. \n\n[예시] “ask”로 설정시 체결 대기중인 매도 주문을 일괄 취소합니다.\n'),
+  "count": zod.number().default(cancelOpenOrdersQueryCountDefault).describe('취소할 주문의 최대 개수.\n필터 파라미터들의 조합으로 한정된 대상 주문의 수가 count보다 많은 경우, 정렬 기준에 따라 count에 설정된 수만큼의 주문만 취소합니다.\n\n최대값은 300이며 미지정시 기본값은 20입니다.\n'),
+  "order_by": zod.enum(['asc', 'desc']).default(cancelOpenOrdersQueryOrderByDefault).describe('취소할 주문의 정렬 방식.\n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 순서에 따라 count개 주문에 대해 취소를 요청합니다. \n\n사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n'),
+  "pairs": zod.string().optional().describe('페어(거래쌍) 목록.\n주문 페어로 취소 대상을 한정할 수 있는 필터 파라미터입니다. 지정한 페어의 미체결 주문만 취소합니다. 최대 20개의 페어를 지정할 수 있으며, 2개 이상의 페어 지정시 쉼표(,)로 구분된 문자열 형식을 사용합니다.\n\n[예시] pairs=KRW-BTC,KRW-ETH\n'),
+  "exclude_pairs": zod.string().optional().describe('페어(거래쌍) 목록.\n특정 페어를 제외한 모든 페어를 취소 대상 주문을 한정할 수 있는 필터 파라미터입니다. 지정한 페어의 주문을 제외한 모든 주문을 취소합니다. \n최대 20개의 페어를 지정할 수 있으며, 2개 이상의 페어 지정시 쉼표(,)로 구분된 문자열 형식을 사용합니다.\n\n[예시] pairs=KRW-BTC,KRW-ETH\n')
 })
 
 
 /**
+ * 종료 주문(Closed Order) 목록을 조회합니다.
  * @summary 종료 주문 목록 조회
  */
 export const listClosedOrdersQueryLimitDefault = 100;
 export const listClosedOrdersQueryOrderByDefault = `desc`;
 
 export const ListClosedOrdersQueryParams = zod.object({
-  "market": zod.string().optional(),
-  "state": zod.enum(['done', 'cancel']).optional(),
-  "states[]": zod.array(zod.enum(['done', 'cancel'])).default([`done`, `cancel`]),
-  "start_time": zod.string().optional(),
-  "end_time": zod.string().optional(),
-  "limit": zod.number().default(listClosedOrdersQueryLimitDefault),
-  "kind": zod.enum(['normal', 'watch']).optional(),
-  "order_by": zod.enum(['asc', 'desc']).default(listClosedOrdersQueryOrderByDefault)
+  "market": zod.string().optional().describe('조회하고자 하는 페어(거래쌍)'),
+  "state": zod.enum(['done', 'cancel']).optional().describe('주문의 상태.\n\n- 시장가 주문이 조회되지 않는 경우: 시장가 매수 주문은 체결 후 주문 상태가 `cancel`, `done` 두 경우 모두 발생할 수 있습니다.\n- 시장가로 체결이 일어난 후 주문 잔량이 발생하는 경우, 남은 잔량이 반환되며 `cancel` 처리됩니다. 대부분의 경우 소수점 아래 8자리까지 나누어떨어지지 않는 미미한 금액이 주문 잔량으로 발생하게 됩니다.\n- 만일 주문 잔량 없이 딱 맞아떨어지게 체결이 발생한 경우에는 주문 상태가 `done`이 됩니다.\n'),
+  "states[]": zod.array(zod.enum(['done', 'cancel'])).default([`done`, `cancel`]).describe('주문의 상태. \n지정한 상태의 주문만을 조회하기 위한 필터 파라미터입니다. 배열 형식이며 사용 가능한 값은 “done”(주문 전체 체결 완료), “cancel”(주문 전체 또는 부분 취소)입니다. 미지정시 기본값은 모든 상태(done, cancel)의 주문 반환입니다.\n\n[예시] states[]=done&states[]=cancel\n'),
+  "start_time": zod.string().optional().describe('조회 기간의 시작 시각.\n지정한 시간 범위 내에 생성된 주문만 조회하기 위한 필터 파라미터입니다. 지정한 시각으로부터 “end_time”에 지정한 시각까지 생성된 주문을 조회 대상으로 한정합니다. 조회 가능 범위는 최대 7일입니다. \n\n\* “start_time”만 입력하는 경우 해당 시각 기준으로 이후 7일, 두 필드 모두 미입력시 요청 시각을 기준으로 이전 7일을 조회 기간으로 적용합니다.\n\* “start_time”, “end_time”으로 지정한 기간이 7일을 초과하는 경우 최대 허용 범위 초과 에러가 발생합니다.\n\* 조회 시간 내의 주문 건이라도 limit 개수를 초과한 범위일 경우 조회되지 않으니 이 경우 나누어서 조회하여야 합니다.\n\n다음 중 하나의 형식으로 입력할 수 있습니다.\n\* ISO 8601 형식 (타임존 포함)\n[예시] 2025-06-24T04:56:53Z\n2025-06-24T13:56:53+09:00 \n\n\* 밀리초 단위의 타임스탬프\n[예시] 1750741013000 (UTC)\n'),
+  "end_time": zod.string().optional().describe('조회 기간의 종료 시각.\n지정한 시간 범위 내에 생성된 주문만 조회하기 위한 필터 파라미터입니다. “start_time” 부터 이 필드에 지정한 시각까지 생성된 주문을 조회 대상으로 한정합니다. 조회 가능 범위는 최대 7일입니다. \n\n\* “end_time”만 입력하는 경우 해당 시각 기준으로 이전 7일, 두 필드 모두 미입력시 요청 시각을 기준으로 이전 7일을 조회 기간으로 적용합니다.\n\* “start_time”, “end_time”으로 지정한 기간이 7일을 초과하는 경우 최대 허용 범위 초과 에러가 발생합니다.\n\n다음 중 하나의 형식으로 입력할 수 있습니다.\n\* ISO 8601 형식 (타임존 포함)\n[예시] 2025-06-24T04:56:53Z\n2025-06-24T13:56:53+09:00\n\n\* 밀리초 단위의 타임스탬프\n[예시] 1750741013000 (UTC)\n'),
+  "limit": zod.number().default(listClosedOrdersQueryLimitDefault).describe('요청 개수(default: 100, max: 1,000)\n요청 당 조회할 주문 개수를 지정합니다. 주문 조회 가능한 최대 개수는 1,000개이며, 시간 범위 내 주문 개수가 1,000개가 넘어갈 경우 시간 범위를 나누어 조회하여야 합니다.\n'),
+  "kind": zod.enum(['normal', 'watch']).optional().describe('주문 종류 필터.\n일반 주문과 예약 주문을 구분하여 조회할 수 있습니다.\n\n- `normal`: 일반 주문\n- `watch`: 예약 주문\n- 미지정시 모든 종류의 주문이 반환됩니다.\n'),
+  "order_by": zod.enum(['asc', 'desc']).default(listClosedOrdersQueryOrderByDefault).describe('결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n')
 })
 
 
 /**
+ * 한 번의 요청으로 기존 주문을 취소하고 신규 주문을 생성합니다.
  * @summary 취소 후 재주문
  */
 export const CancelAndCreateOrderBody = zod.object({
@@ -158,15 +169,17 @@ export const CancelAndCreateOrderBody = zod.object({
 
 
 /**
+ * 지정한 통화에 대한 출금 가능 정보를 조회합니다. 해당 통화의 출금 정책과 사용자 잔고를 확인할 수 있습니다.
  * @summary 출금 가능 정보 조회
  */
 export const GetWithdrawChanceQueryParams = zod.object({
-  "currency": zod.string(),
-  "net_type": zod.string().optional()
+  "currency": zod.string().describe('출금 가능 정보를 조회하고자 하는 통화 코드\n'),
+  "net_type": zod.string().optional().describe('디지털 자산 입출금에 사용되는 블록체인 네트워크 식별자. \n출금 주소 등록 후 출금 허용 주소 목록 조회 API를 호출하여 응답에서 각 주소로의 출금시 사용 가능한 “net_type” 값을 확인할 수 있습니다.\n디지털 자산인 경우 필수(required) 필드입니다.\n')
 })
 
 
 /**
+ * 디지털 자산 출금을 요청합니다.
  * @summary 디지털 자산 출금 요청
  */
 export const createWithdrawalBodyTransactionTypeDefault = `default`;
@@ -182,14 +195,16 @@ export const CreateWithdrawalBody = zod.object({
 
 
 /**
+ * 출금 UUID로 요청이 완료된 디지털 자산 출금 건의 취소를 요청합니다.
  * @summary 디지털 자산 출금 취소 요청
  */
 export const CancelWithdrawalQueryParams = zod.object({
-  "uuid": zod.string()
+  "uuid": zod.string().describe('취소하고자 하는 출금의 유일식별자(UUID)')
 })
 
 
 /**
+ * 원화(KRW) 출금을 요청합니다.
  * @summary 원화 출금 요청
  */
 export const CreateWithdrawKrwBody = zod.object({
@@ -199,16 +214,18 @@ export const CreateWithdrawKrwBody = zod.object({
 
 
 /**
+ * 최신 단일 출금 정보를 조회합니다. 특정 출금 정보를 조회하고자 하는 경우 출금의 UUID 또는 트랜잭션 ID(TXID)로 지정할 수 있습니다.
  * @summary 개별 출금 조회
  */
 export const GetWithdrawalQueryParams = zod.object({
-  "uuid": zod.string().optional(),
-  "txid": zod.string().optional(),
-  "currency": zod.string().optional()
+  "uuid": zod.string().optional().describe('조회하고자 하는 출금의 유일식별자(UUID)\nuuid와 txid를 모두 입력하지 않는 경우 최신 출금 정보가 반환됩니다.\n'),
+  "txid": zod.string().optional().describe('조회하고자 하는 출금의 트랜잭션 ID.\nuuid와 txid를 모두 입력하지 않는 경우 최신 출금 정보가 반환됩니다.\n'),
+  "currency": zod.string().optional().describe('조회하고자 하는 통화 코드. \n통화 코드로 조회 대상을 한정하기 위한 필터 파라미터입니다.\n미입력시 최신 출금 내역이 조회됩니다.\n')
 })
 
 
 /**
+ * 최신 출금 목록을 조회합니다.
  * @summary 출금 목록 조회
  */
 export const listWithdrawalsQueryLimitDefault = 100;
@@ -216,28 +233,30 @@ export const listWithdrawalsQueryPageDefault = 1;
 export const listWithdrawalsQueryOrderByDefault = `desc`;
 
 export const ListWithdrawalsQueryParams = zod.object({
-  "currency": zod.string().optional(),
-  "state": zod.string().optional(),
-  "uuids[]": zod.array(zod.string()).optional(),
-  "txids[]": zod.array(zod.string()).optional(),
-  "limit": zod.number().default(listWithdrawalsQueryLimitDefault),
-  "page": zod.number().default(listWithdrawalsQueryPageDefault),
-  "order_by": zod.enum(['asc', 'desc']).default(listWithdrawalsQueryOrderByDefault),
-  "from": zod.string().optional(),
-  "to": zod.string().optional()
+  "currency": zod.string().optional().describe('조회하고자 하는 통화 코드. \n통화 코드로 조회 대상을 한정하기 위한 필터 파라미터입니다.\n미지정시 모든 통화 코드에 대해 조회됩니다.\n'),
+  "state": zod.string().optional().describe('조회하고자 하는 출금 처리 상태.\n출금 처리 상태로 조회 대상을 한정하기 위한 필터 파라미터입니다. 지정한 상태의 출금 정보만 응답으로 반환됩니다.\n\n사용 가능한 값은 다음과 같습니다.\n\* `WAITING`: 대기중\n\* `PROCESSING`: 진행중\n\* `DONE`: 완료\n\* `FAILED`: 실패\n\* `CANCELLED`: 취소됨\n\* `REJECTED`: 거절됨\n'),
+  "uuids[]": zod.array(zod.string()).optional().describe('조회하고자 하는 유일식별자(UUID) 목록.\n지정한 UUID에 해당하는 입출금 정보만 반환됩니다. 최대 100개의 UUID를 입력할 수 있습니다.\n\nuuids와 txids 파라미터는 동시에 사용할 수 없습니다.\n\n[예시] uuids[]=uuid1&uuids[]=uuid2\n'),
+  "txids[]": zod.array(zod.string()).optional().describe('조회하고자 하는 트랜잭션 ID 목록.\n지정한 txid에 해당하는 입출금 정보만 반환됩니다. 최대 100개의 txid를 입력할 수 있습니다.\n\nuuids와 txids 파라미터는 동시에 사용할 수 없습니다.\n\n[예시] txids[]=txid1&txids[]=txid2\n'),
+  "limit": zod.number().default(listWithdrawalsQueryLimitDefault).describe('요청 개수(default: 100, max: 100)\n요청 당 조회할 주문 개수를 지정합니다. 한번에 최대 100개의 항목을 조회할 수 있으며, 미지정시 기본값은 100입니다.\n'),
+  "page": zod.number().default(listWithdrawalsQueryPageDefault).describe('조회할 페이지 번호.\nPagination을 위한 파라미터로, 조회하고자 하는 페이지를 지정할 수 있습니다. 미지정시 기본값은 1입니다.\n'),
+  "order_by": zod.enum(['asc', 'desc']).default(listWithdrawalsQueryOrderByDefault).describe('결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n'),
+  "from": zod.string().optional().describe('Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이후 \"limit\"개의 출금 이력을 이어서 조회할 수 있습니다.\n'),
+  "to": zod.string().optional().describe('Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이전 \"limit\"개의 출금 이력을 조회할 수 있습니다.\n')
 })
 
 
 /**
+ * 지정한 통화에 대한 입금 가능 정보를 조회합니다.
  * @summary 디지털 자산 입금 가능 정보 조회
  */
 export const GetDepositChanceQueryParams = zod.object({
-  "currency": zod.string(),
-  "net_type": zod.string()
+  "currency": zod.string().describe('조회하고자 하는 통화 코드. \n통화 코드로 조회 대상을 한정하기 위한 필터 파라미터입니다.\n'),
+  "net_type": zod.string().describe('디지털 자산 입출금에 사용되는 블록체인 네트워크 식별자.\n조회 대상을 네트워크 식별자로 한정하기 위한 필터 파라미터입니다.\n')
 })
 
 
 /**
+ * 개인 지갑 또는 타 거래소 자산을 업비트로 입금 하기 위한 입금 주소 생성을 요청합니다.
  * @summary 입금 주소 생성 요청
  */
 export const CreateDepositAddressBody = zod.object({
@@ -247,15 +266,17 @@ export const CreateDepositAddressBody = zod.object({
 
 
 /**
+ * 지정한 통화의 입금 주소 정보를 조회힙니다.
  * @summary 개별 입금 주소 조회
  */
 export const GetDepositAddressQueryParams = zod.object({
-  "currency": zod.string(),
-  "net_type": zod.string()
+  "currency": zod.string().describe('조회하고자 하는 통화 코드. \n통화 코드로 조회 대상을 한정하기 위한 필터 파라미터입니다.\n'),
+  "net_type": zod.string().describe('디지털 자산 입출금에 사용되는 블록체인 네트워크 식별자.\n조회 대상을 네트워크 식별자로 한정하기 위한 필터 파라미터입니다.\n')
 })
 
 
 /**
+ * 입출금 계좌로부터 원화를 지정한 금액만큼 입금합니다.
  * @summary 원화 입금
  */
 export const CreateDepositKrwBody = zod.object({
@@ -265,16 +286,18 @@ export const CreateDepositKrwBody = zod.object({
 
 
 /**
+ * 최신 입금 이력을 조회합니다. 특정 입금 정보를 조회하고자 하는 경우 입금의 UUID 또는 트랜잭션 ID(TXID), 통화 코드로 지정할 수 있습니다.
  * @summary 개별 입금 조회
  */
 export const GetDepositQueryParams = zod.object({
-  "currency": zod.string().optional(),
-  "uuid": zod.string().optional(),
-  "txid": zod.string().optional()
+  "currency": zod.string().optional().describe('조회하고자 하는 통화 코드. \n통화 코드로 조회 대상을 한정하기 위한 필터 파라미터입니다.\n'),
+  "uuid": zod.string().optional().describe('조회하고자 하는 입금의 유일식별자(UUID)\nuuid와 txid를 모두 입력하지 않는 경우 최신 입금 정보가 반환됩니다.\n'),
+  "txid": zod.string().optional().describe('조회하고자 하는 입금의 트랜잭션 ID\nuuid와 txid를 모두 입력하지 않는 경우 최신 입금 정보가 반환됩니다.\n')
 })
 
 
 /**
+ * 최신 입금 목록을 조회합니다.
  * @summary 입금 목록 조회
  */
 export const listDepositsQueryLimitDefault = 100;
@@ -282,19 +305,20 @@ export const listDepositsQueryPageDefault = 1;
 export const listDepositsQueryOrderByDefault = `desc`;
 
 export const ListDepositsQueryParams = zod.object({
-  "currency": zod.string().optional(),
-  "state": zod.enum(['PROCESSING', 'ACCEPTED', 'CANCELLED', 'REJECTED', 'TRAVEL_RULE_SUSPECTED', 'REFUNDING', 'REFUNDED']).optional(),
-  "uuids[]": zod.array(zod.string()).optional(),
-  "txids[]": zod.array(zod.string()).optional(),
-  "limit": zod.number().default(listDepositsQueryLimitDefault),
-  "page": zod.number().default(listDepositsQueryPageDefault),
-  "order_by": zod.enum(['asc', 'desc']).default(listDepositsQueryOrderByDefault),
-  "from": zod.string().optional(),
-  "to": zod.string().optional()
+  "currency": zod.string().optional().describe('조회하고자 하는 통화 코드. \n통화 코드로 조회 대상을 한정하기 위한 필터 파라미터입니다.\n미입력시 최신 입금 내역이 조회됩니다.\n'),
+  "state": zod.enum(['PROCESSING', 'ACCEPTED', 'CANCELLED', 'REJECTED', 'TRAVEL_RULE_SUSPECTED', 'REFUNDING', 'REFUNDED']).optional().describe('조회하고자 하는 입금 처리 상태.\n입금 처리 상태로 조회 대상을 한정하기 위한 필터 파라미터입니다. 지정한 상태의 입금 정보만 응답으로 반환됩니다.\n\n사용 가능한 값은 다음과 같습니다.\n\* `PROCESSING`: 진행중\n\* `ACCEPTED`: 완료\n\* `CANCELLED`: 취소됨\n\* `REJECTED`: 거절됨\n\* `TRAVEL_RULE_SUSPECTED`: 트래블룰 추가 인증 대기중\n\* `REFUNDING`: 반환 절차 진행중\n\* `REFUNDED`: 반환 완료\n'),
+  "uuids[]": zod.array(zod.string()).optional().describe('조회하고자 하는 유일식별자(UUID) 목록.\n지정한 UUID에 해당하는 입출금 정보만 반환됩니다.\n\n[예시] uuids[]=uuid1&uuids[]=uuid2\n'),
+  "txids[]": zod.array(zod.string()).optional().describe('조회하고자 하는 트랜잭션 ID 목록.\n지정한 txid에 해당하는 입출금 정보만 반환됩니다.\n\n[예시] txids[]=txid1&txids[]=txid2\n'),
+  "limit": zod.number().default(listDepositsQueryLimitDefault).describe('요청 개수(default: 100, max: 100)\n요청 당 조회할 주문 개수를 지정합니다. 한번에 최대 100개의 항목을 조회할 수 있으며, 미지정시 기본값은 100입니다.\n'),
+  "page": zod.number().default(listDepositsQueryPageDefault).describe('조회할 페이지 번호.\nPagination을 위한 파라미터로, 조회하고자 하는 페이지를 지정할 수 있습니다. 미지정시 기본값은 1입니다.\n'),
+  "order_by": zod.enum(['asc', 'desc']).default(listDepositsQueryOrderByDefault).describe('결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n'),
+  "from": zod.string().optional().describe('Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이후 \"limit\"개의 출금 이력을 이어서 조회할 수 있습니다.\n'),
+  "to": zod.string().optional().describe('Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이전 \"limit\"개의 출금 이력을 조회할 수 있습니다.\n')
 })
 
 
 /**
+ * 입금의 UUID로 트래블룰 검증(입금 계정주 확인)을 요청합니다.
  * @summary 입금 UUID로 계정주 검증 요청
  */
 export const VerifyTravelRuleByUuidBody = zod.object({
@@ -304,6 +328,7 @@ export const VerifyTravelRuleByUuidBody = zod.object({
 
 
 /**
+ * 입금의 TxID로 트래블룰 검증(입금 계정주 확인)을 요청합니다.
  * @summary 입금 TxID로 계정주 검증 요청
  */
 export const VerifyTravelRuleByTxidBody = zod.object({

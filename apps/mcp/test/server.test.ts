@@ -112,7 +112,9 @@ describe("exchange server", () => {
     const result = await client.listTools();
     const listTickersTool = result.tools.find((tool) => tool.name === "listTickers");
 
-    expect(listTickersTool?.description).toBe("페어 단위 현재가 조회");
+    expect(listTickersTool?.description).toBe(
+      "지정한 페어의 현재가를 조회합니다. 요청 시점 기준으로 해당 페어의 티커 스냅샷이 반환됩니다.",
+    );
     expect(listTickersTool?.description).not.toContain("호출");
   });
 

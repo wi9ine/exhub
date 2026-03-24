@@ -44,7 +44,9 @@ describe("resolveTools", () => {
     if (!resolved) {
       throw new Error("resolved tool이 없습니다.");
     }
-    expect(resolved.description).toBe("페어 단위 현재가 조회");
+    expect(resolved.description).toBe(
+      "지정한 페어의 현재가를 조회합니다. 요청 시점 기준으로 해당 페어의 티커 스냅샷이 반환됩니다.",
+    );
   });
 
   it("spec summary를 찾지 못하면 description을 비워 둔다", () => {

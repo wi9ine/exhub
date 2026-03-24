@@ -45,11 +45,11 @@ function normalizeOperationId(operationId, method, route) {
 }
 
 function getOperationSummary(operation) {
-  const summary = typeof operation.summary === "string" ? operation.summary.trim() : "";
-  if (summary) return summary;
-
   const description = typeof operation.description === "string" ? operation.description.trim() : "";
-  return description || undefined;
+  if (description) return description;
+
+  const summary = typeof operation.summary === "string" ? operation.summary.trim() : "";
+  return summary || undefined;
 }
 
 function loadJson(filePath) {
