@@ -7,12 +7,12 @@
 
 ## 빠른 시작
 
-Upbit를 예시로 Public API를 호출해 봅니다.
+Gopax를 예시로 Public API를 호출해 봅니다.
 
 ### 1. 설치
 
 ```bash npm2yarn
-npm install @exhub/upbit
+npm install @exhub/gopax
 ```
 
 ### 2. 현재가 조회 (Public API)
@@ -20,15 +20,13 @@ npm install @exhub/upbit
 Public API는 인증 없이 바로 사용할 수 있습니다.
 
 ```typescript
-import { createUpbitClient } from "@exhub/upbit";
+import { createGopaxClient } from "@exhub/gopax";
 
-const client = createUpbitClient();
+const client = createGopaxClient();
 
 // BTC 현재가 조회
-const tickers = await client.tickers.listTickers({
-  markets: "KRW-BTC",
-});
-console.log(tickers);
+const ticker = await client.market.ticker("BTC-KRW");
+console.log(ticker);
 ```
 
 ### 3. 잔고 조회 (Private API)
@@ -36,17 +34,17 @@ console.log(tickers);
 Private API는 거래소에서 발급받은 API 키가 필요합니다.
 
 ```typescript
-import { createUpbitClient } from "@exhub/upbit";
+import { createGopaxClient } from "@exhub/gopax";
 
-const client = createUpbitClient({
+const client = createGopaxClient({
   credentials: {
-    accessKey: process.env.UPBIT_ACCESS_KEY!,
-    secretKey: process.env.UPBIT_SECRET_KEY!,
+    apiKey: process.env.GOPAX_API_KEY!,
+    secretKey: process.env.GOPAX_SECRET_KEY!,
   },
 });
 
-const balance = await client.assets.listBalance();
-console.log(balance);
+const balances = await client.account.listBalances();
+console.log(balances);
 ```
 
 ## SDK vs MCP

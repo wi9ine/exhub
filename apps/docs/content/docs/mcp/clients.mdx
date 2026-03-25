@@ -6,8 +6,8 @@ import { Tabs } from "nextra/components";
 import { Callout } from "nextra/components";
 
 <Callout type="info">
-  아래 예시는 모두 Upbit 거래소 기준입니다. 다른 거래소를 사용하려면 `upbit`
-  부분을 원하는 거래소 키(`bithumb`, `coinone`, `gopax`, `korbit`)로 변경하세요.
+  아래 예시는 모두 Gopax 거래소 기준입니다. 다른 거래소를 사용하려면 `gopax`
+  부분을 원하는 거래소 키(`upbit`, `bithumb`, `coinone`, `korbit`)로 변경하세요.
 </Callout>
 
 <Tabs items={["Claude Desktop", "Claude Code", "Cursor", "VS Code", "Windsurf", "Zed"]}>
@@ -23,12 +23,12 @@ import { Callout } from "nextra/components";
     ```json
     {
       "mcpServers": {
-        "exhub-upbit": {
+        "exhub-gopax": {
           "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "upbit"],
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
           "env": {
-            "EXHUB_UPBIT_ACCESS_KEY": "your-access-key",
-            "EXHUB_UPBIT_SECRET_KEY": "your-secret-key"
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
           }
         }
       }
@@ -42,13 +42,13 @@ import { Callout } from "nextra/components";
     ```json
     {
       "mcpServers": {
+        "exhub-gopax": {
+          "command": "npx",
+          "args": ["@exhub/mcp", "--exchange", "gopax"]
+        },
         "exhub-upbit": {
           "command": "npx",
           "args": ["@exhub/mcp", "--exchange", "upbit"]
-        },
-        "exhub-bithumb": {
-          "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "bithumb"]
         }
       }
     }
@@ -63,10 +63,10 @@ import { Callout } from "nextra/components";
 
     ```bash
     # 현재 사용자 전역 등록
-    claude mcp add exhub-upbit --scope user -- npx @exhub/mcp --exchange upbit
+    claude mcp add exhub-gopax --scope user -- npx @exhub/mcp --exchange gopax
 
     # 현재 프로젝트에만 등록
-    claude mcp add exhub-upbit --scope project -- npx @exhub/mcp --exchange upbit
+    claude mcp add exhub-gopax --scope project -- npx @exhub/mcp --exchange gopax
     ```
 
     ### 환경 변수 설정
@@ -74,10 +74,10 @@ import { Callout } from "nextra/components";
     Private API를 사용하려면 환경 변수와 함께 등록합니다:
 
     ```bash
-    claude mcp add exhub-upbit --scope user \
-      -e EXHUB_UPBIT_ACCESS_KEY=your-access-key \
-      -e EXHUB_UPBIT_SECRET_KEY=your-secret-key \
-      -- npx @exhub/mcp --exchange upbit
+    claude mcp add exhub-gopax --scope user \
+      -e EXHUB_GOPAX_API_KEY=your-api-key \
+      -e EXHUB_GOPAX_SECRET_KEY=your-secret-key \
+      -- npx @exhub/mcp --exchange gopax
     ```
 
     ### 등록 확인
@@ -100,12 +100,12 @@ import { Callout } from "nextra/components";
     ```json
     {
       "mcpServers": {
-        "exhub-upbit": {
+        "exhub-gopax": {
           "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "upbit"],
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
           "env": {
-            "EXHUB_UPBIT_ACCESS_KEY": "your-access-key",
-            "EXHUB_UPBIT_SECRET_KEY": "your-secret-key"
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
           }
         }
       }
@@ -124,12 +124,12 @@ import { Callout } from "nextra/components";
     ```json
     {
       "servers": {
-        "exhub-upbit": {
+        "exhub-gopax": {
           "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "upbit"],
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
           "env": {
-            "EXHUB_UPBIT_ACCESS_KEY": "your-access-key",
-            "EXHUB_UPBIT_SECRET_KEY": "your-secret-key"
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
           }
         }
       }
@@ -142,12 +142,12 @@ import { Callout } from "nextra/components";
     {
       "mcp": {
         "servers": {
-          "exhub-upbit": {
+          "exhub-gopax": {
             "command": "npx",
-            "args": ["@exhub/mcp", "--exchange", "upbit"],
+            "args": ["@exhub/mcp", "--exchange", "gopax"],
             "env": {
-              "EXHUB_UPBIT_ACCESS_KEY": "your-access-key",
-              "EXHUB_UPBIT_SECRET_KEY": "your-secret-key"
+              "EXHUB_GOPAX_API_KEY": "your-api-key",
+              "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
             }
           }
         }
@@ -167,12 +167,12 @@ import { Callout } from "nextra/components";
     ```json
     {
       "mcpServers": {
-        "exhub-upbit": {
+        "exhub-gopax": {
           "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "upbit"],
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
           "env": {
-            "EXHUB_UPBIT_ACCESS_KEY": "your-access-key",
-            "EXHUB_UPBIT_SECRET_KEY": "your-secret-key"
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
           }
         }
       }
@@ -193,13 +193,13 @@ import { Callout } from "nextra/components";
     ```json
     {
       "context_servers": {
-        "exhub-upbit": {
+        "exhub-gopax": {
           "command": {
             "path": "npx",
-            "args": ["@exhub/mcp", "--exchange", "upbit"],
+            "args": ["@exhub/mcp", "--exchange", "gopax"],
             "env": {
-              "EXHUB_UPBIT_ACCESS_KEY": "your-access-key",
-              "EXHUB_UPBIT_SECRET_KEY": "your-secret-key"
+              "EXHUB_GOPAX_API_KEY": "your-api-key",
+              "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
             }
           }
         }
@@ -219,9 +219,9 @@ import { Callout } from "nextra/components";
 ```json
 {
   "mcpServers": {
-    "exhub-upbit": {
+    "exhub-gopax": {
       "command": "npx",
-      "args": ["@exhub/mcp", "--exchange", "upbit"]
+      "args": ["@exhub/mcp", "--exchange", "gopax"]
     }
   }
 }

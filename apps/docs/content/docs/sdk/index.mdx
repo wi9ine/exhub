@@ -47,18 +47,18 @@ const client = create[Exchange]Client({
 
 ```typescript
 // 직접 전달
-const client = createUpbitClient({
+const client = createGopaxClient({
   credentials: {
-    accessKey: "your-key",
+    apiKey: "your-key",
     secretKey: "your-secret",
   },
 });
 
 // 동적 제공 (예: 환경에 따라 다른 키 사용)
-const client = createUpbitClient({
+const client = createGopaxClient({
   credentialsProvider: async () => {
     const keys = await fetchKeysFromVault();
-    return { accessKey: keys.access, secretKey: keys.secret };
+    return { apiKey: keys.apiKey, secretKey: keys.secret };
   },
 });
 ```
