@@ -1,0 +1,28 @@
+{
+  "name": "@exhub/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "next": "^15.3.3",
+    "nextra": "^4.2.17",
+    "nextra-theme-docs": "^4.2.17",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wi9ine/exhub.git",
+    "directory": "apps/docs"
+  }
+}

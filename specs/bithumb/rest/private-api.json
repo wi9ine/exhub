@@ -1981,6 +1981,11 @@
         "summary": "TWAP 주문 내역 조회",
         "description": "주문 목록을 조회합니다.",
         "operationId": "list-twap-orders",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/twap-%EC%A3%BC%EB%AC%B8%EB%82%B4%EC%97%AD-%EC%A1%B0%ED%9A%8C"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/twap-주문내역-조회",
         "parameters": [
           {
             "name": "Authorization",
@@ -2224,6 +2229,11 @@
         "summary": "TWAP 주문 취소",
         "description": "주문 목록을 조회합니다.",
         "operationId": "cancel-twap-order",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/twap-%EC%A3%BC%EB%AC%B8-%EC%B7%A8%EC%86%8C"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/twap-주문-취소",
         "parameters": [
           {
             "name": "Authorization",
@@ -2336,6 +2346,11 @@
         "summary": "TWAP 주문하기",
         "description": "주문 목록을 조회합니다.",
         "operationId": "create-twap-order",
+        "externalDocs": {
+          "description": "공식 문서",
+          "url": "https://apidocs.bithumb.com/reference/twap-%EC%A3%BC%EB%AC%B8-%EC%9A%94%EC%B2%AD"
+        },
+        "x-doc-url": "https://apidocs.bithumb.com/reference/twap-주문-요청",
         "parameters": [
           {
             "name": "Authorization",

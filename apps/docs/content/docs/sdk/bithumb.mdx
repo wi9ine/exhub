@@ -1,0 +1,110 @@
+# Bithumb
+
+[Bithumb](https://www.bithumb.com) 거래소 SDK 사용법입니다.
+
+## 설치
+
+```bash npm2yarn
+npm install @exhub/bithumb
+```
+
+## 클라이언트 생성
+
+```typescript
+import { createBithumbClient } from "@exhub/bithumb";
+
+const client = createBithumbClient();
+```
+
+## 인증 설정
+
+Private API를 사용하려면 Bithumb에서 API 키를 발급받으세요.
+
+```typescript
+const client = createBithumbClient({
+  credentials: {
+    apiKey: process.env.BITHUMB_API_KEY!,
+    secretKey: process.env.BITHUMB_SECRET_KEY!,
+  },
+});
+```
+
+## Public API
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `markets.getMarkets(params)` | 마켓 코드 조회 | [링크](https://apidocs.bithumb.com/reference/%EB%A7%88%EC%BC%93%EC%BD%94%EB%93%9C-%EC%A1%B0%ED%9A%8C) |
+| `markets.getMarketVirtualAssetWarning()` | 경보제 | [링크](https://apidocs.bithumb.com/reference/%EA%B2%BD%EB%B3%B4%EC%A0%9C) |
+| `candles.getMinuteCandles(params, unit)` | 분(Minute) 캔들 | [링크](https://apidocs.bithumb.com/reference/%EB%B6%84minute-%EC%BA%94%EB%93%A4-1) |
+| `candles.getDayCandles(params)` | 일(Day) 캔들 | [링크](https://apidocs.bithumb.com/reference/%EC%9D%BCday-%EC%BA%94%EB%93%A4) |
+| `candles.getWeekCandles(params)` | 주(Week) 캔들 | [링크](https://apidocs.bithumb.com/reference/%EC%A3%BCweek-%EC%BA%94%EB%93%A4) |
+| `candles.getMonthCandles(params)` | 월(Month) 캔들 | [링크](https://apidocs.bithumb.com/reference/%EC%9B%94month-%EC%BA%94%EB%93%A4) |
+| `trades.listTradesTicks(params)` | 최근 체결 내역 | [링크](https://apidocs.bithumb.com/reference/%EC%B5%9C%EA%B7%BC-%EC%B2%B4%EA%B2%B0-%EB%82%B4%EC%97%AD) |
+| `tickers.getTicker(params)` | 현재가 정보 | [링크](https://apidocs.bithumb.com/reference/%ED%98%84%EC%9E%AC%EA%B0%80-%EC%A0%95%EB%B3%B4) |
+| `orderbook.getOrderbook(params)` | 호가 정보 조회 | [링크](https://apidocs.bithumb.com/reference/%ED%98%B8%EA%B0%80-%EC%A0%95%EB%B3%B4-%EC%A1%B0%ED%9A%8C) |
+| `service.listNotices()` | 공지사항 조회 | [링크](https://apidocs.bithumb.com/reference/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD-%EC%A1%B0%ED%9A%8C) |
+| `service.getFeeInfo(currency)` | 입출금 수수료 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%9E%85%EC%B6%9C%EA%B8%88-%EC%88%98%EC%88%98%EB%A3%8C-%EC%A1%B0%ED%9A%8C) |
+
+### 사용 예시
+
+```typescript
+// 현재가 조회
+const ticker = await client.tickers.getTicker({ markets: "KRW-BTC" });
+
+// 일봉 조회
+const candles = await client.candles.getDayCandles({ market: "KRW-BTC", count: 10 });
+```
+
+## Private API
+
+import { Callout } from "nextra/components";
+
+<Callout type="warning">
+  Private API는 인증 설정이 필요합니다.
+</Callout>
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `accounts.listAccounts()` | 전체 계좌 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%A0%84%EC%B2%B4-%EA%B3%84%EC%A2%8C-%EC%A1%B0%ED%9A%8C) |
+| `orders.getOrderChance(params)` | 주문 가능 정보 | [링크](https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EA%B0%80%EB%8A%A5-%EC%A0%95%EB%B3%B4) |
+| `orders.createOrder(body)` | 주문 요청 | [링크](https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EC%9A%94%EC%B2%AD) |
+| `orders.createOrdersBatch(body)` | 다건 주문 요청 | [링크](https://apidocs.bithumb.com/reference/%EB%8B%A4%EA%B1%B4-%EC%A3%BC%EB%AC%B8-%EC%9A%94%EC%B2%AD) |
+| `orders.getOrder(params)` | 개별 주문 조회 | [링크](https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%A3%BC%EB%AC%B8-%EC%A1%B0%ED%9A%8C) |
+| `orders.cancelOrder(params)` | 주문 취소 접수 | [링크](https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EC%B7%A8%EC%86%8C-%EC%A0%91%EC%88%98) |
+| `orders.cancelOrders(body)` | 다건 주문 취소 접수 | [링크](https://apidocs.bithumb.com/reference/%EB%8B%A4%EA%B1%B4-%EC%A3%BC%EB%AC%B8-%EC%B7%A8%EC%86%8C-%EC%A0%91%EC%88%98) |
+| `orders.listOrders(params)` | 주문 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%A3%BC%EB%AC%B8-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+| `orders.listTwapOrders(params)` | TWAP 주문 내역 조회 | [링크](https://apidocs.bithumb.com/reference/twap-%EC%A3%BC%EB%AC%B8%EB%82%B4%EC%97%AD-%EC%A1%B0%ED%9A%8C) |
+| `orders.cancelTwapOrder(params)` | TWAP 주문 취소 | [링크](https://apidocs.bithumb.com/reference/twap-%EC%A3%BC%EB%AC%B8-%EC%B7%A8%EC%86%8C) |
+| `orders.createTwapOrder(params)` | TWAP 주문하기 | [링크](https://apidocs.bithumb.com/reference/twap-%EC%A3%BC%EB%AC%B8-%EC%9A%94%EC%B2%AD) |
+| `withdrawals.listWithdraws(params)` | 코인 출금 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%B6%9C%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+| `withdrawals.listWithdrawsKrw(params)` | 원화 출금 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%B6%9C%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+| `withdrawals.getWithdraw(params)` | 개별 출금 조회 | [링크](https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%B6%9C%EA%B8%88-%EC%A1%B0%ED%9A%8C) |
+| `withdrawals.getWithdrawChance(params)` | 출금 가능 정보 | [링크](https://apidocs.bithumb.com/reference/%EC%B6%9C%EA%B8%88-%EA%B0%80%EB%8A%A5-%EC%A0%95%EB%B3%B4) |
+| `withdrawals.listWithdrawsCoinAddresses()` | 출금 허용 주소 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%B6%9C%EA%B8%88-%ED%97%88%EC%9A%A9-%EC%A3%BC%EC%86%8C-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+| `withdrawals.createWithdrawsCoin(body)` | 가상 자산 출금하기 | [링크](https://apidocs.bithumb.com/reference/%EB%94%94%EC%A7%80%ED%84%B8-%EC%9E%90%EC%82%B0-%EC%B6%9C%EA%B8%88%ED%95%98%EA%B8%B0) |
+| `withdrawals.createWithdrawsKrw(body)` | 원화 출금하기 | [링크](https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%B6%9C%EA%B8%88%ED%95%98%EA%B8%B0) |
+| `deposits.listDeposits(params)` | 코인 입금 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%9E%85%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+| `deposits.listDepositsKrw(params)` | 원화 입금 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%9E%85%EA%B8%88-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+| `deposits.getDeposit(params)` | 개별 입금 조회 | [링크](https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%9E%85%EA%B8%88-%EC%A1%B0%ED%9A%8C) |
+| `deposits.listDepositsCoinAddresses()` | 전체 입금 주소 조회 | [링크](https://apidocs.bithumb.com/reference/%EC%A0%84%EC%B2%B4-%EC%9E%85%EA%B8%88-%EC%A3%BC%EC%86%8C-%EC%A1%B0%ED%9A%8C) |
+| `deposits.getDepositsCoinAddress(params)` | 개별 입금 주소 조회 | [링크](https://apidocs.bithumb.com/reference/%EA%B0%9C%EB%B3%84-%EC%9E%85%EA%B8%88-%EC%A3%BC%EC%86%8C-%EC%A1%B0%ED%9A%8C) |
+| `deposits.createDepositsKrw(body)` | 원화 입금하기 | [링크](https://apidocs.bithumb.com/reference/%EC%9B%90%ED%99%94-%EC%9E%85%EA%B8%88%ED%95%98%EA%B8%B0) |
+| `deposits.createDepositAddress(body)` | 입금 주소 생성 요청 | [링크](https://apidocs.bithumb.com/reference/%EC%9E%85%EA%B8%88-%EC%A3%BC%EC%86%8C-%EC%83%9D%EC%84%B1-%EC%9A%94%EC%B2%AD) |
+| `service.getWalletStatus()` | 입출금 현황 | [링크](https://apidocs.bithumb.com/reference/%EC%9E%85%EC%B6%9C%EA%B8%88-%ED%98%84%ED%99%A9) |
+| `service.listApiKeys()` | API 키 리스트 조회 | [링크](https://apidocs.bithumb.com/reference/api-%ED%82%A4-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C) |
+
+### 사용 예시
+
+```typescript
+// 계좌 조회
+const accounts = await client.accounts.listAccounts();
+
+// 주문 생성
+const order = await client.orders.createOrder({
+  market: "KRW-BTC",
+  side: "bid",
+  ord_type: "limit",
+  price: "50000000",
+  volume: "0.001",
+});
+```

@@ -22,5 +22,10 @@
   },
   "dependencies": {
     "axios": "^1.12.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wi9ine/exhub.git",
+    "directory": "packages/core"
   }
 }

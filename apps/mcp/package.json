@@ -32,5 +32,10 @@
   },
   "devDependencies": {
     "@modelcontextprotocol/inspector": "^0.21.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wi9ine/exhub.git",
+    "directory": "apps/mcp"
   }
 }

@@ -1,6 +1,7 @@
-docs/
+sites/
 node_modules/
 .DS_Store
 *.log
 .env.local
 dist/
+.next/

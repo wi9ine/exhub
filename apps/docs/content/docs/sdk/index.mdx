@@ -1,0 +1,78 @@
+# SDK 개요
+
+ExHub SDK는 각 거래소별로 독립된 패키지를 제공합니다. 모든 패키지는 공통 코어(`@exhub/core`) 위에 구축되어 일관된 사용 패턴을 따릅니다.
+
+## 패키지 목록
+
+| 패키지 | 거래소 | 설치 |
+|--------|--------|------|
+| `@exhub/upbit` | Upbit | `npm install @exhub/upbit` |
+| `@exhub/bithumb` | Bithumb | `npm install @exhub/bithumb` |
+| `@exhub/coinone` | Coinone | `npm install @exhub/coinone` |
+| `@exhub/gopax` | Gopax | `npm install @exhub/gopax` |
+| `@exhub/korbit` | Korbit | `npm install @exhub/korbit` |
+
+## 공통 사용 패턴
+
+모든 거래소 SDK는 동일한 팩토리 패턴을 사용합니다.
+
+```typescript
+import { create[Exchange]Client } from "@exhub/[exchange]";
+
+// Public API만 사용 (인증 불필요)
+const client = create[Exchange]Client();
+
+// Private API도 사용 (인증 필요)
+const client = create[Exchange]Client({
+  credentials: {
+    // 거래소별 인증 정보
+  },
+});
+```
+
+## 클라이언트 옵션
+
+모든 클라이언트는 다음 옵션을 지원합니다.
+
+| 옵션 | 타입 | 설명 |
+|------|------|------|
+| `credentials` | 거래소별 | API 키 등 인증 정보 |
+| `credentialsProvider` | `() => credentials` | 인증 정보를 동적으로 제공하는 함수 |
+| `baseURL` | `string` | API 기본 URL (기본값: 각 거래소 공식 URL) |
+| `timeout` | `number` | 요청 타임아웃 (밀리초, 기본값: 10000) |
+
+### credentials vs credentialsProvider
+
+인증 정보를 직접 전달하거나, 함수로 동적 제공할 수 있습니다.
+
+```typescript
+// 직접 전달
+const client = createUpbitClient({
+  credentials: {
+    accessKey: "your-key",
+    secretKey: "your-secret",
+  },
+});
+
+// 동적 제공 (예: 환경에 따라 다른 키 사용)
+const client = createUpbitClient({
+  credentialsProvider: async () => {
+    const keys = await fetchKeysFromVault();
+    return { accessKey: keys.access, secretKey: keys.secret };
+  },
+});
+```
+
+## Public API vs Private API
+
+| | Public API | Private API |
+|---|---|---|
+| **인증** | 불필요 | API 키 필요 |
+| **용도** | 시세, 호가, 체결 내역 등 공개 데이터 | 잔고 조회, 주문, 출금 등 개인 데이터 |
+| **사용 방법** | `credentials` 없이 클라이언트 생성 | `credentials` 설정 후 클라이언트 생성 |
+
+import { Callout } from "nextra/components";
+
+<Callout type="info">
+  Public API는 인증 없이 바로 사용할 수 있습니다. Private API를 사용하려면 각 거래소에서 API 키를 발급받아야 합니다.
+</Callout>

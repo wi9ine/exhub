@@ -1,0 +1,48 @@
+# MCP 개요
+
+## MCP란?
+
+[MCP(Model Context Protocol)](https://modelcontextprotocol.io/)는 AI 모델이 외부 도구와 데이터에 접근할 수 있게 해주는 개방형 프로토콜입니다. MCP 서버를 등록하면 AI가 해당 서버의 도구를 직접 호출할 수 있습니다.
+
+## ExHub MCP
+
+ExHub MCP 서버(`@exhub/mcp`)는 ExHub SDK의 모든 기능을 AI 도구로 노출합니다. 코드를 작성하지 않고도 자연어로 거래소 데이터를 조회하고 활용할 수 있습니다.
+
+### 사용 예시
+
+AI 클라이언트에 ExHub MCP를 등록하면 이런 대화가 가능합니다:
+
+- "비트코인 현재가 알려줘"
+- "업비트에서 최근 BTC 체결 내역 보여줘"
+- "이더리움 호가 조회해줘"
+
+### 지원 거래소
+
+| 거래소  | Exchange 키 |
+| ------- | ----------- |
+| Upbit   | `upbit`     |
+| Bithumb | `bithumb`   |
+| Coinone | `coinone`   |
+| Gopax   | `gopax`     |
+| Korbit  | `korbit`    |
+
+### 지원 AI 클라이언트
+
+- Claude Desktop
+- Claude Code
+- Cursor
+- VS Code (Copilot)
+- Windsurf
+- Zed
+
+import { Callout } from "nextra/components";
+
+<Callout type="info">
+  Public API 도구는 인증 없이 바로 사용할 수 있습니다. Private API 도구(잔고
+  조회, 주문 등)를 사용하려면 환경 변수로 API 키를 설정해야 합니다.
+</Callout>
+
+## 다음 단계
+
+1. [설치 및 설정](/docs/mcp/installation) — 패키지 설치와 환경 변수 설정
+2. [클라이언트 설정](/docs/mcp/clients) — AI 클라이언트별 MCP 서버 등록 방법

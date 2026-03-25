@@ -1,0 +1,125 @@
+# Upbit
+
+[Upbit](https://upbit.com) 거래소 SDK 사용법입니다.
+
+## 설치
+
+```bash npm2yarn
+npm install @exhub/upbit
+```
+
+## 클라이언트 생성
+
+```typescript
+import { createUpbitClient } from "@exhub/upbit";
+
+const client = createUpbitClient();
+```
+
+## 인증 설정
+
+Private API를 사용하려면 [Upbit Open API](https://upbit.com/mypage/open_api_management)에서 API 키를 발급받으세요.
+
+```typescript
+const client = createUpbitClient({
+  credentials: {
+    accessKey: process.env.UPBIT_ACCESS_KEY!,
+    secretKey: process.env.UPBIT_SECRET_KEY!,
+  },
+});
+```
+
+## Public API
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `tradingPairs.listTradingPairs()` | 페어 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-trading-pairs) |
+| `candles.getSecondCandles(params)` | 초(Second) 캔들 조회 | [링크](https://docs.upbit.com/kr/reference/list-candles-seconds) |
+| `candles.getMinuteCandles(unit, params)` | 분(Minute) 캔들 조회 | [링크](https://docs.upbit.com/kr/reference/list-candles-minutes) |
+| `candles.getDayCandles(params)` | 일(Day) 캔들 조회 | [링크](https://docs.upbit.com/kr/reference/list-candles-days) |
+| `candles.getWeekCandles(params)` | 주(Week) 캔들 조회 | [링크](https://docs.upbit.com/kr/reference/list-candles-weeks) |
+| `candles.getMonthCandles(params)` | 월(Month) 캔들 조회 | [링크](https://docs.upbit.com/kr/reference/list-candles-months) |
+| `candles.getYearCandles(params)` | 연(Year) 캔들 조회 | [링크](https://docs.upbit.com/kr/reference/list-candles-years) |
+| `trades.listTradesTicks(params)` | 최근 체결 내역 조회 | [링크](https://docs.upbit.com/kr/reference/list-trades-ticks) |
+| `tickers.listTickers(params)` | 페어 단위 현재가 조회 | [링크](https://docs.upbit.com/kr/reference/list-tickers) |
+| `tickers.listQuoteTickers(params)` | 마켓 단위 현재가 조회 | [링크](https://docs.upbit.com/kr/reference/list-quote-tickers) |
+| `orderbook.listOrderbooks(params)` | 호가 조회 | [링크](https://docs.upbit.com/kr/reference/list-orderbooks) |
+| `orderbook.listOrderbookInstruments(params)` | 호가 정책 조회 | [링크](https://docs.upbit.com/kr/reference/list-orderbook-instruments) |
+| `orderbook.listOrderbookSupportedLevels(params)` | 호가 모아보기 단위 조회 | [링크](https://docs.upbit.com/kr/reference/list-orderbook-levels) |
+
+### 사용 예시
+
+```typescript
+// 현재가 조회
+const tickers = await client.tickers.listTickers({ markets: "KRW-BTC" });
+
+// 일봉 조회
+const candles = await client.candles.getDayCandles({ market: "KRW-BTC", count: 10 });
+
+// 분봉 조회 (1, 3, 5, 10, 15, 30, 60, 240분)
+const minuteCandles = await client.candles.getMinuteCandles(1, {
+  market: "KRW-BTC",
+  count: 10,
+});
+```
+
+## Private API
+
+import { Callout } from "nextra/components";
+
+<Callout type="warning">
+  Private API는 인증 설정이 필요합니다. `credentials` 없이 호출하면 에러가 발생합니다.
+</Callout>
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `assets.listBalance()` | 계정 잔고 조회 | [링크](https://docs.upbit.com/kr/reference/get-balance) |
+| `orders.getOrderChance(params)` | 페어별 주문 가능 정보 조회 | [링크](https://docs.upbit.com/kr/reference/available-order-information) |
+| `orders.createOrder(body)` | 주문 생성 | [링크](https://docs.upbit.com/kr/reference/new-order) |
+| `orders.createTestOrder(body)` | 주문 생성 테스트 | [링크](https://docs.upbit.com/kr/reference/order-test) |
+| `orders.getOrder(params)` | 개별 주문 조회 | [링크](https://docs.upbit.com/kr/reference/get-order) |
+| `orders.cancelOrder(params)` | 개별 주문 취소 접수 | [링크](https://docs.upbit.com/kr/reference/cancel-order) |
+| `orders.listOrdersByIds(params)` | id로 주문 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-orders-by-ids) |
+| `orders.cancelOrdersByIds(params)` | id로 주문 목록 취소 접수 | [링크](https://docs.upbit.com/kr/reference/cancel-orders-by-ids) |
+| `orders.listOpenOrders(params)` | 체결 대기 주문 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-open-orders) |
+| `orders.cancelOpenOrders(params)` | 주문 일괄 취소 접수 | [링크](https://docs.upbit.com/kr/reference/batch-cancel-orders) |
+| `orders.listClosedOrders(params)` | 종료 주문 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-closed-orders) |
+| `orders.cancelAndCreateOrder(body)` | 취소 후 재주문 | [링크](https://docs.upbit.com/kr/reference/cancel-and-new-order) |
+| `withdrawals.getWithdrawChance(params)` | 출금 가능 정보 조회 | [링크](https://docs.upbit.com/kr/reference/available-withdrawal-information) |
+| `withdrawals.listWithdrawalAddresses()` | 출금 허용 주소 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-withdrawal-addresses) |
+| `withdrawals.withdraw(body)` | 디지털 자산 출금 요청 | [링크](https://docs.upbit.com/kr/reference/withdraw) |
+| `withdrawals.cancelWithdrawal(params)` | 디지털 자산 출금 취소 요청 | [링크](https://docs.upbit.com/kr/reference/cancel-withdrawal) |
+| `withdrawals.createWithdrawKrw(body)` | 원화 출금 요청 | [링크](https://docs.upbit.com/kr/reference/withdraw-krw) |
+| `withdrawals.getWithdrawal(params)` | 개별 출금 조회 | [링크](https://docs.upbit.com/kr/reference/get-withdrawal) |
+| `withdrawals.listWithdrawals(params)` | 출금 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-withdrawals) |
+| `deposits.getDepositChance(params)` | 디지털 자산 입금 가능 정보 조회 | [링크](https://docs.upbit.com/kr/reference/available-deposit-information) |
+| `deposits.createDepositAddress(body)` | 입금 주소 생성 요청 | [링크](https://docs.upbit.com/kr/reference/create-deposit-address) |
+| `deposits.getDepositAddress(params)` | 개별 입금 주소 조회 | [링크](https://docs.upbit.com/kr/reference/get-deposit-address) |
+| `deposits.listDepositAddresses()` | 입금 주소 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-deposit-addresses) |
+| `deposits.createDepositKrw(body)` | 원화 입금 | [링크](https://docs.upbit.com/kr/reference/deposit-krw) |
+| `deposits.getDeposit(params)` | 개별 입금 조회 | [링크](https://docs.upbit.com/kr/reference/get-deposit) |
+| `deposits.listDeposits(params)` | 입금 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-deposits) |
+| `travelRule.listTravelRuleVasps()` | 계정주 확인 서비스 지원 거래소 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-travelrule-vasps) |
+| `travelRule.verifyTravelRuleByUuid(body)` | 입금 UUID로 계정주 검증 요청 | [링크](https://docs.upbit.com/kr/reference/verify-travelrule-by-uuid) |
+| `travelRule.verifyTravelRuleByTxid(body)` | 입금 TxID로 계정주 검증 요청 | [링크](https://docs.upbit.com/kr/reference/verify-travelrule-by-txid) |
+| `service.getServiceStatus()` | 입출금 서비스 상태 조회 | [링크](https://docs.upbit.com/kr/reference/get-service-status) |
+| `service.listApiKeys()` | API Key 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-api-keys) |
+
+### 사용 예시
+
+```typescript
+// 잔고 조회
+const balance = await client.assets.listBalance();
+
+// 지정가 매수 주문
+const order = await client.orders.createOrder({
+  market: "KRW-BTC",
+  side: "bid",
+  ord_type: "limit",
+  price: "50000000",
+  volume: "0.001",
+});
+
+// 주문 취소
+await client.orders.cancelOrder({ uuid: order.uuid });
+```

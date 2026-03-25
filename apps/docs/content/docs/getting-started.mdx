@@ -1,0 +1,61 @@
+# 시작하기
+
+## 요구사항
+
+- Node.js 18 이상
+- npm, yarn, 또는 pnpm
+
+## 빠른 시작
+
+Upbit를 예시로 Public API를 호출해 봅니다.
+
+### 1. 설치
+
+```bash npm2yarn
+npm install @exhub/upbit
+```
+
+### 2. 현재가 조회 (Public API)
+
+Public API는 인증 없이 바로 사용할 수 있습니다.
+
+```typescript
+import { createUpbitClient } from "@exhub/upbit";
+
+const client = createUpbitClient();
+
+// BTC 현재가 조회
+const tickers = await client.tickers.listTickers({
+  markets: "KRW-BTC",
+});
+console.log(tickers);
+```
+
+### 3. 잔고 조회 (Private API)
+
+Private API는 거래소에서 발급받은 API 키가 필요합니다.
+
+```typescript
+import { createUpbitClient } from "@exhub/upbit";
+
+const client = createUpbitClient({
+  credentials: {
+    accessKey: process.env.UPBIT_ACCESS_KEY!,
+    secretKey: process.env.UPBIT_SECRET_KEY!,
+  },
+});
+
+const balance = await client.assets.listBalance();
+console.log(balance);
+```
+
+## SDK vs MCP
+
+| | SDK | MCP |
+|---|---|---|
+| **대상** | 직접 코드를 작성하는 개발자 | AI 도구(Claude, Cursor 등) 사용자 |
+| **사용 방식** | TypeScript/JavaScript에서 import하여 사용 | AI 클라이언트에 MCP 서버를 등록하여 사용 |
+| **장점** | 타입 안전성, 완전한 제어 | 코드 작성 없이 자연어로 거래소 데이터 조회 |
+
+- 코드에서 거래소 API를 직접 호출하려면 → [SDK 문서](/docs/sdk)
+- AI 도구에서 거래소 데이터를 활용하려면 → [MCP 문서](/docs/mcp)

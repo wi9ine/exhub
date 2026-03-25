@@ -1802,6 +1802,9 @@
       "get": {
         "operationId": "list-trades-ticks",
         "summary": "최근 체결 내역 조회",
+        "externalDocs": {
+          "url": "https://docs.upbit.com/kr/reference/list-trades-ticks"
+        },
         "tags": [
           "체결(Trade)"
         ],
