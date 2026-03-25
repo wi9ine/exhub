@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "start": "next start"
   },
   "dependencies": {
@@ -18,7 +19,8 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
-    "@types/react": "19.2.14"
+    "@types/react": "19.2.14",
+    "pagefind": "^1.4.0"
   },
   "repository": {
     "type": "git",
