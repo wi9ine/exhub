@@ -10,12 +10,12 @@
  * 파일 내용에서 "openapi" 또는 "asyncapi" 키를 감지하여 적절한 파서를 자동 선택합니다.
  */
 
-import { readFile, readdir, stat } from "node:fs/promises";
-import { resolve, relative, extname } from "node:path";
+import { readdir, readFile, stat } from "node:fs/promises";
+import { extname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import SwaggerParser from "@apidevtools/swagger-parser";
-import { Parser as AsyncApiParser } from "@asyncapi/parser";
 import type { Diagnostic } from "@asyncapi/parser";
+import { Parser as AsyncApiParser } from "@asyncapi/parser";
 
 // ─── 타입 정의 ───────────────────────────────────────────────
 type SpecType = "openapi" | "asyncapi";
@@ -38,14 +38,10 @@ const color = {
   dim: "\x1b[2m",
 } as const;
 
-const ok = (msg: string): void =>
-  console.log(`${color.green}✔${color.reset} ${msg}`);
-const warn = (msg: string): void =>
-  console.log(`${color.yellow}⚠${color.reset} ${msg}`);
-const fail = (msg: string): void =>
-  console.log(`${color.red}✖${color.reset} ${msg}`);
-const info = (msg: string): void =>
-  console.log(`${color.cyan}ℹ${color.reset} ${msg}`);
+const ok = (msg: string): void => console.log(`${color.green}✔${color.reset} ${msg}`);
+const warn = (msg: string): void => console.log(`${color.yellow}⚠${color.reset} ${msg}`);
+const fail = (msg: string): void => console.log(`${color.red}✖${color.reset} ${msg}`);
+const info = (msg: string): void => console.log(`${color.cyan}ℹ${color.reset} ${msg}`);
 const heading = (msg: string): void =>
   console.log(`\n${color.bold}${color.cyan}${msg}${color.reset}`);
 
@@ -94,10 +90,9 @@ async function collectSpecFiles(dir: string): Promise<string[]> {
 async function validateOpenApi(filePath: string): Promise<boolean> {
   try {
     const api = await SwaggerParser.validate(filePath);
-    const version = (api as Record<string, unknown>).openapi ?? (api as Record<string, unknown>).swagger;
-    ok(
-      `OpenAPI ${version ? `v${version}` : ""} — ${api.info?.title ?? "제목 없음"}`
-    );
+    const version =
+      (api as Record<string, unknown>).openapi ?? (api as Record<string, unknown>).swagger;
+    ok(`OpenAPI ${version ? `v${version}` : ""} — ${api.info?.title ?? "제목 없음"}`);
     return true;
   } catch (err) {
     fail("OpenAPI 검증 실패");
@@ -123,9 +118,7 @@ async function validateAsyncApi(filePath: string): Promise<boolean> {
       for (const err of errors) {
         console.log(`  ${color.red}•${color.reset} ${err.message}`);
         if (err.path?.length) {
-          console.log(
-            `    ${color.dim}경로: ${err.path.join(" > ")}${color.reset}`
-          );
+          console.log(`    ${color.dim}경로: ${err.path.join(" > ")}${color.reset}`);
         }
       }
       if (warnings.length > 0) {
@@ -206,9 +199,7 @@ async function main(): Promise<void> {
     }
 
     const success =
-      specType === "openapi"
-        ? await validateOpenApi(filePath)
-        : await validateAsyncApi(filePath);
+      specType === "openapi" ? await validateOpenApi(filePath) : await validateAsyncApi(filePath);
 
     if (success) {
       summary.passed++;
@@ -225,7 +216,7 @@ async function main(): Promise<void> {
     `  ${color.green}통과: ${summary.passed}${color.reset}  ` +
       `${color.red}실패: ${summary.failed}${color.reset}  ` +
       `${color.yellow}건너뜀: ${summary.skipped}${color.reset}  ` +
-      `${color.dim}전체: ${summary.total}${color.reset}`
+      `${color.dim}전체: ${summary.total}${color.reset}`,
   );
   console.log();
 

@@ -100,9 +100,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/range-unit"
@@ -251,9 +249,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/markets"
@@ -412,9 +408,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/market"
@@ -454,12 +448,7 @@
             "description": "조회 하려는 오더북 개수 (기본값: 15)",
             "schema": {
               "type": "string",
-              "enum": [
-                "5",
-                "10",
-                "15",
-                "16"
-              ],
+              "enum": ["5", "10", "15", "16"],
               "default": "15"
             }
           },
@@ -567,9 +556,7 @@
           }
         },
         "deprecated": false,
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/orderbook"
@@ -609,13 +596,7 @@
             "description": "한번에 조회할 목록 수 (기본:200)",
             "schema": {
               "type": "string",
-              "enum": [
-                "10",
-                "50",
-                "100",
-                "150",
-                "200"
-              ],
+              "enum": ["10", "50", "100", "150", "200"],
               "default": "200"
             }
           }
@@ -703,9 +684,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/recent-completed-orders"
@@ -1031,9 +1010,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/tickers"
@@ -1369,9 +1346,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/ticker"
@@ -1697,9 +1672,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/utc-tickers"
@@ -2035,9 +2008,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/utc-ticker"
@@ -2143,9 +2114,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/currencies"
@@ -2263,9 +2232,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/currency"
@@ -2306,20 +2273,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "1m",
-                "3m",
-                "5m",
-                "15m",
-                "30m",
-                "1h",
-                "2h",
-                "4h",
-                "6h",
-                "1d",
-                "1w",
-                "1mon"
-              ]
+              "enum": ["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "1d", "1w", "1mon"]
             }
           },
           {
@@ -2423,9 +2377,7 @@
         },
         "deprecated": false,
         "security": [],
-        "tags": [
-          "PUBLIC API V2"
-        ],
+        "tags": ["PUBLIC API V2"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/chart"
@@ -2518,9 +2470,7 @@
         },
         "deprecated": true,
         "security": [],
-        "tags": [
-          "PUBLIC API V1 (Deprecated)"
-        ],
+        "tags": ["PUBLIC API V1 (Deprecated)"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/orderbook-deprecated"
@@ -2792,9 +2742,7 @@
           }
         },
         "deprecated": true,
-        "tags": [
-          "PUBLIC API V1 (Deprecated)"
-        ],
+        "tags": ["PUBLIC API V1 (Deprecated)"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/ticker-1"
@@ -3067,9 +3015,7 @@
         },
         "deprecated": true,
         "security": [],
-        "tags": [
-          "PUBLIC API V1 (Deprecated)"
-        ],
+        "tags": ["PUBLIC API V1 (Deprecated)"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/ticker-utc-deprecated"
@@ -3157,9 +3103,7 @@
           }
         },
         "deprecated": true,
-        "tags": [
-          "PUBLIC API V1 (Deprecated)"
-        ],
+        "tags": ["PUBLIC API V1 (Deprecated)"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/recent-complete-orders-deprecated"

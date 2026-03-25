@@ -45,10 +45,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -146,17 +143,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/account/balance/all\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "잔고 조회"
-        ],
+        "tags": ["잔고 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-balance"
@@ -194,11 +183,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "currencies"
-                ],
+                "required": ["access_token", "nonce", "currencies"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -211,11 +196,7 @@
                   "currencies": {
                     "type": "array",
                     "description": "잔고 조회하려는 자산의 심볼 입력",
-                    "default": [
-                      "\"BTC\"",
-                      "\"KRW\"",
-                      "\"ETH\""
-                    ],
+                    "default": ["\"BTC\"", "\"KRW\"", "\"ETH\""],
                     "items": {
                       "type": "string"
                     }
@@ -307,17 +288,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/account/balance\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"currencies\":   []string{\"KRW\", \"BTC\", \"ETH\"},\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "잔고 조회"
-        ],
+        "tags": ["잔고 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-balance-by-currencies"
@@ -355,10 +328,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -455,17 +425,9 @@
               "code": "package main\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"fmt\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/account/trade_fee\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "고객 정보"
-        ],
+        "tags": ["고객 정보"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-all-trade-fees"
@@ -523,10 +485,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -623,17 +582,9 @@
               "code": "package main\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"fmt\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/account/trade_fee/KRW/BTC\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "고객 정보"
-        ],
+        "tags": ["고객 정보"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-trade-fee-by-pair"
@@ -671,10 +622,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -695,9 +643,7 @@
                   "order_type": {
                     "type": "array",
                     "description": "조회하고자하는 주문 방식, [\"LIMIT\"], [\"STOP_LIMIT\"], [\"LIMIT\", \"STOP_LIMIT\"] 이 가능하며, [] 또는 생략시 모든 타입이 조회",
-                    "default": [
-                      "[]"
-                    ],
+                    "default": ["[]"],
                     "items": {
                       "type": "string"
                     }
@@ -962,17 +908,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/active_orders\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"quote_currency\":  \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t\t\"order_type\":      []string{\"LIMIT\"}, //The order_type can include MARKET, STOP_LIMIT, and if order_type is null or an empty list, all order types are retrieved\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-active-orders"
@@ -1591,17 +1529,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/detail\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"quote_currency\":  \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t\t\"order_id\":        \"0f1c2fd6-1e4d-11e9-9ec7-00e04c3600d7\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/order-detail"
@@ -1639,13 +1569,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "size",
-                  "from_ts",
-                  "to_ts"
-                ],
+                "required": ["access_token", "nonce", "size", "from_ts", "to_ts"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -1809,17 +1733,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/completed_orders/all\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"size\":         30,\n\t\t\"from_ts\":      1651202074230,\n\t\t\"to_ts\":        1651202974230,\n\t\t\"to_trade_id\":  nil,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-all-completed-orders"
@@ -1830,9 +1746,7 @@
     "/v2.1/order/completed_orders": {
       "post": {
         "summary": "종목 별 체결 주문 조회",
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "description": "특정 종목의 체결된 주문 조회",
         "operationId": "list-completed-orders",
         "parameters": [
@@ -2041,13 +1955,7 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/completed_orders\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"quote_currency\": \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t\t\"size\": 30,\n\t\t\"from_ts\": 1651202074230,\n\t\t\"to_ts\": 1651202974230,\n\t\t\"to_trade_id\": nil,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
         "externalDocs": {
           "description": "공식 문서",
@@ -2086,10 +1994,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -2237,17 +2142,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/open_orders/all\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-all-open-orders"
@@ -2260,9 +2157,7 @@
     "/v2.1/order/open_orders": {
       "post": {
         "summary": "종목 별 미체결 주문 조회",
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "description": "특정 종목에 걸려있는 모든 미체결 주문을 조회",
         "operationId": "list-open-orders",
         "parameters": [
@@ -2290,12 +2185,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "quote_currency",
-                  "target_currency"
-                ],
+                "required": ["access_token", "nonce", "quote_currency", "target_currency"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -2453,13 +2343,7 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/open_orders\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"quote_currency\":  \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
         "externalDocs": {
           "description": "공식 문서",
@@ -2676,17 +2560,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/info\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"order_id\":        \"d85cc6af-b131-4398-b269-ddbafa760a39\",\n\t\t\"quote_currency\":  \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 조회"
-        ],
+        "tags": ["주문 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/find-order-info"
@@ -2850,17 +2726,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"quote_currency\":  \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t\t\"type\":            \"MARKET\",\n\t\t\"side\":            \"BUY\",\n\t\t\"amount\":          \"10000000\", //only for market buy order\n\t\t\"qty\":             nil,        // for limit order, stop limit order, market sell order\n\t\t\"limit_price\":     \"12000000\", //for market order\n\t\t\"price\":           nil,        // for limit, stop limit order\n\t\t\"post_only\":       nil,        // for limit order\n\t\t\"trigger_price\":   nil,        // for stop limit order\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 권한"
-        ],
+        "tags": ["주문 권한"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/place-order"
@@ -2898,12 +2766,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "quote_currency",
-                  "target_currency"
-                ],
+                "required": ["access_token", "nonce", "quote_currency", "target_currency"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -2993,17 +2856,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/cancel/all\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"quote_currency\":  \"krw\",\n\t\t\"target_currency\": \"btc\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 권한"
-        ],
+        "tags": ["주문 권한"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/cancel-orders"
@@ -3200,17 +3055,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/cancel\", map[string]interface{}{\n\t\t\"access_token\":    accessToken,\n\t\t\"order_id\":        \"d85cc6af-b131-4398-b269-ddbafa760a39\",\n\t\t\"quote_currency\":  \"KRW\",\n\t\t\"target_currency\": \"BTC\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 권한"
-        ],
+        "tags": ["주문 권한"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/cancel-order"
@@ -3358,17 +3205,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/order/limit\", map[string]interface{}{\n\t\t\"access_token\":     accessToken,\n\t\t\"quote_currency\":   \"KRW\",\n\t\t\"target_currency\":  \"BTC\",\n\t\t\"side\":             \"BUY\",\n\t\t\"price\":            \"4241000.0\",\n\t\t\"qty\":              \"0.1\",\n\t\t\"limit_order_type\": \"LIMIT\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 권한"
-        ],
+        "tags": ["주문 권한"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/order-place-limit-order"
@@ -3408,10 +3247,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -3548,17 +3384,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/transaction/krw/history\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"to_id\":        nil,\n\t\t\"is_deposit\":   nil,\n\t\t\"size\":         50,\n\t\t\"from_ts\":      1656514800000,\n\t\t\"to_ts\":        1661938475279,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "입출금 조회"
-        ],
+        "tags": ["입출금 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/krw-transaction-history"
@@ -3596,10 +3424,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -3772,17 +3597,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/transaction/coin/history\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"currency\":     nil,\n\t\t\"to_id\":        nil,\n\t\t\"is_deposit\":   nil,\n\t\t\"size\":         50,\n\t\t\"from_ts\":      1656514800000,\n\t\t\"to_ts\":        1661938475279,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "입출금 조회"
-        ],
+        "tags": ["입출금 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/coin-transaction-history"
@@ -3793,9 +3610,7 @@
     "/v2.1/transaction/coin/history/detail": {
       "post": {
         "summary": "가상자산 입출금 내역 단건 조회",
-        "tags": [
-          "입출금 조회"
-        ],
+        "tags": ["입출금 조회"],
         "description": "출금 API를 통해 받은 ID를 이용하여 가상자산의 입출금 내역의 진행상태를 조회할 수 있습니다.",
         "operationId": "get-coin-transaction-history-detail",
         "parameters": [
@@ -3823,11 +3638,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "id"
-                ],
+                "required": ["access_token", "nonce", "id"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -3975,13 +3786,7 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/transaction/coin/history/detail\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"id\":  \"0fec72eb-1e4d-11e9-9ec7-00e04c3600d7\"\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
         "externalDocs": {
           "description": "공식 문서",
@@ -4020,11 +3825,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "currency"
-                ],
+                "required": ["access_token", "nonce", "currency"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -4113,17 +3914,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/transaction/coin/withdrawal/limit\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"currency\":     \"BTC\",\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "입출금 조회"
-        ],
+        "tags": ["입출금 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/coin-withdrawal-limit"
@@ -4161,10 +3954,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -4214,10 +4004,7 @@
                             "description": "출금 주소"
                           },
                           "secondary_address": {
-                            "type": [
-                              "string",
-                              "null"
-                            ],
+                            "type": ["string", "null"],
                             "description": "추가적인 출금 주소 정보 (Memo 혹은 Destination Tag)"
                           },
                           "nickname": {
@@ -4266,17 +4053,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/transaction/coin/withdrawal/address_book\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"currency\": \"BTC\"\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "입출금 조회"
-        ],
+        "tags": ["입출금 조회"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/coin-withdrawal-address-book"
@@ -4314,13 +4093,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce",
-                  "currency",
-                  "amount",
-                  "address"
-                ],
+                "required": ["access_token", "nonce", "currency", "amount", "address"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -4445,17 +4218,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/transaction/coin/withdrawal\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"currency\": \"BTC\",\n\t\t\"amount\": \"1.1\",\n\t\t\"address\": \"muQoJGAySUJsn1c9iaj9GQitdVLJhnQVnL\",\n\t\t\"secondary_address\": \"memo\"\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "출금 권한"
-        ],
+        "tags": ["출금 권한"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/coin-withdrawal"
@@ -4493,10 +4258,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token",
-                  "nonce"
-                ],
+                "required": ["access_token", "nonce"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -4619,17 +4381,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/event/order-reward/programs\", map[string]interface{}{\n\t\t\"access_token\": accessToken\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 리워드 이벤트"
-        ],
+        "tags": ["주문 리워드 이벤트"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/order-reward-programs"
@@ -4667,9 +4421,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "access_token"
-                ],
+                "required": ["access_token"],
                 "properties": {
                   "access_token": {
                     "type": "string",
@@ -4821,17 +4573,9 @@
               "code": "package main\n\nimport (\n\t\"fmt\"\n)\n\nimport (\n\t\"crypto/hmac\"\n\t\"crypto/sha512\"\n\t\"encoding/base64\"\n\t\"encoding/json\"\n\t\"github.com/google/uuid\"\n\t\"io\"\n\t\"net/http\"\n\t\"strings\"\n)\n\nconst (\n\taccessToken = \"{access token}\"\n\tsecretKey   = \"{secret key}\"\n)\n\nfunc getEncodedPayload(payload map[string]interface{}) string {\n\tpayload[\"nonce\"] = uuid.New().String()\n\n\tdumpedJSON, _ := json.Marshal(payload)\n\treturn base64.StdEncoding.EncodeToString(dumpedJSON)\n}\n\nfunc getSignature(encodedPayload string) string {\n\th := hmac.New(sha512.New, []byte(secretKey))\n\th.Write([]byte(encodedPayload))\n\treturn fmt.Sprintf(\"%x\", h.Sum(nil))\n}\n\nfunc getResponse(action string, payload map[string]interface{}) ([]byte, error) {\n\turl := fmt.Sprintf(\"https://api.coinone.co.kr%s\", action)\n\n\tencodedPayload := getEncodedPayload(payload)\n\n\treq, err := http.NewRequest(\"POST\", url, strings.NewReader(\"\"))\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\treq.Header.Set(\"X-COINONE-PAYLOAD\", encodedPayload)\n\treq.Header.Set(\"X-COINONE-SIGNATURE\", getSignature(encodedPayload))\n\n\tclient := &http.Client{}\n\tresp, err := client.Do(req)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer resp.Body.Close()\n\n\tbody, err := io.ReadAll(resp.Body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\n\treturn body, nil\n}\n\nfunc main() {\n\tresponse, err := getResponse(\"/v2.1/event/order-reward/history\", map[string]interface{}{\n\t\t\"access_token\": accessToken,\n\t\t\"from_ts\":      1746835200,\n\t\t\"to_ts\":        1749513600,\n\t})\n\tif err != nil {\n\t\tfmt.Println(\"Error:\", err)\n\t\treturn\n\t}\n\n\tfmt.Println(string(response))\n}"
             }
           ],
-          "samples-languages": [
-            "python",
-            "java",
-            "kotlin",
-            "javascript",
-            "go"
-          ]
+          "samples-languages": ["python", "java", "kotlin", "javascript", "go"]
         },
-        "tags": [
-          "주문 리워드 이벤트"
-        ],
+        "tags": ["주문 리워드 이벤트"],
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://docs.coinone.co.kr/reference/order-reward-history"

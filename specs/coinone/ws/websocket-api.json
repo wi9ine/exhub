@@ -35,9 +35,7 @@
   },
   "channels": {
     "public.ping": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "send-public-ping",
         "message": {
@@ -62,9 +60,7 @@
       }
     },
     "public.orderbook": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-public-orderbook",
         "message": {
@@ -96,9 +92,7 @@
       }
     },
     "public.ticker": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-public-ticker",
         "message": {
@@ -130,9 +124,7 @@
       }
     },
     "public.trade": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-public-trade",
         "message": {
@@ -164,9 +156,7 @@
       }
     },
     "public.chart": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-public-chart",
         "message": {
@@ -198,9 +188,7 @@
       }
     },
     "private.ping": {
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "send-private-ping",
         "message": {
@@ -225,9 +213,7 @@
       }
     },
     "private.myOrder": {
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-private-my-order",
         "message": {
@@ -259,9 +245,7 @@
       }
     },
     "private.myAsset": {
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-private-my-asset",
         "message": {
@@ -307,10 +291,7 @@
             "description": "조회 요청할 종목"
           }
         },
-        "required": [
-          "quote_currency",
-          "target_currency"
-        ]
+        "required": ["quote_currency", "target_currency"]
       },
       "ChartTopic": {
         "type": "object",
@@ -326,22 +307,14 @@
             "description": "1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 1d, 1w"
           }
         },
-        "required": [
-          "quote_currency",
-          "target_currency",
-          "interval"
-        ]
+        "required": ["quote_currency", "target_currency", "interval"]
       },
       "PublicBaseRequest": {
         "type": "object",
         "properties": {
           "request_type": {
             "type": "string",
-            "enum": [
-              "SUBSCRIBE",
-              "UNSUBSCRIBE",
-              "PING"
-            ],
+            "enum": ["SUBSCRIBE", "UNSUBSCRIBE", "PING"],
             "description": "실행할 요청 종류"
           },
           "channel": {
@@ -354,28 +327,19 @@
           },
           "format": {
             "type": "string",
-            "enum": [
-              "DEFAULT",
-              "SHORT"
-            ],
+            "enum": ["DEFAULT", "SHORT"],
             "default": "DEFAULT",
             "description": "단축 변수명으로 구독 원하는 경우 SHORT 입력 (기본값: DEFAULT)"
           }
         },
-        "required": [
-          "request_type"
-        ]
+        "required": ["request_type"]
       },
       "PrivateBaseRequest": {
         "type": "object",
         "properties": {
           "request_type": {
             "type": "string",
-            "enum": [
-              "SUBSCRIBE",
-              "UNSUBSCRIBE",
-              "PING"
-            ],
+            "enum": ["SUBSCRIBE", "UNSUBSCRIBE", "PING"],
             "description": "실행할 요청 종류"
           },
           "channel": {
@@ -391,56 +355,41 @@
           },
           "format": {
             "type": "string",
-            "enum": [
-              "DEFAULT",
-              "SHORT"
-            ],
+            "enum": ["DEFAULT", "SHORT"],
             "default": "DEFAULT",
             "description": "단축 변수명으로 구독 원하는 경우 SHORT 입력 (기본값: DEFAULT)"
           }
         },
-        "required": [
-          "request_type"
-        ]
+        "required": ["request_type"]
       },
       "PingRequest": {
         "type": "object",
         "properties": {
           "request_type": {
             "type": "string",
-            "enum": [
-              "PING"
-            ],
+            "enum": ["PING"],
             "description": "연결 상태를 체크하고 세션 만료시간을 갱신하는 요청"
           }
         },
-        "required": [
-          "request_type"
-        ]
+        "required": ["request_type"]
       },
       "PongResponse": {
         "type": "object",
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "PONG"
-            ],
+            "enum": ["PONG"],
             "description": "PING 요청에 대한 응답"
           }
         },
-        "required": [
-          "response_type"
-        ]
+        "required": ["response_type"]
       },
       "ConnectedResponse": {
         "type": "object",
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "CONNECTED"
-            ],
+            "enum": ["CONNECTED"],
             "description": "웹소켓 연결 직후 세션 생성 성공 응답"
           },
           "data": {
@@ -452,15 +401,10 @@
                 "description": "생성된 세션 식별자"
               }
             },
-            "required": [
-              "session_id"
-            ]
+            "required": ["session_id"]
           }
         },
-        "required": [
-          "response_type",
-          "data"
-        ]
+        "required": ["response_type", "data"]
       },
       "PublicOrderbookRequestPayload": {
         "allOf": [
@@ -472,20 +416,14 @@
             "properties": {
               "channel": {
                 "type": "string",
-                "enum": [
-                  "ORDERBOOK"
-                ],
+                "enum": ["ORDERBOOK"],
                 "description": "구독 채널명: ORDERBOOK"
               },
               "topic": {
                 "$ref": "#/components/schemas/TopicPair"
               }
             },
-            "required": [
-              "request_type",
-              "channel",
-              "topic"
-            ]
+            "required": ["request_type", "channel", "topic"]
           }
         ]
       },
@@ -499,20 +437,14 @@
             "properties": {
               "channel": {
                 "type": "string",
-                "enum": [
-                  "TICKER"
-                ],
+                "enum": ["TICKER"],
                 "description": "구독 채널명: TICKER"
               },
               "topic": {
                 "$ref": "#/components/schemas/TopicPair"
               }
             },
-            "required": [
-              "request_type",
-              "channel",
-              "topic"
-            ]
+            "required": ["request_type", "channel", "topic"]
           }
         ]
       },
@@ -526,20 +458,14 @@
             "properties": {
               "channel": {
                 "type": "string",
-                "enum": [
-                  "TRADE"
-                ],
+                "enum": ["TRADE"],
                 "description": "구독 채널명: TRADE"
               },
               "topic": {
                 "$ref": "#/components/schemas/TopicPair"
               }
             },
-            "required": [
-              "request_type",
-              "channel",
-              "topic"
-            ]
+            "required": ["request_type", "channel", "topic"]
           }
         ]
       },
@@ -553,20 +479,14 @@
             "properties": {
               "channel": {
                 "type": "string",
-                "enum": [
-                  "CHART"
-                ],
+                "enum": ["CHART"],
                 "description": "구독 채널명: CHART"
               },
               "topic": {
                 "$ref": "#/components/schemas/ChartTopic"
               }
             },
-            "required": [
-              "request_type",
-              "channel",
-              "topic"
-            ]
+            "required": ["request_type", "channel", "topic"]
           }
         ]
       },
@@ -580,16 +500,11 @@
             "properties": {
               "channel": {
                 "type": "string",
-                "enum": [
-                  "MYORDER"
-                ],
+                "enum": ["MYORDER"],
                 "description": "구독 채널명: MYORDER"
               }
             },
-            "required": [
-              "request_type",
-              "channel"
-            ]
+            "required": ["request_type", "channel"]
           }
         ]
       },
@@ -603,16 +518,11 @@
             "properties": {
               "channel": {
                 "type": "string",
-                "enum": [
-                  "MYASSET"
-                ],
+                "enum": ["MYASSET"],
                 "description": "구독 채널명: MYASSET"
               }
             },
-            "required": [
-              "request_type",
-              "channel"
-            ]
+            "required": ["request_type", "channel"]
           }
         ]
       },
@@ -621,9 +531,7 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "SUBSCRIBED"
-            ]
+            "enum": ["SUBSCRIBED"]
           },
           "channel": {
             "type": "string"
@@ -632,10 +540,7 @@
             "type": "object"
           }
         },
-        "required": [
-          "response_type",
-          "channel"
-        ]
+        "required": ["response_type", "channel"]
       },
       "PublicOrderbookStreamData": {
         "type": "object",
@@ -678,10 +583,7 @@
                   "description": "매도 수량"
                 }
               },
-              "required": [
-                "price",
-                "qty"
-              ]
+              "required": ["price", "qty"]
             },
             "description": "매도 오더북 정보"
           },
@@ -702,22 +604,12 @@
                   "description": "매수 수량"
                 }
               },
-              "required": [
-                "price",
-                "qty"
-              ]
+              "required": ["price", "qty"]
             },
             "description": "매수 오더북 정보"
           }
         },
-        "required": [
-          "quote_currency",
-          "target_currency",
-          "timestamp",
-          "id",
-          "asks",
-          "bids"
-        ],
+        "required": ["quote_currency", "target_currency", "timestamp", "id", "asks", "bids"],
         "x-format-transforms": {
           "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
         },
@@ -728,17 +620,13 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "DATA"
-            ],
+            "enum": ["DATA"],
             "x-abbreviation": "r",
             "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "ORDERBOOK"
-            ],
+            "enum": ["ORDERBOOK"],
             "x-abbreviation": "c",
             "description": "ORDERBOOK 채널 고정"
           },
@@ -748,11 +636,7 @@
             "description": "구독 data 정보"
           }
         },
-        "required": [
-          "response_type",
-          "channel",
-          "data"
-        ]
+        "required": ["response_type", "channel", "data"]
       },
       "PublicTickerStreamData": {
         "type": "object",
@@ -849,17 +733,13 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "DATA"
-            ],
+            "enum": ["DATA"],
             "x-abbreviation": "r",
             "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "TICKER"
-            ],
+            "enum": ["TICKER"],
             "x-abbreviation": "c",
             "description": "TICKER 채널 고정"
           },
@@ -869,11 +749,7 @@
             "description": "구독 data 정보"
           }
         },
-        "required": [
-          "response_type",
-          "channel",
-          "data"
-        ]
+        "required": ["response_type", "channel", "data"]
       },
       "PublicTradeStreamData": {
         "type": "object",
@@ -925,17 +801,13 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "DATA"
-            ],
+            "enum": ["DATA"],
             "x-abbreviation": "r",
             "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "TRADE"
-            ],
+            "enum": ["TRADE"],
             "x-abbreviation": "c",
             "description": "TRADE 채널 고정"
           },
@@ -945,11 +817,7 @@
             "description": "구독 data 정보"
           }
         },
-        "required": [
-          "response_type",
-          "channel",
-          "data"
-        ]
+        "required": ["response_type", "channel", "data"]
       },
       "PublicChartStreamData": {
         "type": "object",
@@ -1027,17 +895,13 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "DATA"
-            ],
+            "enum": ["DATA"],
             "x-abbreviation": "r",
             "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "CHART"
-            ],
+            "enum": ["CHART"],
             "x-abbreviation": "c",
             "description": "CHART 채널 고정"
           },
@@ -1047,11 +911,7 @@
             "description": "구독 data 정보"
           }
         },
-        "required": [
-          "response_type",
-          "channel",
-          "data"
-        ]
+        "required": ["response_type", "channel", "data"]
       },
       "PrivateMyOrderStreamData": {
         "type": "object",
@@ -1073,10 +933,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "LIMIT",
-              "MARKET"
-            ],
+            "enum": ["LIMIT", "MARKET"],
             "x-abbreviation": "t",
             "description": "주문 방식"
           },
@@ -1096,121 +953,76 @@
           },
           "side": {
             "type": "string",
-            "enum": [
-              "BID",
-              "ASK"
-            ],
+            "enum": ["BID", "ASK"],
             "x-abbreviation": "s",
             "description": "매수/매도 여부"
           },
           "order_price": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "op",
             "description": "주문 가격"
           },
           "order_qty": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "oq",
             "description": "주문 수량 (지정가, 시장가매도, 예약)"
           },
           "order_amount": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "oa",
             "description": "주문 금액 (시장가 매수)"
           },
           "trade_id": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ti",
             "description": "체결 식별 ID"
           },
           "is_maker": {
-            "type": [
-              "boolean",
-              "null"
-            ],
+            "type": ["boolean", "null"],
             "x-abbreviation": "im",
             "description": "true: 메이커, false: 테이커"
           },
           "executed_price": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ep",
             "description": "체결 가격"
           },
           "executed_qty": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "eq",
             "description": "체결수량 또는 취소수량"
           },
           "executed_fee": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ef",
             "description": "체결시 발생한 수수료"
           },
           "remain_qty": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "rq",
             "description": "체결/취소 후 잔량"
           },
           "remain_amount": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ra",
             "description": "체결/취소 후 잔량 금액 (시장가 매수)"
           },
           "user_order_id": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ui",
             "description": "사용자 정의 주문 id"
           },
           "prevented_qty": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "description": "공식 예시 응답에는 존재하나 Stream Fields 표에는 없음"
           },
           "executed_timestamp": {
-            "type": [
-              "integer",
-              "null"
-            ],
+            "type": ["integer", "null"],
             "x-abbreviation": "et",
             "description": "체결/취소 타임스탬프"
           },
           "order_timestamp": {
-            "type": [
-              "integer",
-              "null"
-            ],
+            "type": ["integer", "null"],
             "x-abbreviation": "ot",
             "description": "주문 타임스탬프"
           },
@@ -1233,17 +1045,13 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "DATA"
-            ],
+            "enum": ["DATA"],
             "x-abbreviation": "r",
             "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "MYORDER"
-            ],
+            "enum": ["MYORDER"],
             "x-abbreviation": "c",
             "description": "MYORDER 채널 고정"
           },
@@ -1253,11 +1061,7 @@
             "description": "구독 data 정보"
           }
         },
-        "required": [
-          "response_type",
-          "channel",
-          "data"
-        ]
+        "required": ["response_type", "channel", "data"]
       },
       "PrivateMyAssetAsset": {
         "type": "object",
@@ -1298,36 +1102,23 @@
             "description": "타임스탬프"
           }
         },
-        "required": [
-          "currency",
-          "available",
-          "limit"
-        ]
+        "required": ["currency", "available", "limit"]
       },
       "PrivateMyAssetStreamData": {
         "type": "object",
         "properties": {
           "order_id": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "oi",
             "description": "주문 식별 ID"
           },
           "user_order_id": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ui",
             "description": "사용자 정의 주문 id"
           },
           "trade_id": {
-            "type": [
-              "string",
-              "null"
-            ],
+            "type": ["string", "null"],
             "x-abbreviation": "ti",
             "description": "체결 식별 ID"
           },
@@ -1360,11 +1151,7 @@
             "description": "타임스탬프"
           }
         },
-        "required": [
-          "assets",
-          "type",
-          "timestamp"
-        ],
+        "required": ["assets", "type", "timestamp"],
         "x-format-transforms": {
           "SHORT": "DEFAULT 객체의 각 키를 x-abbreviation 값으로 치환"
         },
@@ -1375,17 +1162,13 @@
         "properties": {
           "response_type": {
             "type": "string",
-            "enum": [
-              "DATA"
-            ],
+            "enum": ["DATA"],
             "x-abbreviation": "r",
             "description": "실시간 데이터 응답을 의미하며 DATA로 고정"
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "MYASSET"
-            ],
+            "enum": ["MYASSET"],
             "x-abbreviation": "c",
             "description": "MYASSET 채널 고정"
           },
@@ -1395,11 +1178,7 @@
             "description": "구독 data 정보"
           }
         },
-        "required": [
-          "response_type",
-          "channel",
-          "data"
-        ]
+        "required": ["response_type", "channel", "data"]
       }
     },
     "messages": {
@@ -1439,9 +1218,7 @@
               "properties": {
                 "channel": {
                   "type": "string",
-                  "enum": [
-                    "ORDERBOOK"
-                  ]
+                  "enum": ["ORDERBOOK"]
                 },
                 "data": {
                   "$ref": "#/components/schemas/TopicPair"
@@ -1463,9 +1240,7 @@
               "properties": {
                 "channel": {
                   "type": "string",
-                  "enum": [
-                    "TICKER"
-                  ]
+                  "enum": ["TICKER"]
                 },
                 "data": {
                   "$ref": "#/components/schemas/TopicPair"
@@ -1487,9 +1262,7 @@
               "properties": {
                 "channel": {
                   "type": "string",
-                  "enum": [
-                    "TRADE"
-                  ]
+                  "enum": ["TRADE"]
                 },
                 "data": {
                   "$ref": "#/components/schemas/TopicPair"
@@ -1511,9 +1284,7 @@
               "properties": {
                 "channel": {
                   "type": "string",
-                  "enum": [
-                    "CHART"
-                  ]
+                  "enum": ["CHART"]
                 },
                 "data": {
                   "$ref": "#/components/schemas/ChartTopic"
@@ -1535,9 +1306,7 @@
               "properties": {
                 "channel": {
                   "type": "string",
-                  "enum": [
-                    "MYORDER"
-                  ]
+                  "enum": ["MYORDER"]
                 },
                 "data": {
                   "type": "array",
@@ -1562,9 +1331,7 @@
               "properties": {
                 "channel": {
                   "type": "string",
-                  "enum": [
-                    "MYASSET"
-                  ]
+                  "enum": ["MYASSET"]
                 }
               }
             }

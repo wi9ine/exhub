@@ -20,13 +20,6 @@
     }
   },
   "files": {
-    "includes": [
-      "**",
-      "!docs",
-      "!specs/node_modules",
-      "!node_modules",
-      "!**/dist",
-      "!**/generated"
-    ]
+    "includes": ["**", "!docs", "!specs/node_modules", "!node_modules", "!**/dist", "!**/generated", "!apps/docs/app/global.css"]
   }
 }

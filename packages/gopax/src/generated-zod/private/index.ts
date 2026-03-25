@@ -155,8 +155,8 @@ export const CreateOrderBody = zod.object({
   protection: zod
     .string()
     .optional()
-    .describe("최초 체결가 기준 ±10% 초과되는 주문 취소 여부로 yes\/no 중 택일"),
-  timeInForce: zod.string().optional().describe("지정가 주문 유형으로 gtc\/po\/ioc\/fok 중 택일"),
+    .describe("최초 체결가 기준 ±10% 초과되는 주문 취소 여부로 yes/no 중 택일"),
+  timeInForce: zod.string().optional().describe("지정가 주문 유형으로 gtc/po/ioc/fok 중 택일"),
 });
 
 /**
@@ -262,7 +262,7 @@ export const ListDepositWithdrawalStatusQueryParams = zod.object({
   completedOnly: zod
     .boolean()
     .optional()
-    .describe("완료된 입출금 내역만 조회 (true\/false 중 택일)"),
+    .describe("완료된 입출금 내역만 조회 (true/false 중 택일)"),
   asset: zod.string().optional().describe("해당 자산의 입출금 내역 조회 (BTC, ETH ...)"),
 });
 

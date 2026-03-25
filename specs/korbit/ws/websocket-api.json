@@ -43,9 +43,7 @@
   ],
   "channels": {
     "public.ticker": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-ticker",
         "message": {
@@ -56,9 +54,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker",
-        "x-tags": [
-          "Public 타입"
-        ]
+        "x-tags": ["Public 타입"]
       },
       "subscribe": {
         "operationId": "receive-ticker",
@@ -83,15 +79,11 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-ticker",
-        "x-tags": [
-          "Public 타입"
-        ]
+        "x-tags": ["Public 타입"]
       }
     },
     "public.orderbook": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-orderbook",
         "message": {
@@ -102,9 +94,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook",
-        "x-tags": [
-          "Public 타입"
-        ]
+        "x-tags": ["Public 타입"]
       },
       "subscribe": {
         "operationId": "receive-orderbook",
@@ -129,15 +119,11 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-orderbook",
-        "x-tags": [
-          "Public 타입"
-        ]
+        "x-tags": ["Public 타입"]
       }
     },
     "public.trade": {
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-trade",
         "message": {
@@ -148,9 +134,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade",
-        "x-tags": [
-          "Public 타입"
-        ]
+        "x-tags": ["Public 타입"]
       },
       "subscribe": {
         "operationId": "receive-trade",
@@ -175,15 +159,11 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-trade",
-        "x-tags": [
-          "Public 타입"
-        ]
+        "x-tags": ["Public 타입"]
       }
     },
     "private.myOrder": {
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-my-order",
         "message": {
@@ -194,9 +174,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder",
-        "x-tags": [
-          "Private 타입"
-        ]
+        "x-tags": ["Private 타입"]
       },
       "subscribe": {
         "operationId": "receive-my-order",
@@ -221,15 +199,11 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myOrder",
-        "x-tags": [
-          "Private 타입"
-        ]
+        "x-tags": ["Private 타입"]
       }
     },
     "private.myTrade": {
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-my-trade",
         "message": {
@@ -240,9 +214,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade",
-        "x-tags": [
-          "Private 타입"
-        ]
+        "x-tags": ["Private 타입"]
       },
       "subscribe": {
         "operationId": "receive-my-trade",
@@ -267,15 +239,11 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myTrade",
-        "x-tags": [
-          "Private 타입"
-        ]
+        "x-tags": ["Private 타입"]
       }
     },
     "private.myAsset": {
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-my-asset",
         "message": {
@@ -286,9 +254,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset",
-        "x-tags": [
-          "Private 타입"
-        ]
+        "x-tags": ["Private 타입"]
       },
       "subscribe": {
         "operationId": "receive-my-asset",
@@ -313,9 +279,7 @@
           "url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset"
         },
         "x-doc-url": "https://docs.korbit.co.kr/#WS-method-subscribe_type-myAsset",
-        "x-tags": [
-          "Private 타입"
-        ]
+        "x-tags": ["Private 타입"]
       }
     }
   },
@@ -335,16 +299,11 @@
             "status": {
               "type": "string",
               "description": "제어 메시지 상태",
-              "enum": [
-                "success"
-              ],
+              "enum": ["success"],
               "example": "success"
             }
           },
-          "required": [
-            "requestId",
-            "status"
-          ]
+          "required": ["requestId", "status"]
         }
       },
       "ControlFail": {
@@ -361,9 +320,7 @@
             "status": {
               "type": "string",
               "description": "제어 메시지 상태",
-              "enum": [
-                "fail"
-              ],
+              "enum": ["fail"],
               "example": "fail"
             },
             "code": {
@@ -377,12 +334,7 @@
               "example": "The symbol does not exist (eth_btc)"
             }
           },
-          "required": [
-            "requestId",
-            "status",
-            "code",
-            "message"
-          ]
+          "required": ["requestId", "status", "code", "message"]
         }
       },
       "ControlError": {
@@ -394,9 +346,7 @@
             "status": {
               "type": "string",
               "description": "제어 메시지 상태",
-              "enum": [
-                "error"
-              ],
+              "enum": ["error"],
               "example": "error"
             },
             "message": {
@@ -404,10 +354,7 @@
               "description": "오류 설명"
             }
           },
-          "required": [
-            "status",
-            "message"
-          ]
+          "required": ["status", "message"]
         }
       },
       "TickerPublicRequest": {
@@ -441,27 +388,17 @@
                   "example": "btc_krw"
                 },
                 "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
-                "example": [
-                  "btc_krw",
-                  "eth_krw"
-                ]
+                "example": ["btc_krw", "eth_krw"]
               }
             },
-            "required": [
-              "method",
-              "type",
-              "symbols"
-            ]
+            "required": ["method", "type", "symbols"]
           },
           "minItems": 1,
           "example": [
             {
               "method": "subscribe",
               "type": "ticker",
-              "symbols": [
-                "btc_krw",
-                "eth_krw"
-              ]
+              "symbols": ["btc_krw", "eth_krw"]
             }
           ]
         },
@@ -573,13 +510,7 @@
               ]
             }
           },
-          "required": [
-            "type",
-            "timestamp",
-            "symbol",
-            "snapshot",
-            "data"
-          ]
+          "required": ["type", "timestamp", "symbol", "snapshot", "data"]
         },
         "messageId": "korbit.ws.ticker.response"
       },
@@ -614,10 +545,7 @@
                   "example": "btc_krw"
                 },
                 "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
-                "example": [
-                  "btc_krw",
-                  "eth_krw"
-                ]
+                "example": ["btc_krw", "eth_krw"]
               },
               "level": {
                 "type": "string",
@@ -625,20 +553,14 @@
                 "example": "1000"
               }
             },
-            "required": [
-              "method",
-              "type",
-              "symbols"
-            ]
+            "required": ["method", "type", "symbols"]
           },
           "minItems": 1,
           "example": [
             {
               "method": "subscribe",
               "type": "orderbook",
-              "symbols": [
-                "btc_krw"
-              ]
+              "symbols": ["btc_krw"]
             }
           ]
         },
@@ -699,10 +621,7 @@
                         "example": "2500000"
                       }
                     },
-                    "required": [
-                      "price",
-                      "qty"
-                    ]
+                    "required": ["price", "qty"]
                   },
                   "description": "매도 호가 정보 (호가 오름차순 정렬)"
                 },
@@ -727,28 +646,15 @@
                         "example": "2500000"
                       }
                     },
-                    "required": [
-                      "price",
-                      "qty"
-                    ]
+                    "required": ["price", "qty"]
                   },
                   "description": "매수 호가 정보 (호가 내림차순 정렬)"
                 }
               },
-              "required": [
-                "timestamp",
-                "asks",
-                "bids"
-              ]
+              "required": ["timestamp", "asks", "bids"]
             }
           },
-          "required": [
-            "type",
-            "timestamp",
-            "symbol",
-            "snapshot",
-            "data"
-          ]
+          "required": ["type", "timestamp", "symbol", "snapshot", "data"]
         },
         "messageId": "korbit.ws.orderbook.response"
       },
@@ -783,26 +689,17 @@
                   "example": "btc_krw"
                 },
                 "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
-                "example": [
-                  "btc_krw",
-                  "eth_krw"
-                ]
+                "example": ["btc_krw", "eth_krw"]
               }
             },
-            "required": [
-              "method",
-              "type",
-              "symbols"
-            ]
+            "required": ["method", "type", "symbols"]
           },
           "minItems": 1,
           "example": [
             {
               "method": "subscribe",
               "type": "trade",
-              "symbols": [
-                "btc_krw"
-              ]
+              "symbols": ["btc_krw"]
             }
           ]
         },
@@ -865,23 +762,11 @@
                     "description": "거래 체결 ID (각 거래쌍마다 생성된 개별 거래 체결 건의 ID)"
                   }
                 },
-                "required": [
-                  "timestamp",
-                  "price",
-                  "qty",
-                  "isBuyerTaker",
-                  "tradeId"
-                ]
+                "required": ["timestamp", "price", "qty", "isBuyerTaker", "tradeId"]
               }
             }
           },
-          "required": [
-            "symbol",
-            "timestamp",
-            "type",
-            "snapshot",
-            "data"
-          ]
+          "required": ["symbol", "timestamp", "type", "snapshot", "data"]
         },
         "messageId": "korbit.ws.trade.response"
       },
@@ -916,26 +801,17 @@
                   "example": "btc_krw"
                 },
                 "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
-                "example": [
-                  "btc_krw",
-                  "eth_krw"
-                ]
+                "example": ["btc_krw", "eth_krw"]
               }
             },
-            "required": [
-              "method",
-              "type",
-              "symbols"
-            ]
+            "required": ["method", "type", "symbols"]
           },
           "minItems": 1,
           "example": [
             {
               "method": "subscribe",
               "type": "myOrder",
-              "symbols": [
-                "btc_krw"
-              ]
+              "symbols": ["btc_krw"]
             }
           ]
         },
@@ -993,31 +869,19 @@
                         "type": "string",
                         "example": "buy",
                         "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
-                        "enum": [
-                          "buy",
-                          "sell"
-                        ]
+                        "enum": ["buy", "sell"]
                       },
                       "orderType": {
                         "type": "string",
                         "example": "limit",
                         "description": "주문 유형 구분\n\n- limit 지정가 주문\n\n- market 시장가 주문\n\n- best BBO 주문 (Best-Bid-Offer, 최우선/최유리)",
-                        "enum": [
-                          "limit",
-                          "market",
-                          "best"
-                        ]
+                        "enum": ["limit", "market", "best"]
                       },
                       "timeInForce": {
                         "type": "string",
                         "example": "gtc",
                         "description": "주문 취소 조건\n\n- gtc 일반적인 지정가 주문. 전량 체결되거나 취소될 때까지 유효한 주문입니다. (Good-Till-Canceled)\n\n- ioc 주문호가 또는 더 좋은 가격으로 즉시 체결시킵니다. 체결되지 않은 잔량은 취소됩니다. (Immediate-Or-Cancel)\n\n- fok 주문호가 또는 더 좋은 가격으로 즉시 전량 체결시킵니다. 전량 체결이 불가하다면 주문이 취소됩니다. (Fill-Or-Kill)\n\n- po 주문 입력 시 바로 체결되는 상황이라면 주문이 취소됩니다. 즉, 메이커(Maker) 주문만 발생합니다. (Post-Only)",
-                        "enum": [
-                          "gtc",
-                          "ioc",
-                          "fok",
-                          "po"
-                        ]
+                        "enum": ["gtc", "ioc", "fok", "po"]
                       },
                       "price": {
                         "type": "string",
@@ -1084,17 +948,10 @@
                   }
                 }
               },
-              "required": [
-                "orders"
-              ]
+              "required": ["orders"]
             }
           },
-          "required": [
-            "symbol",
-            "timestamp",
-            "channelType",
-            "order"
-          ]
+          "required": ["symbol", "timestamp", "channelType", "order"]
         },
         "messageId": "korbit.ws.my-order.response"
       },
@@ -1129,26 +986,17 @@
                   "example": "btc_krw"
                 },
                 "description": "조회하고자 하는 거래쌍의 심볼을 입력합니다.",
-                "example": [
-                  "btc_krw",
-                  "eth_krw"
-                ]
+                "example": ["btc_krw", "eth_krw"]
               }
             },
-            "required": [
-              "method",
-              "type",
-              "symbols"
-            ]
+            "required": ["method", "type", "symbols"]
           },
           "minItems": 1,
           "example": [
             {
               "method": "subscribe",
               "type": "myTrade",
-              "symbols": [
-                "btc_krw"
-              ]
+              "symbols": ["btc_krw"]
             }
           ]
         },
@@ -1197,10 +1045,7 @@
                         "type": "string",
                         "example": "buy",
                         "description": "매수, 매도 구분\n\n- buy 매수\n\n- sell 매도",
-                        "enum": [
-                          "buy",
-                          "sell"
-                        ]
+                        "enum": ["buy", "sell"]
                       },
                       "price": {
                         "type": "string",
@@ -1247,17 +1092,10 @@
                   }
                 }
               },
-              "required": [
-                "trades"
-              ]
+              "required": ["trades"]
             }
           },
-          "required": [
-            "symbol",
-            "timestamp",
-            "channelType",
-            "trade"
-          ]
+          "required": ["symbol", "timestamp", "channelType", "trade"]
         },
         "messageId": "korbit.ws.my-trade.response"
       },
@@ -1286,10 +1124,7 @@
                 "example": "myAsset"
               }
             },
-            "required": [
-              "method",
-              "type"
-            ]
+            "required": ["method", "type"]
           },
           "minItems": 1,
           "example": [
@@ -1373,16 +1208,10 @@
                   }
                 }
               },
-              "required": [
-                "assets"
-              ]
+              "required": ["assets"]
             }
           },
-          "required": [
-            "timestamp",
-            "channelType",
-            "asset"
-          ]
+          "required": ["timestamp", "channelType", "asset"]
         },
         "messageId": "korbit.ws.my-asset.response"
       }

@@ -44,7 +44,9 @@ export default defineTransformer((inputSchema) => {
         operation.parameters = parameters.map((parameter) => {
           const next = { ...parameter };
           const schema =
-            "schema" in next && next.schema && typeof next.schema === "object" ? next.schema : undefined;
+            "schema" in next && next.schema && typeof next.schema === "object"
+              ? next.schema
+              : undefined;
           if (
             (!("description" in next) || !next.description) &&
             schema &&

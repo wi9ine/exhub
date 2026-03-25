@@ -56,10 +56,7 @@
                       "market_warning": {
                         "type": "string",
                         "description": "유의 종목 여부",
-                        "enum": [
-                          "NONE",
-                          "CAUTION"
-                        ]
+                        "enum": ["NONE", "CAUTION"]
                       }
                     }
                   }
@@ -121,20 +118,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/market/all?isDetails=false\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%A7%88%EC%BC%93%EC%BD%94%EB%93%9C-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/마켓코드-조회",
-        "tags": [
-          "시세 종목 조회"
-        ]
+        "tags": ["시세 종목 조회"]
       }
     },
     "/v1/candles/minutes/{unit}": {
@@ -290,20 +281,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/minutes/1?market=KRW-BTC&count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EB%B6%84minute-%EC%BA%94%EB%93%A4-1"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/분minute-캔들-1",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/candles/days": {
@@ -465,20 +450,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/days?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9D%BCday-%EC%BA%94%EB%93%A4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/일day-캔들",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/candles/weeks": {
@@ -620,20 +599,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/weeks?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%A3%BCweek-%EC%BA%94%EB%93%A4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/주week-캔들",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/candles/months": {
@@ -775,20 +748,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/candles/months?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%9B%94month-%EC%BA%94%EB%93%A4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/월month-캔들",
-        "tags": [
-          "시세 캔들 조회"
-        ]
+        "tags": ["시세 캔들 조회"]
       }
     },
     "/v1/trades/ticks": {
@@ -938,20 +905,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/trades/ticks?count=1\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EC%B5%9C%EA%B7%BC-%EC%B2%B4%EA%B2%B0-%EB%82%B4%EC%97%AD"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/최근-체결-내역",
-        "tags": [
-          "시세 체결 조회"
-        ]
+        "tags": ["시세 체결 조회"]
       }
     },
     "/v1/ticker": {
@@ -1147,20 +1108,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/ticker\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%ED%98%84%EC%9E%AC%EA%B0%80-%EC%A0%95%EB%B3%B4"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/현재가-정보",
-        "tags": [
-          "시세 현재가(Ticker) 조회"
-        ]
+        "tags": ["시세 현재가(Ticker) 조회"]
       }
     },
     "/v1/orderbook": {
@@ -1284,20 +1239,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/orderbook\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%ED%98%B8%EA%B0%80-%EC%A0%95%EB%B3%B4-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/호가-정보-조회",
-        "tags": [
-          "시세 호가 정보(Orderbook) 조회"
-        ]
+        "tags": ["시세 호가 정보(Orderbook) 조회"]
       }
     },
     "/v1/market/virtual_asset_warning": {
@@ -1409,20 +1358,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n        .url(\"https://api.bithumb.com/v1/market/virtual_asset_warning\")\n        .get()\n        .addHeader(\"accept\", \"application/json\")\n        .build();\n\nResponse response = client.newCall(request).execute();\n\nSystem.out.println(response.body().string());"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B2%BD%EB%B3%B4%EC%A0%9C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/경보제",
-        "tags": [
-          "서비스 정보"
-        ]
+        "tags": ["서비스 정보"]
       }
     },
     "/v1/notices": {
@@ -1523,20 +1466,14 @@
               "code": "OkHttpClient client = new OkHttpClient();\n\nRequest request = new Request.Builder()\n  .url(\"https://api.bithumb.com/v1/notices\")\n  .get()\n  .addHeader(\"accept\", \"application/json\")\n  .build();\n\nResponse response = client.newCall(request).execute();"
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java"
-          ]
+          "samples-languages": ["javascript", "python", "java"]
         },
         "externalDocs": {
           "description": "공식 문서",
           "url": "https://apidocs.bithumb.com/reference/%EA%B3%B5%EC%A7%80%EC%82%AC%ED%95%AD-%EC%A1%B0%ED%9A%8C"
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/공지사항-조회",
-        "tags": [
-          "서비스 정보"
-        ]
+        "tags": ["서비스 정보"]
       }
     },
     "/v2/fee/inout/{currency}": {
@@ -1708,17 +1645,10 @@
               "name": ""
             }
           ],
-          "samples-languages": [
-            "javascript",
-            "python",
-            "java",
-            "shell"
-          ]
+          "samples-languages": ["javascript", "python", "java", "shell"]
         },
         "summary": "입출금 수수료 조회",
-        "tags": [
-          "서비스 정보"
-        ]
+        "tags": ["서비스 정보"]
       }
     }
   },

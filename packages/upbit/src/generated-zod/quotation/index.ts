@@ -197,7 +197,7 @@ export const ListTradesTicksQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 체결의 \"sequential_id” 값을 이 필드에 입력하여 해당 체결 직전 데이터부터 “count”개의 이전 체결 이력을 이어서 조회할 수 있습니다.\n',
+      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 체결의 "sequential_id” 값을 이 필드에 입력하여 해당 체결 직전 데이터부터 “count”개의 이전 체결 이력을 이어서 조회할 수 있습니다.\n',
     ),
   days_ago: zod
     .number()
@@ -248,7 +248,7 @@ export const ListOrderbooksQueryParams = zod.object({
     .enum(["0", "10000", "100000", "1000000", "10000000", "100000000"])
     .default(listOrderbooksQueryLevelDefault)
     .describe(
-      "호가 모아보기 단위.\n원화마켓(KRW)에서만 지원하는 기능으로, 지정한 단위로 ask\/bid price와 size를 모아(group) 조회할 수 있습니다. 숫자 형식의 String으로 요청합니다. \n\n0 또는 1 이상의 모아보기 단위인 경우 소수점을 포함하지 않은 정수형 문자열로, 1 미만의 소수점 단위 모아보기 단위인 경우 double형 문자열로 요청합니다. 미지정시 기본값은 0입니다.\n",
+      "호가 모아보기 단위.\n원화마켓(KRW)에서만 지원하는 기능으로, 지정한 단위로 ask/bid price와 size를 모아(group) 조회할 수 있습니다. 숫자 형식의 String으로 요청합니다. \n\n0 또는 1 이상의 모아보기 단위인 경우 소수점을 포함하지 않은 정수형 문자열로, 1 미만의 소수점 단위 모아보기 단위인 경우 double형 문자열로 요청합니다. 미지정시 기본값은 0입니다.\n",
     ),
   count: zod
     .number()

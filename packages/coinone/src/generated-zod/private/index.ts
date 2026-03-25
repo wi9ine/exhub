@@ -20,7 +20,7 @@ export const ListBalanceHeader = zod.object({
 
 export const ListBalanceBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
 });
 
 /**
@@ -38,7 +38,7 @@ export const listBalanceByCurrenciesBodyCurrenciesDefault = [`"BTC"`, `"KRW"`, `
 
 export const ListBalanceByCurrenciesBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   currencies: zod
     .array(zod.string())
     .default(listBalanceByCurrenciesBodyCurrenciesDefault)
@@ -58,7 +58,7 @@ export const ListTradeFeesHeader = zod.object({
 
 export const ListTradeFeesBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
 });
 
 /**
@@ -88,7 +88,7 @@ export const GetTradeFeeByPairHeader = zod.object({
 
 export const GetTradeFeeByPairBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
 });
 
 /**
@@ -106,7 +106,7 @@ export const listActiveOrdersBodyOrderTypeDefault = [`[]`];
 
 export const ListActiveOrdersBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   quote_currency: zod
     .string()
     .optional()
@@ -119,7 +119,7 @@ export const ListActiveOrdersBody = zod.object({
     .array(zod.string())
     .default(listActiveOrdersBodyOrderTypeDefault)
     .describe(
-      '조회하고자하는 주문 방식, [\"LIMIT\"], [\"STOP_LIMIT\"], [\"LIMIT\", \"STOP_LIMIT\"] 이 가능하며, [] 또는 생략시 모든 타입이 조회',
+      '조회하고자하는 주문 방식, ["LIMIT"], ["STOP_LIMIT"], ["LIMIT", "STOP_LIMIT"] 이 가능하며, [] 또는 생략시 모든 타입이 조회',
     ),
 });
 
@@ -139,7 +139,7 @@ export const getOrderDetailBodyTargetCurrencyDefault = `BTC`;
 
 export const GetOrderDetailBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   order_id: zod.string().describe("조회하려는 주문 식별 ID"),
   quote_currency: zod
     .string()
@@ -152,7 +152,7 @@ export const GetOrderDetailBody = zod.object({
   user_order_id: zod
     .string()
     .optional()
-    .describe("150자까지 지원 (알파벳 소문자 \/ 숫자 \/ 특수문자 - _ . 지원)"),
+    .describe("150자까지 지원 (알파벳 소문자 / 숫자 / 특수문자 - _ . 지원)"),
 });
 
 /**
@@ -168,7 +168,7 @@ export const ListCompletedOrdersAllHeader = zod.object({
 
 export const ListCompletedOrdersAllBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   to_trade_id: zod.string().optional().describe("주문 ID 입력 시, 입력한 주문 ID 이전의 내역 조회"),
   size: zod.number().describe("한번에 조회할 목록 개수 (MAX: 100 MIN: 1)"),
   from_ts: zod
@@ -198,7 +198,7 @@ export const listCompletedOrdersBodyTargetCurrencyDefault = `BTC`;
 
 export const ListCompletedOrdersBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   to_trade_id: zod.string().optional().describe("주문 ID 입력 시, 입력한 주문 ID 이전의 내역 조회"),
   size: zod.number().describe("한번에 조회할 목록 개수 (MAX: 100 MIN: 1)"),
   from_ts: zod
@@ -231,7 +231,7 @@ export const ListOpenOrdersAllHeader = zod.object({
 
 export const ListOpenOrdersAllBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
 });
 
 /**
@@ -251,7 +251,7 @@ export const listOpenOrdersBodyTargetCurrencyDefault = `BTC`;
 
 export const ListOpenOrdersBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   quote_currency: zod
     .string()
     .default(listOpenOrdersBodyQuoteCurrencyDefault)
@@ -279,7 +279,7 @@ export const getOrderInfoBodyTargetCurrencyDefault = `BTC`;
 
 export const GetOrderInfoBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   order_id: zod.string().describe("조회하려는 주문 식별 ID"),
   quote_currency: zod
     .string()
@@ -304,8 +304,8 @@ export const CreateOrderHeader = zod.object({
 
 export const CreateOrderBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
-  side: zod.string().describe('매수\/매도 여부 (Enum: \"BUY\", \"SELL\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
+  side: zod.string().describe('매수/매도 여부 (Enum: "BUY", "SELL")'),
   quote_currency: zod.string().describe("마켓 기준 통화"),
   target_currency: zod.string().describe("주문하려는 종목의 심볼"),
   type: zod.string().describe("주문 방식, LIMIT 지정가, STOP_LIMIT 예약 지정가, MARKET 시장가"),
@@ -326,7 +326,7 @@ export const CreateOrderBody = zod.object({
   user_order_id: zod
     .string()
     .optional()
-    .describe("150자까지 지원 (알파벳 소문자 \/ 숫자 \/ 특수문자 - _ . 지원)"),
+    .describe("150자까지 지원 (알파벳 소문자 / 숫자 / 특수문자 - _ . 지원)"),
 });
 
 /**
@@ -345,7 +345,7 @@ export const cancelOrdersBodyTargetCurrencyDefault = `BTC`;
 
 export const CancelOrdersBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   quote_currency: zod
     .string()
     .default(cancelOrdersBodyQuoteCurrencyDefault)
@@ -372,7 +372,7 @@ export const cancelOrderBodyTargetCurrencyDefault = `BTC`;
 
 export const CancelOrderBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   order_id: zod.string().describe("주문 식별 ID (UUID 포맷)"),
   quote_currency: zod
     .string()
@@ -385,7 +385,7 @@ export const CancelOrderBody = zod.object({
   user_order_id: zod
     .string()
     .optional()
-    .describe("150자까지 지원 (알파벳 소문자 \/ 숫자 \/ 특수문자 - _ . 지원)"),
+    .describe("150자까지 지원 (알파벳 소문자 / 숫자 / 특수문자 - _ . 지원)"),
 });
 
 /**
@@ -407,7 +407,7 @@ export const createLimitOrderBodyLimitOrderTypeDefault = `LIMIT`;
 
 export const CreateLimitOrderBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   quote_currency: zod
     .string()
     .default(createLimitOrderBodyQuoteCurrencyDefault)
@@ -419,14 +419,14 @@ export const CreateLimitOrderBody = zod.object({
   side: zod
     .string()
     .default(createLimitOrderBodySideDefault)
-    .describe('매수\/매도 여부 (Enum: \"BUY\", \"SELL\")'),
+    .describe('매수/매도 여부 (Enum: "BUY", "SELL")'),
   price: zod.string().describe("주문하려는 금액"),
   qty: zod.string().describe("주문하려는 수량"),
   limit_order_type: zod
     .string()
     .default(createLimitOrderBodyLimitOrderTypeDefault)
     .describe(
-      '주문 방식 입력, POST_ONLY 주문 시 marker 주문으로만 실행 됨 (Enum: \"LIMIT\" \"POST_ONLY\")',
+      '주문 방식 입력, POST_ONLY 주문 시 marker 주문으로만 실행 됨 (Enum: "LIMIT" "POST_ONLY")',
     ),
 });
 
@@ -445,7 +445,7 @@ export const listKrwTransactionHistoryBodySizeDefault = 100;
 
 export const ListKrwTransactionHistoryBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   to_id: zod.string().optional().describe("입력한 ID 이전의 내역 조회"),
   is_deposit: zod
     .boolean()
@@ -483,7 +483,7 @@ export const listCoinTransactionHistoryBodySizeDefault = 100;
 
 export const ListCoinTransactionHistoryBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   currency: zod
     .string()
     .default(listCoinTransactionHistoryBodyCurrencyDefault)
@@ -522,7 +522,7 @@ export const GetCoinTransactionHistoryDetailHeader = zod.object({
 
 export const GetCoinTransactionHistoryDetailBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   id: zod.string().describe("입출금 거래 식별 id"),
 });
 
@@ -541,7 +541,7 @@ export const getCoinWithdrawalLimitBodyCurrencyDefault = `BTC`;
 
 export const GetCoinWithdrawalLimitBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   currency: zod
     .string()
     .default(getCoinWithdrawalLimitBodyCurrencyDefault)
@@ -561,7 +561,7 @@ export const ListCoinWithdrawalAddressBookHeader = zod.object({
 
 export const ListCoinWithdrawalAddressBookBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   currency: zod.string().optional().describe("출금 주소를 조회 하려는 종목"),
 });
 
@@ -578,7 +578,7 @@ export const CreateCoinWithdrawalHeader = zod.object({
 
 export const CreateCoinWithdrawalBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   currency: zod.string().describe("출금하려는 가상자산"),
   amount: zod.string().describe("출금하려는 수량"),
   address: zod.string().describe("출금 주소 (가상자산을 입금 받게될 주소)"),
@@ -598,7 +598,7 @@ export const ListOrderRewardProgramsHeader = zod.object({
 
 export const ListOrderRewardProgramsBody = zod.object({
   access_token: zod.string().describe("사용자의 액세스 토큰 (access token)"),
-  nonce: zod.string().describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+  nonce: zod.string().describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
 });
 
 /**
@@ -617,13 +617,13 @@ export const ListOrderRewardHistoryBody = zod.object({
   nonce: zod
     .string()
     .optional()
-    .describe('UUID nonce (예: \"022f53b2-8b2f-40c6-8e51-b594f562ee83\")'),
+    .describe('UUID nonce (예: "022f53b2-8b2f-40c6-8e51-b594f562ee83")'),
   to_ts: zod
     .number()
     .optional()
-    .describe("조회 종료 시점 타임스탬프 (UTC) \* unit of time: second (예: 1749513600)"),
+    .describe("조회 종료 시점 타임스탬프 (UTC) * unit of time: second (예: 1749513600)"),
   from_ts: zod
     .number()
     .optional()
-    .describe("조회 시작 시점 타임스탬프 (UTC) \* unit of time: second (예: 1746835200)"),
+    .describe("조회 시작 시점 타임스탬프 (UTC) * unit of time: second (예: 1746835200)"),
 });

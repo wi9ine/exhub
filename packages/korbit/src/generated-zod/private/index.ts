@@ -246,7 +246,7 @@ export const GetCoinDepositAddressQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      "블록체인 네트워크 심볼. 네트워크 정보는 \/v2\/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.",
+      "블록체인 네트워크 심볼. 네트워크 정보는 /v2/currencies API로 확인 가능합니다.\n\n미입력시 해당 가상자산의 기본 네트워크를 사용합니다. 기본 네트워크는 변경될 수 있으므로, 오류를 방지하기 위하여 네트워크를 항상 명시해주시기 바랍니다.",
     ),
   timestamp: zod
     .number()

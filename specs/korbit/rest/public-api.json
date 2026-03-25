@@ -25,9 +25,7 @@
   "paths": {
     "/v2/tickers": {
       "get": {
-        "tags": [
-          "시세"
-        ],
+        "tags": ["시세"],
         "summary": "현재가 조회",
         "description": "하나 또는 여러 거래쌍의 현재가(Ticker) 정보를 조회합니다.",
         "operationId": "list-tickers",
@@ -137,10 +135,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -197,9 +192,7 @@
     },
     "/v2/orderbook": {
       "get": {
-        "tags": [
-          "시세"
-        ],
+        "tags": ["시세"],
         "summary": "호가 조회",
         "description": "단일 거래쌍의 호가 정보를 조회합니다.",
         "operationId": "get-orderbook",
@@ -249,10 +242,7 @@
                                 "example": "2500000"
                               }
                             },
-                            "required": [
-                              "price",
-                              "qty"
-                            ]
+                            "required": ["price", "qty"]
                           },
                           "description": "매수 호가 정보 (호가 내림차순 정렬)"
                         },
@@ -277,25 +267,15 @@
                                 "example": "2500000"
                               }
                             },
-                            "required": [
-                              "price",
-                              "qty"
-                            ]
+                            "required": ["price", "qty"]
                           },
                           "description": "매도 호가 정보 (호가 오름차순 정렬)"
                         }
                       },
-                      "required": [
-                        "timestamp",
-                        "bids",
-                        "asks"
-                      ]
+                      "required": ["timestamp", "bids", "asks"]
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -377,9 +357,7 @@
     },
     "/v2/trades": {
       "get": {
-        "tags": [
-          "시세"
-        ],
+        "tags": ["시세"],
         "summary": "최근 체결 내역",
         "description": "최근 체결 내역을 조회합니다.",
         "operationId": "list-trades",
@@ -431,20 +409,11 @@
                             "example": 1234
                           }
                         },
-                        "required": [
-                          "timestamp",
-                          "price",
-                          "qty",
-                          "isBuyerTaker",
-                          "tradeId"
-                        ]
+                        "required": ["timestamp", "price", "qty", "isBuyerTaker", "tradeId"]
                       }
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -505,9 +474,7 @@
     },
     "/v2/candles": {
       "get": {
-        "tags": [
-          "시세"
-        ],
+        "tags": ["시세"],
         "summary": "캔들스틱 조회",
         "description": "시세 캔들스틱 정보를 조회합니다.",
         "operationId": "get-candles",
@@ -564,21 +531,11 @@
                             "description": "거래량"
                           }
                         },
-                        "required": [
-                          "timestamp",
-                          "open",
-                          "high",
-                          "low",
-                          "close",
-                          "volume"
-                        ]
+                        "required": ["timestamp", "open", "high", "low", "close", "volume"]
                       }
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -647,16 +604,7 @@
             "description": "각 캔들 주기(단위)\n\n허용되는 값:\n\n- 1 1분\n\n- 5 5분\n\n- 15 15분\n\n- 30 30분\n\n- 60 1시간\n\n- 240 4시간\n\n- 1D 1일\n\n- 1W 1주",
             "schema": {
               "type": "string",
-              "enum": [
-                "1",
-                "5",
-                "15",
-                "30",
-                "60",
-                "240",
-                "1D",
-                "1W"
-              ]
+              "enum": ["1", "5", "15", "30", "60", "240", "1D", "1W"]
             },
             "example": "60"
           },
@@ -695,9 +643,7 @@
     },
     "/v2/currencyPairs": {
       "get": {
-        "tags": [
-          "시세"
-        ],
+        "tags": ["시세"],
         "summary": "거래지원 목록 조회",
         "description": "",
         "operationId": "list-currency-pairs",
@@ -732,23 +678,14 @@
                             "type": "string",
                             "example": "launched",
                             "description": "거래 가능 상태\n\n- launched 거래 가능\n\n- stopped 거래 중단",
-                            "enum": [
-                              "launched",
-                              "stopped"
-                            ]
+                            "enum": ["launched", "stopped"]
                           }
                         },
-                        "required": [
-                          "symbol",
-                          "status"
-                        ]
+                        "required": ["symbol", "status"]
                       }
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -775,9 +712,7 @@
     },
     "/v2/tickSizePolicy": {
       "get": {
-        "tags": [
-          "시세"
-        ],
+        "tags": ["시세"],
         "summary": "호가 정책 조회",
         "description": "지정한 거래쌍의 호가 정책 및 오더북 모아보기 단위를 조회합니다.",
         "operationId": "get-tick-size-policy",
@@ -824,10 +759,7 @@
                                   "description": "해당 가격 범위의 호가 단위"
                                 }
                               },
-                              "required": [
-                                "priceGte",
-                                "tickSize"
-                              ]
+                              "required": ["priceGte", "tickSize"]
                             },
                             "description": "호가 정책 목록.\n\n배열에서 주문가격 >= priceGte 조건을 만족하는 항목 중 가장 큰 priceGte 값을 가진 항목의 tickSize를 사용합니다.\n\n예: 주문가격이 150원이라면, priceGte가 \"100\"인 항목의 tickSize를 사용합니다."
                           },
@@ -838,26 +770,14 @@
                               "example": "0.1"
                             },
                             "description": "오더북 모아보기 단위 목록",
-                            "example": [
-                              "0.1",
-                              "1",
-                              "10",
-                              "100"
-                            ]
+                            "example": ["0.1", "1", "10", "100"]
                           }
                         },
-                        "required": [
-                          "symbol",
-                          "tickSizePolicy",
-                          "orderbookLevels"
-                        ]
+                        "required": ["symbol", "tickSizePolicy", "orderbookLevels"]
                       }
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -910,12 +830,7 @@
                           "tickSize": "1000"
                         }
                       ],
-                      "orderbookLevels": [
-                        "0.1",
-                        "1",
-                        "10",
-                        "100"
-                      ]
+                      "orderbookLevels": ["0.1", "1", "10", "100"]
                     }
                   ]
                 }
@@ -939,9 +854,7 @@
     },
     "/v2/currencies": {
       "get": {
-        "tags": [
-          "기타"
-        ],
+        "tags": ["기타"],
         "summary": "가상자산 정보 조회",
         "description": "가상자산 정보를 조회합니다.",
         "operationId": "list-currencies",
@@ -1026,19 +939,13 @@
                                   "type": "string",
                                   "example": "launched",
                                   "description": "입금 가능 상태\n\n값:\n\n- launched 입금 가능\n\n- stopped 입금 중단",
-                                  "enum": [
-                                    "launched",
-                                    "stopped"
-                                  ]
+                                  "enum": ["launched", "stopped"]
                                 },
                                 "withdrawalStatus": {
                                   "type": "string",
                                   "example": "launched",
                                   "description": "출금 가능 상태.\n\n값:\n\n- launched 출금 가능\n\n- stopped 출금 중단",
-                                  "enum": [
-                                    "launched",
-                                    "stopped"
-                                  ]
+                                  "enum": ["launched", "stopped"]
                                 },
                                 "confirmationCount": {
                                   "type": "integer",
@@ -1112,10 +1019,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,
@@ -1226,9 +1130,7 @@
     },
     "/v2/time": {
       "get": {
-        "tags": [
-          "기타"
-        ],
+        "tags": ["기타"],
         "summary": "서버 시각 조회",
         "description": "서버 시각을 조회합니다.",
         "operationId": "get-time",
@@ -1258,15 +1160,10 @@
                           "description": "서버 시각(timestamp)"
                         }
                       },
-                      "required": [
-                        "time"
-                      ]
+                      "required": ["time"]
                     }
                   },
-                  "required": [
-                    "success",
-                    "data"
-                  ]
+                  "required": ["success", "data"]
                 },
                 "example": {
                   "success": true,

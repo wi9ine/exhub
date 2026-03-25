@@ -1,8 +1,8 @@
-import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
+import type { ReactNode } from "react";
 import "./global.css";
 
 export const metadata: Metadata = {
@@ -14,19 +14,12 @@ export const metadata: Metadata = {
 };
 
 const navbar = (
-  <Navbar
-    logo={<strong>ExHub</strong>}
-    projectLink="https://github.com/wi9ine/exhub"
-  />
+  <Navbar logo={<strong>ExHub</strong>} projectLink="https://github.com/wi9ine/exhub" />
 );
 
 const footer = <Footer>MIT {new Date().getFullYear()} © ExHub</Footer>;
 
-export default async function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko" dir="ltr" suppressHydrationWarning>
       <Head />

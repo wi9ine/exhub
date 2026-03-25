@@ -25,9 +25,7 @@
       "get": {
         "operationId": "list-balance",
         "summary": "계정 잔고 조회",
-        "tags": [
-          "자산(Asset)"
-        ],
+        "tags": ["자산(Asset)"],
         "x-readme": {
           "code-samples": [
             {
@@ -136,10 +134,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -179,9 +174,7 @@
       "get": {
         "summary": "페어별 주문 가능 정보 조회",
         "operationId": "get-order-chance",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -285,34 +278,20 @@
                           "order_types": {
                             "type": "array",
                             "description": "지원하는 주문 유형 (deprecated)",
-                            "enum": [
-                              "limit",
-                              "price",
-                              "market",
-                              "best"
-                            ],
+                            "enum": ["limit", "price", "market", "best"],
                             "items": {
                               "type": "string"
                             },
-                            "example": [
-                              "limit",
-                              "market"
-                            ]
+                            "example": ["limit", "market"]
                           },
                           "order_sides": {
                             "type": "array",
                             "description": "지원하는 주문 방향(매수/매도)",
-                            "enum": [
-                              "ask",
-                              "bid"
-                            ],
+                            "enum": ["ask", "bid"],
                             "items": {
                               "type": "string"
                             },
-                            "example": [
-                              "ask",
-                              "bid"
-                            ]
+                            "example": ["ask", "bid"]
                           },
                           "bid_types": {
                             "type": "array",
@@ -328,10 +307,7 @@
                             "items": {
                               "type": "string"
                             },
-                            "example": [
-                              "best_fok",
-                              "limit"
-                            ]
+                            "example": ["best_fok", "limit"]
                           },
                           "ask_types": {
                             "description": "지원하는 매도 주문 유형\n\n[예시] [\"market\", \"limit\", \"best_fok\", ...]\n",
@@ -347,18 +323,12 @@
                             "items": {
                               "type": "string"
                             },
-                            "example": [
-                              "market",
-                              "limit_ioc"
-                            ]
+                            "example": ["market", "limit_ioc"]
                           },
                           "bid": {
                             "description": "매수 제약 조건",
                             "type": "object",
-                            "required": [
-                              "currency",
-                              "min_total"
-                            ],
+                            "required": ["currency", "min_total"],
                             "properties": {
                               "currency": {
                                 "type": "string",
@@ -382,10 +352,7 @@
                           "ask": {
                             "description": "매도 제약 조건",
                             "type": "object",
-                            "required": [
-                              "currency",
-                              "min_total"
-                            ],
+                            "required": ["currency", "min_total"],
                             "properties": {
                               "currency": {
                                 "type": "string",
@@ -413,9 +380,7 @@
                           },
                           "state": {
                             "type": "string",
-                            "enum": [
-                              "active"
-                            ],
+                            "enum": ["active"],
                             "description": "페어 운영 상태",
                             "example": "active",
                             "default": "active"
@@ -522,13 +487,8 @@
                         "market": {
                           "id": "KRW-BTC",
                           "name": "BTC/KRW",
-                          "order_types": [
-                            "limit"
-                          ],
-                          "order_sides": [
-                            "ask",
-                            "bid"
-                          ],
+                          "order_types": ["limit"],
+                          "order_sides": ["ask", "bid"],
                           "bid_types": [
                             "best_fok",
                             "best_ioc",
@@ -588,10 +548,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -639,9 +596,7 @@
       "post": {
         "summary": "주문 생성",
         "operationId": "create-order",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -671,10 +626,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "market",
-                  "side"
-                ],
+                "required": ["market", "side"],
                 "properties": {
                   "market": {
                     "type": "string",
@@ -683,10 +635,7 @@
                   },
                   "side": {
                     "type": "string",
-                    "enum": [
-                      "ask",
-                      "bid"
-                    ],
+                    "enum": ["ask", "bid"],
                     "description": "주문 방향(매수/매도). \n매수 주문을 생성하는 경우 “bid”, 매도 주문을 생성하는 경우 “ask”로 지정합니다.\n",
                     "example": "bid"
                   },
@@ -702,12 +651,7 @@
                   },
                   "ord_type": {
                     "type": "string",
-                    "enum": [
-                      "limit",
-                      "price",
-                      "market",
-                      "best"
-                    ],
+                    "enum": ["limit", "price", "market", "best"],
                     "description": "주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                     "example": "limit",
                     "default": "limit"
@@ -719,21 +663,13 @@
                   },
                   "time_in_force": {
                     "type": "string",
-                    "enum": [
-                      "fok",
-                      "ioc",
-                      "post_only"
-                    ],
+                    "enum": ["fok", "ioc", "post_only"],
                     "description": "주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 \"limit\")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 \"ioc\" 또는 \"fok\" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n",
                     "example": "ioc"
                   },
                   "smp_type": {
                     "type": "string",
-                    "enum": [
-                      "cancel_maker",
-                      "cancel_taker",
-                      "reduce"
-                    ],
+                    "enum": ["cancel_maker", "cancel_taker", "reduce"],
                     "description": "자전거래 체결 방지(Self-Match Prevention) 모드.\n\n사용 가능한 값은 다음과 같습니다.\n\n* `cancel_maker`: 메이커 주문(이전 주문)을 취소합니다. \n* `cancel_taker`: 테이커 주문(신규 주문)을 취소합니다. \n* `reduce`: 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
                     "example": "cancel_maker"
                   }
@@ -779,21 +715,13 @@
                     },
                     "side": {
                       "type": "string",
-                      "enum": [
-                        "ask",
-                        "bid"
-                      ],
+                      "enum": ["ask", "bid"],
                       "description": "주문 방향(매수/매도)",
                       "example": "ask"
                     },
                     "ord_type": {
                       "type": "string",
-                      "enum": [
-                        "limit",
-                        "price",
-                        "market",
-                        "best"
-                      ],
+                      "enum": ["limit", "price", "market", "best"],
                       "description": "주문 유형.\n",
                       "example": "limit"
                     },
@@ -804,12 +732,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "wait",
-                        "watch",
-                        "done",
-                        "cancel"
-                      ],
+                      "enum": ["wait", "watch", "done", "cancel"],
                       "description": "주문 상태\n\n- `wait`: 체결 대기\n- `watch`: 예약 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소\n",
                       "example": "wait"
                     },
@@ -860,11 +783,7 @@
                     },
                     "time_in_force": {
                       "type": "string",
-                      "enum": [
-                        "fok",
-                        "ioc",
-                        "post_only"
-                      ],
+                      "enum": ["fok", "ioc", "post_only"],
                       "description": "주문 체결 옵션",
                       "example": "ioc"
                     },
@@ -875,11 +794,7 @@
                     },
                     "smp_type": {
                       "type": "string",
-                      "enum": [
-                        "reduce",
-                        "cancel_maker",
-                        "cancel_taker"
-                      ],
+                      "enum": ["reduce", "cancel_maker", "cancel_taker"],
                       "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                       "example": "cancel_maker"
                     },
@@ -930,10 +845,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -1033,10 +945,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -1076,9 +985,7 @@
       "post": {
         "summary": "주문 생성 테스트",
         "operationId": "create-test-order",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -1108,10 +1015,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "market",
-                  "side"
-                ],
+                "required": ["market", "side"],
                 "properties": {
                   "market": {
                     "type": "string",
@@ -1120,10 +1024,7 @@
                   },
                   "side": {
                     "type": "string",
-                    "enum": [
-                      "ask",
-                      "bid"
-                    ],
+                    "enum": ["ask", "bid"],
                     "description": "주문 방향(매수/매도). \n매수 주문을 생성하는 경우 “bid”, 매도 주문을 생성하는 경우 “ask”로 지정합니다.\n",
                     "example": "bid"
                   },
@@ -1139,12 +1040,7 @@
                   },
                   "ord_type": {
                     "type": "string",
-                    "enum": [
-                      "limit",
-                      "price",
-                      "market",
-                      "best"
-                    ],
+                    "enum": ["limit", "price", "market", "best"],
                     "description": "주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                     "example": "limit",
                     "default": "limit"
@@ -1156,21 +1052,13 @@
                   },
                   "time_in_force": {
                     "type": "string",
-                    "enum": [
-                      "fok",
-                      "ioc",
-                      "post_only"
-                    ],
+                    "enum": ["fok", "ioc", "post_only"],
                     "description": "주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 \"limit\")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 \"ioc\" 또는 \"fok\" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n",
                     "example": "ioc"
                   },
                   "smp_type": {
                     "type": "string",
-                    "enum": [
-                      "cancel_maker",
-                      "cancel_taker",
-                      "reduce"
-                    ],
+                    "enum": ["cancel_maker", "cancel_taker", "reduce"],
                     "description": "자전거래 체결 방지(Self-Match Prevention) 모드.\n\n사용 가능한 값은 다음과 같습니다.\n\n* `cancel_maker`: 메이커 주문(이전 주문)을 취소합니다. \n* `cancel_taker`: 테이커 주문(신규 주문)을 취소합니다. \n* `reduce`: 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
                     "example": "cancel_maker"
                   }
@@ -1216,21 +1104,13 @@
                     },
                     "side": {
                       "type": "string",
-                      "enum": [
-                        "ask",
-                        "bid"
-                      ],
+                      "enum": ["ask", "bid"],
                       "description": "주문 방향(매수/매도)",
                       "example": "ask"
                     },
                     "ord_type": {
                       "type": "string",
-                      "enum": [
-                        "limit",
-                        "price",
-                        "market",
-                        "best"
-                      ],
+                      "enum": ["limit", "price", "market", "best"],
                       "description": "주문 유형.\n",
                       "example": "limit"
                     },
@@ -1241,9 +1121,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "wait"
-                      ],
+                      "enum": ["wait"],
                       "description": "주문 상태. 테스트 주문의 경우 실제로 체결되지 않습니다.\n\n- `wait`: 체결 대기\n",
                       "example": "wait"
                     },
@@ -1294,11 +1172,7 @@
                     },
                     "time_in_force": {
                       "type": "string",
-                      "enum": [
-                        "fok",
-                        "ioc",
-                        "post_only"
-                      ],
+                      "enum": ["fok", "ioc", "post_only"],
                       "description": "주문 체결 옵션",
                       "example": "ioc"
                     },
@@ -1309,11 +1183,7 @@
                     },
                     "smp_type": {
                       "type": "string",
-                      "enum": [
-                        "reduce",
-                        "cancel_maker",
-                        "cancel_taker"
-                      ],
+                      "enum": ["reduce", "cancel_maker", "cancel_taker"],
                       "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                       "example": "cancel_maker"
                     },
@@ -1364,10 +1234,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -1467,10 +1334,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -1510,9 +1374,7 @@
       "get": {
         "summary": "개별 주문 조회",
         "operationId": "get-order",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -1596,21 +1458,13 @@
                     },
                     "side": {
                       "type": "string",
-                      "enum": [
-                        "ask",
-                        "bid"
-                      ],
+                      "enum": ["ask", "bid"],
                       "description": "주문 방향(매수/매도)",
                       "example": "ask"
                     },
                     "ord_type": {
                       "type": "string",
-                      "enum": [
-                        "limit",
-                        "price",
-                        "market",
-                        "best"
-                      ],
+                      "enum": ["limit", "price", "market", "best"],
                       "description": "주문 유형. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                       "example": "limit"
                     },
@@ -1621,12 +1475,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "wait",
-                        "watch",
-                        "done",
-                        "cancel"
-                      ],
+                      "enum": ["wait", "watch", "done", "cancel"],
                       "description": "주문 상태\n\n- `wait`: 체결 대기\n- `watch`: 예약 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소\n",
                       "example": "wait"
                     },
@@ -1672,21 +1521,13 @@
                     },
                     "time_in_force": {
                       "type": "string",
-                      "enum": [
-                        "fok",
-                        "ioc",
-                        "post_only"
-                      ],
+                      "enum": ["fok", "ioc", "post_only"],
                       "description": "주문 체결 옵션",
                       "example": "ioc"
                     },
                     "smp_type": {
                       "type": "string",
-                      "enum": [
-                        "reduce",
-                        "cancel_maker",
-                        "cancel_taker"
-                      ],
+                      "enum": ["reduce", "cancel_maker", "cancel_taker"],
                       "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                       "example": "cancel_maker"
                     },
@@ -1753,10 +1594,7 @@
                           },
                           "trend": {
                             "type": "string",
-                            "enum": [
-                              "up",
-                              "down"
-                            ],
+                            "enum": ["up", "down"],
                             "description": "체결 시세 흐름\n- `up`: \"매수 주문\" 에 의해 체결이 발생\n- `down`: \"매도 주문\" 에 의해 체결이 발생\n",
                             "example": "up"
                           },
@@ -1767,10 +1605,7 @@
                           },
                           "side": {
                             "type": "string",
-                            "enum": [
-                              "ask",
-                              "bid"
-                            ],
+                            "enum": ["ask", "bid"],
                             "description": "체결 방향(매수/매도)",
                             "example": "ask"
                           }
@@ -1908,10 +1743,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -1947,10 +1779,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -1988,9 +1817,7 @@
       "delete": {
         "summary": "개별 주문 취소 접수",
         "operationId": "cancel-order",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -2075,21 +1902,13 @@
                     },
                     "side": {
                       "type": "string",
-                      "enum": [
-                        "ask",
-                        "bid"
-                      ],
+                      "enum": ["ask", "bid"],
                       "description": "주문 방향(매수/매도)",
                       "example": "ask"
                     },
                     "ord_type": {
                       "type": "string",
-                      "enum": [
-                        "limit",
-                        "price",
-                        "market",
-                        "best"
-                      ],
+                      "enum": ["limit", "price", "market", "best"],
                       "description": "주문 유형. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                       "example": "limit"
                     },
@@ -2100,10 +1919,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "wait",
-                        "watch"
-                      ],
+                      "enum": ["wait", "watch"],
                       "description": "주문 상태\n\n- `wait`: 체결 대기\n- `watch`: 예약 주문 대기\n",
                       "example": "wait"
                     },
@@ -2149,11 +1965,7 @@
                     },
                     "time_in_force": {
                       "type": "string",
-                      "enum": [
-                        "fok",
-                        "ioc",
-                        "post_only"
-                      ],
+                      "enum": ["fok", "ioc", "post_only"],
                       "description": "주문 체결 옵션",
                       "example": "ioc"
                     },
@@ -2164,11 +1976,7 @@
                     },
                     "smp_type": {
                       "type": "string",
-                      "enum": [
-                        "reduce",
-                        "cancel_maker",
-                        "cancel_taker"
-                      ],
+                      "enum": ["reduce", "cancel_maker", "cancel_taker"],
                       "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                       "example": "cancel_maker"
                     },
@@ -2224,10 +2032,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -2271,10 +2076,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -2314,9 +2116,7 @@
       "get": {
         "summary": "id로 주문 목록 조회",
         "operationId": "list-orders-by-ids",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -2386,10 +2186,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "enum": ["asc", "desc"],
               "description": "결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n",
               "example": "desc",
               "default": "desc"
@@ -2435,21 +2232,13 @@
                       },
                       "side": {
                         "type": "string",
-                        "enum": [
-                          "ask",
-                          "bid"
-                        ],
+                        "enum": ["ask", "bid"],
                         "description": "주문 방향(매수/매도)",
                         "example": "ask"
                       },
                       "ord_type": {
                         "type": "string",
-                        "enum": [
-                          "limit",
-                          "price",
-                          "market",
-                          "best"
-                        ],
+                        "enum": ["limit", "price", "market", "best"],
                         "description": "주문 유형. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                         "example": "limit"
                       },
@@ -2460,12 +2249,7 @@
                       },
                       "state": {
                         "type": "string",
-                        "enum": [
-                          "wait",
-                          "watch",
-                          "done",
-                          "cancel"
-                        ],
+                        "enum": ["wait", "watch", "done", "cancel"],
                         "description": "주문 상태\n\n- `wait`: 체결 대기\n- `watch`: 예약 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소\n",
                         "example": "wait"
                       },
@@ -2516,11 +2300,7 @@
                       },
                       "time_in_force": {
                         "type": "string",
-                        "enum": [
-                          "fok",
-                          "ioc",
-                          "post_only"
-                        ],
+                        "enum": ["fok", "ioc", "post_only"],
                         "description": "주문 체결 옵션",
                         "example": "ioc"
                       },
@@ -2531,11 +2311,7 @@
                       },
                       "smp_type": {
                         "type": "string",
-                        "enum": [
-                          "reduce",
-                          "cancel_maker",
-                          "cancel_taker"
-                        ],
+                        "enum": ["reduce", "cancel_maker", "cancel_taker"],
                         "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                         "example": "cancel_maker"
                       },
@@ -2649,10 +2425,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -2690,9 +2463,7 @@
       "delete": {
         "summary": "id로 주문 목록 취소 접수",
         "operationId": "cancel-orders-by-ids",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -2753,18 +2524,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "failed"
-                  ],
+                  "required": ["success", "failed"],
                   "properties": {
                     "success": {
                       "description": "성공적으로 취소된 주문 정보",
                       "type": "object",
-                      "required": [
-                        "count",
-                        "orders"
-                      ],
+                      "required": ["count", "orders"],
                       "properties": {
                         "count": {
                           "type": "number",
@@ -2776,10 +2541,7 @@
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "required": [
-                              "uuid",
-                              "market"
-                            ],
+                            "required": ["uuid", "market"],
                             "properties": {
                               "uuid": {
                                 "type": "string",
@@ -2804,10 +2566,7 @@
                     "failed": {
                       "description": "취소 실패한 주문 정보",
                       "type": "object",
-                      "required": [
-                        "count",
-                        "orders"
-                      ],
+                      "required": ["count", "orders"],
                       "properties": {
                         "count": {
                           "type": "number",
@@ -2819,10 +2578,7 @@
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "required": [
-                              "uuid",
-                              "market"
-                            ],
+                            "required": ["uuid", "market"],
                             "properties": {
                               "uuid": {
                                 "type": "string",
@@ -2886,10 +2642,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -2937,9 +2690,7 @@
       "get": {
         "summary": "체결 대기 주문 목록 조회",
         "operationId": "list-open-orders",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -2982,10 +2733,7 @@
             "schema": {
               "type": "string",
               "description": "주문의 상태. \n지정한 상태의 주문만을 조회하기 위한 필터 파라미터입니다. 사용 가능한 값은 “wait”(체결 대기), “watch”(예약 주문 대기)입니다. 미지정시 기본값은 “wait”입니다.\n",
-              "enum": [
-                "wait",
-                "watch"
-              ],
+              "enum": ["wait", "watch"],
               "default": "wait"
             },
             "allowReserved": true
@@ -2999,10 +2747,7 @@
               "description": "주문의 상태. \n지정한 상태의 주문만을 조회하기 위한 필터 파라미터입니다. 배열 형식이며 사용 가능한 값은 “wait”(체결 대기), “watch”(예약 주문 대기)입니다. 미지정시 기본값은 “wait”입니다.\n\n[예시] states[]=wait&states[]=watch\n",
               "items": {
                 "type": "string",
-                "enum": [
-                  "wait",
-                  "watch"
-                ]
+                "enum": ["wait", "watch"]
               }
             },
             "allowReserved": true
@@ -3037,10 +2782,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "enum": ["asc", "desc"],
               "description": "결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n",
               "example": "desc",
               "default": "desc"
@@ -3088,21 +2830,13 @@
                       },
                       "side": {
                         "type": "string",
-                        "enum": [
-                          "ask",
-                          "bid"
-                        ],
+                        "enum": ["ask", "bid"],
                         "description": "주문 방향(매수/매도)",
                         "example": "ask"
                       },
                       "ord_type": {
                         "type": "string",
-                        "enum": [
-                          "limit",
-                          "price",
-                          "market",
-                          "best"
-                        ],
+                        "enum": ["limit", "price", "market", "best"],
                         "description": "주문 유형. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                         "example": "limit"
                       },
@@ -3113,10 +2847,7 @@
                       },
                       "state": {
                         "type": "string",
-                        "enum": [
-                          "wait",
-                          "watch"
-                        ],
+                        "enum": ["wait", "watch"],
                         "description": "주문 상태\n\n- `wait`: 체결 대기\n- `watch`: 예약 주문 대기\n",
                         "example": "wait"
                       },
@@ -3167,11 +2898,7 @@
                       },
                       "time_in_force": {
                         "type": "string",
-                        "enum": [
-                          "fok",
-                          "ioc",
-                          "post_only"
-                        ],
+                        "enum": ["fok", "ioc", "post_only"],
                         "description": "주문 체결 옵션",
                         "example": "ioc"
                       },
@@ -3182,11 +2909,7 @@
                       },
                       "smp_type": {
                         "type": "string",
-                        "enum": [
-                          "reduce",
-                          "cancel_maker",
-                          "cancel_taker"
-                        ],
+                        "enum": ["reduce", "cancel_maker", "cancel_taker"],
                         "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                         "example": "cancel_maker"
                       },
@@ -3246,10 +2969,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -3287,9 +3007,7 @@
       "delete": {
         "summary": "주문 일괄 취소 접수",
         "operationId": "cancel-open-orders",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -3321,9 +3039,7 @@
                 "type": "string"
               },
               "description": "주문 취소 대상 마켓 목록.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)로 취소 대상 주문을 한정할 수 있는 필터 파라미터입니다. 지정한 마켓에 속한 미체결 주문을 일괄 취소합니다. \n\n[예시] \"KRW\"로 지정시 원화마켓의 모든 미체결 매수 주문 취소\n",
-              "example": [
-                "KRW"
-              ]
+              "example": ["KRW"]
             },
             "allowReserved": true
           },
@@ -3334,11 +3050,7 @@
             "schema": {
               "type": "string",
               "description": "취소하고자 하는 주문의 매수/매도 방향 구분. \n매수/매도 구분으로 취소 대상을 한정할 수 있는 필터 파라미터입니다. 사용 가능한 값은 “all”(매수, 매도 전체), “ask”(매도), “bid”(매수)입니다. \n\n[예시] “ask”로 설정시 체결 대기중인 매도 주문을 일괄 취소합니다.\n",
-              "enum": [
-                "bid",
-                "ask",
-                "all"
-              ],
+              "enum": ["bid", "ask", "all"],
               "default": "all"
             },
             "allowReserved": true
@@ -3361,10 +3073,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "enum": ["asc", "desc"],
               "description": "취소할 주문의 정렬 방식.\n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 순서에 따라 count개 주문에 대해 취소를 요청합니다. \n\n사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n",
               "example": "desc",
               "default": "desc"
@@ -3401,18 +3110,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "failed"
-                  ],
+                  "required": ["success", "failed"],
                   "properties": {
                     "success": {
                       "description": "성공적으로 취소된 주문 정보",
                       "type": "object",
-                      "required": [
-                        "count",
-                        "orders"
-                      ],
+                      "required": ["count", "orders"],
                       "properties": {
                         "count": {
                           "type": "number",
@@ -3424,10 +3127,7 @@
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "required": [
-                              "uuid",
-                              "market"
-                            ],
+                            "required": ["uuid", "market"],
                             "properties": {
                               "uuid": {
                                 "type": "string",
@@ -3452,10 +3152,7 @@
                     "failed": {
                       "description": "취소 실패한 주문 정보",
                       "type": "object",
-                      "required": [
-                        "count",
-                        "orders"
-                      ],
+                      "required": ["count", "orders"],
                       "properties": {
                         "count": {
                           "type": "number",
@@ -3467,10 +3164,7 @@
                           "type": "array",
                           "items": {
                             "type": "object",
-                            "required": [
-                              "uuid",
-                              "market"
-                            ],
+                            "required": ["uuid", "market"],
                             "properties": {
                               "uuid": {
                                 "type": "string",
@@ -3534,10 +3228,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -3581,10 +3272,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -3620,10 +3308,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -3663,9 +3348,7 @@
       "get": {
         "summary": "종료 주문 목록 조회",
         "operationId": "list-closed-orders",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -3708,10 +3391,7 @@
             "schema": {
               "type": "string",
               "description": "주문의 상태.\n\n- 시장가 주문이 조회되지 않는 경우: 시장가 매수 주문은 체결 후 주문 상태가 `cancel`, `done` 두 경우 모두 발생할 수 있습니다.\n- 시장가로 체결이 일어난 후 주문 잔량이 발생하는 경우, 남은 잔량이 반환되며 `cancel` 처리됩니다. 대부분의 경우 소수점 아래 8자리까지 나누어떨어지지 않는 미미한 금액이 주문 잔량으로 발생하게 됩니다.\n- 만일 주문 잔량 없이 딱 맞아떨어지게 체결이 발생한 경우에는 주문 상태가 `done`이 됩니다.\n",
-              "enum": [
-                "done",
-                "cancel"
-              ]
+              "enum": ["done", "cancel"]
             },
             "allowReserved": true
           },
@@ -3724,15 +3404,9 @@
               "description": "주문의 상태. \n지정한 상태의 주문만을 조회하기 위한 필터 파라미터입니다. 배열 형식이며 사용 가능한 값은 “done”(주문 전체 체결 완료), “cancel”(주문 전체 또는 부분 취소)입니다. 미지정시 기본값은 모든 상태(done, cancel)의 주문 반환입니다.\n\n[예시] states[]=done&states[]=cancel\n",
               "items": {
                 "type": "string",
-                "enum": [
-                  "done",
-                  "cancel"
-                ]
+                "enum": ["done", "cancel"]
               },
-              "default": [
-                "done",
-                "cancel"
-              ]
+              "default": ["done", "cancel"]
             },
             "allowReserved": true
           },
@@ -3774,10 +3448,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "normal",
-                "watch"
-              ],
+              "enum": ["normal", "watch"],
               "description": "주문 종류 필터.\n일반 주문과 예약 주문을 구분하여 조회할 수 있습니다.\n\n- `normal`: 일반 주문\n- `watch`: 예약 주문\n- 미지정시 모든 종류의 주문이 반환됩니다.\n"
             },
             "allowReserved": true
@@ -3788,10 +3459,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "enum": ["asc", "desc"],
               "description": "결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n",
               "example": "desc",
               "default": "desc"
@@ -3841,21 +3509,13 @@
                       },
                       "side": {
                         "type": "string",
-                        "enum": [
-                          "ask",
-                          "bid"
-                        ],
+                        "enum": ["ask", "bid"],
                         "description": "주문 방향(매수/매도)",
                         "example": "ask"
                       },
                       "ord_type": {
                         "type": "string",
-                        "enum": [
-                          "limit",
-                          "price",
-                          "market",
-                          "best"
-                        ],
+                        "enum": ["limit", "price", "market", "best"],
                         "description": "주문 유형. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
                         "example": "limit"
                       },
@@ -3866,10 +3526,7 @@
                       },
                       "state": {
                         "type": "string",
-                        "enum": [
-                          "done",
-                          "cancel"
-                        ],
+                        "enum": ["done", "cancel"],
                         "description": "주문 상태\n\n- `done`: 체결 완료\n- `cancel`: 주문 취소\n",
                         "example": "wait"
                       },
@@ -3920,11 +3577,7 @@
                       },
                       "time_in_force": {
                         "type": "string",
-                        "enum": [
-                          "fok",
-                          "ioc",
-                          "post_only"
-                        ],
+                        "enum": ["fok", "ioc", "post_only"],
                         "description": "주문 체결 옵션",
                         "example": "ioc"
                       },
@@ -3935,11 +3588,7 @@
                       },
                       "smp_type": {
                         "type": "string",
-                        "enum": [
-                          "reduce",
-                          "cancel_maker",
-                          "cancel_taker"
-                        ],
+                        "enum": ["reduce", "cancel_maker", "cancel_taker"],
                         "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                         "example": "cancel_maker"
                       },
@@ -3986,10 +3635,7 @@
                             },
                             "trend": {
                               "type": "string",
-                              "enum": [
-                                "up",
-                                "down"
-                              ],
+                              "enum": ["up", "down"],
                               "description": "가격 추세"
                             },
                             "created_at": {
@@ -3998,10 +3644,7 @@
                             },
                             "side": {
                               "type": "string",
-                              "enum": [
-                                "ask",
-                                "bid"
-                              ],
+                              "enum": ["ask", "bid"],
                               "description": "체결 방향"
                             }
                           }
@@ -4048,10 +3691,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -4091,9 +3731,7 @@
       "post": {
         "operationId": "cancel-and-create-order",
         "summary": "취소 후 재주문",
-        "tags": [
-          "주문(Order)"
-        ],
+        "tags": ["주문(Order)"],
         "x-readme": {
           "code-samples": [
             {
@@ -4123,9 +3761,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "new_ord_type"
-                ],
+                "required": ["new_ord_type"],
                 "properties": {
                   "prev_order_uuid": {
                     "type": "string",
@@ -4159,21 +3795,13 @@
                   },
                   "new_time_in_force": {
                     "type": "string",
-                    "enum": [
-                      "ioc",
-                      "fok",
-                      "post_only"
-                    ],
+                    "enum": ["ioc", "fok", "post_only"],
                     "description": "주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 \"limit\")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 \"ioc\" 또는 \"fok\" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n",
                     "example": "ioc"
                   },
                   "new_smp_type": {
                     "type": "string",
-                    "enum": [
-                      "reduce",
-                      "cancel_maker",
-                      "cancel_taker"
-                    ],
+                    "enum": ["reduce", "cancel_maker", "cancel_taker"],
                     "description": "신규 주문의 자전거래 체결 방지(Self-Match Prevention) 모드.\n자동 매매 시 동일 계정으로부터 생성된 매수 주문과 매도 주문이 체결(자전거래)되는 것을 방지하기 위해 SMP 모드를 선택적으로 설정할 수 있습니다. 메이커(maker) 주문과 테이커(taker) 주문에 설정된 SMP 모드가 서로 상이한 경우 테이커 주문 모드에 따라 동작합니다. \n\n사용 가능한 값은 다음과 같습니다.\n\n* `cancel_maker`: 메이커 주문을 취소합니다. 즉, 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 이전에 생성한 주문을 취소하여 체결을 방지합니다.\n* `cancel_taker`: 테이커 주문을 취소합니다. 즉, 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 새롭게 생성한 주문을 취소하여 체결을 방지합니다.\n* `reduce`: 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
                     "example": "cancel_maker"
                   }
@@ -4225,21 +3853,13 @@
                     },
                     "side": {
                       "type": "string",
-                      "enum": [
-                        "ask",
-                        "bid"
-                      ],
+                      "enum": ["ask", "bid"],
                       "description": "취소할 주문의 방향(매수/매도)",
                       "example": "ask"
                     },
                     "ord_type": {
                       "type": "string",
-                      "enum": [
-                        "limit",
-                        "price",
-                        "market",
-                        "best"
-                      ],
+                      "enum": ["limit", "price", "market", "best"],
                       "description": "취소할 주문의 유형.\n",
                       "example": "limit"
                     },
@@ -4250,12 +3870,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "wait",
-                        "watch",
-                        "done",
-                        "cancel"
-                      ],
+                      "enum": ["wait", "watch", "done", "cancel"],
                       "description": "취소할 주문의 상태\n\n- `wait`: 체결 대기\n- `watch`: 예약 주문 대기\n- `done`: 체결 완료\n- `cancel`: 주문 취소\n",
                       "example": "wait"
                     },
@@ -4311,11 +3926,7 @@
                     },
                     "smp_type": {
                       "type": "string",
-                      "enum": [
-                        "reduce",
-                        "cancel_maker",
-                        "cancel_taker"
-                      ],
+                      "enum": ["reduce", "cancel_maker", "cancel_taker"],
                       "description": "자전거래 체결 방지(Self-Match Prevention) 모드",
                       "example": "cancel_maker"
                     },
@@ -4326,11 +3937,7 @@
                     },
                     "time_in_force": {
                       "type": "string",
-                      "enum": [
-                        "fok",
-                        "ioc",
-                        "post_only"
-                      ],
+                      "enum": ["fok", "ioc", "post_only"],
                       "description": "주문 체결 옵션",
                       "example": "ioc"
                     },
@@ -4382,10 +3989,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -4421,10 +4025,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -4460,10 +4061,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -4503,9 +4101,7 @@
       "get": {
         "operationId": "get-withdraw-chance",
         "summary": "출금 가능 정보 조회",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -4560,12 +4156,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "member_level",
-                    "currency",
-                    "account",
-                    "withdraw_limit"
-                  ],
+                  "required": ["member_level", "currency", "account", "withdraw_limit"],
                   "properties": {
                     "member_level": {
                       "description": "사용자 보안 등급 정보",
@@ -4651,27 +4242,18 @@
                         },
                         "wallet_state": {
                           "type": "string",
-                          "enum": [
-                            "working",
-                            "unsupported"
-                          ],
+                          "enum": ["working", "unsupported"],
                           "description": "자산별 입출금 지원 이력 여부. 현시점의 입출금 가능 여부는 wallet_support 필드를 참조하시기 바랍니다.\n  - `working`: 입출금 지원한 적 있음\n  - `unsupported`: 입출금 미지원\n",
                           "example": "working"
                         },
                         "wallet_support": {
                           "description": "해당 통화의 입출금 가능 여부. 입금가능한 상태인 경우 'deposit', 출금가능한 상태인 경우 'withdraw'가 추가되며, 빈 리스트일 경우 입출금 모두 불가한 상태입니다.",
                           "type": "array",
-                          "enum": [
-                            "deposit",
-                            "withdraw"
-                          ],
+                          "enum": ["deposit", "withdraw"],
                           "items": {
                             "type": "string"
                           },
-                          "example": [
-                            "deposit",
-                            "withdraw"
-                          ]
+                          "example": ["deposit", "withdraw"]
                         }
                       }
                     },
@@ -4809,10 +4391,7 @@
                         "withdraw_fee": "0.0008",
                         "is_coin": true,
                         "wallet_state": "working",
-                        "wallet_support": [
-                          "deposit",
-                          "withdraw"
-                        ]
+                        "wallet_support": ["deposit", "withdraw"]
                       },
                       "account": {
                         "currency": "BTC",
@@ -4850,10 +4429,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -4901,9 +4477,7 @@
       "get": {
         "operationId": "list-withdrawal-addresses",
         "summary": "출금 허용 주소 목록 조회",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -4936,12 +4510,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "currency",
-                      "net_type",
-                      "network_name",
-                      "withdraw_address"
-                    ],
+                    "required": ["currency", "net_type", "network_name", "withdraw_address"],
                     "properties": {
                       "currency": {
                         "type": "string",
@@ -5042,9 +4611,7 @@
       "post": {
         "summary": "디지털 자산 출금 요청",
         "operationId": "create-withdrawal",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -5072,12 +4639,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "currency",
-                  "net_type",
-                  "amount",
-                  "address"
-                ],
+                "required": ["currency", "net_type", "amount", "address"],
                 "properties": {
                   "currency": {
                     "type": "string",
@@ -5107,10 +4669,7 @@
                   },
                   "transaction_type": {
                     "type": "string",
-                    "enum": [
-                      "default",
-                      "internal"
-                    ],
+                    "enum": ["default", "internal"],
                     "description": "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
                     "example": "default",
                     "default": "default"
@@ -5170,14 +4729,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "WAITING",
-                        "PROCESSING",
-                        "DONE",
-                        "FAILED",
-                        "CANCELLED",
-                        "REJECTED"
-                      ],
+                      "enum": ["WAITING", "PROCESSING", "DONE", "FAILED", "CANCELLED", "REJECTED"],
                       "description": "출금 처리 상태\n  - `WAITING`: 대기 중\n  - `PROCESSING`: 처리 중\n  - `DONE`: 완료\n  - `FAILED`: 실패\n  - `CANCELLED`: 취소됨\n  - `REJECTED`: 거절됨\n",
                       "example": "WAITING"
                     },
@@ -5204,10 +4756,7 @@
                     },
                     "transaction_type": {
                       "type": "string",
-                      "enum": [
-                        "default",
-                        "internal"
-                      ],
+                      "enum": ["default", "internal"],
                       "description": "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
                       "example": "default",
                       "default": "default"
@@ -5249,10 +4798,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -5298,9 +4844,7 @@
       "delete": {
         "summary": "디지털 자산 출금 취소 요청",
         "operationId": "cancel-withdrawal",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -5387,9 +4931,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "CANCELLED"
-                      ],
+                      "enum": ["CANCELLED"],
                       "description": "출금 처리 상태",
                       "example": "CANCELLED",
                       "default": "CANCELLED"
@@ -5417,10 +4959,7 @@
                     },
                     "transaction_type": {
                       "type": "string",
-                      "enum": [
-                        "default",
-                        "internal"
-                      ],
+                      "enum": ["default", "internal"],
                       "description": "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
                       "example": "default",
                       "default": "default"
@@ -5462,10 +5001,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -5501,10 +5037,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -5545,9 +5078,7 @@
       "post": {
         "operationId": "create-withdraw-krw",
         "summary": "원화 출금 요청",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -5577,10 +5108,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "amount",
-                  "two_factor_type"
-                ],
+                "required": ["amount", "two_factor_type"],
                 "properties": {
                   "amount": {
                     "type": "string",
@@ -5589,11 +5117,7 @@
                   },
                   "two_factor_type": {
                     "type": "string",
-                    "enum": [
-                      "kakao",
-                      "naver",
-                      "hana"
-                    ],
+                    "enum": ["kakao", "naver", "hana"],
                     "description": "원화 입출금 시 사용할 2차 인증 수단.\n사용 가능한 값은 다음과 같습니다.\n\n* `kakao`: 카카오 인증\n* `naver`: 네이버 인증\n* `hana`: 하나인증서 인증\n",
                     "example": "kakao"
                   }
@@ -5646,14 +5170,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "WAITING",
-                        "PROCESSING",
-                        "DONE",
-                        "FAILED",
-                        "CANCELLED",
-                        "REJECTED"
-                      ],
+                      "enum": ["WAITING", "PROCESSING", "DONE", "FAILED", "CANCELLED", "REJECTED"],
                       "description": "출금 처리 상태\n  - `WAITING`: 대기 중\n  - `PROCESSING`: 처리 중\n  - `DONE`: 완료\n  - `FAILED`: 실패\n  - `CANCELLED`: 취소됨\n  - `REJECTED`: 거절됨\n",
                       "example": "WAITING"
                     },
@@ -5680,10 +5197,7 @@
                     },
                     "transaction_type": {
                       "type": "string",
-                      "enum": [
-                        "default",
-                        "internal"
-                      ],
+                      "enum": ["default", "internal"],
                       "description": "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
                       "example": "default",
                       "default": "default"
@@ -5724,10 +5238,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -5775,9 +5286,7 @@
       "get": {
         "operationId": "get-withdrawal",
         "summary": "개별 출금 조회",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -5885,14 +5394,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "WAITING",
-                        "PROCESSING",
-                        "DONE",
-                        "FAILED",
-                        "CANCELLED",
-                        "REJECTED"
-                      ],
+                      "enum": ["WAITING", "PROCESSING", "DONE", "FAILED", "CANCELLED", "REJECTED"],
                       "description": "출금 처리 상태\n  - `WAITING`: 대기 중\n  - `PROCESSING`: 처리 중\n  - `DONE`: 완료\n  - `FAILED`: 실패\n  - `CANCELLED`: 취소됨\n  - `REJECTED`: 거절됨\n",
                       "example": "WAITING"
                     },
@@ -5919,10 +5421,7 @@
                     },
                     "transaction_type": {
                       "type": "string",
-                      "enum": [
-                        "default",
-                        "internal"
-                      ],
+                      "enum": ["default", "internal"],
                       "description": "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
                       "example": "default",
                       "default": "default"
@@ -5963,10 +5462,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6006,9 +5502,7 @@
       "get": {
         "operationId": "list-withdrawals",
         "summary": "출금 목록 조회",
-        "tags": [
-          "출금(Withdrawal)"
-        ],
+        "tags": ["출금(Withdrawal)"],
         "x-readme": {
           "code-samples": [
             {
@@ -6112,10 +5606,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "enum": ["asc", "desc"],
               "description": "결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n",
               "example": "desc",
               "default": "desc"
@@ -6226,10 +5717,7 @@
                       },
                       "transaction_type": {
                         "type": "string",
-                        "enum": [
-                          "default",
-                          "internal"
-                        ],
+                        "enum": ["default", "internal"],
                         "description": "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
                         "example": "default",
                         "default": "default"
@@ -6274,10 +5762,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6313,10 +5798,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6356,9 +5838,7 @@
       "get": {
         "operationId": "get-deposit-chance",
         "summary": "디지털 자산 입금 가능 정보 조회",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -6486,10 +5966,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6537,9 +6014,7 @@
       "post": {
         "operationId": "create-deposit-address",
         "summary": "입금 주소 생성 요청",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -6569,10 +6044,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "currency",
-                  "net_type"
-                ],
+                "required": ["currency", "net_type"],
                 "properties": {
                   "currency": {
                     "type": "string",
@@ -6596,11 +6068,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "currency",
-                    "net_type",
-                    "deposit_address"
-                  ],
+                  "required": ["currency", "net_type", "deposit_address"],
                   "properties": {
                     "currency": {
                       "type": "string",
@@ -6645,10 +6113,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "message"
-                  ],
+                  "required": ["success", "message"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -6683,10 +6148,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6742,9 +6204,7 @@
       "get": {
         "operationId": "get-deposit-address",
         "summary": "개별 입금 주소 조회",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -6798,10 +6258,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "currency",
-                    "net_type"
-                  ],
+                  "required": ["currency", "net_type"],
                   "properties": {
                     "currency": {
                       "type": "string",
@@ -6849,10 +6306,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6896,10 +6350,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -6939,9 +6390,7 @@
       "get": {
         "operationId": "list-deposit-addresses",
         "summary": "입금 주소 목록 조회",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -6974,10 +6423,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "currency",
-                      "net_type"
-                    ],
+                    "required": ["currency", "net_type"],
                     "properties": {
                       "currency": {
                         "type": "string",
@@ -7044,9 +6490,7 @@
       "post": {
         "operationId": "create-deposit-krw",
         "summary": "원화 입금",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -7076,10 +6520,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "amount",
-                  "two_factor_type"
-                ],
+                "required": ["amount", "two_factor_type"],
                 "properties": {
                   "amount": {
                     "type": "string",
@@ -7088,11 +6529,7 @@
                   },
                   "two_factor_type": {
                     "type": "string",
-                    "enum": [
-                      "kakao",
-                      "naver",
-                      "hana"
-                    ],
+                    "enum": ["kakao", "naver", "hana"],
                     "description": "원화 입출금 시 사용할 2차 인증 수단.\n사용 가능한 값은 다음과 같습니다.\n\n* `kakao`: 카카오 인증\n* `naver`: 네이버 인증\n* `hana`: 하나인증서 인증\n",
                     "example": "kakao"
                   }
@@ -7150,12 +6587,7 @@
                     },
                     "state": {
                       "type": "string",
-                      "enum": [
-                        "ACCEPTED",
-                        "CANCELLED",
-                        "REJECTED",
-                        "REFUNDING"
-                      ],
+                      "enum": ["ACCEPTED", "CANCELLED", "REJECTED", "REFUNDING"],
                       "description": "입금 처리 상태\n  - `ACCEPTED`: 완료\n  - `CANCELLED`: 취소됨\n  - `REJECTED`: 거절됨\n  - `REFUNDING`: 반환 절차 중\n",
                       "example": "ACCEPTED"
                     },
@@ -7182,10 +6614,7 @@
                     },
                     "transaction_type": {
                       "type": "string",
-                      "enum": [
-                        "default",
-                        "internal"
-                      ],
+                      "enum": ["default", "internal"],
                       "description": "입금 유형\n  - `default`: 일반 입금\n  - `internal`: 바로 입금 (업비트 계정간 입금)\n",
                       "example": "default",
                       "default": "default"
@@ -7221,10 +6650,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -7280,9 +6706,7 @@
       "get": {
         "operationId": "get-deposit",
         "summary": "개별 입금 조회",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -7426,10 +6850,7 @@
                     },
                     "transaction_type": {
                       "type": "string",
-                      "enum": [
-                        "default",
-                        "internal"
-                      ],
+                      "enum": ["default", "internal"],
                       "description": "입금 유형\n  - `default`: 일반 입금\n  - `internal`: 바로 입금 (업비트 계정간 입금)\n",
                       "example": "default",
                       "default": "default"
@@ -7465,10 +6886,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -7504,10 +6922,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -7543,10 +6958,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -7586,9 +6998,7 @@
       "get": {
         "operationId": "list-deposits",
         "summary": "입금 목록 조회",
-        "tags": [
-          "입금(Deposit)"
-        ],
+        "tags": ["입금(Deposit)"],
         "x-readme": {
           "code-samples": [
             {
@@ -7701,10 +7111,7 @@
             "required": false,
             "schema": {
               "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ],
+              "enum": ["asc", "desc"],
               "description": "결과 정렬 방식. \n주문 생성 시각을 기준으로 설정한 방식에 따라 정렬된 주문 목록이 반환됩니다. 사용 가능한 값은 “desc”(내림차순, 최신 주문 순) 또는 “asc”(오름차순, 오래된 주문 순)입니다. 기본값은 “desc”입니다.\n",
               "example": "desc",
               "default": "desc"
@@ -7804,10 +7211,7 @@
                       },
                       "transaction_type": {
                         "type": "string",
-                        "enum": [
-                          "default",
-                          "internal"
-                        ],
+                        "enum": ["default", "internal"],
                         "description": "입금 유형\n  - `default`: 일반 입금\n  - `internal`: 바로 입금 (업비트 계정간 입금)\n",
                         "example": "default",
                         "default": "default"
@@ -7846,10 +7250,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -7885,10 +7286,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -7928,9 +7326,7 @@
       "get": {
         "operationId": "list-travel-rule-vasps",
         "summary": "계정주 확인 서비스 지원 거래소 목록 조회",
-        "tags": [
-          "트래블룰 검증"
-        ],
+        "tags": ["트래블룰 검증"],
         "security": [
           {
             "BearerAuth": []
@@ -7968,12 +7364,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "vasp_name",
-                      "vasp_uuid",
-                      "depositable",
-                      "withdrawable"
-                    ],
+                    "required": ["vasp_name", "vasp_uuid", "depositable", "withdrawable"],
                     "properties": {
                       "vasp_name": {
                         "type": "string",
@@ -8034,9 +7425,7 @@
       "post": {
         "operationId": "verify-travel-rule-by-uuid",
         "summary": "입금 UUID로 계정주 검증 요청",
-        "tags": [
-          "트래블룰 검증"
-        ],
+        "tags": ["트래블룰 검증"],
         "security": [
           {
             "BearerAuth": []
@@ -8070,10 +7459,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "deposit_uuid",
-                  "vasp_uuid"
-                ],
+                "required": ["deposit_uuid", "vasp_uuid"],
                 "properties": {
                   "deposit_uuid": {
                     "type": "string",
@@ -8097,11 +7483,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "deposit_uuid",
-                    "verification_result",
-                    "deposit_state"
-                  ],
+                  "required": ["deposit_uuid", "verification_result", "deposit_state"],
                   "properties": {
                     "deposit_uuid": {
                       "type": "string",
@@ -8150,10 +7532,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -8213,10 +7592,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -8258,9 +7634,7 @@
       "post": {
         "operationId": "verify-travel-rule-by-txid",
         "summary": "입금 TxID로 계정주 검증 요청",
-        "tags": [
-          "트래블룰 검증"
-        ],
+        "tags": ["트래블룰 검증"],
         "security": [
           {
             "BearerAuth": []
@@ -8295,12 +7669,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "vasp_uuid",
-                  "txid",
-                  "currency",
-                  "net_type"
-                ],
+                "required": ["vasp_uuid", "txid", "currency", "net_type"],
                 "properties": {
                   "vasp_uuid": {
                     "type": "string",
@@ -8334,11 +7703,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "deposit_uuid",
-                    "verification_result",
-                    "deposit_state"
-                  ],
+                  "required": ["deposit_uuid", "verification_result", "deposit_state"],
                   "properties": {
                     "deposit_uuid": {
                       "type": "string",
@@ -8387,10 +7752,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -8450,10 +7812,7 @@
                   "properties": {
                     "error": {
                       "type": "object",
-                      "required": [
-                        "name",
-                        "message"
-                      ],
+                      "required": ["name", "message"],
                       "properties": {
                         "name": {
                           "type": "string",
@@ -8495,9 +7854,7 @@
       "get": {
         "operationId": "get-service-status",
         "summary": "입출금 서비스 상태 조회",
-        "tags": [
-          "서비스 정보(Service)"
-        ],
+        "tags": ["서비스 정보(Service)"],
         "x-readme": {
           "code-samples": [
             {
@@ -8557,11 +7914,7 @@
                       },
                       "block_state": {
                         "type": "string",
-                        "enum": [
-                          "normal",
-                          "delayed",
-                          "inactive"
-                        ],
+                        "enum": ["normal", "delayed", "inactive"],
                         "description": "블록체인 네트워크의 상태.\n지갑 또는 거래소 상태에 따라 null로 반환 될 수 있습니다. \n  - `normal`: 정상\n  - `delayed`: 지연\n  - `inactive`: 비활성\n",
                         "example": "normal"
                       },
@@ -8675,9 +8028,7 @@
       "get": {
         "operationId": "list-api-keys",
         "summary": "API Key 목록 조회",
-        "tags": [
-          "서비스 정보(Service)"
-        ],
+        "tags": ["서비스 정보(Service)"],
         "x-readme": {
           "code-samples": [
             {
@@ -8710,10 +8061,7 @@
                   "type": "array",
                   "items": {
                     "type": "object",
-                    "required": [
-                      "access_key",
-                      "expire_at"
-                    ],
+                    "required": ["access_key", "expire_at"],
                     "properties": {
                       "access_key": {
                         "type": "string",

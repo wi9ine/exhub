@@ -32,9 +32,7 @@
   ],
   "channels": {
     "private.미체결주문구독": {
-      "servers": [
-        "production"
-      ],
+      "servers": ["production"],
       "publish": {
         "operationId": "subscribe-open-orders",
         "message": {
@@ -51,10 +49,7 @@
                 "properties": {}
               }
             },
-            "required": [
-              "n",
-              "o"
-            ]
+            "required": ["n", "o"]
           }
         },
         "externalDocs": {
@@ -62,9 +57,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#f1d60da232"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#f1d60da232",
-        "x-tags": [
-          "개인 API"
-        ]
+        "x-tags": ["개인 API"]
       },
       "subscribe": {
         "operationId": "receive-open-orders",
@@ -219,15 +212,10 @@
                         }
                       }
                     },
-                    "required": [
-                      "data"
-                    ]
+                    "required": ["data"]
                   }
                 },
-                "required": [
-                  "n",
-                  "o"
-                ]
+                "required": ["n", "o"]
               }
             },
             {
@@ -366,11 +354,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "i",
-                  "n",
-                  "o"
-                ]
+                "required": ["i", "n", "o"]
               }
             },
             {
@@ -387,15 +371,11 @@
           "url": "https://gopax.github.io/wsapi/index.html#f1d60da232"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#f1d60da232",
-        "x-tags": [
-          "개인 API"
-        ]
+        "x-tags": ["개인 API"]
       }
     },
     "private.잔고구독": {
-      "servers": [
-        "production"
-      ],
+      "servers": ["production"],
       "publish": {
         "operationId": "subscribe-balances",
         "message": {
@@ -412,10 +392,7 @@
                 "properties": {}
               }
             },
-            "required": [
-              "n",
-              "o"
-            ]
+            "required": ["n", "o"]
           }
         },
         "externalDocs": {
@@ -423,9 +400,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#fa07b908ad"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#fa07b908ad",
-        "x-tags": [
-          "개인 API"
-        ]
+        "x-tags": ["개인 API"]
       },
       "subscribe": {
         "operationId": "receive-balances",
@@ -488,16 +463,10 @@
                         }
                       }
                     },
-                    "required": [
-                      "result",
-                      "data"
-                    ]
+                    "required": ["result", "data"]
                   }
                 },
-                "required": [
-                  "n",
-                  "o"
-                ]
+                "required": ["n", "o"]
               }
             },
             {
@@ -559,11 +528,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "i",
-                  "n",
-                  "o"
-                ]
+                "required": ["i", "n", "o"]
               }
             },
             {
@@ -580,15 +545,11 @@
           "url": "https://gopax.github.io/wsapi/index.html#fa07b908ad"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#fa07b908ad",
-        "x-tags": [
-          "개인 API"
-        ]
+        "x-tags": ["개인 API"]
       }
     },
     "private.체결내역구독": {
-      "servers": [
-        "production"
-      ],
+      "servers": ["production"],
       "publish": {
         "operationId": "subscribe-my-trades",
         "message": {
@@ -605,10 +566,7 @@
                 "properties": {}
               }
             },
-            "required": [
-              "n",
-              "o"
-            ]
+            "required": ["n", "o"]
           }
         },
         "externalDocs": {
@@ -616,9 +574,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#70aea396f8"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#70aea396f8",
-        "x-tags": [
-          "개인 API"
-        ]
+        "x-tags": ["개인 API"]
       },
       "subscribe": {
         "operationId": "receive-my-trades",
@@ -638,10 +594,7 @@
                     "properties": {}
                   }
                 },
-                "required": [
-                  "n",
-                  "o"
-                ]
+                "required": ["n", "o"]
               }
             },
             {
@@ -737,11 +690,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "i",
-                  "n",
-                  "o"
-                ]
+                "required": ["i", "n", "o"]
               }
             },
             {
@@ -758,15 +707,11 @@
           "url": "https://gopax.github.io/wsapi/index.html#70aea396f8"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#70aea396f8",
-        "x-tags": [
-          "개인 API"
-        ]
+        "x-tags": ["개인 API"]
       }
     },
     "public.오더북구독": {
-      "servers": [
-        "production"
-      ],
+      "servers": ["production"],
       "publish": {
         "operationId": "subscribe-orderbook",
         "message": {
@@ -787,15 +732,10 @@
                     "description": "구독하고자 하는 오더북"
                   }
                 },
-                "required": [
-                  "tradingPairName"
-                ]
+                "required": ["tradingPairName"]
               }
             },
-            "required": [
-              "n",
-              "o"
-            ]
+            "required": ["n", "o"]
           }
         },
         "externalDocs": {
@@ -803,9 +743,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#3e61e5d414"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#3e61e5d414",
-        "x-tags": [
-          "공개 API"
-        ]
+        "x-tags": ["공개 API"]
       },
       "subscribe": {
         "operationId": "receive-orderbook",
@@ -849,12 +787,7 @@
                               "description": "마지막 업데이트 시간"
                             }
                           },
-                          "required": [
-                            "entryId",
-                            "price",
-                            "volume",
-                            "updatedAt"
-                          ]
+                          "required": ["entryId", "price", "volume", "updatedAt"]
                         },
                         "description": "판매 엔트리 목록"
                       },
@@ -880,12 +813,7 @@
                               "example": 1599088982.102
                             }
                           },
-                          "required": [
-                            "entryId",
-                            "price",
-                            "volume",
-                            "updatedAt"
-                          ]
+                          "required": ["entryId", "price", "volume", "updatedAt"]
                         }
                       },
                       "tradingPairName": {
@@ -897,18 +825,10 @@
                         "example": 50
                       }
                     },
-                    "required": [
-                      "ask",
-                      "bid",
-                      "tradingPairName",
-                      "maxEntryId"
-                    ]
+                    "required": ["ask", "bid", "tradingPairName", "maxEntryId"]
                   }
                 },
-                "required": [
-                  "n",
-                  "o"
-                ]
+                "required": ["n", "o"]
               }
             },
             {
@@ -954,12 +874,7 @@
                               "example": 1599089169.282
                             }
                           },
-                          "required": [
-                            "entryId",
-                            "price",
-                            "volume",
-                            "updatedAt"
-                          ]
+                          "required": ["entryId", "price", "volume", "updatedAt"]
                         }
                       },
                       "tradingPairName": {
@@ -967,18 +882,10 @@
                         "example": "BCH-KRW"
                       }
                     },
-                    "required": [
-                      "ask",
-                      "bid",
-                      "tradingPairName"
-                    ]
+                    "required": ["ask", "bid", "tradingPairName"]
                   }
                 },
-                "required": [
-                  "i",
-                  "n",
-                  "o"
-                ]
+                "required": ["i", "n", "o"]
               }
             },
             {
@@ -995,15 +902,11 @@
           "url": "https://gopax.github.io/wsapi/index.html#3e61e5d414"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#3e61e5d414",
-        "x-tags": [
-          "공개 API"
-        ]
+        "x-tags": ["공개 API"]
       }
     },
     "public.거래쌍구독": {
-      "servers": [
-        "production"
-      ],
+      "servers": ["production"],
       "publish": {
         "operationId": "subscribe-trading-pair",
         "message": {
@@ -1024,15 +927,10 @@
                     "description": "구독하고자 하는 오더북"
                   }
                 },
-                "required": [
-                  "tradingPairName"
-                ]
+                "required": ["tradingPairName"]
               }
             },
-            "required": [
-              "n",
-              "o"
-            ]
+            "required": ["n", "o"]
           }
         },
         "externalDocs": {
@@ -1040,9 +938,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf",
-        "x-tags": [
-          "공개 API"
-        ]
+        "x-tags": ["공개 API"]
       },
       "subscribe": {
         "operationId": "receive-trading-pair",
@@ -1112,11 +1008,7 @@
                     ]
                   }
                 },
-                "required": [
-                  "i",
-                  "n",
-                  "o"
-                ]
+                "required": ["i", "n", "o"]
               }
             },
             {
@@ -1133,15 +1025,11 @@
           "url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#b8c4d7cfbf",
-        "x-tags": [
-          "공개 API"
-        ]
+        "x-tags": ["공개 API"]
       }
     },
     "public.티커구독": {
-      "servers": [
-        "production"
-      ],
+      "servers": ["production"],
       "publish": {
         "operationId": "subscribe-ticker",
         "message": {
@@ -1158,10 +1046,7 @@
                 "properties": {}
               }
             },
-            "required": [
-              "n",
-              "o"
-            ]
+            "required": ["n", "o"]
           }
         },
         "externalDocs": {
@@ -1169,9 +1054,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#a98232916e"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#a98232916e",
-        "x-tags": [
-          "공개 API"
-        ]
+        "x-tags": ["공개 API"]
       },
       "subscribe": {
         "operationId": "receive-ticker",
@@ -1260,15 +1143,10 @@
                         }
                       }
                     },
-                    "required": [
-                      "data"
-                    ]
+                    "required": ["data"]
                   }
                 },
-                "required": [
-                  "n",
-                  "o"
-                ]
+                "required": ["n", "o"]
               }
             },
             {
@@ -1345,16 +1223,10 @@
                         ]
                       }
                     },
-                    "required": [
-                      "BTC-KRW"
-                    ]
+                    "required": ["BTC-KRW"]
                   }
                 },
-                "required": [
-                  "i",
-                  "n",
-                  "o"
-                ]
+                "required": ["i", "n", "o"]
               }
             },
             {
@@ -1371,9 +1243,7 @@
           "url": "https://gopax.github.io/wsapi/index.html#a98232916e"
         },
         "x-doc-url": "https://gopax.github.io/wsapi/index.html#a98232916e",
-        "x-tags": [
-          "공개 API"
-        ]
+        "x-tags": ["공개 API"]
       }
     }
   },
@@ -1409,10 +1279,7 @@
               "properties": {}
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.open-orders.request"
       },
@@ -1565,15 +1432,10 @@
                   }
                 }
               },
-              "required": [
-                "data"
-              ]
+              "required": ["data"]
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.open-orders.response"
       },
@@ -1713,11 +1575,7 @@
               ]
             }
           },
-          "required": [
-            "i",
-            "n",
-            "o"
-          ]
+          "required": ["i", "n", "o"]
         },
         "messageId": "gopax.ws.open-orders.delta"
       },
@@ -1735,10 +1593,7 @@
               "properties": {}
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.balances.request"
       },
@@ -1799,16 +1654,10 @@
                   }
                 }
               },
-              "required": [
-                "result",
-                "data"
-              ]
+              "required": ["result", "data"]
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.balances.response"
       },
@@ -1871,11 +1720,7 @@
               ]
             }
           },
-          "required": [
-            "i",
-            "n",
-            "o"
-          ]
+          "required": ["i", "n", "o"]
         },
         "messageId": "gopax.ws.balances.delta"
       },
@@ -1893,10 +1738,7 @@
               "properties": {}
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.my-trades.request"
       },
@@ -1914,10 +1756,7 @@
               "properties": {}
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.my-trades.response"
       },
@@ -2014,11 +1853,7 @@
               ]
             }
           },
-          "required": [
-            "i",
-            "n",
-            "o"
-          ]
+          "required": ["i", "n", "o"]
         },
         "messageId": "gopax.ws.my-trades.delta"
       },
@@ -2040,15 +1875,10 @@
                   "description": "구독하고자 하는 오더북"
                 }
               },
-              "required": [
-                "tradingPairName"
-              ]
+              "required": ["tradingPairName"]
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.orderbook.request"
       },
@@ -2090,12 +1920,7 @@
                         "description": "마지막 업데이트 시간"
                       }
                     },
-                    "required": [
-                      "entryId",
-                      "price",
-                      "volume",
-                      "updatedAt"
-                    ]
+                    "required": ["entryId", "price", "volume", "updatedAt"]
                   },
                   "description": "판매 엔트리 목록"
                 },
@@ -2121,12 +1946,7 @@
                         "example": 1599088982.102
                       }
                     },
-                    "required": [
-                      "entryId",
-                      "price",
-                      "volume",
-                      "updatedAt"
-                    ]
+                    "required": ["entryId", "price", "volume", "updatedAt"]
                   }
                 },
                 "tradingPairName": {
@@ -2138,18 +1958,10 @@
                   "example": 50
                 }
               },
-              "required": [
-                "ask",
-                "bid",
-                "tradingPairName",
-                "maxEntryId"
-              ]
+              "required": ["ask", "bid", "tradingPairName", "maxEntryId"]
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.orderbook.response"
       },
@@ -2196,12 +2008,7 @@
                         "example": 1599089169.282
                       }
                     },
-                    "required": [
-                      "entryId",
-                      "price",
-                      "volume",
-                      "updatedAt"
-                    ]
+                    "required": ["entryId", "price", "volume", "updatedAt"]
                   }
                 },
                 "tradingPairName": {
@@ -2209,18 +2016,10 @@
                   "example": "BCH-KRW"
                 }
               },
-              "required": [
-                "ask",
-                "bid",
-                "tradingPairName"
-              ]
+              "required": ["ask", "bid", "tradingPairName"]
             }
           },
-          "required": [
-            "i",
-            "n",
-            "o"
-          ]
+          "required": ["i", "n", "o"]
         },
         "messageId": "gopax.ws.orderbook.delta"
       },
@@ -2242,15 +2041,10 @@
                   "description": "구독하고자 하는 오더북"
                 }
               },
-              "required": [
-                "tradingPairName"
-              ]
+              "required": ["tradingPairName"]
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.trading-pair.request"
       },
@@ -2318,11 +2112,7 @@
               ]
             }
           },
-          "required": [
-            "i",
-            "n",
-            "o"
-          ]
+          "required": ["i", "n", "o"]
         },
         "messageId": "gopax.ws.trading-pair.response"
       },
@@ -2340,10 +2130,7 @@
               "properties": {}
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.ticker.request"
       },
@@ -2430,15 +2217,10 @@
                   }
                 }
               },
-              "required": [
-                "data"
-              ]
+              "required": ["data"]
             }
           },
-          "required": [
-            "n",
-            "o"
-          ]
+          "required": ["n", "o"]
         },
         "messageId": "gopax.ws.ticker.response"
       },
@@ -2516,16 +2298,10 @@
                   ]
                 }
               },
-              "required": [
-                "BTC-KRW"
-              ]
+              "required": ["BTC-KRW"]
             }
           },
-          "required": [
-            "i",
-            "n",
-            "o"
-          ]
+          "required": ["i", "n", "o"]
         },
         "messageId": "gopax.ws.ticker.delta"
       }

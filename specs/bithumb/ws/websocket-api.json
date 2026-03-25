@@ -36,9 +36,7 @@
   "channels": {
     "ticker": {
       "description": "현재가 (Ticker) 데이터 수신",
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-ticker",
         "message": {
@@ -61,15 +59,11 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/현재가-ticker"
       },
-      "x-tags": [
-        "타입별 요청 및 응답"
-      ]
+      "x-tags": ["타입별 요청 및 응답"]
     },
     "trade": {
       "description": "체결 (Trade) 데이터 수신",
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-trade",
         "message": {
@@ -92,15 +86,11 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/체결-trade"
       },
-      "x-tags": [
-        "타입별 요청 및 응답"
-      ]
+      "x-tags": ["타입별 요청 및 응답"]
     },
     "orderbook": {
       "description": "호가 (Orderbook) 데이터 수신",
-      "servers": [
-        "public"
-      ],
+      "servers": ["public"],
       "publish": {
         "operationId": "subscribe-orderbook",
         "message": {
@@ -123,15 +113,11 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/호가-orderbook"
       },
-      "x-tags": [
-        "타입별 요청 및 응답"
-      ]
+      "x-tags": ["타입별 요청 및 응답"]
     },
     "myOrder": {
       "description": "내 주문 및 체결 (MyOrder) 데이터 수신",
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-my-order",
         "message": {
@@ -154,15 +140,11 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/내-주문-및-체결-myorder"
       },
-      "x-tags": [
-        "타입별 요청 및 응답"
-      ]
+      "x-tags": ["타입별 요청 및 응답"]
     },
     "myAsset": {
       "description": "내 자산 (MyAsset) 데이터 수신",
-      "servers": [
-        "private"
-      ],
+      "servers": ["private"],
       "publish": {
         "operationId": "subscribe-my-asset",
         "message": {
@@ -185,16 +167,11 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/내-자산-myasset"
       },
-      "x-tags": [
-        "타입별 요청 및 응답"
-      ]
+      "x-tags": ["타입별 요청 및 응답"]
     },
     "status": {
       "description": "PING 메시지 또는 idle timeout 방지 시 수신되는 상태 응답",
-      "servers": [
-        "public",
-        "private"
-      ],
+      "servers": ["public", "private"],
       "subscribe": {
         "operationId": "receive-status",
         "message": {
@@ -206,16 +183,11 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/연결-관리"
       },
-      "x-tags": [
-        "연결 관리"
-      ]
+      "x-tags": ["연결 관리"]
     },
     "error": {
       "description": "웹소켓 에러 응답",
-      "servers": [
-        "public",
-        "private"
-      ],
+      "servers": ["public", "private"],
       "subscribe": {
         "operationId": "receive-error",
         "message": {
@@ -227,9 +199,7 @@
         },
         "x-doc-url": "https://apidocs.bithumb.com/reference/웹소켓-에러"
       },
-      "x-tags": [
-        "웹소켓 에러"
-      ]
+      "x-tags": ["웹소켓 에러"]
     }
   },
   "components": {
@@ -250,35 +220,26 @@
             "description": "요청자를 식별할 수 있는 값"
           }
         },
-        "required": [
-          "ticket"
-        ]
+        "required": ["ticket"]
       },
       "FormatObject": {
         "type": "object",
         "properties": {
           "format": {
             "type": "string",
-            "enum": [
-              "DEFAULT",
-              "SIMPLE"
-            ],
+            "enum": ["DEFAULT", "SIMPLE"],
             "default": "DEFAULT",
             "description": "DEFAULT는 기본형, SIMPLE은 축약형 포맷"
           }
         },
-        "required": [
-          "format"
-        ]
+        "required": ["format"]
       },
       "TickerTypeField": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "ticker"
-            ]
+            "enum": ["ticker"]
           },
           "codes": {
             "type": "array",
@@ -297,19 +258,14 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ]
+        "required": ["type", "codes"]
       },
       "TradeTypeField": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "trade"
-            ]
+            "enum": ["trade"]
           },
           "codes": {
             "type": "array",
@@ -327,19 +283,14 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ]
+        "required": ["type", "codes"]
       },
       "OrderbookTypeField": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "orderbook"
-            ]
+            "enum": ["orderbook"]
           },
           "codes": {
             "type": "array",
@@ -362,19 +313,14 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ]
+        "required": ["type", "codes"]
       },
       "MyOrderTypeField": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "myOrder"
-            ]
+            "enum": ["myOrder"]
           },
           "codes": {
             "type": "array",
@@ -384,23 +330,17 @@
             "description": "생략하거나 빈 배열이면 모든 마켓 수신"
           }
         },
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "MyAssetTypeField": {
         "type": "object",
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "myAsset"
-            ]
+            "enum": ["myAsset"]
           }
         },
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "additionalProperties": false
       },
       "TickerRequest": {
@@ -519,11 +459,7 @@
           },
           "change": {
             "type": "string",
-            "enum": [
-              "RISE",
-              "EVEN",
-              "FALL"
-            ],
+            "enum": ["RISE", "EVEN", "FALL"],
             "x-abbreviation": "c"
           },
           "change_price": {
@@ -577,10 +513,7 @@
           },
           "ask_bid": {
             "type": "string",
-            "enum": [
-              "ASK",
-              "BID"
-            ],
+            "enum": ["ASK", "BID"],
             "x-abbreviation": "ab"
           },
           "acc_ask_volume": {
@@ -631,10 +564,7 @@
           },
           "stream_type": {
             "type": "string",
-            "enum": [
-              "SNAPSHOT",
-              "REALTIME"
-            ],
+            "enum": ["SNAPSHOT", "REALTIME"],
             "x-abbreviation": "st"
           }
         }
@@ -663,10 +593,7 @@
           },
           "ask_bid": {
             "type": "string",
-            "enum": [
-              "ASK",
-              "BID"
-            ],
+            "enum": ["ASK", "BID"],
             "x-abbreviation": "ab"
           },
           "prev_closing_price": {
@@ -675,11 +602,7 @@
           },
           "change": {
             "type": "string",
-            "enum": [
-              "RISE",
-              "EVEN",
-              "FALL"
-            ],
+            "enum": ["RISE", "EVEN", "FALL"],
             "x-abbreviation": "c"
           },
           "change_price": {
@@ -711,10 +634,7 @@
           },
           "stream_type": {
             "type": "string",
-            "enum": [
-              "SNAPSHOT",
-              "REALTIME"
-            ],
+            "enum": ["SNAPSHOT", "REALTIME"],
             "x-abbreviation": "st"
           }
         }
@@ -804,29 +724,17 @@
           },
           "ask_bid": {
             "type": "string",
-            "enum": [
-              "ASK",
-              "BID"
-            ],
+            "enum": ["ASK", "BID"],
             "x-abbreviation": "ab"
           },
           "order_type": {
             "type": "string",
-            "enum": [
-              "limit",
-              "price",
-              "market"
-            ],
+            "enum": ["limit", "price", "market"],
             "x-abbreviation": "ot"
           },
           "state": {
             "type": "string",
-            "enum": [
-              "wait",
-              "trade",
-              "done",
-              "cancel"
-            ],
+            "enum": ["wait", "trade", "done", "cancel"],
             "x-abbreviation": "s"
           },
           "trade_uuid": {
@@ -886,9 +794,7 @@
           },
           "stream_type": {
             "type": "string",
-            "enum": [
-              "REALTIME"
-            ],
+            "enum": ["REALTIME"],
             "x-abbreviation": "st"
           }
         },
@@ -944,9 +850,7 @@
           },
           "stream_type": {
             "type": "string",
-            "enum": [
-              "REALTIME"
-            ],
+            "enum": ["REALTIME"],
             "x-abbreviation": "st"
           }
         },
@@ -959,22 +863,13 @@
         "properties": {
           "name": {
             "type": "string",
-            "enum": [
-              "WRONG_FORMAT",
-              "NO_TICKET",
-              "NO_TYPE",
-              "NO_CODES",
-              "INVALID_PARAM"
-            ]
+            "enum": ["WRONG_FORMAT", "NO_TICKET", "NO_TYPE", "NO_CODES", "INVALID_PARAM"]
           },
           "message": {
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "message"
-        ]
+        "required": ["name", "message"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -983,23 +878,17 @@
             "$ref": "#/components/schemas/ErrorDetail"
           }
         },
-        "required": [
-          "error"
-        ]
+        "required": ["error"]
       },
       "StatusResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "UP"
-            ]
+            "enum": ["UP"]
           }
         },
-        "required": [
-          "status"
-        ]
+        "required": ["status"]
       }
     },
     "messages": {

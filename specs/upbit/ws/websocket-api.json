@@ -168,9 +168,7 @@
         },
         "x-doc-url": "https://docs.upbit.com/kr/reference/websocket-myorder"
       },
-      "servers": [
-        "private"
-      ]
+      "servers": ["private"]
     },
     "myAsset": {
       "description": "내 자산 변동 데이터를 실시간으로 수신합니다. 실제 자산에 변동이 발생할 때만 데이터가 전송됩니다. codes 파라미터를 포함하면 WRONG_FORMAT 에러가 발생합니다.",
@@ -198,9 +196,7 @@
         },
         "x-doc-url": "https://docs.upbit.com/kr/reference/websocket-myasset"
       },
-      "servers": [
-        "private"
-      ]
+      "servers": ["private"]
     },
     "listSubscriptions": {
       "description": "현재 연결에서 구독 중인 스트림 목록을 조회합니다. 요청 JSON Array에 Ticket Object와 Method Object, 필요 시 Format Object를 포함해 전송합니다.",
@@ -261,9 +257,7 @@
                   "description": "고유 티켓 ID (UUID 권장)"
                 }
               },
-              "required": [
-                "ticket"
-              ]
+              "required": ["ticket"]
             },
             {
               "type": "object",
@@ -311,9 +305,7 @@
                   "description": "호가 모아보기 단위 (orderbook 전용, 원화마켓만 지원)"
                 }
               },
-              "required": [
-                "type"
-              ]
+              "required": ["type"]
             },
             {
               "type": "object",
@@ -322,14 +314,10 @@
                 "method": {
                   "type": "string",
                   "description": "요청 메서드",
-                  "enum": [
-                    "LIST_SUBSCRIPTIONS"
-                  ]
+                  "enum": ["LIST_SUBSCRIPTIONS"]
                 }
               },
-              "required": [
-                "method"
-              ]
+              "required": ["method"]
             },
             {
               "type": "object",
@@ -338,12 +326,7 @@
                 "format": {
                   "type": "string",
                   "description": "응답 데이터 포맷",
-                  "enum": [
-                    "DEFAULT",
-                    "SIMPLE",
-                    "JSON_LIST",
-                    "SIMPLE_LIST"
-                  ],
+                  "enum": ["DEFAULT", "SIMPLE", "JSON_LIST", "SIMPLE_LIST"],
                   "default": "DEFAULT"
                 }
               }
@@ -356,10 +339,7 @@
           },
           {
             "type": "ticker",
-            "codes": [
-              "KRW-BTC",
-              "KRW-ETH"
-            ],
+            "codes": ["KRW-BTC", "KRW-ETH"],
             "is_only_realtime": true
           },
           {
@@ -376,9 +356,7 @@
             "description": "요청자를 식별할 수 있는 임의의 문자열. UUID 사용 권장."
           }
         },
-        "required": [
-          "ticket"
-        ],
+        "required": ["ticket"],
         "example": {
           "ticket": "0e66c0ac-7e13-43ef-91fb-2a87c2956c49"
         }
@@ -396,18 +374,11 @@
           "format": {
             "type": "string",
             "description": "응답 데이터 포맷. DEFAULT는 일반 객체, SIMPLE은 축약 키 객체, JSON_LIST는 일반 키 기반 리스트 포맷, SIMPLE_LIST는 축약 키 기반 리스트 포맷입니다.",
-            "enum": [
-              "DEFAULT",
-              "SIMPLE",
-              "JSON_LIST",
-              "SIMPLE_LIST"
-            ],
+            "enum": ["DEFAULT", "SIMPLE", "JSON_LIST", "SIMPLE_LIST"],
             "default": "DEFAULT"
           }
         },
-        "required": [
-          "format"
-        ]
+        "required": ["format"]
       },
       "TickerSubscription": {
         "type": "object",
@@ -415,9 +386,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "ticker"
-            ],
+            "enum": ["ticker"],
             "description": "데이터 타입"
           },
           "codes": {
@@ -439,10 +408,7 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ],
+        "required": ["type", "codes"],
         "x-runtime-rules": [
           "codes는 대문자 페어 코드 배열이어야 합니다.",
           "is_only_snapshot과 is_only_realtime을 둘 다 true로 보내는 것은 권장되지 않습니다."
@@ -454,9 +420,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "trade"
-            ],
+            "enum": ["trade"],
             "description": "데이터 타입"
           },
           "codes": {
@@ -478,10 +442,7 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ]
+        "required": ["type", "codes"]
       },
       "OrderbookSubscription": {
         "type": "object",
@@ -489,9 +450,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "orderbook"
-            ],
+            "enum": ["orderbook"],
             "description": "데이터 타입"
           },
           "codes": {
@@ -517,10 +476,7 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ],
+        "required": ["type", "codes"],
         "x-runtime-rules": [
           "기본 호가 쌍 개수는 30입니다.",
           "codes의 각 원소는 {pair_code}.{unit} 형식으로 unit(1, 5, 15, 30)을 지정할 수 있습니다.",
@@ -565,10 +521,7 @@
             "default": false
           }
         },
-        "required": [
-          "type",
-          "codes"
-        ],
+        "required": ["type", "codes"],
         "x-runtime-rules": [
           "캔들 실시간 스트림 전송 주기는 1초입니다.",
           "해당 시간대에 체결이 발생해 직전 캔들 대비 데이터가 변경될 때만 새 캔들이 생성됩니다.",
@@ -581,9 +534,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "myOrder"
-            ],
+            "enum": ["myOrder"],
             "description": "데이터 타입"
           },
           "codes": {
@@ -594,9 +545,7 @@
             }
           }
         },
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "x-runtime-rules": [
           "private endpoint와 Authorization 헤더가 필요합니다.",
           "codes를 생략하거나 빈 배열로 보내면 모든 마켓의 주문/체결 이벤트를 수신합니다.",
@@ -609,15 +558,11 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "myAsset"
-            ],
+            "enum": ["myAsset"],
             "description": "데이터 타입"
           }
         },
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "additionalProperties": false,
         "x-runtime-rules": [
           "private endpoint와 Authorization 헤더가 필요합니다.",
@@ -631,15 +576,11 @@
         "properties": {
           "method": {
             "type": "string",
-            "enum": [
-              "LIST_SUBSCRIPTIONS"
-            ],
+            "enum": ["LIST_SUBSCRIPTIONS"],
             "description": "요청 메서드"
           }
         },
-        "required": [
-          "method"
-        ]
+        "required": ["method"]
       },
       "TickerRequest": {
         "type": "array",
@@ -823,11 +764,7 @@
           "change": {
             "type": "string",
             "description": "전일 대비 가격 변동 방향",
-            "enum": [
-              "RISE",
-              "EVEN",
-              "FALL"
-            ],
+            "enum": ["RISE", "EVEN", "FALL"],
             "x-abbreviation": "c"
           },
           "change_price": {
@@ -894,10 +831,7 @@
           "ask_bid": {
             "type": "string",
             "description": "매수/매도 구분",
-            "enum": [
-              "ASK",
-              "BID"
-            ],
+            "enum": ["ASK", "BID"],
             "x-abbreviation": "ab"
           },
           "acc_ask_volume": {
@@ -933,11 +867,7 @@
           "market_state": {
             "type": "string",
             "description": "거래 상태",
-            "enum": [
-              "PREVIEW",
-              "ACTIVE",
-              "DELISTED"
-            ],
+            "enum": ["PREVIEW", "ACTIVE", "DELISTED"],
             "x-abbreviation": "ms"
           },
           "is_trading_suspended": {
@@ -953,10 +883,7 @@
           "market_warning": {
             "type": "string",
             "description": "유의 종목 여부 (Deprecated)",
-            "enum": [
-              "NONE",
-              "CAUTION"
-            ],
+            "enum": ["NONE", "CAUTION"],
             "x-abbreviation": "mw"
           },
           "timestamp": {
@@ -968,10 +895,7 @@
           "stream_type": {
             "type": "string",
             "description": "스트림 유형",
-            "enum": [
-              "SNAPSHOT",
-              "REALTIME"
-            ],
+            "enum": ["SNAPSHOT", "REALTIME"],
             "x-abbreviation": "st"
           }
         },
@@ -1017,10 +941,7 @@
           "ask_bid": {
             "type": "string",
             "description": "매수/매도 구분",
-            "enum": [
-              "ASK",
-              "BID"
-            ],
+            "enum": ["ASK", "BID"],
             "x-abbreviation": "ab"
           },
           "prev_closing_price": {
@@ -1031,11 +952,7 @@
           "change": {
             "type": "string",
             "description": "전일 대비 가격 변동",
-            "enum": [
-              "RISE",
-              "EVEN",
-              "FALL"
-            ],
+            "enum": ["RISE", "EVEN", "FALL"],
             "x-abbreviation": "c"
           },
           "change_price": {
@@ -1094,10 +1011,7 @@
           "stream_type": {
             "type": "string",
             "description": "스트림 유형",
-            "enum": [
-              "SNAPSHOT",
-              "REALTIME"
-            ],
+            "enum": ["SNAPSHOT", "REALTIME"],
             "x-abbreviation": "st"
           }
         }
@@ -1180,10 +1094,7 @@
           "stream_type": {
             "type": "string",
             "description": "스트림 유형",
-            "enum": [
-              "SNAPSHOT",
-              "REALTIME"
-            ],
+            "enum": ["SNAPSHOT", "REALTIME"],
             "x-abbreviation": "st"
           }
         }
@@ -1261,10 +1172,7 @@
           "stream_type": {
             "type": "string",
             "description": "스트림 유형",
-            "enum": [
-              "SNAPSHOT",
-              "REALTIME"
-            ],
+            "enum": ["SNAPSHOT", "REALTIME"],
             "x-abbreviation": "st"
           }
         }
@@ -1301,34 +1209,19 @@
           "ask_bid": {
             "type": "string",
             "description": "매수/매도 구분",
-            "enum": [
-              "BID",
-              "ASK"
-            ],
+            "enum": ["BID", "ASK"],
             "x-abbreviation": "ab"
           },
           "order_type": {
             "type": "string",
             "description": "주문 유형",
-            "enum": [
-              "limit",
-              "price",
-              "market",
-              "best"
-            ],
+            "enum": ["limit", "price", "market", "best"],
             "x-abbreviation": "ot"
           },
           "state": {
             "type": "string",
             "description": "주문/체결 상태",
-            "enum": [
-              "wait",
-              "watch",
-              "trade",
-              "done",
-              "cancel",
-              "prevented"
-            ],
+            "enum": ["wait", "watch", "trade", "done", "cancel", "prevented"],
             "x-abbreviation": "s"
           },
           "trade_uuid": {
@@ -1394,11 +1287,7 @@
           "time_in_force": {
             "type": "string",
             "description": "IOC, FOK, POST ONLY 설정",
-            "enum": [
-              "ioc",
-              "fok",
-              "post_only"
-            ],
+            "enum": ["ioc", "fok", "post_only"],
             "x-abbreviation": "tif"
           },
           "trade_fee": {
@@ -1433,11 +1322,7 @@
           "smp_type": {
             "type": "string",
             "description": "자전거래 방지 모드",
-            "enum": [
-              "reduce",
-              "cancel_maker",
-              "cancel_taker"
-            ],
+            "enum": ["reduce", "cancel_maker", "cancel_taker"],
             "x-abbreviation": "smpt"
           },
           "prevented_volume": {
@@ -1459,10 +1344,7 @@
           "stream_type": {
             "type": "string",
             "description": "스트림 유형",
-            "enum": [
-              "REALTIME",
-              "SNAPSHOT"
-            ],
+            "enum": ["REALTIME", "SNAPSHOT"],
             "x-abbreviation": "st"
           }
         }
@@ -1530,9 +1412,7 @@
           "stream_type": {
             "type": "string",
             "description": "스트림 유형",
-            "enum": [
-              "REALTIME"
-            ],
+            "enum": ["REALTIME"],
             "x-abbreviation": "st"
           }
         }
@@ -1579,9 +1459,7 @@
           "method": {
             "type": "string",
             "description": "요청 메서드",
-            "enum": [
-              "LIST_SUBSCRIPTIONS"
-            ],
+            "enum": ["LIST_SUBSCRIPTIONS"],
             "x-abbreviation": "mthd"
           },
           "result": {
@@ -1620,10 +1498,7 @@
             "description": "에러 메시지"
           }
         },
-        "required": [
-          "name",
-          "message"
-        ]
+        "required": ["name", "message"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -1633,9 +1508,7 @@
             "$ref": "#/components/schemas/ErrorDetail"
           }
         },
-        "required": [
-          "error"
-        ]
+        "required": ["error"]
       },
       "StatusResponse": {
         "type": "object",
@@ -1643,15 +1516,11 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "UP"
-            ],
+            "enum": ["UP"],
             "description": "연결 상태"
           }
         },
-        "required": [
-          "status"
-        ]
+        "required": ["status"]
       }
     },
     "messages": {

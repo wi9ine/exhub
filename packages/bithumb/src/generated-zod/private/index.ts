@@ -37,7 +37,7 @@ export const GetOrderQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      "서버에서 부여하는 주문 ID(`uuid`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자",
+      "서버에서 부여하는 주문 ID(`uuid`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대/소문자, 숫자, -, _\n- 길이: 1–36자",
     ),
 });
 
@@ -60,7 +60,7 @@ export const CancelOrderQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자",
+      "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대/소문자, 숫자, -, _\n- 길이: 1–36자",
     ),
 });
 
@@ -140,7 +140,7 @@ export const CreateOrderBody = zod.object({
     .string()
     .optional()
     .describe(
-      "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정하는 고유 ID\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자",
+      "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정하는 고유 ID\n\n- 허용 문자: 영문 대/소문자, 숫자, -, _\n- 길이: 1–36자",
     ),
 });
 
@@ -160,7 +160,7 @@ export const CreateOrdersBatchBody = zod.object({
           .string()
           .optional()
           .describe(
-            "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자",
+            "서버에서 부여하는 주문 ID(`order_id`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID\n\n- 허용 문자: 영문 대/소문자, 숫자, -, _\n- 길이: 1–36자",
           ),
         market: zod.string().describe("거래 대상 페어의 고유 심볼\n\n예시) KRW-BTC"),
         side: zod.enum(["bid", "ask"]).describe("주문 종류\n- `bid`: 매수\n- `ask`: 매도"),
@@ -198,7 +198,7 @@ export const CancelOrdersBody = zod.object({
     .array(zod.string())
     .optional()
     .describe(
-      "서버에서 부여하는 주문 ID(구 `uuid`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID 목록(max 30)\n\n- 허용 문자: 영문 대\/소문자, 숫자, -, _\n- 길이: 1–36자",
+      "서버에서 부여하는 주문 ID(구 `uuid`)와 별도로 주문 생성 시 사용자가 직접 지정한 고유 ID 목록(max 30)\n\n- 허용 문자: 영문 대/소문자, 숫자, -, _\n- 길이: 1–36자",
     ),
 });
 
@@ -358,7 +358,7 @@ export const CreateWithdrawsCoinBody = zod.object({
   address: zod.string().describe("출금 지갑 주소"),
   secondary_address: zod.string().optional().describe("2차 출금주소 (필요한 디지털 자산에 한해서)"),
   exchange_name: zod.string().optional().describe("출금 거래소명(영문)"),
-  receiver_type: zod.string().optional().describe("수취인 개인\/법인 여부"),
+  receiver_type: zod.string().optional().describe("수취인 개인/법인 여부"),
   receiver_ko_name: zod
     .string()
     .optional()

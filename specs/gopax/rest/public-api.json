@@ -22,9 +22,7 @@
   "paths": {
     "/assets": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "자산 목록 조회",
         "operationId": "list-assets",
         "externalDocs": {
@@ -91,9 +89,7 @@
     },
     "/trading-pairs": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "거래쌍 목록 조회",
         "operationId": "list-trading-pairs",
         "externalDocs": {
@@ -161,10 +157,7 @@
                                 "example": "KRW"
                               }
                             },
-                            "required": [
-                              "amount",
-                              "unit"
-                            ]
+                            "required": ["amount", "unit"]
                           },
                           "limitBid": {
                             "type": "object",
@@ -178,10 +171,7 @@
                                 "example": "KRW"
                               }
                             },
-                            "required": [
-                              "amount",
-                              "unit"
-                            ]
+                            "required": ["amount", "unit"]
                           },
                           "marketAsk": {
                             "type": "object",
@@ -195,10 +185,7 @@
                                 "example": "ETH"
                               }
                             },
-                            "required": [
-                              "amount",
-                              "unit"
-                            ]
+                            "required": ["amount", "unit"]
                           },
                           "marketBid": {
                             "type": "object",
@@ -212,18 +199,10 @@
                                 "example": "KRW"
                               }
                             },
-                            "required": [
-                              "amount",
-                              "unit"
-                            ]
+                            "required": ["amount", "unit"]
                           }
                         },
-                        "required": [
-                          "limitAsk",
-                          "limitBid",
-                          "marketAsk",
-                          "marketBid"
-                        ],
+                        "required": ["limitAsk", "limitBid", "marketAsk", "marketBid"],
                         "description": "REST API 통해 주문 시 최소 주문 수량"
                       },
                       "makerFeePercent": {
@@ -259,9 +238,7 @@
     },
     "/trading-pairs/{TradingPair}/price-tick-size": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "가격 틱 사이즈 조회",
         "operationId": "get-trading-pair-price-tick-size",
         "externalDocs": {
@@ -288,10 +265,7 @@
                         "example": 1
                       }
                     },
-                    "required": [
-                      "startPrice",
-                      "tickSize"
-                    ]
+                    "required": ["startPrice", "tickSize"]
                   }
                 }
               }
@@ -313,9 +287,7 @@
     },
     "/trading-pairs/{TradingPair}/ticker": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "티커 조회",
         "operationId": "get-trading-pair-ticker",
         "externalDocs": {
@@ -402,9 +374,7 @@
     },
     "/trading-pairs/{TradingPair}/book": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "오더북 조회",
         "operationId": "get-trading-pair-book",
         "externalDocs": {
@@ -448,11 +418,7 @@
                       "description": "오더북 구매 엔트리 목록"
                     }
                   },
-                  "required": [
-                    "sequence",
-                    "ask",
-                    "bid"
-                  ]
+                  "required": ["sequence", "ask", "bid"]
                 }
               }
             }
@@ -475,11 +441,7 @@
             "description": "오더북 레벨. 1 = 1개 호가, 2 = 50개 호가, 3 = 전체 오더북",
             "schema": {
               "type": "integer",
-              "enum": [
-                1,
-                2,
-                3
-              ]
+              "enum": [1, 2, 3]
             }
           }
         ]
@@ -487,9 +449,7 @@
     },
     "/trading-pairs/{TradingPair}/trades": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "체결 기록 조회",
         "operationId": "list-trading-pair-trades",
         "externalDocs": {
@@ -538,14 +498,7 @@
                         "description": "buy(구매), sell(판매)"
                       }
                     },
-                    "required": [
-                      "time",
-                      "date",
-                      "id",
-                      "price",
-                      "amount",
-                      "side"
-                    ]
+                    "required": ["time", "date", "id", "price", "amount", "side"]
                   }
                 }
               }
@@ -612,9 +565,7 @@
     },
     "/trading-pairs/{TradingPair}/stats": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "최근 24시간 통계 조회",
         "operationId": "get-trading-pair-stats",
         "externalDocs": {
@@ -661,14 +612,7 @@
                       "description": "최근 통계 업데이트 시간"
                     }
                   },
-                  "required": [
-                    "open",
-                    "high",
-                    "low",
-                    "close",
-                    "volume",
-                    "time"
-                  ]
+                  "required": ["open", "high", "low", "close", "volume", "time"]
                 }
               }
             }
@@ -689,9 +633,7 @@
     },
     "/trading-pairs/stats": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "최근 24시간 통계 조회 (모든 거래쌍)",
         "operationId": "list-trading-pairs-stats",
         "externalDocs": {
@@ -745,15 +687,7 @@
                         "description": "최근 통계 업데이트 시간"
                       }
                     },
-                    "required": [
-                      "name",
-                      "open",
-                      "high",
-                      "low",
-                      "close",
-                      "volume",
-                      "time"
-                    ]
+                    "required": ["name", "open", "high", "low", "close", "volume", "time"]
                   }
                 }
               }
@@ -764,9 +698,7 @@
     },
     "/trading-pairs/{TradingPair}/candles": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "차트 데이터 조회",
         "description": "1개의 구간은 1개의 차트 봉과 일치합니다.",
         "operationId": "get-trading-pair-candles",
@@ -830,12 +762,7 @@
             "description": "캔들 시간 간격 (분 단위): 1, 5, 30, 1440 중 하나",
             "schema": {
               "type": "integer",
-              "enum": [
-                1,
-                5,
-                30,
-                1440
-              ]
+              "enum": [1, 5, 30, 1440]
             }
           },
           {
@@ -853,9 +780,7 @@
     },
     "/trading-pairs/cautions": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "투자유의 정보 조회",
         "description": "여부 항목들이 모두 false이지만 alertLevel 이 정상(0)이 아닌 경우가 발생할 수 있습니다. 이는 한번 주의나 경고가 되면 24시간 동안 안전한 경우에만 정상으로 복귀 라는 룰에 의한 것이고 자연스러운 현상입니다.",
         "operationId": "list-trading-pairs-cautions",
@@ -958,9 +883,7 @@
     },
     "/tickers": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "전체 티커 조회",
         "operationId": "list-tickers",
         "externalDocs": {
@@ -1051,9 +974,7 @@
     },
     "/time": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "서버 시간 조회",
         "operationId": "get-time",
         "externalDocs": {
@@ -1075,9 +996,7 @@
                       "description": "밀리세컨드 단위 타임스탬프"
                     }
                   },
-                  "required": [
-                    "serverTime"
-                  ]
+                  "required": ["serverTime"]
                 }
               }
             }
@@ -1087,9 +1006,7 @@
     },
     "/notices": {
       "get": {
-        "tags": [
-          "공개 API"
-        ],
+        "tags": ["공개 API"],
         "summary": "공지사항 조회",
         "operationId": "list-notices",
         "externalDocs": {
@@ -1167,12 +1084,7 @@
             "description": "공지 유형. 0=전체, 1=일반, 2=신규상장, 3=이벤트",
             "schema": {
               "type": "integer",
-              "enum": [
-                0,
-                1,
-                2,
-                3
-              ]
+              "enum": [0, 1, 2, 3]
             }
           },
           {
@@ -1182,10 +1094,7 @@
             "description": "응답 형식. 0=HTML, 1=plain text",
             "schema": {
               "type": "integer",
-              "enum": [
-                0,
-                1
-              ]
+              "enum": [0, 1]
             }
           }
         ]

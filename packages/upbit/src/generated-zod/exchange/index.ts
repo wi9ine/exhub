@@ -26,25 +26,25 @@ export const CreateOrderBody = zod.object({
   side: zod
     .enum(["ask", "bid"])
     .describe(
-      "주문 방향(매수\/매도). \n매수 주문을 생성하는 경우 “bid”, 매도 주문을 생성하는 경우 “ask”로 지정합니다.\n",
+      "주문 방향(매수/매도). \n매수 주문을 생성하는 경우 “bid”, 매도 주문을 생성하는 경우 “ask”로 지정합니다.\n",
     ),
   volume: zod
     .string()
     .optional()
     .describe(
-      "주문 수량.\n매수 또는 매도하고자 하는 수량을 숫자 형식의 String으로 입력합니다.\n\n다음 주문 유형에 대해 필수로 입력되어야 합니다.\n- 지정가 매수\/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매도(ord_type 필드가 “market”인 경우)\n- 최유리 지정가 매도(side 필드가 “ask”, ord_type 필드가 “best”인 경우)\n",
+      "주문 수량.\n매수 또는 매도하고자 하는 수량을 숫자 형식의 String으로 입력합니다.\n\n다음 주문 유형에 대해 필수로 입력되어야 합니다.\n- 지정가 매수/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매도(ord_type 필드가 “market”인 경우)\n- 최유리 지정가 매도(side 필드가 “ask”, ord_type 필드가 “best”인 경우)\n",
     ),
   price: zod
     .string()
     .optional()
     .describe(
-      "주문 단가 또는 총액.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)를 기준으로, 숫자 형식의 String으로 입력합니다.\n\n다음 주문 조건에 대해 필수로 입력합니다.\n- 지정가 매수\/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매수(ord_type 필드가 “price”인 경우)\n- 최유리 지정가 매수(side필드가 “bid”, ord_type 필드가 “best”인 경우)\n\nprice 필드는 주문 유형에 따라 다른 용도로 사용됩니다.\n- 지정가 주문시 매수\/매도 호가로 사용됩니다.\n- 시장가 매수, 최유리 지정가 매수시 매수 총액을 설정하는 용도로 사용됩니다. 주문 시점의 시장가 또는 최유리 지정가로 price 총액을 채우는 수량만큼 매수 주문이 체결됩니다.\n",
+      "주문 단가 또는 총액.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)를 기준으로, 숫자 형식의 String으로 입력합니다.\n\n다음 주문 조건에 대해 필수로 입력합니다.\n- 지정가 매수/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매수(ord_type 필드가 “price”인 경우)\n- 최유리 지정가 매수(side필드가 “bid”, ord_type 필드가 “best”인 경우)\n\nprice 필드는 주문 유형에 따라 다른 용도로 사용됩니다.\n- 지정가 주문시 매수/매도 호가로 사용됩니다.\n- 시장가 매수, 최유리 지정가 매수시 매수 총액을 설정하는 용도로 사용됩니다. 주문 시점의 시장가 또는 최유리 지정가로 price 총액을 채우는 수량만큼 매수 주문이 체결됩니다.\n",
     ),
   ord_type: zod
     .enum(["limit", "price", "market", "best"])
     .default(createOrderBodyOrdTypeDefault)
     .describe(
-      "주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n- `limit`: 지정가 매수\/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수\/매도 주문 (time_in_force 필드 설정 필수)\n",
+      "주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
     ),
   identifier: zod
     .string()
@@ -56,13 +56,13 @@ export const CreateOrderBody = zod.object({
     .enum(["fok", "ioc", "post_only"])
     .optional()
     .describe(
-      '주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 \"limit\")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 \"ioc\" 또는 \"fok\" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n\* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n\* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n\* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n',
+      '주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 "limit")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 "ioc" 또는 "fok" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n',
     ),
   smp_type: zod
     .enum(["cancel_maker", "cancel_taker", "reduce"])
     .optional()
     .describe(
-      "자전거래 체결 방지(Self-Match Prevention) 모드.\n\n사용 가능한 값은 다음과 같습니다.\n\n\* `cancel_maker`: 메이커 주문(이전 주문)을 취소합니다. \n\* `cancel_taker`: 테이커 주문(신규 주문)을 취소합니다. \n\* `reduce`: 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
+      "자전거래 체결 방지(Self-Match Prevention) 모드.\n\n사용 가능한 값은 다음과 같습니다.\n\n* `cancel_maker`: 메이커 주문(이전 주문)을 취소합니다. \n* `cancel_taker`: 테이커 주문(신규 주문)을 취소합니다. \n* `reduce`: 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
     ),
 });
 
@@ -77,25 +77,25 @@ export const CreateTestOrderBody = zod.object({
   side: zod
     .enum(["ask", "bid"])
     .describe(
-      "주문 방향(매수\/매도). \n매수 주문을 생성하는 경우 “bid”, 매도 주문을 생성하는 경우 “ask”로 지정합니다.\n",
+      "주문 방향(매수/매도). \n매수 주문을 생성하는 경우 “bid”, 매도 주문을 생성하는 경우 “ask”로 지정합니다.\n",
     ),
   volume: zod
     .string()
     .optional()
     .describe(
-      "주문 수량.\n매수 또는 매도하고자 하는 수량을 숫자 형식의 String으로 입력합니다.\n\n다음 주문 유형에 대해 필수로 입력되어야 합니다.\n- 지정가 매수\/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매도(ord_type 필드가 “market”인 경우)\n- 최유리 지정가 매도(side 필드가 “ask”, ord_type 필드가 “best”인 경우)\n",
+      "주문 수량.\n매수 또는 매도하고자 하는 수량을 숫자 형식의 String으로 입력합니다.\n\n다음 주문 유형에 대해 필수로 입력되어야 합니다.\n- 지정가 매수/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매도(ord_type 필드가 “market”인 경우)\n- 최유리 지정가 매도(side 필드가 “ask”, ord_type 필드가 “best”인 경우)\n",
     ),
   price: zod
     .string()
     .optional()
     .describe(
-      "주문 단가 또는 총액.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)를 기준으로, 숫자 형식의 String으로 입력합니다.\n\n다음 주문 조건에 대해 필수로 입력합니다.\n- 지정가 매수\/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매수(ord_type 필드가 “price”인 경우)\n- 최유리 지정가 매수(side필드가 “bid”, ord_type 필드가 “best”인 경우)\n\nprice 필드는 주문 유형에 따라 다른 용도로 사용됩니다.\n- 지정가 주문시 매수\/매도 호가로 사용됩니다.\n- 시장가 매수, 최유리 지정가 매수시 매수 총액을 설정하는 용도로 사용됩니다. 주문 시점의 시장가 또는 최유리 지정가로 price 총액을 채우는 수량만큼 매수 주문이 체결됩니다.\n",
+      "주문 단가 또는 총액.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)를 기준으로, 숫자 형식의 String으로 입력합니다.\n\n다음 주문 조건에 대해 필수로 입력합니다.\n- 지정가 매수/매도(ord_type 필드가 “limit”인 경우)\n- 시장가 매수(ord_type 필드가 “price”인 경우)\n- 최유리 지정가 매수(side필드가 “bid”, ord_type 필드가 “best”인 경우)\n\nprice 필드는 주문 유형에 따라 다른 용도로 사용됩니다.\n- 지정가 주문시 매수/매도 호가로 사용됩니다.\n- 시장가 매수, 최유리 지정가 매수시 매수 총액을 설정하는 용도로 사용됩니다. 주문 시점의 시장가 또는 최유리 지정가로 price 총액을 채우는 수량만큼 매수 주문이 체결됩니다.\n",
     ),
   ord_type: zod
     .enum(["limit", "price", "market", "best"])
     .default(createTestOrderBodyOrdTypeDefault)
     .describe(
-      "주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n- `limit`: 지정가 매수\/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수\/매도 주문 (time_in_force 필드 설정 필수)\n",
+      "주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n- `limit`: 지정가 매수/매도 주문\n- `price`: 시장가 매수 주문\n- `market`: 시장가 매도 주문\n- `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
     ),
   identifier: zod
     .string()
@@ -107,13 +107,13 @@ export const CreateTestOrderBody = zod.object({
     .enum(["fok", "ioc", "post_only"])
     .optional()
     .describe(
-      '주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 \"limit\")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 \"ioc\" 또는 \"fok\" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n\* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n\* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n\* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n',
+      '주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 "limit")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 "ioc" 또는 "fok" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n',
     ),
   smp_type: zod
     .enum(["cancel_maker", "cancel_taker", "reduce"])
     .optional()
     .describe(
-      "자전거래 체결 방지(Self-Match Prevention) 모드.\n\n사용 가능한 값은 다음과 같습니다.\n\n\* `cancel_maker`: 메이커 주문(이전 주문)을 취소합니다. \n\* `cancel_taker`: 테이커 주문(신규 주문)을 취소합니다. \n\* `reduce`: 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
+      "자전거래 체결 방지(Self-Match Prevention) 모드.\n\n사용 가능한 값은 다음과 같습니다.\n\n* `cancel_maker`: 메이커 주문(이전 주문)을 취소합니다. \n* `cancel_taker`: 테이커 주문(신규 주문)을 취소합니다. \n* `reduce`: 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
     ),
 });
 
@@ -248,13 +248,13 @@ export const CancelOpenOrdersQueryParams = zod.object({
     .array(zod.string())
     .optional()
     .describe(
-      '주문 취소 대상 마켓 목록.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)로 취소 대상 주문을 한정할 수 있는 필터 파라미터입니다. 지정한 마켓에 속한 미체결 주문을 일괄 취소합니다. \n\n[예시] \"KRW\"로 지정시 원화마켓의 모든 미체결 매수 주문 취소\n',
+      '주문 취소 대상 마켓 목록.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)로 취소 대상 주문을 한정할 수 있는 필터 파라미터입니다. 지정한 마켓에 속한 미체결 주문을 일괄 취소합니다. \n\n[예시] "KRW"로 지정시 원화마켓의 모든 미체결 매수 주문 취소\n',
     ),
   cancel_side: zod
     .enum(["bid", "ask", "all"])
     .default(cancelOpenOrdersQueryCancelSideDefault)
     .describe(
-      "취소하고자 하는 주문의 매수\/매도 방향 구분. \n매수\/매도 구분으로 취소 대상을 한정할 수 있는 필터 파라미터입니다. 사용 가능한 값은 “all”(매수, 매도 전체), “ask”(매도), “bid”(매수)입니다. \n\n[예시] “ask”로 설정시 체결 대기중인 매도 주문을 일괄 취소합니다.\n",
+      "취소하고자 하는 주문의 매수/매도 방향 구분. \n매수/매도 구분으로 취소 대상을 한정할 수 있는 필터 파라미터입니다. 사용 가능한 값은 “all”(매수, 매도 전체), “ask”(매도), “bid”(매수)입니다. \n\n[예시] “ask”로 설정시 체결 대기중인 매도 주문을 일괄 취소합니다.\n",
     ),
   count: zod
     .number()
@@ -307,13 +307,13 @@ export const ListClosedOrdersQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      "조회 기간의 시작 시각.\n지정한 시간 범위 내에 생성된 주문만 조회하기 위한 필터 파라미터입니다. 지정한 시각으로부터 “end_time”에 지정한 시각까지 생성된 주문을 조회 대상으로 한정합니다. 조회 가능 범위는 최대 7일입니다. \n\n\* “start_time”만 입력하는 경우 해당 시각 기준으로 이후 7일, 두 필드 모두 미입력시 요청 시각을 기준으로 이전 7일을 조회 기간으로 적용합니다.\n\* “start_time”, “end_time”으로 지정한 기간이 7일을 초과하는 경우 최대 허용 범위 초과 에러가 발생합니다.\n\* 조회 시간 내의 주문 건이라도 limit 개수를 초과한 범위일 경우 조회되지 않으니 이 경우 나누어서 조회하여야 합니다.\n\n다음 중 하나의 형식으로 입력할 수 있습니다.\n\* ISO 8601 형식 (타임존 포함)\n[예시] 2025-06-24T04:56:53Z\n2025-06-24T13:56:53+09:00 \n\n\* 밀리초 단위의 타임스탬프\n[예시] 1750741013000 (UTC)\n",
+      "조회 기간의 시작 시각.\n지정한 시간 범위 내에 생성된 주문만 조회하기 위한 필터 파라미터입니다. 지정한 시각으로부터 “end_time”에 지정한 시각까지 생성된 주문을 조회 대상으로 한정합니다. 조회 가능 범위는 최대 7일입니다. \n\n* “start_time”만 입력하는 경우 해당 시각 기준으로 이후 7일, 두 필드 모두 미입력시 요청 시각을 기준으로 이전 7일을 조회 기간으로 적용합니다.\n* “start_time”, “end_time”으로 지정한 기간이 7일을 초과하는 경우 최대 허용 범위 초과 에러가 발생합니다.\n* 조회 시간 내의 주문 건이라도 limit 개수를 초과한 범위일 경우 조회되지 않으니 이 경우 나누어서 조회하여야 합니다.\n\n다음 중 하나의 형식으로 입력할 수 있습니다.\n* ISO 8601 형식 (타임존 포함)\n[예시] 2025-06-24T04:56:53Z\n2025-06-24T13:56:53+09:00 \n\n* 밀리초 단위의 타임스탬프\n[예시] 1750741013000 (UTC)\n",
     ),
   end_time: zod
     .string()
     .optional()
     .describe(
-      "조회 기간의 종료 시각.\n지정한 시간 범위 내에 생성된 주문만 조회하기 위한 필터 파라미터입니다. “start_time” 부터 이 필드에 지정한 시각까지 생성된 주문을 조회 대상으로 한정합니다. 조회 가능 범위는 최대 7일입니다. \n\n\* “end_time”만 입력하는 경우 해당 시각 기준으로 이전 7일, 두 필드 모두 미입력시 요청 시각을 기준으로 이전 7일을 조회 기간으로 적용합니다.\n\* “start_time”, “end_time”으로 지정한 기간이 7일을 초과하는 경우 최대 허용 범위 초과 에러가 발생합니다.\n\n다음 중 하나의 형식으로 입력할 수 있습니다.\n\* ISO 8601 형식 (타임존 포함)\n[예시] 2025-06-24T04:56:53Z\n2025-06-24T13:56:53+09:00\n\n\* 밀리초 단위의 타임스탬프\n[예시] 1750741013000 (UTC)\n",
+      "조회 기간의 종료 시각.\n지정한 시간 범위 내에 생성된 주문만 조회하기 위한 필터 파라미터입니다. “start_time” 부터 이 필드에 지정한 시각까지 생성된 주문을 조회 대상으로 한정합니다. 조회 가능 범위는 최대 7일입니다. \n\n* “end_time”만 입력하는 경우 해당 시각 기준으로 이전 7일, 두 필드 모두 미입력시 요청 시각을 기준으로 이전 7일을 조회 기간으로 적용합니다.\n* “start_time”, “end_time”으로 지정한 기간이 7일을 초과하는 경우 최대 허용 범위 초과 에러가 발생합니다.\n\n다음 중 하나의 형식으로 입력할 수 있습니다.\n* ISO 8601 형식 (타임존 포함)\n[예시] 2025-06-24T04:56:53Z\n2025-06-24T13:56:53+09:00\n\n* 밀리초 단위의 타임스탬프\n[예시] 1750741013000 (UTC)\n",
     ),
   limit: zod
     .number()
@@ -348,19 +348,19 @@ export const CancelAndCreateOrderBody = zod.object({
   new_ord_type: zod
     .string()
     .describe(
-      "신규 주문의 주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n\* `limit`: 지정가 매수\/매도 주문\n\* `price`: 시장가 매수 주문\n\* `market`: 시장가 매도 주문\n\* `best`: 최유리 지정가 매수\/매도 주문 (time_in_force 필드 설정 필수)\n",
+      "신규 주문의 주문 유형. \n생성하고자 하는 주문 유형에 따라 아래 값 중 하나를 입력합니다. \n\n* `limit`: 지정가 매수/매도 주문\n* `price`: 시장가 매수 주문\n* `market`: 시장가 매도 주문\n* `best`: 최유리 지정가 매수/매도 주문 (time_in_force 필드 설정 필수)\n",
     ),
   new_volume: zod
     .string()
     .optional()
     .describe(
-      "신규 주문 수량.\n매수 또는 매도하고자 하는 수량을 숫자 형식의 String으로 입력합니다. “remain_only”로 설정하는 경우 이전 주문 잔량을 신규 주문 수량으로 설정할 수 있습니다. \n\n다음 주문 유형에 대해 필수로 입력되어야 합니다.\n- 지정가 매수\/매도(new_ord_type 필드가 “limit”인 경우)\n- 시장가 매도(new_ord_type 필드가 “market”인 경우)\n- 최유리 지정가 매도(이전 주문의 side 필드가 “ask”, new_ord_type 필드가 “best”인 경우)\n",
+      "신규 주문 수량.\n매수 또는 매도하고자 하는 수량을 숫자 형식의 String으로 입력합니다. “remain_only”로 설정하는 경우 이전 주문 잔량을 신규 주문 수량으로 설정할 수 있습니다. \n\n다음 주문 유형에 대해 필수로 입력되어야 합니다.\n- 지정가 매수/매도(new_ord_type 필드가 “limit”인 경우)\n- 시장가 매도(new_ord_type 필드가 “market”인 경우)\n- 최유리 지정가 매도(이전 주문의 side 필드가 “ask”, new_ord_type 필드가 “best”인 경우)\n",
     ),
   new_price: zod
     .string()
     .optional()
     .describe(
-      "신규 주문 단가 또는 총액.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)를 기준으로, 숫자 형식의 String으로 입력합니다.\n\n다음 주문 조건에 대해 필수로 입력합니다.\n- 지정가 매수\/매도(new_ord_type 필드가 “limit”인 경우)\n- 시장가 매수(new_ord_type 필드가 “price”인 경우)\n- 최유리 지정가 매수(이전 주문의 side필드가 “bid”, new_ord_type 필드가 “best”인 경우)\n\nprice 필드는 주문 유형에 따라 다른 용도로 사용됩니다.\n- 지정가 주문시 매수\/매도 호가로 사용됩니다.\n- 시장가 매수, 최유리 지정가 매수시 매수 총액을 설정하는 용도로 사용됩니다. 주문 시점의 시장가 또는 최유리 지정가로 price 총액을 채우는 수량만큼 매수 주문이 체결됩니다.\n",
+      "신규 주문 단가 또는 총액.\n디지털 자산 구매에 사용되는 통화(KRW,BTC,USDT)를 기준으로, 숫자 형식의 String으로 입력합니다.\n\n다음 주문 조건에 대해 필수로 입력합니다.\n- 지정가 매수/매도(new_ord_type 필드가 “limit”인 경우)\n- 시장가 매수(new_ord_type 필드가 “price”인 경우)\n- 최유리 지정가 매수(이전 주문의 side필드가 “bid”, new_ord_type 필드가 “best”인 경우)\n\nprice 필드는 주문 유형에 따라 다른 용도로 사용됩니다.\n- 지정가 주문시 매수/매도 호가로 사용됩니다.\n- 시장가 매수, 최유리 지정가 매수시 매수 총액을 설정하는 용도로 사용됩니다. 주문 시점의 시장가 또는 최유리 지정가로 price 총액을 채우는 수량만큼 매수 주문이 체결됩니다.\n",
     ),
   new_identifier: zod
     .string()
@@ -372,13 +372,13 @@ export const CancelAndCreateOrderBody = zod.object({
     .enum(["ioc", "fok", "post_only"])
     .optional()
     .describe(
-      '주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 \"limit\")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 \"ioc\" 또는 \"fok\" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n\* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n\* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n\* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n',
+      '주문 체결 조건.\nIOC(Immediate or Cancel), FOK(Fill or Kill), Post Only와 같은 주문 체결 조건을 설정할 수 있습니다. \n\n시장가 주문(ord_type 필드가 "limit")인 경우 모든 옵션을 선택적으로 사용할 수 있습니다. 최유리 지정가 주문(ord_type 필드가 “best”)인 경우 대해 "ioc" 또는 "fok" 중 하나를 필수로 입력합니다. 사용 가능한 값은 다음과 같습니다.\n\n* `ioc`: 지정가 조건으로 체결 가능한 수량만 즉시 부분 체결하고, 잔여 수량은 취소됩니다.\n* `fok`: 지정가 조건으로 주문량 전량 체결 가능할 때만 주문을 실행하고, 아닌 경우 전량 주문 취소합니다.\n* `post_only`: 지정가 조건으로 부분 또는 전체에 대해 즉시 체결 가능한 상황인 경우 주문을 실행하지 않고 취소합니다. 즉, 메이커(maker)주문으로 생성될 수 있는 상황에서만 주문이 생성되며 테이커(taker) 주문으로 체결되는 것을 방지합니다.\n',
     ),
   new_smp_type: zod
     .enum(["reduce", "cancel_maker", "cancel_taker"])
     .optional()
     .describe(
-      "신규 주문의 자전거래 체결 방지(Self-Match Prevention) 모드.\n자동 매매 시 동일 계정으로부터 생성된 매수 주문과 매도 주문이 체결(자전거래)되는 것을 방지하기 위해 SMP 모드를 선택적으로 설정할 수 있습니다. 메이커(maker) 주문과 테이커(taker) 주문에 설정된 SMP 모드가 서로 상이한 경우 테이커 주문 모드에 따라 동작합니다. \n\n사용 가능한 값은 다음과 같습니다.\n\n\* `cancel_maker`: 메이커 주문을 취소합니다. 즉, 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 이전에 생성한 주문을 취소하여 체결을 방지합니다.\n\* `cancel_taker`: 테이커 주문을 취소합니다. 즉, 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 새롭게 생성한 주문을 취소하여 체결을 방지합니다.\n\* `reduce`: 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
+      "신규 주문의 자전거래 체결 방지(Self-Match Prevention) 모드.\n자동 매매 시 동일 계정으로부터 생성된 매수 주문과 매도 주문이 체결(자전거래)되는 것을 방지하기 위해 SMP 모드를 선택적으로 설정할 수 있습니다. 메이커(maker) 주문과 테이커(taker) 주문에 설정된 SMP 모드가 서로 상이한 경우 테이커 주문 모드에 따라 동작합니다. \n\n사용 가능한 값은 다음과 같습니다.\n\n* `cancel_maker`: 메이커 주문을 취소합니다. 즉, 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 이전에 생성한 주문을 취소하여 체결을 방지합니다.\n* `cancel_taker`: 테이커 주문을 취소합니다. 즉, 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 새롭게 생성한 주문을 취소하여 체결을 방지합니다.\n* `reduce`: 새로운 주문 생성 시 자전 거래 조건이 성립하는 경우 기존 주문과 신규 주문의 주문 수량을 줄여 체결을 방지합니다. 잔량이 0인 경우 주문을 취소합니다.\n",
     ),
 });
 
@@ -427,7 +427,7 @@ export const CreateWithdrawalBody = zod.object({
     .enum(["default", "internal"])
     .default(createWithdrawalBodyTransactionTypeDefault)
     .describe(
-      "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n\* `default`: 일반출금\n\* `internal`: 바로출금\n",
+      "출금 유형.\n사용 가능한 값은 다음과 같습니다.\n\n* `default`: 일반출금\n* `internal`: 바로출금\n",
     ),
 });
 
@@ -448,7 +448,7 @@ export const CreateWithdrawKrwBody = zod.object({
   two_factor_type: zod
     .enum(["kakao", "naver", "hana"])
     .describe(
-      "원화 입출금 시 사용할 2차 인증 수단.\n사용 가능한 값은 다음과 같습니다.\n\n\* `kakao`: 카카오 인증\n\* `naver`: 네이버 인증\n\* `hana`: 하나인증서 인증\n",
+      "원화 입출금 시 사용할 2차 인증 수단.\n사용 가능한 값은 다음과 같습니다.\n\n* `kakao`: 카카오 인증\n* `naver`: 네이버 인증\n* `hana`: 하나인증서 인증\n",
     ),
 });
 
@@ -496,7 +496,7 @@ export const ListWithdrawalsQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      "조회하고자 하는 출금 처리 상태.\n출금 처리 상태로 조회 대상을 한정하기 위한 필터 파라미터입니다. 지정한 상태의 출금 정보만 응답으로 반환됩니다.\n\n사용 가능한 값은 다음과 같습니다.\n\* `WAITING`: 대기중\n\* `PROCESSING`: 진행중\n\* `DONE`: 완료\n\* `FAILED`: 실패\n\* `CANCELLED`: 취소됨\n\* `REJECTED`: 거절됨\n",
+      "조회하고자 하는 출금 처리 상태.\n출금 처리 상태로 조회 대상을 한정하기 위한 필터 파라미터입니다. 지정한 상태의 출금 정보만 응답으로 반환됩니다.\n\n사용 가능한 값은 다음과 같습니다.\n* `WAITING`: 대기중\n* `PROCESSING`: 진행중\n* `DONE`: 완료\n* `FAILED`: 실패\n* `CANCELLED`: 취소됨\n* `REJECTED`: 거절됨\n",
     ),
   "uuids[]": zod
     .array(zod.string())
@@ -532,13 +532,13 @@ export const ListWithdrawalsQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이후 \"limit\"개의 출금 이력을 이어서 조회할 수 있습니다.\n',
+      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 "uuid" 값을 이 필드에 입력하여 해당 출금 시각 이후 "limit"개의 출금 이력을 이어서 조회할 수 있습니다.\n',
     ),
   to: zod
     .string()
     .optional()
     .describe(
-      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이전 \"limit\"개의 출금 이력을 조회할 수 있습니다.\n',
+      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 "uuid" 값을 이 필드에 입력하여 해당 출금 시각 이전 "limit"개의 출금 이력을 조회할 수 있습니다.\n',
     ),
 });
 
@@ -594,7 +594,7 @@ export const CreateDepositKrwBody = zod.object({
   two_factor_type: zod
     .enum(["kakao", "naver", "hana"])
     .describe(
-      "원화 입출금 시 사용할 2차 인증 수단.\n사용 가능한 값은 다음과 같습니다.\n\n\* `kakao`: 카카오 인증\n\* `naver`: 네이버 인증\n\* `hana`: 하나인증서 인증\n",
+      "원화 입출금 시 사용할 2차 인증 수단.\n사용 가능한 값은 다음과 같습니다.\n\n* `kakao`: 카카오 인증\n* `naver`: 네이버 인증\n* `hana`: 하나인증서 인증\n",
     ),
 });
 
@@ -650,7 +650,7 @@ export const ListDepositsQueryParams = zod.object({
     ])
     .optional()
     .describe(
-      "조회하고자 하는 입금 처리 상태.\n입금 처리 상태로 조회 대상을 한정하기 위한 필터 파라미터입니다. 지정한 상태의 입금 정보만 응답으로 반환됩니다.\n\n사용 가능한 값은 다음과 같습니다.\n\* `PROCESSING`: 진행중\n\* `ACCEPTED`: 완료\n\* `CANCELLED`: 취소됨\n\* `REJECTED`: 거절됨\n\* `TRAVEL_RULE_SUSPECTED`: 트래블룰 추가 인증 대기중\n\* `REFUNDING`: 반환 절차 진행중\n\* `REFUNDED`: 반환 완료\n",
+      "조회하고자 하는 입금 처리 상태.\n입금 처리 상태로 조회 대상을 한정하기 위한 필터 파라미터입니다. 지정한 상태의 입금 정보만 응답으로 반환됩니다.\n\n사용 가능한 값은 다음과 같습니다.\n* `PROCESSING`: 진행중\n* `ACCEPTED`: 완료\n* `CANCELLED`: 취소됨\n* `REJECTED`: 거절됨\n* `TRAVEL_RULE_SUSPECTED`: 트래블룰 추가 인증 대기중\n* `REFUNDING`: 반환 절차 진행중\n* `REFUNDED`: 반환 완료\n",
     ),
   "uuids[]": zod
     .array(zod.string())
@@ -686,13 +686,13 @@ export const ListDepositsQueryParams = zod.object({
     .string()
     .optional()
     .describe(
-      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이후 \"limit\"개의 출금 이력을 이어서 조회할 수 있습니다.\n',
+      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 "uuid" 값을 이 필드에 입력하여 해당 출금 시각 이후 "limit"개의 출금 이력을 이어서 조회할 수 있습니다.\n',
     ),
   to: zod
     .string()
     .optional()
     .describe(
-      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 \"uuid\" 값을 이 필드에 입력하여 해당 출금 시각 이전 \"limit\"개의 출금 이력을 조회할 수 있습니다.\n',
+      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 "uuid" 값을 이 필드에 입력하여 해당 출금 시각 이전 "limit"개의 출금 이력을 조회할 수 있습니다.\n',
     ),
 });
 
