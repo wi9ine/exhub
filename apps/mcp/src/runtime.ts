@@ -349,10 +349,6 @@ const COINONE_SPEC_OPERATION_IDS = {
   "market.listCurrencies": "list_currencies",
   "market.getCurrency": "get_currency",
   "market.getChart": "get_chart",
-  "market.getOrderbookDeprecated": "get_orderbook_deprecated",
-  "market.getTickerDeprecated": "get_ticker_deprecated",
-  "market.getTickerUtcDeprecated": "get_ticker_utc_deprecated",
-  "market.listTradesDeprecated": "list_trades_deprecated",
   "account.listBalance": "list_balance",
   "account.listBalanceByCurrencies": "list_balance_by_currencies",
   "account.listTradeFees": "list_trade_fees",
@@ -454,7 +450,7 @@ export function resolveTools(
   const resolved = tools.map((candidate) => {
     const name =
       (duplicates.get(candidate.method) ?? 0) > 1
-        ? `${candidate.category}.${candidate.method}`
+        ? `${candidate.category}_${candidate.method}`
         : candidate.method;
     const inputZodSchema = buildToolInputZodSchema(candidate.args);
     const description =
@@ -760,18 +756,6 @@ function getCoinoneTools() {
           stringArg("quoteCurrency", "quote currency", true),
           stringArg("targetCurrency", "target currency", true),
           coinonePublicQuery("GetChart", true),
-        ]),
-        tool("market", "getOrderbookDeprecated", "public", [
-          coinonePublicQuery("GetOrderbookDeprecated"),
-        ]),
-        tool("market", "getTickerDeprecated", "public", [
-          coinonePublicQuery("GetTickerDeprecated"),
-        ]),
-        tool("market", "getTickerUtcDeprecated", "public", [
-          coinonePublicQuery("GetTickerUtcDeprecated"),
-        ]),
-        tool("market", "listTradesDeprecated", "public", [
-          coinonePublicQuery("ListTradesDeprecated"),
         ]),
         tool("account", "listBalance", "private"),
         tool("account", "listBalanceByCurrencies", "private", [

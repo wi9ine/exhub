@@ -265,4 +265,25 @@ describe("거래소별 도구명 유일성", () => {
 
     expect(unique.size).toBe(names.length);
   });
+
+  it.each(
+    listSupportedExchanges().map((key) => [key]),
+  )("%s 거래소의 도구명이 Claude Code 제약을 만족한다", async (exchange) => {
+    const runtime = await getExchangeRuntime(exchange);
+    const validNamePattern = /^[a-zA-Z0-9_-]{1,64}$/;
+
+    expect(runtime.tools.every((tool) => validNamePattern.test(tool.name))).toBe(true);
+  });
+});
+
+describe("deprecated 도구 비노출", () => {
+  it("coinone deprecated 공개 도구를 노출하지 않는다", async () => {
+    const runtime = await getExchangeRuntime("coinone");
+    const names = runtime.tools.map((tool) => tool.name);
+
+    expect(names).not.toContain("getOrderbookDeprecated");
+    expect(names).not.toContain("getTickerDeprecated");
+    expect(names).not.toContain("getTickerUtcDeprecated");
+    expect(names).not.toContain("listTradesDeprecated");
+  });
 });

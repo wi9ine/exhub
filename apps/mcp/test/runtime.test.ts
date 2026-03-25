@@ -19,17 +19,17 @@ describe("resolveTools", () => {
     expect(result.map((t) => t.name)).toEqual(["tickers", "orderbook"]);
   });
 
-  it("method 이름이 중복되면 category.method 형태로 구분한다", () => {
+  it("method 이름이 중복되면 category_method 형태로 구분한다", () => {
     const result = resolveTools("upbit", [tool("market", "getOrder"), tool("orders", "getOrder")]);
 
-    expect(result.map((t) => t.name)).toEqual(["market.getOrder", "orders.getOrder"]);
+    expect(result.map((t) => t.name)).toEqual(["market_getOrder", "orders_getOrder"]);
   });
 
   it("최종 도구명이 중복되면 에러를 throw한다", () => {
-    // 같은 category + 같은 method → category.method도 동일
+    // 같은 category + 같은 method → category_method도 동일
     expect(() =>
       resolveTools("upbit", [tool("market", "tickers"), tool("market", "tickers")]),
-    ).toThrow("도구 이름이 중복됩니다: market.tickers");
+    ).toThrow("도구 이름이 중복됩니다: market_tickers");
   });
 
   it("빈 배열을 전달하면 빈 결과를 반환한다", () => {
