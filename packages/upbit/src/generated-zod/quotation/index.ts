@@ -5,16 +5,20 @@
  * 업비트 시세 조회 API. 공식 개발자 센터 v1.6.1 기준 스키마입니다.
  * OpenAPI spec version: 1.6.1
  */
-import * as zod from 'zod';
+import * as zod from "zod";
 
 /**
  * 업비트에서 지원하는 모든 페어 목록을 조회합니다.
  * @summary 페어 목록 조회
  */
 export const ListTradingPairsQueryParams = zod.object({
-  "is_details": zod.boolean().optional().describe('상세 정보를 포함한 조회 여부.\ntrue로 지정하여 유의종목 지정 여부, 주의종목 지정 여부와 같은 상세 정보를 응답에 포함할 수 있습니다. 기본값은 false입니다.\n')
-})
-
+  is_details: zod
+    .boolean()
+    .optional()
+    .describe(
+      "상세 정보를 포함한 조회 여부.\ntrue로 지정하여 유의종목 지정 여부, 주의종목 지정 여부와 같은 상세 정보를 응답에 포함할 수 있습니다. 기본값은 false입니다.\n",
+    ),
+});
 
 /**
  * 업비트 Open API로 초 단위 캔들 데이터를 조회할 수 있습니다.
@@ -23,28 +27,59 @@ export const ListTradingPairsQueryParams = zod.object({
 export const getSecondCandlesQueryCountDefault = 1;
 
 export const GetSecondCandlesQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 다음과 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] 2025-06-24T04:56:53Z \n2025-06-24 04:56:53 \n2025-06-24T13:56:53+09:00 \n\n초 캔들은 요청 시점으로부터 최대 3개월 이전 데이터까지의 조회만 지원하므로, 3개월 이전 시각을 지정하는 경우 응답이 빈 배열로 반환됩니다.\n'),
-  "count": zod.number().default(getSecondCandlesQueryCountDefault).describe('조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 다음과 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] 2025-06-24T04:56:53Z \n2025-06-24 04:56:53 \n2025-06-24T13:56:53+09:00 \n\n초 캔들은 요청 시점으로부터 최대 3개월 이전 데이터까지의 조회만 지원하므로, 3개월 이전 시각을 지정하는 경우 응답이 빈 배열로 반환됩니다.\n",
+    ),
+  count: zod
+    .number()
+    .default(getSecondCandlesQueryCountDefault)
+    .describe(
+      "조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n",
+    ),
+});
 
 /**
  * 분 단위 캔들 목록을 조회합니다.
  * @summary 분(Minute) 캔들 조회
  */
 export const GetMinuteCandlesParams = zod.object({
-  "unit": zod.union([zod.literal(1),zod.literal(3),zod.literal(5),zod.literal(10),zod.literal(15),zod.literal(30),zod.literal(60),zod.literal(240)]).describe('분(Minute) 캔들 단위\n캔들 단위를 지정하여 캔들 조회를 할 수 있습니다.\n최대 240분(4시간) 캔들까지 조회할 수 있습니다.\n')
-})
+  unit: zod
+    .union([
+      zod.literal(1),
+      zod.literal(3),
+      zod.literal(5),
+      zod.literal(10),
+      zod.literal(15),
+      zod.literal(30),
+      zod.literal(60),
+      zod.literal(240),
+    ])
+    .describe(
+      "분(Minute) 캔들 단위\n캔들 단위를 지정하여 캔들 조회를 할 수 있습니다.\n최대 240분(4시간) 캔들까지 조회할 수 있습니다.\n",
+    ),
+});
 
 export const getMinuteCandlesQueryCountDefault = 1;
 
 export const GetMinuteCandlesQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n'),
-  "count": zod.number().default(getMinuteCandlesQueryCountDefault).describe('조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n",
+    ),
+  count: zod
+    .number()
+    .default(getMinuteCandlesQueryCountDefault)
+    .describe(
+      "조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n",
+    ),
+});
 
 /**
  * 일 단위 캔들 목록을 조회합니다.
@@ -53,12 +88,26 @@ export const GetMinuteCandlesQueryParams = zod.object({
 export const getDayCandlesQueryCountDefault = 1;
 
 export const GetDayCandlesQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n'),
-  "count": zod.number().default(getDayCandlesQueryCountDefault).describe('조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n'),
-  "converting_price_unit": zod.string().optional().describe('종가 환산 통화.\n종가를 특정 통화로 환산하고자 하는 경우 선택적으로 지정할 수 있습니다. 사용시 응답에 “converted_trade_price” 필드가 추가로 반환됩니다. \n\n[예시] “KRW”로 지정시 원가로 환산된 종가가 반환됨.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n",
+    ),
+  count: zod
+    .number()
+    .default(getDayCandlesQueryCountDefault)
+    .describe(
+      "조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n",
+    ),
+  converting_price_unit: zod
+    .string()
+    .optional()
+    .describe(
+      "종가 환산 통화.\n종가를 특정 통화로 환산하고자 하는 경우 선택적으로 지정할 수 있습니다. 사용시 응답에 “converted_trade_price” 필드가 추가로 반환됩니다. \n\n[예시] “KRW”로 지정시 원가로 환산된 종가가 반환됨.\n",
+    ),
+});
 
 /**
  * 주 단위 캔들 목록을 조회합니다.
@@ -67,11 +116,20 @@ export const GetDayCandlesQueryParams = zod.object({
 export const getWeekCandlesQueryCountDefault = 1;
 
 export const GetWeekCandlesQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n'),
-  "count": zod.number().default(getWeekCandlesQueryCountDefault).describe('조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n",
+    ),
+  count: zod
+    .number()
+    .default(getWeekCandlesQueryCountDefault)
+    .describe(
+      "조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n",
+    ),
+});
 
 /**
  * 월 단위 캔들 목록을 조회합니다.
@@ -80,11 +138,20 @@ export const GetWeekCandlesQueryParams = zod.object({
 export const getMonthCandlesQueryCountDefault = 1;
 
 export const GetMonthCandlesQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n'),
-  "count": zod.number().default(getMonthCandlesQueryCountDefault).describe('조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n",
+    ),
+  count: zod
+    .number()
+    .default(getMonthCandlesQueryCountDefault)
+    .describe(
+      "조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n",
+    ),
+});
 
 /**
  * 연 단위 캔들 목록을 조회합니다.
@@ -93,11 +160,20 @@ export const GetMonthCandlesQueryParams = zod.object({
 export const getYearCandlesQueryCountDefault = 1;
 
 export const GetYearCandlesQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n'),
-  "count": zod.number().default(getYearCandlesQueryCountDefault).describe('조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 기간의 종료 시각. \n지정한 시각 이전 캔들을 조회합니다. 미지정시 요청 시각을 기준으로 최근 캔들이 조회됩니다.\n\nISO 8601 형식의 datetime으로 아래와 같이 요청 할 수 있습니다. 실제 요청 시에는 공백 및 특수문자가 정상적으로 처리되도록 URL 인코딩을 수행해야 합니다.\n\n[예시] \n2025-06-24T04:56:53Z\n2025-06-24 04:56:53\n2025-06-24T13:56:53+09:00\n",
+    ),
+  count: zod
+    .number()
+    .default(getYearCandlesQueryCountDefault)
+    .describe(
+      "조회하고자 하는 캔들의 개수.\n최대 200개의 캔들 조회를 지원하며, 기본값은 1입니다.\n",
+    ),
+});
 
 /**
  * 지정한 페어의 최근 체결 목록을 조회합니다.
@@ -106,31 +182,54 @@ export const GetYearCandlesQueryParams = zod.object({
 export const listTradesTicksQueryCountDefault = 1;
 
 export const ListTradesTicksQueryParams = zod.object({
-  "market": zod.string().describe('조회하고자 하는 페어(거래쌍)'),
-  "to": zod.string().optional().describe('조회 대상 일자 내 조회 기간의 종료 시각(UTC).\n지정한 조회 일자 내에서 특정 시간대의 체결 내역을 조회하고자 하는 경우 선택적으로 사용할 수 있는 파라미터입니다. \n\nHHmmss 또는 HH:mm:ss 형식의 시간 포맷으로 입력합니다. 체결 목록이 지정한 시간부터 시간 역순으로 반환됩니다. \n\n[예시] days_ago=1&to=130000 으로 조회하는 경우 1일 전(어제) UTC 기준 오후 1시 정각 이전 체결 이력을 최신순으로 반환\n'),
-  "count": zod.number().default(listTradesTicksQueryCountDefault).describe('조회하고자 하는 체결 내역의 개수.\n최대 500개 조회를 지원하며 기본 값은 1입니다.\n'),
-  "cursor": zod.string().optional().describe('Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 체결의 \"sequential_id” 값을 이 필드에 입력하여 해당 체결 직전 데이터부터 “count”개의 이전 체결 이력을 이어서 조회할 수 있습니다.\n'),
-  "days_ago": zod.number().optional().describe('체결 내역 조회 대상 일자와 요청 시점과의 일 단위 offset. \n체결 내역은 체결 일을 지정하여 조회해야 하며 최대 7일의 조회 기간을 지원합니다. 일자 구분은 UTC를 기준으로 합니다.\n\n1 이상 7 이하의 정수형으로 입력합니다. 빈 값으로 입력할 경우, 요청 일자에 발생한 체결 목록을 반환하며, 7을 입력하면 7일 이전에 발생한 체결 목록을 시간 역순(최신 체결 순)으로 반환합니다.\n')
-})
-
+  market: zod.string().describe("조회하고자 하는 페어(거래쌍)"),
+  to: zod
+    .string()
+    .optional()
+    .describe(
+      "조회 대상 일자 내 조회 기간의 종료 시각(UTC).\n지정한 조회 일자 내에서 특정 시간대의 체결 내역을 조회하고자 하는 경우 선택적으로 사용할 수 있는 파라미터입니다. \n\nHHmmss 또는 HH:mm:ss 형식의 시간 포맷으로 입력합니다. 체결 목록이 지정한 시간부터 시간 역순으로 반환됩니다. \n\n[예시] days_ago=1&to=130000 으로 조회하는 경우 1일 전(어제) UTC 기준 오후 1시 정각 이전 체결 이력을 최신순으로 반환\n",
+    ),
+  count: zod
+    .number()
+    .default(listTradesTicksQueryCountDefault)
+    .describe("조회하고자 하는 체결 내역의 개수.\n최대 500개 조회를 지원하며 기본 값은 1입니다.\n"),
+  cursor: zod
+    .string()
+    .optional()
+    .describe(
+      'Pagination을 위한 조회 범위 지정용 커서. \n응답에 포함된 체결의 \"sequential_id” 값을 이 필드에 입력하여 해당 체결 직전 데이터부터 “count”개의 이전 체결 이력을 이어서 조회할 수 있습니다.\n',
+    ),
+  days_ago: zod
+    .number()
+    .optional()
+    .describe(
+      "체결 내역 조회 대상 일자와 요청 시점과의 일 단위 offset. \n체결 내역은 체결 일을 지정하여 조회해야 하며 최대 7일의 조회 기간을 지원합니다. 일자 구분은 UTC를 기준으로 합니다.\n\n1 이상 7 이하의 정수형으로 입력합니다. 빈 값으로 입력할 경우, 요청 일자에 발생한 체결 목록을 반환하며, 7을 입력하면 7일 이전에 발생한 체결 목록을 시간 역순(최신 체결 순)으로 반환합니다.\n",
+    ),
+});
 
 /**
  * 지정한 페어의 현재가를 조회합니다. 요청 시점 기준으로 해당 페어의 티커 스냅샷이 반환됩니다.
  * @summary 페어 단위 현재가 조회
  */
 export const ListTickersQueryParams = zod.object({
-  "markets": zod.string().describe('조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n')
-})
-
+  markets: zod
+    .string()
+    .describe(
+      "조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n",
+    ),
+});
 
 /**
  * 지정한 마켓(호가 자산) 내 모든 페어들의 현재가 정보를 조회합니다.
  * @summary 마켓 단위 현재가 조회
  */
 export const ListQuoteTickersQueryParams = zod.object({
-  "quote_currencies": zod.string().describe('조회하고자 하는 마켓의 통화 코드 목록. \n2개 이상의 마켓에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW,BTC\n')
-})
-
+  quote_currencies: zod
+    .string()
+    .describe(
+      "조회하고자 하는 마켓의 통화 코드 목록. \n2개 이상의 마켓에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW,BTC\n",
+    ),
+});
 
 /**
  * 지정한 종목들의 실시간 호가(Orderbook) 정보를 조회합니다.
@@ -140,20 +239,36 @@ export const listOrderbooksQueryLevelDefault = `0`;
 export const listOrderbooksQueryCountDefault = 30;
 
 export const ListOrderbooksQueryParams = zod.object({
-  "markets": zod.string().describe('조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n'),
-  "level": zod.enum(['0', '10000', '100000', '1000000', '10000000', '100000000']).default(listOrderbooksQueryLevelDefault).describe('호가 모아보기 단위.\n원화마켓(KRW)에서만 지원하는 기능으로, 지정한 단위로 ask\/bid price와 size를 모아(group) 조회할 수 있습니다. 숫자 형식의 String으로 요청합니다. \n\n0 또는 1 이상의 모아보기 단위인 경우 소수점을 포함하지 않은 정수형 문자열로, 1 미만의 소수점 단위 모아보기 단위인 경우 double형 문자열로 요청합니다. 미지정시 기본값은 0입니다.\n'),
-  "count": zod.number().default(listOrderbooksQueryCountDefault).describe('조회하고자 하는 호가 쌍의 개수.\n최고 매수 호가 - 최저 매도 호가의 쌍을 기준으로, 지정한 개수 만큼의 호가 쌍 정보가 반환됩니다. 미지정시 기본값은 30입니다.\n')
-})
-
+  markets: zod
+    .string()
+    .describe(
+      "조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n",
+    ),
+  level: zod
+    .enum(["0", "10000", "100000", "1000000", "10000000", "100000000"])
+    .default(listOrderbooksQueryLevelDefault)
+    .describe(
+      "호가 모아보기 단위.\n원화마켓(KRW)에서만 지원하는 기능으로, 지정한 단위로 ask\/bid price와 size를 모아(group) 조회할 수 있습니다. 숫자 형식의 String으로 요청합니다. \n\n0 또는 1 이상의 모아보기 단위인 경우 소수점을 포함하지 않은 정수형 문자열로, 1 미만의 소수점 단위 모아보기 단위인 경우 double형 문자열로 요청합니다. 미지정시 기본값은 0입니다.\n",
+    ),
+  count: zod
+    .number()
+    .default(listOrderbooksQueryCountDefault)
+    .describe(
+      "조회하고자 하는 호가 쌍의 개수.\n최고 매수 호가 - 최저 매도 호가의 쌍을 기준으로, 지정한 개수 만큼의 호가 쌍 정보가 반환됩니다. 미지정시 기본값은 30입니다.\n",
+    ),
+});
 
 /**
  * 지정한 페어들의 호가 단위(tick_size)와 호가 모아보기 단위(supported_levels) 정보를 조회합니다.
  * @summary 호가 정책 조회
  */
 export const ListOrderbookInstrumentsQueryParams = zod.object({
-  "markets": zod.string().describe('조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n')
-})
-
+  markets: zod
+    .string()
+    .describe(
+      "조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n",
+    ),
+});
 
 /**
  * 종목별로 지원하는 모아보기 단위 목록을 조회합니다. 반환된 지원 단위를 호가 조회 API 사용 시 지정하여 호가를 원하는 단위로 조회할 수 있습니다.
@@ -161,5 +276,9 @@ export const ListOrderbookInstrumentsQueryParams = zod.object({
  * @summary 호가 모아보기 단위 조회
  */
 export const ListOrderbookSupportedLevelsQueryParams = zod.object({
-  "markets": zod.string().describe('조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n')
-})
+  markets: zod
+    .string()
+    .describe(
+      "조회하고자 하는 페어(거래쌍) 목록.\n2개 이상의 페어에 대해 조회하고자 하는 경우 쉼표(,)로 구분된 문자열 형식으로 요청합니다.\n\n[예시] KRW-BTC,KRW-ETH,BTC-ETH,BTC-XRP\n",
+    ),
+});
