@@ -2,24 +2,26 @@
 
 사용하는 AI 클라이언트에 맞는 설정 방법을 확인하세요.
 
-import { Tabs } from "nextra/components";
-import { Callout } from "nextra/components";
+import { Tabs, Callout, Steps } from "nextra/components";
 
 <Callout type="info">
-  아래 예시는 모두 Gopax 거래소 기준입니다. 다른 거래소를 사용하려면 `gopax`
-  부분을 원하는 거래소 키(`upbit`, `bithumb`, `coinone`, `korbit`)로 변경하세요.
+  아래 예시는 모두 **Gopax 거래소** 기준입니다. 다른 거래소를 사용하려면 `gopax` 부분을 원하는 거래소 키(`upbit`, `bithumb`, `coinone`, `korbit`)로 변경하세요.
 </Callout>
 
-<Tabs items={["Claude Desktop", "Claude Code", "Cursor", "VS Code", "Windsurf", "Zed"]}>
+<Tabs items={["Cursor", "Claude Desktop", "VS Code", "Claude Code", "Windsurf", "Zed", "Antigravity", "Gemini CLI", "Codex"]}>
+
   <Tabs.Tab>
-    ## Claude Desktop
+    ### Cursor
+    
+    [Cursor MCP documentation](https://docs.cursor.com/context/model-context-protocol)
 
-    설정 파일을 열어 MCP 서버를 추가합니다.
+    <Steps>
+    #### 1. 설정 메뉴 진입 또는 파일 열기
+    - **메뉴 활용 시:** `Settings` > `Features` > `MCP` > `+ Add new MCP server`
+    - **파일 수정 시:** `~/.cursor/mcp.json` (글로벌) 또는 `.cursor/mcp.json` (프로젝트 내부) 파일 열기
 
-    **설정 파일 위치:**
-    - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-    - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
+    #### 2. 환경 변수 및 설정값 입력
+    아래의 JSON 구문을 복사하여 설정 파일에 붙여넣습니다.
     ```json
     {
       "mcpServers": {
@@ -35,68 +37,122 @@ import { Callout } from "nextra/components";
     }
     ```
 
-    설정 후 Claude Desktop을 재시작하면 적용됩니다.
+    #### 3. 변경사항 적용
+    설정을 저장한 후, Cursor 에디터를 껐다가 다시 실행(Restart)하면 설정이 반영됩니다.
+    </Steps>
+  </Tabs.Tab>
 
-    ### 여러 거래소 동시 사용
+  <Tabs.Tab>
+    ### Claude Desktop
+    
+    [Claude Desktop MCP documentation](https://modelcontextprotocol.io/quickstart/user)
 
+    <Steps>
+    #### 1. 설정 파일 위치 열기
+    사용 중인 운영체제에 맞춰 지정된 파일을 텍스트 에디터로 엽니다.
+    - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+    - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+    #### 2. 환경 변수 및 설정값 입력
+    아래 JSON 코문을 파일 안에 복사합니다.
     ```json
     {
       "mcpServers": {
         "exhub-gopax": {
           "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "gopax"]
-        },
-        "exhub-upbit": {
-          "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "upbit"]
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
+          }
         }
       }
     }
     ```
 
+    #### 3. 변경사항 적용
+    파일을 수정한 후 Claude Desktop을 백그라운드에서 완전히 종료하고 켭니다.
+    </Steps>
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ## Claude Code
+    ### VS Code (Cline / Roo Code)
 
-    CLI 명령으로 MCP 서버를 등록합니다.
+    [Cline MCP documentation](https://github.com/cline/cline) | [Roo Code MCP documentation](https://docs.roocode.com/features/mcp/using-mcp-in-roo)
 
+    <Callout type="info">
+      VS Code 자체는 현재 내장 MCP 기능을 직접 지원하지 않으므로, **Cline**이나 **Roo Code**와 같은 인기 AI 편의 확장 프로그램을 필수로 이용해야 합니다.
+    </Callout>
+
+    <Steps>
+    #### 1. 설정 메뉴 진입 또는 파일 열기
+    - **Cline:** 사이드바 메뉴 톱니바퀴 > `MCP Servers` 탭 열기 (또는 `~/.vscode/mcp.json` 파일 수정)
+    - **Roo Code:** 확장 프로그램 우측 상단 메뉴 > `MCP Servers` 클릭
+
+    #### 2. 환경 변수 및 설정값 입력
+    해당 설정 탭 혹은 JSON 파일 안에 아래 항목을 추가합니다.
+    ```json
+    {
+      "mcpServers": {
+        "exhub-gopax": {
+          "command": "npx",
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
+          }
+        }
+      }
+    }
+    ```
+
+    #### 3. 변경사항 적용
+    파일을 저장하고 VS Code 창을 새로고침하여 활성화 여부를 확인하세요.
+    </Steps>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Claude Code
+    
+    [Claude Code MCP documentation](https://docs.anthropic.com/en/docs/agents-and-tools/mcp/install-mcp)
+
+    <Steps>
+    #### 1. CLI 터미널 연동 (선택)
+    명령어를 통해 로컬 환경 명령줄에 곧바로 MCP 서버를 등록할 수 있습니다.
     ```bash
-    # 현재 사용자 전역 등록
-    claude mcp add exhub-gopax --scope user -- npx @exhub/mcp --exchange gopax
-
-    # 현재 프로젝트에만 등록
-    claude mcp add exhub-gopax --scope project -- npx @exhub/mcp --exchange gopax
+    claude mcp add exhub-gopax npx -y @exhub/mcp --exchange gopax
     ```
 
-    ### 환경 변수 설정
-
-    Private API를 사용하려면 환경 변수와 함께 등록합니다:
-
-    ```bash
-    claude mcp add exhub-gopax --scope user \
-      -e EXHUB_GOPAX_API_KEY=your-api-key \
-      -e EXHUB_GOPAX_SECRET_KEY=your-secret-key \
-      -- npx @exhub/mcp --exchange gopax
+    #### 2. 구성 파일 직접 편집 (인증 키 필요 시)
+    인증 키를 설정해야 한다면 위 명령어로 등록 후 생성된 `~/.claude.json` 파일을 열어 `env` 항목을 수동으로 추가하거나, 처음부터 직접 기입합니다.
+    ```json
+    {
+      "mcpServers": {
+        "exhub-gopax": {
+          "command": "npx",
+          "args": ["-y", "@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
+          }
+        }
+      }
+    }
     ```
-
-    ### 등록 확인
-
-    ```bash
-    claude mcp list
-    ```
-
+    </Steps>
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ## Cursor
+    ### Windsurf
 
-    MCP 설정 파일에 서버를 추가합니다.
+    [Windsurf MCP documentation](https://docs.windsurf.com/windsurf/cascade/mcp)
 
-    **설정 파일 위치:**
-    - 글로벌: `~/.cursor/mcp.json`
-    - 프로젝트: `.cursor/mcp.json` (프로젝트 루트)
+    <Steps>
+    #### 1. 설정 파일 열기
+    에디터를 사용해 `~/.codeium/windsurf/mcp_config.json` 파일을 찾아 엽니다.
 
+    #### 2. 환경 변수 및 설정값 입력
+    설정 파일의 `mcpServers` 블록 내에 아래 내용을 추가합니다.
     ```json
     {
       "mcpServers": {
@@ -112,109 +168,140 @@ import { Callout } from "nextra/components";
     }
     ```
 
-    설정 후 Cursor를 재시작하면 적용됩니다.
-
+    #### 3. 변경사항 적용
+    파일을 덮어쓰기 저장한 뒤, Windsurf 클라이언트를 재시작하면 완료됩니다.
+    </Steps>
   </Tabs.Tab>
 
   <Tabs.Tab>
-    ## VS Code
+    ### Zed
 
-    프로젝트의 `.vscode/mcp.json` 파일에 서버를 추가합니다.
+    [Zed Context Server documentation](https://zed.dev/docs/assistant/context-servers)
 
-    ```json
-    {
-      "servers": {
-        "exhub-gopax": {
-          "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "gopax"],
-          "env": {
-            "EXHUB_GOPAX_API_KEY": "your-api-key",
-            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
-          }
-        }
-      }
-    }
-    ```
+    <Steps>
+    #### 1. 설정 메뉴 진입
+    상단 메뉴에서 `Zed` > `Settings` > `Open Settings` 를 클릭하거나 단축키(`Cmd + ,`)로 `settings.json`을 엽니다.
 
-    또는 `settings.json`에 추가할 수도 있습니다:
-
-    ```json
-    {
-      "mcp": {
-        "servers": {
-          "exhub-gopax": {
-            "command": "npx",
-            "args": ["@exhub/mcp", "--exchange", "gopax"],
-            "env": {
-              "EXHUB_GOPAX_API_KEY": "your-api-key",
-              "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
-            }
-          }
-        }
-      }
-    }
-    ```
-
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-    ## Windsurf
-
-    MCP 설정 파일에 서버를 추가합니다.
-
-    **설정 파일 위치:** `~/.codeium/windsurf/mcp_config.json`
-
-    ```json
-    {
-      "mcpServers": {
-        "exhub-gopax": {
-          "command": "npx",
-          "args": ["@exhub/mcp", "--exchange", "gopax"],
-          "env": {
-            "EXHUB_GOPAX_API_KEY": "your-api-key",
-            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
-          }
-        }
-      }
-    }
-    ```
-
-    설정 후 Windsurf를 재시작하면 적용됩니다.
-
-  </Tabs.Tab>
-
-  <Tabs.Tab>
-    ## Zed
-
-    Zed 설정 파일에 context server를 추가합니다.
-
-    **설정 파일 위치:** `~/.config/zed/settings.json`
-
+    #### 2. 환경 변수 및 설정값 입력
+    `context_servers` 섹션을 찾아 코드를 추가하세요.
     ```json
     {
       "context_servers": {
         "exhub-gopax": {
-          "command": {
-            "path": "npx",
-            "args": ["@exhub/mcp", "--exchange", "gopax"],
-            "env": {
-              "EXHUB_GOPAX_API_KEY": "your-api-key",
-              "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
-            }
+          "command": "npx",
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
           }
         }
       }
     }
     ```
 
-    설정 후 Zed를 재시작하면 적용됩니다.
-
+    #### 3. 변경사항 적용
+    저장 후 설정 창을 닫으면 어시스턴트에서 도구를 즉시 활용할 수 있습니다.
+    </Steps>
   </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Antigravity
+
+    [Antigravity MCP documentation](https://antigravity.google/docs/mcp)
+
+    <Steps>
+    #### 1. 설정 파일 열기
+    디렉터리에 위치한 `~/.gemini/antigravity/mcp.json` 또는 `~/.antigravity/settings.json` 파일을 오픈합니다.
+
+    #### 2. 환경 변수 및 설정값 입력
+    `mcpServers` 객체 안에 ExHub 설정 정보를 주입합니다.
+    ```json
+    {
+      "mcpServers": {
+        "exhub-gopax": {
+          "command": "npx",
+          "args": ["@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
+          }
+        }
+      }
+    }
+    ```
+
+    #### 3. 변경사항 적용
+    파일을 저장하고 에이전트 인스턴스 환경을 초기화 및 재실행하세요.
+    </Steps>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Gemini CLI
+    
+    [Gemini CLI MCP Configuration](https://google-gemini.github.io/gemini-cli/docs/tools/mcp-server.html)
+
+    <Steps>
+    #### 1. CLI 터미널 연동 (선택)
+    터미널에서 명령행 한 줄로 서버를 연동할 수 있습니다.
+    ```bash
+    gemini mcp add exhub-gopax npx -y @exhub/mcp --exchange gopax
+    ```
+
+    #### 2. 구성 파일 직접 편집 (인증 키 필요 시)
+    인증 키를 설정해야 한다면 명령어로 등록 후 생성된 `~/.gemini/settings.json` 파일을 열어 `env` 항목을 추가하거나 직접 기입합니다.
+    ```json
+    {
+      "mcpServers": {
+        "exhub-gopax": {
+          "command": "npx",
+          "args": ["-y", "@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
+          }
+        }
+      }
+    }
+    ```
+    </Steps>
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    ### Codex
+
+    [OpenAI Codex MCP documentation](https://developers.openai.com/codex/mcp)
+
+    <Steps>
+    #### 1. CLI 터미널 연동 (선택)
+    명령어를 통해 커맨드 라인 환경에 곧바로 MCP 서버를 추가할 수 있습니다.
+    ```bash
+    codex mcp add exhub-gopax -- npx -y @exhub/mcp --exchange gopax
+    ```
+
+    #### 2. 구성 파일 직접 편집 (인증 키 필요 시)
+    인증 키 설정이 필요한 경우 구성 파일(`~/.codex/settings.json` 또는 `.codex/config.toml`)을 직접 열어 `env` 블록을 수동으로 입력해 주어야 합니다.
+    ```json
+    {
+      "mcpServers": {
+        "exhub-gopax": {
+          "command": "npx",
+          "args": ["-y", "@exhub/mcp", "--exchange", "gopax"],
+          "env": {
+            "EXHUB_GOPAX_API_KEY": "your-api-key",
+            "EXHUB_GOPAX_SECRET_KEY": "your-secret-key"
+          }
+        }
+      }
+    }
+    ```
+    </Steps>
+  </Tabs.Tab>
+
 </Tabs>
 
-## Public API만 사용
+## 공통: Public API 전용 사용
 
-인증 키 없이 Public API만 사용하려면 `env` 설정을 생략하세요:
+시세 및 호가 조회 등 **인증(API Key/Secret_Key) 없이 공유 데이터를 호출**하려면 아래처럼 `env` 속성만 지워 등록해 주시면 어디서나 바로 사용할 수 있습니다.
 
 ```json
 {
@@ -226,5 +313,3 @@ import { Callout } from "nextra/components";
   }
 }
 ```
-
-시세 조회, 호가, 체결 내역 등 공개 데이터는 인증 없이 사용할 수 있습니다.
