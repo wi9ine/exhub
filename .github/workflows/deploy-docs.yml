@@ -5,11 +5,13 @@ on:
     branches:
       - main
     paths:
+      - '.github/workflows/deploy-docs.yml'
       - 'apps/docs/**'
       - 'packages/**'
       - 'package.json'
       - 'pnpm-workspace.yaml'
       - 'pnpm-lock.yaml'
+  workflow_dispatch:
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
