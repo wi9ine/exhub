@@ -40,7 +40,7 @@ import { createGopaxClient } from "@exhub/gopax";
 // Public API (인증 불필요)
 const client = createGopaxClient();
 
-const ticker = await client.market.ticker("BTC-KRW");
+const ticker = await client.market.getTradingPairTicker("BTC-KRW");
 console.log(ticker);
 ```
 
@@ -98,7 +98,7 @@ exhub/
 ├── apps/
 │   ├── mcp/           # MCP 서버 (@exhub/mcp)
 │   └── docs/          # 문서 사이트
-├── specs/             # OpenAPI/AsyncAPI 스펙 (SSOT)
+├── packages/spec/     # OpenAPI/AsyncAPI 스펙 (SSOT)
 └── scripts/           # 코드 생성 스크립트
 ```
 

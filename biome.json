@@ -20,6 +20,6 @@
     }
   },
   "files": {
-    "includes": ["**", "!docs", "!specs/node_modules", "!node_modules", "!**/dist", "!**/generated", "!apps/docs/app/global.css"]
+    "includes": ["**", "!docs", "!specs/node_modules", "!node_modules", "!**/dist", "!**/generated", "!**/generated-zod", "!apps/docs/app/global.css"]
   }
 }

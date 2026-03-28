@@ -1,22 +1,6 @@
-import {
-  defaultHttpTransport,
-  ExHubConfigurationError,
-  resolveBaseUrl,
-  sha512Base64,
-  toQueryString,
-} from "@exhub/core";
-
-import type { GopaxClient, GopaxClientOptions, GopaxCredentials } from "./types";
-
-const GOPAX_DEFAULT_BASE_URL = "https://api.gopax.co.kr";
-const GOPAX_PRIVATE_PATHS = {
-  balances: "/balances",
-  orders: "/orders",
-  trades: "/trades",
-  depositWithdrawalStatus: "/deposit-withdrawal-status",
-  cryptoDepositAddresses: "/crypto-deposit-addresses",
-  cryptoWithdrawalAddresses: "/crypto-withdrawal-addresses",
-} as const;
+// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.
+import { createRequestFunctions } from "./auth";
+import type { GopaxClient, GopaxClientOptions } from "./types";
 
 type AsyncResult<TMethod> = TMethod extends (...args: never[]) => Promise<infer TResult>
   ? TResult
@@ -26,201 +10,134 @@ function encodePathSegment(value: string): string {
   return encodeURIComponent(value);
 }
 
-async function resolveCredentials(options: GopaxClientOptions): Promise<GopaxCredentials> {
-  if (options.credentialsProvider) {
-    return options.credentialsProvider();
-  }
-  if (options.credentials) {
-    return options.credentials;
-  }
-  throw new ExHubConfigurationError("GOPAX 인증 정보가 설정되지 않았습니다.");
-}
-
 export function createGopaxClient(options: GopaxClientOptions = {}): GopaxClient {
-  const transport = defaultHttpTransport;
-  const baseURL = resolveBaseUrl(GOPAX_DEFAULT_BASE_URL, options.baseURL);
-  const timeout = options.timeout ?? 10_000;
-
-  function requestPublic<TResponse>(
-    path: string,
-    query?: Record<string, unknown>,
-  ): Promise<TResponse> {
-    return transport.request<TResponse>({
-      method: "GET",
-      baseURL,
-      path,
-      query,
-      timeout,
-    });
-  }
-
-  async function requestPrivate<TResponse>(
-    method: "GET" | "POST" | "DELETE",
-    path: string,
-    params?: Record<string, unknown>,
-    body?: Record<string, unknown>,
-    includeQueryInSignature = false,
-  ): Promise<TResponse> {
-    const credentials = await resolveCredentials(options);
-    const timestamp = String(Date.now());
-    const receiveWindow = credentials.receiveWindow;
-    const queryString = params ? toQueryString(params) : "";
-    const signaturePath = includeQueryInSignature && queryString ? `${path}?${queryString}` : path;
-    const bodyString = body ? JSON.stringify(body) : "";
-    const message = `t${timestamp}${method}${signaturePath}${receiveWindow ? String(receiveWindow) : ""}${bodyString}`;
-    const signature = sha512Base64(message, credentials.secretKey);
-
-    return transport.request<TResponse>({
-      method,
-      baseURL,
-      path,
-      query: params,
-      body,
-      timeout,
-      headers: {
-        "api-key": credentials.apiKey,
-        timestamp,
-        signature,
-        ...(receiveWindow ? { "receive-window": String(receiveWindow) } : {}),
-      },
-    });
-  }
+  const { requestPublic, requestPrivate } = createRequestFunctions(options);
 
   return {
     market: {
-      assets: async () => requestPublic<AsyncResult<GopaxClient["market"]["assets"]>>("/assets"),
-      tradingPairs: async () =>
-        requestPublic<AsyncResult<GopaxClient["market"]["tradingPairs"]>>("/trading-pairs"),
-      priceTickSize: async (tradingPair) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["priceTickSize"]>>(
+      listAssets: async () =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listAssets"]>>("/assets"),
+      listTradingPairs: async () =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listTradingPairs"]>>("/trading-pairs"),
+      getTradingPairPriceTickSize: async (tradingPair) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["getTradingPairPriceTickSize"]>>(
           `/trading-pairs/${encodePathSegment(tradingPair)}/price-tick-size`,
         ),
-      ticker: async (tradingPair) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["ticker"]>>(
+      getTradingPairTicker: async (tradingPair) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["getTradingPairTicker"]>>(
           `/trading-pairs/${encodePathSegment(tradingPair)}/ticker`,
         ),
-      orderbook: async (tradingPair, params) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["orderbook"]>>(
+      getTradingPairBook: async (tradingPair, params) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["getTradingPairBook"]>>(
           `/trading-pairs/${encodePathSegment(tradingPair)}/book`,
           params,
         ),
-      trades: async (tradingPair, params) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["trades"]>>(
+      listTradingPairTrades: async (tradingPair, params) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listTradingPairTrades"]>>(
           `/trading-pairs/${encodePathSegment(tradingPair)}/trades`,
           params,
         ),
-      stats: async (tradingPair) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["stats"]>>(
+      getTradingPairStats: async (tradingPair) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["getTradingPairStats"]>>(
           `/trading-pairs/${encodePathSegment(tradingPair)}/stats`,
         ),
-      allStats: async () =>
-        requestPublic<AsyncResult<GopaxClient["market"]["allStats"]>>("/trading-pairs/stats"),
-      candles: async (tradingPair, params) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["candles"]>>(
+      listTradingPairsStats: async () =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listTradingPairsStats"]>>(
+          "/trading-pairs/stats",
+        ),
+      getTradingPairCandles: async (tradingPair, params) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["getTradingPairCandles"]>>(
           `/trading-pairs/${encodePathSegment(tradingPair)}/candles`,
           params,
         ),
-      cautions: async (params) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["cautions"]>>(
+      listTradingPairsCautions: async (params) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listTradingPairsCautions"]>>(
           "/trading-pairs/cautions",
           params,
         ),
-      tickers: async () => requestPublic<AsyncResult<GopaxClient["market"]["tickers"]>>("/tickers"),
-      time: async () => requestPublic<AsyncResult<GopaxClient["market"]["time"]>>("/time"),
-      notices: async (params) =>
-        requestPublic<AsyncResult<GopaxClient["market"]["notices"]>>("/notices", params),
+      listTickers: async () =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listTickers"]>>("/tickers"),
+      getTime: async () => requestPublic<AsyncResult<GopaxClient["market"]["getTime"]>>("/time"),
+      listNotices: async (params) =>
+        requestPublic<AsyncResult<GopaxClient["market"]["listNotices"]>>("/notices", params),
     },
     account: {
       listBalances: async () =>
-        requestPrivate<AsyncResult<GopaxClient["account"]["listBalances"]>>(
-          "GET",
-          GOPAX_PRIVATE_PATHS.balances,
-        ),
-      getBalance: async (assetName) => {
-        const encodedAssetName = encodePathSegment(assetName);
-        return requestPrivate<AsyncResult<GopaxClient["account"]["getBalance"]>>(
-          "GET",
-          `${GOPAX_PRIVATE_PATHS.balances}/${encodedAssetName}`,
-        );
-      },
+        requestPrivate<AsyncResult<GopaxClient["account"]["listBalances"]>>({
+          method: "GET",
+          path: "/balances",
+        }),
+      getBalance: async (assetName) =>
+        requestPrivate<AsyncResult<GopaxClient["account"]["getBalance"]>>({
+          method: "GET",
+          path: `/balances/${encodePathSegment(assetName)}`,
+        }),
     },
     orders: {
       listOrders: async (params) =>
-        requestPrivate<AsyncResult<GopaxClient["orders"]["listOrders"]>>(
-          "GET",
-          GOPAX_PRIVATE_PATHS.orders,
-          params,
-          undefined,
-          true,
-        ),
+        requestPrivate<AsyncResult<GopaxClient["orders"]["listOrders"]>>({
+          method: "GET",
+          path: "/orders",
+          query: params,
+        }),
       createOrder: async (body) =>
-        requestPrivate<AsyncResult<GopaxClient["orders"]["createOrder"]>>(
-          "POST",
-          GOPAX_PRIVATE_PATHS.orders,
-          undefined,
+        requestPrivate<AsyncResult<GopaxClient["orders"]["createOrder"]>>({
+          method: "POST",
+          path: "/orders",
           body,
-        ),
-      getOrder: async (orderId) => {
-        const encodedOrderId = encodePathSegment(orderId);
-        return requestPrivate<AsyncResult<GopaxClient["orders"]["getOrder"]>>(
-          "GET",
-          `${GOPAX_PRIVATE_PATHS.orders}/${encodedOrderId}`,
-        );
-      },
-      cancelOrder: async (orderId) => {
-        const encodedOrderId = encodePathSegment(orderId);
-        return requestPrivate<AsyncResult<GopaxClient["orders"]["cancelOrder"]>>(
-          "DELETE",
-          `${GOPAX_PRIVATE_PATHS.orders}/${encodedOrderId}`,
-        );
-      },
-      getOrderByClientOrderId: async (clientOrderId) => {
-        const encoded = encodePathSegment(clientOrderId);
-        return requestPrivate<AsyncResult<GopaxClient["orders"]["getOrderByClientOrderId"]>>(
-          "GET",
-          `${GOPAX_PRIVATE_PATHS.orders}/clientOrderId/${encoded}`,
-        );
-      },
-      cancelOrderByClientOrderId: async (clientOrderId) => {
-        const encoded = encodePathSegment(clientOrderId);
-        return requestPrivate<AsyncResult<GopaxClient["orders"]["cancelOrderByClientOrderId"]>>(
-          "DELETE",
-          `${GOPAX_PRIVATE_PATHS.orders}/clientOrderId/${encoded}`,
-        );
-      },
+        }),
+      getOrder: async (orderId) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["getOrder"]>>({
+          method: "GET",
+          path: `/orders/${encodePathSegment(orderId)}`,
+        }),
+      cancelOrder: async (orderId) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["cancelOrder"]>>({
+          method: "DELETE",
+          path: `/orders/${encodePathSegment(orderId)}`,
+        }),
+      getOrderByClientOrderId: async (clientOrderID) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["getOrderByClientOrderId"]>>({
+          method: "GET",
+          path: `/orders/clientOrderId/${encodePathSegment(clientOrderID)}`,
+        }),
+      cancelOrderByClientOrderId: async (clientOrderID) =>
+        requestPrivate<AsyncResult<GopaxClient["orders"]["cancelOrderByClientOrderId"]>>({
+          method: "DELETE",
+          path: `/orders/clientOrderId/${encodePathSegment(clientOrderID)}`,
+        }),
     },
     trades: {
       listTrades: async (params) =>
-        requestPrivate<AsyncResult<GopaxClient["trades"]["listTrades"]>>(
-          "GET",
-          GOPAX_PRIVATE_PATHS.trades,
-          params,
-        ),
+        requestPrivate<AsyncResult<GopaxClient["trades"]["listTrades"]>>({
+          method: "GET",
+          path: "/trades",
+          query: params,
+        }),
     },
     wallet: {
       listDepositWithdrawalStatus: async (params) =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["listDepositWithdrawalStatus"]>>(
-          "GET",
-          GOPAX_PRIVATE_PATHS.depositWithdrawalStatus,
-          params,
-        ),
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["listDepositWithdrawalStatus"]>>({
+          method: "GET",
+          path: "/deposit-withdrawal-status",
+          query: params,
+        }),
       listCryptoDepositAddresses: async () =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["listCryptoDepositAddresses"]>>(
-          "GET",
-          GOPAX_PRIVATE_PATHS.cryptoDepositAddresses,
-        ),
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["listCryptoDepositAddresses"]>>({
+          method: "GET",
+          path: "/crypto-deposit-addresses",
+        }),
       listCryptoWithdrawalAddresses: async () =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["listCryptoWithdrawalAddresses"]>>(
-          "GET",
-          GOPAX_PRIVATE_PATHS.cryptoWithdrawalAddresses,
-        ),
-      withdraw: async (body) =>
-        requestPrivate<AsyncResult<GopaxClient["wallet"]["withdraw"]>>(
-          "POST",
-          "/withdrawals",
-          undefined,
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["listCryptoWithdrawalAddresses"]>>({
+          method: "GET",
+          path: "/crypto-withdrawal-addresses",
+        }),
+      createWithdrawal: async (body) =>
+        requestPrivate<AsyncResult<GopaxClient["wallet"]["createWithdrawal"]>>({
+          method: "POST",
+          path: "/withdrawals",
           body,
-        ),
+        }),
     },
   };
 }

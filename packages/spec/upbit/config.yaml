@@ -1,0 +1,49 @@
+name: upbit
+displayName: 업비트
+
+auth:
+  type: jwt-hs256
+  hashAlgorithm: sha512
+  credentialFields:
+    accessKey: string
+    secretKey: string
+  envVars:
+    accessKey: EXHUB_UPBIT_ACCESS_KEY
+    secretKey: EXHUB_UPBIT_SECRET_KEY
+  autoInjectedParams: []
+
+specs:
+  rest:
+    - id: quotation
+      path: ./rest/quotation-api.json
+      access: public
+    - id: exchange
+      path: ./rest/exchange-api.json
+      access: private
+  ws:
+    - id: websocket
+      path: ./ws/websocket-api.json
+
+categories:
+  tradingPairs:
+    tags: ["페어(Trading Pairs)"]
+  candles:
+    tags: ["캔들(OHLCV)"]
+  trades:
+    tags: ["체결(Trade)"]
+  tickers:
+    tags: ["현재가(Ticker)"]
+  orderbook:
+    tags: ["호가(Orderbook)", "DEPRECATED"]
+  assets:
+    tags: ["자산(Asset)"]
+  orders:
+    tags: ["주문(Order)"]
+  withdrawals:
+    tags: ["출금(Withdrawal)"]
+  deposits:
+    tags: ["입금(Deposit)"]
+  travelRule:
+    tags: ["트래블룰 검증"]
+  service:
+    tags: ["서비스 정보(Service)"]

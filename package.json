@@ -8,7 +8,7 @@
     "url": "https://github.com/wi9ine/exhub.git"
   },
   "scripts": {
-    "generate": "pnpm exec orval --config ./scripts/orval.config.ts && node ./scripts/generate-mcp-tool-summaries.mjs",
+    "generate": "pnpm exec orval --config ./scripts/orval.config.ts && pnpm exec tsx ./scripts/generate-sdk.ts && pnpm exec biome check --write packages/*/src/lib/types.ts packages/*/src/lib/client.ts apps/mcp/src/runtime.ts && node ./scripts/generate-mcp-tool-summaries.mjs",
     "build": "pnpm -r --filter './packages/*' --filter './apps/*' build",
     "lint": "pnpm -r --filter './packages/*' --filter './apps/*' lint",
     "format": "pnpm -r --filter './packages/*' --filter './apps/*' format",
@@ -25,8 +25,10 @@
     "dotenv": "^17.2.3",
     "orval": "^8.5.3",
     "tsdown": "^0.21.4",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
+    "yaml": "^2.8.3",
     "zod": "^3.25.76"
   }
 }

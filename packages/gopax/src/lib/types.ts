@@ -1,5 +1,5 @@
+// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.
 import type { ExHubClientOptions } from "@exhub/core";
-
 import type {
   CancelOrder200,
   CancelOrderByClientOrderId200,
@@ -45,31 +45,34 @@ export interface GopaxCredentials {
 
 export type GopaxClientOptions = ExHubClientOptions<GopaxCredentials>;
 
-export type GopaxSignedQueryInput = Record<string, unknown> | undefined;
-
 export interface GopaxClient {
   market: {
-    assets: () => Promise<ListAssets200Item[]>;
-    tradingPairs: () => Promise<ListTradingPairs200Item[]>;
-    priceTickSize: (tradingPair: string) => Promise<GetTradingPairPriceTickSize200Item[]>;
-    ticker: (tradingPair: string) => Promise<GetTradingPairTicker200>;
-    orderbook: (
+    listAssets: () => Promise<ListAssets200Item[]>;
+    listTradingPairs: () => Promise<ListTradingPairs200Item[]>;
+    getTradingPairPriceTickSize: (
+      tradingPair: string,
+    ) => Promise<GetTradingPairPriceTickSize200Item[]>;
+    getTradingPairTicker: (tradingPair: string) => Promise<GetTradingPairTicker200>;
+    getTradingPairBook: (
       tradingPair: string,
       params?: GetTradingPairBookParams,
     ) => Promise<GetTradingPairBook200>;
-    trades: (
+    listTradingPairTrades: (
       tradingPair: string,
       params?: ListTradingPairTradesParams,
     ) => Promise<ListTradingPairTrades200Item[]>;
-    stats: (tradingPair: string) => Promise<GetTradingPairStats200>;
-    allStats: () => Promise<ListTradingPairsStats200Item[]>;
-    candles: (tradingPair: string, params: GetTradingPairCandlesParams) => Promise<number[][]>;
-    cautions: (
+    getTradingPairStats: (tradingPair: string) => Promise<GetTradingPairStats200>;
+    listTradingPairsStats: () => Promise<ListTradingPairsStats200Item[]>;
+    getTradingPairCandles: (
+      tradingPair: string,
+      params?: GetTradingPairCandlesParams,
+    ) => Promise<number[][]>;
+    listTradingPairsCautions: (
       params?: ListTradingPairsCautionsParams,
     ) => Promise<ListTradingPairsCautions200Item[]>;
-    tickers: () => Promise<ListTickers200Item[]>;
-    time: () => Promise<GetTime200>;
-    notices: (params?: ListNoticesParams) => Promise<string[]>;
+    listTickers: () => Promise<ListTickers200Item[]>;
+    getTime: () => Promise<GetTime200>;
+    listNotices: (params?: ListNoticesParams) => Promise<string[]>;
   };
   account: {
     listBalances: () => Promise<ListBalances200Item[]>;
@@ -80,8 +83,8 @@ export interface GopaxClient {
     createOrder: (body: CreateOrderBody) => Promise<CreateOrder200>;
     getOrder: (orderId: string) => Promise<GetOrder200>;
     cancelOrder: (orderId: string) => Promise<CancelOrder200>;
-    getOrderByClientOrderId: (clientOrderId: string) => Promise<GetOrderByClientOrderId200>;
-    cancelOrderByClientOrderId: (clientOrderId: string) => Promise<CancelOrderByClientOrderId200>;
+    getOrderByClientOrderId: (clientOrderID: string) => Promise<GetOrderByClientOrderId200>;
+    cancelOrderByClientOrderId: (clientOrderID: string) => Promise<CancelOrderByClientOrderId200>;
   };
   trades: {
     listTrades: (params?: ListTradesParams) => Promise<ListTrades200Item[]>;
@@ -90,6 +93,6 @@ export interface GopaxClient {
     listDepositWithdrawalStatus: (params?: ListDepositWithdrawalStatusParams) => Promise<string[]>;
     listCryptoDepositAddresses: () => Promise<ListCryptoDepositAddresses200Item[]>;
     listCryptoWithdrawalAddresses: () => Promise<ListCryptoWithdrawalAddresses200Item[]>;
-    withdraw: (body: CreateWithdrawalBody) => Promise<void>;
+    createWithdrawal: (body: CreateWithdrawalBody) => Promise<void>;
   };
 }

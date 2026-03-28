@@ -1,79 +1,17 @@
-import {
-  createHs256Jwt,
-  createNonce,
-  defaultHttpTransport,
-  ExHubConfigurationError,
-  resolveBaseUrl,
-  sha512HexDigest,
-  toQueryString,
-} from "@exhub/core";
-
-import type { BithumbClient, BithumbClientOptions, BithumbCredentials } from "./types";
-
-const BITHUMB_DEFAULT_BASE_URL = "https://api.bithumb.com";
+// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.
+import { createRequestFunctions } from "./auth";
+import type { BithumbClient, BithumbClientOptions } from "./types";
 
 type AsyncResult<TMethod> = TMethod extends (...args: never[]) => Promise<infer TResult>
   ? TResult
   : never;
 
-function resolveCredentials(
-  options: BithumbClientOptions,
-): Promise<BithumbCredentials> | BithumbCredentials {
-  if (options.credentialsProvider) return options.credentialsProvider();
-  if (options.credentials) return options.credentials;
-  throw new ExHubConfigurationError("Bithumb 인증 정보가 설정되지 않았습니다.");
+function encodePathSegment(value: string): string {
+  return encodeURIComponent(value);
 }
 
 export function createBithumbClient(options: BithumbClientOptions = {}): BithumbClient {
-  const transport = defaultHttpTransport;
-  const baseURL = resolveBaseUrl(BITHUMB_DEFAULT_BASE_URL, options.baseURL);
-  const timeout = options.timeout ?? 10_000;
-
-  function requestPublic<TResponse>(
-    path: string,
-    query?: Record<string, unknown>,
-  ): Promise<TResponse> {
-    return transport.request<TResponse>({
-      method: "GET",
-      baseURL,
-      path,
-      query,
-      timeout,
-    });
-  }
-
-  async function requestPrivate<TResponse>(
-    method: "GET" | "POST" | "DELETE",
-    path: string,
-    query?: Record<string, unknown>,
-  ): Promise<TResponse> {
-    const credentials = await resolveCredentials(options);
-    const queryString = query ? toQueryString(query) : "";
-    const tokenPayload = {
-      access_key: credentials.apiKey,
-      nonce: createNonce(),
-      timestamp: Date.now(),
-      ...(queryString
-        ? {
-            query_hash: sha512HexDigest(queryString),
-            query_hash_alg: "SHA512",
-          }
-        : {}),
-    };
-
-    return transport.request<TResponse>({
-      method,
-      baseURL,
-      path,
-      query,
-      timeout,
-      headers: {
-        Authorization: `Bearer ${createHs256Jwt(tokenPayload, credentials.secretKey)}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  const { requestPublic, requestPrivate } = createRequestFunctions(options);
 
   return {
     markets: {
@@ -82,13 +20,9 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
           "/v1/market/all",
           params,
         ),
-      getMarketVirtualAssetWarning: async () =>
-        requestPublic<AsyncResult<BithumbClient["markets"]["getMarketVirtualAssetWarning"]>>(
-          "/v1/market/virtual_asset_warning",
-        ),
     },
     candles: {
-      getMinuteCandles: async (params, unit = 1) =>
+      getMinuteCandles: async (unit = 1, params) =>
         requestPublic<AsyncResult<BithumbClient["candles"]["getMinuteCandles"]>>(
           `/v1/candles/minutes/${unit}`,
           params,
@@ -128,174 +62,181 @@ export function createBithumbClient(options: BithumbClientOptions = {}): Bithumb
         ),
     },
     service: {
+      getMarketVirtualAssetWarning: async () =>
+        requestPublic<AsyncResult<BithumbClient["service"]["getMarketVirtualAssetWarning"]>>(
+          "/v1/market/virtual_asset_warning",
+        ),
       listNotices: async () =>
         requestPublic<AsyncResult<BithumbClient["service"]["listNotices"]>>("/v1/notices"),
       getFeeInfo: async (currency) =>
         requestPublic<AsyncResult<BithumbClient["service"]["getFeeInfo"]>>(
-          `/v2/fee/inout/${currency}`,
+          `/v2/fee/inout/${encodePathSegment(currency)}`,
         ),
       getWalletStatus: async () =>
-        requestPrivate<AsyncResult<BithumbClient["service"]["getWalletStatus"]>>(
-          "GET",
-          "/v1/status/wallet",
-        ),
+        requestPrivate<AsyncResult<BithumbClient["service"]["getWalletStatus"]>>({
+          method: "GET",
+          path: "/v1/status/wallet",
+        }),
       listApiKeys: async () =>
-        requestPrivate<AsyncResult<BithumbClient["service"]["listApiKeys"]>>("GET", "/v1/api_keys"),
+        requestPrivate<AsyncResult<BithumbClient["service"]["listApiKeys"]>>({
+          method: "GET",
+          path: "/v1/api_keys",
+        }),
     },
     accounts: {
       listAccounts: async () =>
-        requestPrivate<AsyncResult<BithumbClient["accounts"]["listAccounts"]>>(
-          "GET",
-          "/v1/accounts",
-        ),
+        requestPrivate<AsyncResult<BithumbClient["accounts"]["listAccounts"]>>({
+          method: "GET",
+          path: "/v1/accounts",
+        }),
     },
     orders: {
       getOrderChance: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["getOrderChance"]>>(
-          "GET",
-          "/v1/orders/chance",
-          params,
-        ),
-      createOrder: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["createOrder"]>>(
-          "POST",
-          "/v1/orders",
-          body,
-        ),
-      createOrdersBatch: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["createOrdersBatch"]>>(
-          "POST",
-          "/v1/orders/batch",
-          body,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["getOrderChance"]>>({
+          method: "GET",
+          path: "/v1/orders/chance",
+          query: params,
+        }),
       getOrder: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["getOrder"]>>(
-          "GET",
-          "/v1/order",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["getOrder"]>>({
+          method: "GET",
+          path: "/v1/order",
+          query: params,
+        }),
       cancelOrder: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelOrder"]>>(
-          "DELETE",
-          "/v1/order",
-          params,
-        ),
-      cancelOrders: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelOrders"]>>(
-          "POST",
-          "/v1/orders/cancel",
-          body,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelOrder"]>>({
+          method: "DELETE",
+          path: "/v1/order",
+          query: params,
+        }),
       listOrders: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["listOrders"]>>(
-          "GET",
-          "/v1/orders",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["listOrders"]>>({
+          method: "GET",
+          path: "/v1/orders",
+          query: params,
+        }),
+      createOrder: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["createOrder"]>>({
+          method: "POST",
+          path: "/v1/orders",
+          body,
+        }),
+      createOrdersBatch: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["createOrdersBatch"]>>({
+          method: "POST",
+          path: "/v1/orders/batch",
+          body,
+        }),
+      cancelOrders: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelOrders"]>>({
+          method: "POST",
+          path: "/v1/orders/cancel",
+          body,
+        }),
       listTwapOrders: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["listTwapOrders"]>>(
-          "GET",
-          "/v1/twap",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["listTwapOrders"]>>({
+          method: "GET",
+          path: "/v1/twap",
+          query: params,
+        }),
       cancelTwapOrder: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelTwapOrder"]>>(
-          "DELETE",
-          "/v1/twap",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["cancelTwapOrder"]>>({
+          method: "DELETE",
+          path: "/v1/twap",
+          query: params,
+        }),
       createTwapOrder: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["orders"]["createTwapOrder"]>>(
-          "POST",
-          "/v1/twap",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["orders"]["createTwapOrder"]>>({
+          method: "POST",
+          path: "/v1/twap",
+          query: params,
+        }),
     },
     withdrawals: {
       listWithdraws: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["listWithdraws"]>>(
-          "GET",
-          "/v1/withdraws",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["listWithdraws"]>>({
+          method: "GET",
+          path: "/v1/withdraws",
+          query: params,
+        }),
       listWithdrawsKrw: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["listWithdrawsKrw"]>>(
-          "GET",
-          "/v1/withdraws/krw",
-          params,
-        ),
-      getWithdraw: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["getWithdraw"]>>(
-          "GET",
-          "/v1/withdraw",
-          params,
-        ),
-      getWithdrawChance: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["getWithdrawChance"]>>(
-          "GET",
-          "/v1/withdraws/chance",
-          params,
-        ),
-      listWithdrawsCoinAddresses: async () =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["listWithdrawsCoinAddresses"]>>(
-          "GET",
-          "/v1/withdraws/coin_addresses",
-        ),
-      createWithdrawsCoin: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["createWithdrawsCoin"]>>(
-          "POST",
-          "/v1/withdraws/coin",
-          body,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["listWithdrawsKrw"]>>({
+          method: "GET",
+          path: "/v1/withdraws/krw",
+          query: params,
+        }),
       createWithdrawsKrw: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["createWithdrawsKrw"]>>(
-          "POST",
-          "/v1/withdraws/krw",
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["createWithdrawsKrw"]>>({
+          method: "POST",
+          path: "/v1/withdraws/krw",
           body,
-        ),
+        }),
+      getWithdraw: async (params) =>
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["getWithdraw"]>>({
+          method: "GET",
+          path: "/v1/withdraw",
+          query: params,
+        }),
+      getWithdrawChance: async (params) =>
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["getWithdrawChance"]>>({
+          method: "GET",
+          path: "/v1/withdraws/chance",
+          query: params,
+        }),
+      createWithdrawsCoin: async (body) =>
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["createWithdrawsCoin"]>>({
+          method: "POST",
+          path: "/v1/withdraws/coin",
+          body,
+        }),
+      listWithdrawsCoinAddresses: async () =>
+        requestPrivate<AsyncResult<BithumbClient["withdrawals"]["listWithdrawsCoinAddresses"]>>({
+          method: "GET",
+          path: "/v1/withdraws/coin_addresses",
+        }),
     },
     deposits: {
       listDeposits: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["listDeposits"]>>(
-          "GET",
-          "/v1/deposits",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["listDeposits"]>>({
+          method: "GET",
+          path: "/v1/deposits",
+          query: params,
+        }),
       listDepositsKrw: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["listDepositsKrw"]>>(
-          "GET",
-          "/v1/deposits/krw",
-          params,
-        ),
-      getDeposit: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["getDeposit"]>>(
-          "GET",
-          "/v1/deposit",
-          params,
-        ),
-      listDepositsCoinAddresses: async () =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["listDepositsCoinAddresses"]>>(
-          "GET",
-          "/v1/deposits/coin_addresses",
-        ),
-      getDepositsCoinAddress: async (params) =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["getDepositsCoinAddress"]>>(
-          "GET",
-          "/v1/deposits/coin_address",
-          params,
-        ),
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["listDepositsKrw"]>>({
+          method: "GET",
+          path: "/v1/deposits/krw",
+          query: params,
+        }),
       createDepositsKrw: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["createDepositsKrw"]>>(
-          "POST",
-          "/v1/deposits/krw",
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["createDepositsKrw"]>>({
+          method: "POST",
+          path: "/v1/deposits/krw",
           body,
-        ),
+        }),
+      getDeposit: async (params) =>
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["getDeposit"]>>({
+          method: "GET",
+          path: "/v1/deposit",
+          query: params,
+        }),
       createDepositAddress: async (body) =>
-        requestPrivate<AsyncResult<BithumbClient["deposits"]["createDepositAddress"]>>(
-          "POST",
-          "/v1/deposits/generate_coin_address",
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["createDepositAddress"]>>({
+          method: "POST",
+          path: "/v1/deposits/generate_coin_address",
           body,
-        ),
+        }),
+      listDepositsCoinAddresses: async () =>
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["listDepositsCoinAddresses"]>>({
+          method: "GET",
+          path: "/v1/deposits/coin_addresses",
+        }),
+      getDepositsCoinAddress: async (params) =>
+        requestPrivate<AsyncResult<BithumbClient["deposits"]["getDepositsCoinAddress"]>>({
+          method: "GET",
+          path: "/v1/deposits/coin_address",
+          query: params,
+        }),
     },
   };
 }

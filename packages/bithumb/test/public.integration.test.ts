@@ -21,7 +21,7 @@ describe("@exhub/bithumb public integration", () => {
   });
 
   it("분 캔들 조회", async () => {
-    const result = await client.candles.getMinuteCandles({ market, count: 1 }, 1);
+    const result = await client.candles.getMinuteCandles(1, { market, count: 1 });
     expect(Array.isArray(result)).toBe(true);
   });
 
@@ -56,7 +56,7 @@ describe("@exhub/bithumb public integration", () => {
   });
 
   it("경보제 조회", async () => {
-    const result = await client.markets.getMarketVirtualAssetWarning();
+    const result = await client.service.getMarketVirtualAssetWarning();
     expect(Array.isArray(result)).toBe(true);
   });
 

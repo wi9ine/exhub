@@ -1,0 +1,80 @@
+name: coinone
+displayName: 코인원
+
+auth:
+  type: custom-header
+  hashAlgorithm: sha512
+  credentialFields:
+    accessToken: string
+    secretKey: string
+  envVars:
+    accessToken: EXHUB_COINONE_ACCESS_TOKEN
+    secretKey: EXHUB_COINONE_SECRET_KEY
+  autoInjectedParams:
+    - access_token
+    - nonce
+
+specs:
+  rest:
+    - id: public
+      path: ./rest/public-api.json
+      access: public
+    - id: private
+      path: ./rest/private-api.json
+      access: private
+  ws:
+    - id: websocket
+      path: ./ws/websocket-api.json
+
+# Coinone의 tags는 "PUBLIC API V2", "잔고 조회" 등으로
+# 카테고리와 1:1 매핑이 어려워 operationIds로 직접 지정
+categories:
+  market:
+    operationIds:
+      - get-range-unit
+      - list-markets
+      - get-market
+      - get-orderbook
+      - list-trades
+      - list-tickers
+      - get-ticker
+      - list-ticker-utc
+      - get-ticker-utc
+      - list-currencies
+      - get-currency
+      - get-chart
+      - get-orderbook-deprecated
+      - get-ticker-deprecated
+      - get-ticker-utc-deprecated
+      - list-trades-deprecated
+  account:
+    operationIds:
+      - list-balance
+      - list-balance-by-currencies
+      - list-trade-fees
+      - get-trade-fee-by-pair
+  orders:
+    operationIds:
+      - list-active-orders
+      - create-order
+      - create-limit-order
+      - cancel-orders
+      - cancel-order
+      - get-order-detail
+      - list-completed-orders-all
+      - list-completed-orders
+      - list-open-orders-all
+      - list-open-orders
+      - get-order-info
+  transactions:
+    operationIds:
+      - list-krw-transaction-history
+      - list-coin-transaction-history
+      - get-coin-transaction-history-detail
+      - get-coin-withdrawal-limit
+      - list-coin-withdrawal-address-book
+      - create-coin-withdrawal
+  rewards:
+    operationIds:
+      - list-order-reward-programs
+      - list-order-reward-history

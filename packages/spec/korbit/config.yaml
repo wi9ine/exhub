@@ -1,0 +1,48 @@
+name: korbit
+displayName: 코빗
+
+auth:
+  type: hmac-sha256
+  hashAlgorithm: sha256
+  credentialFields:
+    apiKey: string
+    secretKey: string
+  envVars:
+    apiKey: EXHUB_KORBIT_API_KEY
+    secretKey: EXHUB_KORBIT_SECRET_KEY
+  autoInjectedParams:
+    - timestamp
+    - signature
+    - recvWindow
+  optionalParams:
+    recvWindow:
+      type: number
+      envVar: EXHUB_KORBIT_RECV_WINDOW
+
+specs:
+  rest:
+    - id: public
+      path: ./rest/public-api.json
+      access: public
+    - id: private
+      path: ./rest/private-api.json
+      access: private
+  ws:
+    - id: websocket
+      path: ./ws/websocket-api.json
+
+categories:
+  market:
+    tags: ["시세"]
+  orders:
+    tags: ["주문"]
+  assets:
+    tags: ["자산"]
+  cryptoDeposits:
+    tags: ["가상자산 입금"]
+  cryptoWithdrawals:
+    tags: ["가상자산 출금"]
+  krw:
+    tags: ["원화 입출금"]
+  service:
+    tags: ["기타"]

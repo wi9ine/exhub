@@ -1,0 +1,47 @@
+name: bithumb
+displayName: 빗썸
+
+auth:
+  type: jwt-hs256
+  hashAlgorithm: sha512
+  credentialFields:
+    apiKey: string
+    secretKey: string
+  envVars:
+    apiKey: EXHUB_BITHUMB_API_KEY
+    secretKey: EXHUB_BITHUMB_SECRET_KEY
+  autoInjectedParams: []
+
+specs:
+  rest:
+    - id: public
+      path: ./rest/public-api.json
+      access: public
+    - id: private
+      path: ./rest/private-api.json
+      access: private
+  ws:
+    - id: websocket
+      path: ./ws/websocket-api.json
+
+categories:
+  markets:
+    tags: ["시세 종목 조회"]
+  candles:
+    tags: ["시세 캔들 조회"]
+  trades:
+    tags: ["시세 체결 조회"]
+  tickers:
+    tags: ["시세 현재가(Ticker) 조회"]
+  orderbook:
+    tags: ["시세 호가 정보(Orderbook) 조회"]
+  accounts:
+    tags: ["자산"]
+  orders:
+    tags: ["주문", "TWAP"]
+  withdrawals:
+    tags: ["출금"]
+  deposits:
+    tags: ["입금"]
+  service:
+    tags: ["서비스 정보"]

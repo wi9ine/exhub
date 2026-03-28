@@ -1,3 +1,4 @@
+// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.
 import type { ExHubClientOptions } from "@exhub/core";
 import type {
   CancelOrder200,
@@ -82,27 +83,27 @@ export type BithumbClientOptions = ExHubClientOptions<BithumbCredentials>;
 export interface BithumbClient {
   markets: {
     getMarkets: (params?: GetMarketsParams) => Promise<GetMarkets200Item[]>;
-    getMarketVirtualAssetWarning: () => Promise<GetMarketVirtualAssetWarning200Item[]>;
   };
   candles: {
     getMinuteCandles: (
-      params: GetMinuteCandlesParams,
-      unit?: number,
+      unit: number | undefined,
+      params?: GetMinuteCandlesParams,
     ) => Promise<GetMinuteCandles200Item[]>;
-    getDayCandles: (params: GetDayCandlesParams) => Promise<GetDayCandles200Item[]>;
-    getWeekCandles: (params: GetWeekCandlesParams) => Promise<GetWeekCandles200Item[]>;
-    getMonthCandles: (params: GetMonthCandlesParams) => Promise<GetMonthCandles200Item[]>;
+    getDayCandles: (params?: GetDayCandlesParams) => Promise<GetDayCandles200Item[]>;
+    getWeekCandles: (params?: GetWeekCandlesParams) => Promise<GetWeekCandles200Item[]>;
+    getMonthCandles: (params?: GetMonthCandlesParams) => Promise<GetMonthCandles200Item[]>;
   };
   trades: {
-    listTradesTicks: (params: ListTradesTicksParams) => Promise<ListTradesTicks200Item[]>;
+    listTradesTicks: (params?: ListTradesTicksParams) => Promise<ListTradesTicks200Item[]>;
   };
   tickers: {
-    getTicker: (params: GetTickerParams) => Promise<GetTicker200Item[]>;
+    getTicker: (params?: GetTickerParams) => Promise<GetTicker200Item[]>;
   };
   orderbook: {
-    getOrderbook: (params: GetOrderbookParams) => Promise<GetOrderbook200Item[]>;
+    getOrderbook: (params?: GetOrderbookParams) => Promise<GetOrderbook200Item[]>;
   };
   service: {
+    getMarketVirtualAssetWarning: () => Promise<GetMarketVirtualAssetWarning200Item[]>;
     listNotices: () => Promise<ListNotices200Item[]>;
     getFeeInfo: (currency: string) => Promise<GetFeeInfo200Item[]>;
     getWalletStatus: () => Promise<GetWalletStatus200Item[]>;
@@ -112,35 +113,35 @@ export interface BithumbClient {
     listAccounts: () => Promise<ListAccounts200Item[]>;
   };
   orders: {
-    getOrderChance: (params: GetOrderChanceParams) => Promise<GetOrderChance200>;
-    createOrder: (body: CreateOrderBody) => Promise<CreateOrder201>;
-    createOrdersBatch: (body: CreateOrdersBatchBody) => Promise<CreateOrdersBatch200>;
+    getOrderChance: (params?: GetOrderChanceParams) => Promise<GetOrderChance200>;
     getOrder: (params?: GetOrderParams) => Promise<GetOrder200>;
     cancelOrder: (params?: CancelOrderParams) => Promise<CancelOrder200>;
-    cancelOrders: (body: CancelOrdersBody) => Promise<CancelOrders200>;
     listOrders: (params?: ListOrdersParams) => Promise<ListOrders200Item[]>;
+    createOrder: (body: CreateOrderBody) => Promise<CreateOrder201>;
+    createOrdersBatch: (body: CreateOrdersBatchBody) => Promise<CreateOrdersBatch200>;
+    cancelOrders: (body: CancelOrdersBody) => Promise<CancelOrders200>;
     listTwapOrders: (params?: ListTwapOrdersParams) => Promise<ListTwapOrders200Item[]>;
-    cancelTwapOrder: (params: CancelTwapOrderParams) => Promise<CancelTwapOrder200Item[]>;
-    createTwapOrder: (params: CreateTwapOrderParams) => Promise<CreateTwapOrder200Item[]>;
+    cancelTwapOrder: (params?: CancelTwapOrderParams) => Promise<CancelTwapOrder200Item[]>;
+    createTwapOrder: (params?: CreateTwapOrderParams) => Promise<CreateTwapOrder200Item[]>;
   };
   withdrawals: {
     listWithdraws: (params?: ListWithdrawsParams) => Promise<ListWithdraws200Item[]>;
     listWithdrawsKrw: (params?: ListWithdrawsKrwParams) => Promise<ListWithdrawsKrw200Item[]>;
-    getWithdraw: (params: GetWithdrawParams) => Promise<GetWithdraw200>;
-    getWithdrawChance: (params: GetWithdrawChanceParams) => Promise<GetWithdrawChance200>;
-    listWithdrawsCoinAddresses: () => Promise<ListWithdrawsCoinAddresses200Item[]>;
-    createWithdrawsCoin: (body: CreateWithdrawsCoinBody) => Promise<CreateWithdrawsCoin201>;
     createWithdrawsKrw: (body: CreateWithdrawsKrwBody) => Promise<CreateWithdrawsKrw201>;
+    getWithdraw: (params?: GetWithdrawParams) => Promise<GetWithdraw200>;
+    getWithdrawChance: (params?: GetWithdrawChanceParams) => Promise<GetWithdrawChance200>;
+    createWithdrawsCoin: (body: CreateWithdrawsCoinBody) => Promise<CreateWithdrawsCoin201>;
+    listWithdrawsCoinAddresses: () => Promise<ListWithdrawsCoinAddresses200Item[]>;
   };
   deposits: {
     listDeposits: (params?: ListDepositsParams) => Promise<ListDeposits200Item[]>;
     listDepositsKrw: (params?: ListDepositsKrwParams) => Promise<ListDepositsKrw200Item[]>;
-    getDeposit: (params: GetDepositParams) => Promise<GetDeposit200>;
+    createDepositsKrw: (body: CreateDepositsKrwBody) => Promise<CreateDepositsKrw201>;
+    getDeposit: (params?: GetDepositParams) => Promise<GetDeposit200>;
+    createDepositAddress: (body: CreateDepositAddressBody) => Promise<CreateDepositAddress201>;
     listDepositsCoinAddresses: () => Promise<ListDepositsCoinAddresses200Item[]>;
     getDepositsCoinAddress: (
-      params: GetDepositsCoinAddressParams,
+      params?: GetDepositsCoinAddressParams,
     ) => Promise<GetDepositsCoinAddress200>;
-    createDepositsKrw: (body: CreateDepositsKrwBody) => Promise<CreateDepositsKrw201>;
-    createDepositAddress: (body: CreateDepositAddressBody) => Promise<CreateDepositAddress201>;
   };
 }

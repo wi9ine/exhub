@@ -1,0 +1,68 @@
+name: gopax
+displayName: GOPAX
+
+auth:
+  type: hmac-sha256
+  hashAlgorithm: sha512
+  credentialFields:
+    apiKey: string
+    secretKey: string
+  envVars:
+    apiKey: EXHUB_GOPAX_API_KEY
+    secretKey: EXHUB_GOPAX_SECRET_KEY
+  autoInjectedParams: []
+  optionalParams:
+    receiveWindow:
+      type: number
+      envVar: EXHUB_GOPAX_RECEIVE_WINDOW
+
+specs:
+  rest:
+    - id: public
+      path: ./rest/public-api.json
+      access: public
+    - id: private
+      path: ./rest/private-api.json
+      access: private
+  ws:
+    - id: websocket
+      path: ./ws/websocket-api.json
+
+# GOPAX의 tags는 "공개 API", "개인 API"로 카테고리 구분 불가
+categories:
+  market:
+    operationIds:
+      - list-assets
+      - list-trading-pairs
+      - get-trading-pair-price-tick-size
+      - get-trading-pair-ticker
+      - get-trading-pair-book
+      - list-trading-pair-trades
+      - get-trading-pair-stats
+      - list-trading-pairs-stats
+      - get-trading-pair-candles
+      - list-trading-pairs-cautions
+      - list-tickers
+      - get-time
+      - list-notices
+  account:
+    operationIds:
+      - list-balances
+      - get-balance
+  orders:
+    operationIds:
+      - list-orders
+      - create-order
+      - get-order
+      - cancel-order
+      - get-order-by-client-order-id
+      - cancel-order-by-client-order-id
+  trades:
+    operationIds:
+      - list-trades
+  wallet:
+    operationIds:
+      - list-deposit-withdrawal-status
+      - list-crypto-deposit-addresses
+      - list-crypto-withdrawal-addresses
+      - create-withdrawal

@@ -7,11 +7,11 @@ const ROOT = path.resolve(__dirname, "..");
 const OUTPUT_PATH = path.join(ROOT, "apps/mcp/src/generated/tool-summaries.ts");
 
 const SPEC_FILES = {
-  upbit: ["specs/upbit/rest/quotation-api.json", "specs/upbit/rest/exchange-api.json"],
-  bithumb: ["specs/bithumb/rest/public-api.json", "specs/bithumb/rest/private-api.json"],
-  coinone: ["specs/coinone/rest/public-api.json", "specs/coinone/rest/private-api.json"],
-  gopax: ["specs/gopax/rest/public-api.json", "specs/gopax/rest/private-api.json"],
-  korbit: ["specs/korbit/rest/public-api.json", "specs/korbit/rest/private-api.json"],
+  upbit: ["packages/spec/upbit/rest/quotation-api.json", "packages/spec/upbit/rest/exchange-api.json"],
+  bithumb: ["packages/spec/bithumb/rest/public-api.json", "packages/spec/bithumb/rest/private-api.json"],
+  coinone: ["packages/spec/coinone/rest/public-api.json", "packages/spec/coinone/rest/private-api.json"],
+  gopax: ["packages/spec/gopax/rest/public-api.json", "packages/spec/gopax/rest/private-api.json"],
+  korbit: ["packages/spec/korbit/rest/public-api.json", "packages/spec/korbit/rest/private-api.json"],
 };
 
 function toCamelSeed(value) {

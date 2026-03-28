@@ -1,6 +1,5 @@
+// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.
 import type { ExHubClientOptions } from "@exhub/core";
-import { createNonce, ExHubConfigurationError, resolveBaseUrl, sha512Hex } from "@exhub/core";
-
 import type {
   CancelOrder200,
   CancelOrderBody,
@@ -25,6 +24,7 @@ import type {
   ListActiveOrders200,
   ListActiveOrdersBody,
   ListBalance200,
+  ListBalanceBody,
   ListBalanceByCurrencies200,
   ListBalanceByCurrenciesBody,
   ListCoinTransactionHistory200,
@@ -46,6 +46,7 @@ import type {
   ListOrderRewardPrograms200,
   ListOrderRewardProgramsBody,
   ListTradeFees200,
+  ListTradeFeesBody,
 } from "../generated/private/model";
 import type {
   GetChart200,
@@ -92,52 +93,63 @@ export interface CoinoneClient {
     listMarkets: (quoteCurrency?: string) => Promise<ListMarkets200>;
     getMarket: (quoteCurrency?: string, targetCurrency?: string) => Promise<GetMarket200>;
     getOrderbook: (
-      quoteCurrency?: string,
-      targetCurrency?: string,
-      params?: GetOrderbookParams,
+      quoteCurrency: string | undefined,
+      targetCurrency: string | undefined,
+      params?: Omit<GetOrderbookParams, "access_token" | "nonce">,
     ) => Promise<GetOrderbook200>;
     listTrades: (
-      quoteCurrency?: string,
-      targetCurrency?: string,
-      params?: ListTradesParams,
+      quoteCurrency: string | undefined,
+      targetCurrency: string | undefined,
+      params?: Omit<ListTradesParams, "access_token" | "nonce">,
     ) => Promise<ListTrades200>;
-    listTickers: (quoteCurrency?: string, params?: ListTickersParams) => Promise<ListTickers200>;
+    listTickers: (
+      quoteCurrency: string | undefined,
+      params?: Omit<ListTickersParams, "access_token" | "nonce">,
+    ) => Promise<ListTickers200>;
     getTicker: (
-      quoteCurrency?: string,
-      targetCurrency?: string,
-      params?: GetTickerParams,
+      quoteCurrency: string | undefined,
+      targetCurrency: string | undefined,
+      params?: Omit<GetTickerParams, "access_token" | "nonce">,
     ) => Promise<GetTicker200>;
     listTickerUtc: (
-      quoteCurrency?: string,
-      params?: ListTickerUtcParams,
+      quoteCurrency: string | undefined,
+      params?: Omit<ListTickerUtcParams, "access_token" | "nonce">,
     ) => Promise<ListTickerUtc200>;
     getTickerUtc: (
-      quoteCurrency?: string,
-      targetCurrency?: string,
-      params?: GetTickerUtcParams,
+      quoteCurrency: string | undefined,
+      targetCurrency: string | undefined,
+      params?: Omit<GetTickerUtcParams, "access_token" | "nonce">,
     ) => Promise<GetTickerUtc200>;
     listCurrencies: () => Promise<ListCurrencies200>;
     getCurrency: (currency?: string) => Promise<GetCurrency200>;
     getChart: (
       quoteCurrency: string | undefined,
       targetCurrency: string | undefined,
-      params: GetChartParams,
+      params?: Omit<GetChartParams, "access_token" | "nonce">,
     ) => Promise<GetChart200>;
     getOrderbookDeprecated: (
-      params?: GetOrderbookDeprecatedParams,
+      params?: Omit<GetOrderbookDeprecatedParams, "access_token" | "nonce">,
     ) => Promise<GetOrderbookDeprecated200>;
-    getTickerDeprecated: (params?: GetTickerDeprecatedParams) => Promise<GetTickerDeprecated200>;
+    getTickerDeprecated: (
+      params?: Omit<GetTickerDeprecatedParams, "access_token" | "nonce">,
+    ) => Promise<GetTickerDeprecated200>;
     getTickerUtcDeprecated: (
-      params?: GetTickerUtcDeprecatedParams,
+      params?: Omit<GetTickerUtcDeprecatedParams, "access_token" | "nonce">,
     ) => Promise<GetTickerUtcDeprecated200>;
-    listTradesDeprecated: (params?: ListTradesDeprecatedParams) => Promise<ListTradesDeprecated200>;
+    listTradesDeprecated: (
+      params?: Omit<ListTradesDeprecatedParams, "access_token" | "nonce">,
+    ) => Promise<ListTradesDeprecated200>;
   };
   account: {
-    listBalance: () => Promise<ListBalance200>;
+    listBalance: (
+      body?: Omit<ListBalanceBody, "access_token" | "nonce">,
+    ) => Promise<ListBalance200>;
     listBalanceByCurrencies: (
       body: Omit<ListBalanceByCurrenciesBody, "access_token" | "nonce">,
     ) => Promise<ListBalanceByCurrencies200>;
-    listTradeFees: () => Promise<ListTradeFees200>;
+    listTradeFees: (
+      body?: Omit<ListTradeFeesBody, "access_token" | "nonce">,
+    ) => Promise<ListTradeFees200>;
     getTradeFeeByPair: (
       quoteCurrency?: string,
       targetCurrency?: string,
@@ -148,14 +160,6 @@ export interface CoinoneClient {
     listActiveOrders: (
       body?: Omit<ListActiveOrdersBody, "access_token" | "nonce">,
     ) => Promise<ListActiveOrders200>;
-    createOrder: (body: Omit<CreateOrderBody, "access_token" | "nonce">) => Promise<CreateOrder200>;
-    createLimitOrder: (
-      body: Omit<CreateLimitOrderBody, "access_token" | "nonce">,
-    ) => Promise<CreateLimitOrder200>;
-    cancelOrders: (
-      body: Omit<CancelOrdersBody, "access_token" | "nonce">,
-    ) => Promise<CancelOrders200>;
-    cancelOrder: (body: Omit<CancelOrderBody, "access_token" | "nonce">) => Promise<CancelOrder200>;
     getOrderDetail: (
       body: Omit<GetOrderDetailBody, "access_token" | "nonce">,
     ) => Promise<GetOrderDetail200>;
@@ -174,6 +178,14 @@ export interface CoinoneClient {
     getOrderInfo: (
       body: Omit<GetOrderInfoBody, "access_token" | "nonce">,
     ) => Promise<GetOrderInfo200>;
+    createOrder: (body: Omit<CreateOrderBody, "access_token" | "nonce">) => Promise<CreateOrder200>;
+    cancelOrders: (
+      body: Omit<CancelOrdersBody, "access_token" | "nonce">,
+    ) => Promise<CancelOrders200>;
+    cancelOrder: (body: Omit<CancelOrderBody, "access_token" | "nonce">) => Promise<CancelOrder200>;
+    createLimitOrder: (
+      body: Omit<CreateLimitOrderBody, "access_token" | "nonce">,
+    ) => Promise<CreateLimitOrder200>;
   };
   transactions: {
     listKrwTransactionHistory: (
@@ -203,43 +215,4 @@ export interface CoinoneClient {
       body?: Omit<ListOrderRewardHistoryBody, "access_token" | "nonce">,
     ) => Promise<ListOrderRewardHistory200>;
   };
-}
-
-export const COINONE_DEFAULT_BASE_URL = "https://api.coinone.co.kr";
-
-export function createCoinoneSignedBody<TBody extends CreateCoinoneSignedBodyInput>(
-  credentials: CoinoneCredentials,
-  body?: TBody,
-) {
-  return {
-    access_token: credentials.accessToken,
-    nonce: createNonce(),
-    ...(body ?? {}),
-  };
-}
-
-export function createCoinoneHeaders(
-  credentials: CoinoneCredentials,
-  payload: Record<string, unknown>,
-) {
-  const encodedPayload = Buffer.from(JSON.stringify(payload)).toString("base64");
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      "X-COINONE-PAYLOAD": encodedPayload,
-      "X-COINONE-SIGNATURE": sha512Hex(encodedPayload, credentials.secretKey),
-    },
-  };
-}
-
-export function resolveCoinoneCredentials(
-  options: CoinoneClientOptions,
-): Promise<CoinoneCredentials> | CoinoneCredentials {
-  if (options.credentialsProvider) return options.credentialsProvider();
-  if (options.credentials) return options.credentials;
-  throw new ExHubConfigurationError("Coinone 인증 정보가 설정되지 않았습니다.");
-}
-
-export function resolveCoinoneBaseUrl(options: CoinoneClientOptions): string {
-  return resolveBaseUrl(COINONE_DEFAULT_BASE_URL, options.baseURL);
 }

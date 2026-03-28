@@ -5,7 +5,7 @@
  * 코인원 공식 문서 v1.7 기준 Public REST API 스펙입니다.
  * OpenAPI spec version: 1.7
  */
-import * as zod from "zod";
+import * as zod from 'zod';
 
 /**
  * 개별 종목의 가격 단위 별 호가 단위 조회
@@ -15,15 +15,10 @@ export const getRangeUnitPathQuoteCurrencyDefault = `KRW`;
 export const getRangeUnitPathTargetCurrencyDefault = `BTC`;
 
 export const GetRangeUnitParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(getRangeUnitPathQuoteCurrencyDefault)
-    .describe("마켓 기준 통화 (예: KRW)"),
-  target_currency: zod
-    .string()
-    .default(getRangeUnitPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼 (예: BTC)"),
-});
+  "quote_currency": zod.string().default(getRangeUnitPathQuoteCurrencyDefault).describe('마켓 기준 통화 (예: KRW)'),
+  "target_currency": zod.string().default(getRangeUnitPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼 (예: BTC)')
+})
+
 
 /**
  * 마켓 별로 거래 가능한 종목들의 정보 조회
@@ -32,11 +27,9 @@ export const GetRangeUnitParams = zod.object({
 export const listMarketsPathQuoteCurrencyDefault = `KRW`;
 
 export const ListMarketsParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(listMarketsPathQuoteCurrencyDefault)
-    .describe("마켓 기준 통화"),
-});
+  "quote_currency": zod.string().default(listMarketsPathQuoteCurrencyDefault).describe('마켓 기준 통화')
+})
+
 
 /**
  * 마켓 별로 거래 가능한 개별 종목의 정보 조회
@@ -46,15 +39,10 @@ export const getMarketPathQuoteCurrencyDefault = `KRW`;
 export const getMarketPathTargetCurrencyDefault = `BTC`;
 
 export const GetMarketParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(getMarketPathQuoteCurrencyDefault)
-    .describe("마켓 기준 통화"),
-  target_currency: zod
-    .string()
-    .default(getMarketPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "quote_currency": zod.string().default(getMarketPathQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(getMarketPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
+
 
 /**
  * 특정 종목의 오더북 정보 조회 (호가 단위 별)
@@ -64,28 +52,17 @@ export const getOrderbookPathQuoteCurrencyDefault = `KRW`;
 export const getOrderbookPathTargetCurrencyDefault = `BTC`;
 
 export const GetOrderbookParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(getOrderbookPathQuoteCurrencyDefault)
-    .describe("마켓 기준 통화"),
-  target_currency: zod
-    .string()
-    .default(getOrderbookPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "quote_currency": zod.string().default(getOrderbookPathQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(getOrderbookPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
 
 export const getOrderbookQuerySizeDefault = `15`;
 
 export const GetOrderbookQueryParams = zod.object({
-  size: zod
-    .enum(["5", "10", "15", "16"])
-    .default(getOrderbookQuerySizeDefault)
-    .describe("조회 하려는 오더북 개수 (기본값: 15)"),
-  order_book_unit: zod
-    .number()
-    .optional()
-    .describe("Market API의 order_book_units 값 사용. 아닐경우, 표준 오더북 반환"),
-});
+  "size": zod.enum(['5', '10', '15', '16']).default(getOrderbookQuerySizeDefault).describe('조회 하려는 오더북 개수 (기본값: 15)'),
+  "order_book_unit": zod.number().optional().describe('Market API의 order_book_units 값 사용. 아닐경우, 표준 오더북 반환')
+})
+
 
 /**
  * 최신 순으로 체결된 주문 목록 조회
@@ -95,24 +72,16 @@ export const listTradesPathQuoteCurrencyDefault = `KRW`;
 export const listTradesPathTargetCurrencyDefault = `BTC`;
 
 export const ListTradesParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(listTradesPathQuoteCurrencyDefault)
-    .describe("마켓 기준 통화"),
-  target_currency: zod
-    .string()
-    .default(listTradesPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "quote_currency": zod.string().default(listTradesPathQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(listTradesPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
 
 export const listTradesQuerySizeDefault = `200`;
 
 export const ListTradesQueryParams = zod.object({
-  size: zod
-    .enum(["10", "50", "100", "150", "200"])
-    .default(listTradesQuerySizeDefault)
-    .describe("한번에 조회할 목록 수 (기본:200)"),
-});
+  "size": zod.enum(['10', '50', '100', '150', '200']).default(listTradesQuerySizeDefault).describe('한번에 조회할 목록 수 (기본:200)')
+})
+
 
 /**
  * 마켓의 모든 티커 정보 조회
@@ -121,20 +90,15 @@ export const ListTradesQueryParams = zod.object({
 export const listTickersPathQuoteCurrencyDefault = `KRW`;
 
 export const ListTickersParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(listTickersPathQuoteCurrencyDefault)
-    .describe("조회하려는 마켓의 기준 통화"),
-});
+  "quote_currency": zod.string().default(listTickersPathQuoteCurrencyDefault).describe('조회하려는 마켓의 기준 통화')
+})
 
 export const listTickersQueryAdditionalDataDefault = false;
 
 export const ListTickersQueryParams = zod.object({
-  additional_data: zod
-    .boolean()
-    .default(listTickersQueryAdditionalDataDefault)
-    .describe("입력 값이 true 이면 전일가 정보까지 조회"),
-});
+  "additional_data": zod.boolean().default(listTickersQueryAdditionalDataDefault).describe('입력 값이 true 이면 전일가 정보까지 조회')
+})
+
 
 /**
  * 특정 종목의 티커 정보 조회
@@ -144,24 +108,16 @@ export const getTickerPathQuoteCurrencyDefault = `KRW`;
 export const getTickerPathTargetCurrencyDefault = `BTC`;
 
 export const GetTickerParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(getTickerPathQuoteCurrencyDefault)
-    .describe("마켓의 기준 통화"),
-  target_currency: zod
-    .string()
-    .default(getTickerPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "quote_currency": zod.string().default(getTickerPathQuoteCurrencyDefault).describe('마켓의 기준 통화'),
+  "target_currency": zod.string().default(getTickerPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
 
 export const getTickerQueryAdditionalDataDefault = false;
 
 export const GetTickerQueryParams = zod.object({
-  additional_data: zod
-    .boolean()
-    .default(getTickerQueryAdditionalDataDefault)
-    .describe("입력 값이 true 이면 전일가 정보까지 조회"),
-});
+  "additional_data": zod.boolean().default(getTickerQueryAdditionalDataDefault).describe('입력 값이 true 이면 전일가 정보까지 조회')
+})
+
 
 /**
  * UTC 기준으로 마켓의 모든 티커 정보 조회
@@ -170,20 +126,15 @@ export const GetTickerQueryParams = zod.object({
 export const listTickerUtcPathQuoteCurrencyDefault = `KRW`;
 
 export const ListTickerUtcParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(listTickerUtcPathQuoteCurrencyDefault)
-    .describe("조회하려는 마켓의 기준 통화"),
-});
+  "quote_currency": zod.string().default(listTickerUtcPathQuoteCurrencyDefault).describe('조회하려는 마켓의 기준 통화')
+})
 
 export const listTickerUtcQueryAdditionalDataDefault = true;
 
 export const ListTickerUtcQueryParams = zod.object({
-  additional_data: zod
-    .boolean()
-    .default(listTickerUtcQueryAdditionalDataDefault)
-    .describe("입력 값이 true 이면 전일가 정보까지 조회"),
-});
+  "additional_data": zod.boolean().default(listTickerUtcQueryAdditionalDataDefault).describe('입력 값이 true 이면 전일가 정보까지 조회')
+})
+
 
 /**
  * UTC 기준으로 특정 종목의 티커 정보 조회
@@ -193,24 +144,16 @@ export const getTickerUtcPathQuoteCurrencyDefault = `KRW`;
 export const getTickerUtcPathTargetCurrencyDefault = `BTC`;
 
 export const GetTickerUtcParams = zod.object({
-  quote_currency: zod
-    .string()
-    .default(getTickerUtcPathQuoteCurrencyDefault)
-    .describe("마켓의 기준 통화"),
-  target_currency: zod
-    .string()
-    .default(getTickerUtcPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "quote_currency": zod.string().default(getTickerUtcPathQuoteCurrencyDefault).describe('마켓의 기준 통화'),
+  "target_currency": zod.string().default(getTickerUtcPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
 
 export const getTickerUtcQueryAdditionalDataDefault = true;
 
 export const GetTickerUtcQueryParams = zod.object({
-  additional_data: zod
-    .boolean()
-    .default(getTickerUtcQueryAdditionalDataDefault)
-    .describe("입력 값이 true 이면 전일가 정보까지 조회"),
-});
+  "additional_data": zod.boolean().default(getTickerUtcQueryAdditionalDataDefault).describe('입력 값이 true 이면 전일가 정보까지 조회')
+})
+
 
 /**
  * 특정 종목의 정보 조회 (심볼 정보, 입/출금 가능여부, 입/출금 수수료, 최소 출금 가능 금액 등)
@@ -219,8 +162,9 @@ export const GetTickerUtcQueryParams = zod.object({
 export const getCurrencyPathCurrencyDefault = `BTC`;
 
 export const GetCurrencyParams = zod.object({
-  currency: zod.string().default(getCurrencyPathCurrencyDefault).describe("조회하려는 종목의 심볼"),
-});
+  "currency": zod.string().default(getCurrencyPathCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
+
 
 /**
  * 특정 종목의 캔들 차트 조회
@@ -230,28 +174,18 @@ export const getChartPathQuoteCurrencyDefault = `KRW`;
 export const getChartPathTargetCurrencyDefault = `BTC`;
 
 export const GetChartParams = zod.object({
-  quote_currency: zod.string().default(getChartPathQuoteCurrencyDefault).describe("마켓 기준 통화"),
-  target_currency: zod
-    .string()
-    .default(getChartPathTargetCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "quote_currency": zod.string().default(getChartPathQuoteCurrencyDefault).describe('마켓 기준 통화'),
+  "target_currency": zod.string().default(getChartPathTargetCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
 
 export const getChartQuerySizeDefault = 200;
 
 export const GetChartQueryParams = zod.object({
-  interval: zod
-    .enum(["1m", "3m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "1d", "1w", "1mon"])
-    .describe("차트 간격"),
-  timestamp: zod
-    .string()
-    .optional()
-    .describe("마지막 캔들의 타임스탬프 (UTC 기준 시간 입력, Unix time, ms)"),
-  size: zod
-    .number()
-    .default(getChartQuerySizeDefault)
-    .describe("조회할 캔들 수 (최소 1~최대 500) 미입력시 default: 200"),
-});
+  "interval": zod.enum(['1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '1d', '1w', '1mon']).describe('차트 간격'),
+  "timestamp": zod.string().optional().describe('마지막 캔들의 타임스탬프 (UTC 기준 시간 입력, Unix time, ms)'),
+  "size": zod.number().default(getChartQuerySizeDefault).describe('조회할 캔들 수 (최소 1~최대 500) 미입력시 default: 200')
+})
+
 
 /**
  * 특정 종목의 오더북 정보 조회
@@ -261,11 +195,9 @@ export const GetChartQueryParams = zod.object({
 export const getOrderbookDeprecatedQueryCurrencyDefault = `BTC`;
 
 export const GetOrderbookDeprecatedQueryParams = zod.object({
-  currency: zod
-    .string()
-    .default(getOrderbookDeprecatedQueryCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "currency": zod.string().default(getOrderbookDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼')
+})
+
 
 /**
  * 마켓의 모든 티커 정보 조회
@@ -275,11 +207,9 @@ export const GetOrderbookDeprecatedQueryParams = zod.object({
 export const getTickerDeprecatedQueryCurrencyDefault = `BTC`;
 
 export const GetTickerDeprecatedQueryParams = zod.object({
-  currency: zod
-    .string()
-    .default(getTickerDeprecatedQueryCurrencyDefault)
-    .describe("조회하려는 종목의 심볼. 유효하지 않은 심볼 입력 시 전체 티커 정보가 조회 됨"),
-});
+  "currency": zod.string().default(getTickerDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼. 유효하지 않은 심볼 입력 시 전체 티커 정보가 조회 됨')
+})
+
 
 /**
  * UTC 기준으로 마켓의 모든 티커 정보 조회
@@ -289,11 +219,9 @@ export const GetTickerDeprecatedQueryParams = zod.object({
 export const getTickerUtcDeprecatedQueryCurrencyDefault = `BTC`;
 
 export const GetTickerUtcDeprecatedQueryParams = zod.object({
-  currency: zod
-    .string()
-    .default(getTickerUtcDeprecatedQueryCurrencyDefault)
-    .describe("조회하려는 종목의 심볼. 유효하지 않은 심볼 입력 시 전체 티커 정보가 조회 됨"),
-});
+  "currency": zod.string().default(getTickerUtcDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼. 유효하지 않은 심볼 입력 시 전체 티커 정보가 조회 됨')
+})
+
 
 /**
  * 최신 순으로 체결된 주문 목록 조회
@@ -303,8 +231,5 @@ export const GetTickerUtcDeprecatedQueryParams = zod.object({
 export const listTradesDeprecatedQueryCurrencyDefault = `BTC`;
 
 export const ListTradesDeprecatedQueryParams = zod.object({
-  currency: zod
-    .string()
-    .default(listTradesDeprecatedQueryCurrencyDefault)
-    .describe("조회하려는 종목의 심볼"),
-});
+  "currency": zod.string().default(listTradesDeprecatedQueryCurrencyDefault).describe('조회하려는 종목의 심볼')
+})

@@ -32,22 +32,22 @@ describe("korbit private integration", () => {
       credentials: { apiKey, secretKey },
     });
 
-    const pairs = await client.market.currencyPairs();
+    const pairs = await client.market.listCurrencyPairs();
     symbol = pairs.data[0]?.symbol ?? symbol;
 
     const openOrders = await client.orders.listOpenOrders({ symbol, limit: 10 });
     orderId = openOrders.data[0]?.orderId;
 
-    const depositAddresses = await client.cryptoDeposits.listDepositAddresses();
+    const depositAddresses = await client.cryptoDeposits.listCoinDepositAddresses();
     coinCurrency = depositAddresses.data[0]?.currency ?? coinCurrency;
 
-    const recentDeposits = await client.cryptoDeposits.listRecentDeposits({
+    const recentDeposits = await client.cryptoDeposits.listCoinRecentDeposits({
       currency: coinCurrency,
       limit: 10,
     });
     coinDepositId = recentDeposits.data[0]?.id;
 
-    const recentWithdrawals = await client.cryptoWithdrawals.listRecentWithdrawals({
+    const recentWithdrawals = await client.cryptoWithdrawals.listCoinRecentWithdrawals({
       currency: coinCurrency,
       limit: 10,
     });
@@ -84,14 +84,14 @@ describe("korbit private integration", () => {
   });
 
   testIf("입금 주소 전체 조회", async () => {
-    const result = await client.cryptoDeposits.listDepositAddresses();
+    const result = await client.cryptoDeposits.listCoinDepositAddresses();
     expect(result.success).toBe(true);
     expect(Array.isArray(result.data)).toBe(true);
   });
 
   testIf("입금 주소 조회", async (context) => {
     try {
-      const result = await client.cryptoDeposits.getDepositAddress({ currency: coinCurrency });
+      const result = await client.cryptoDeposits.getCoinDepositAddress({ currency: coinCurrency });
       expect(result).toBeTruthy();
     } catch (error) {
       if (
@@ -110,7 +110,7 @@ describe("korbit private integration", () => {
   });
 
   testIf("최근 입금내역 조회", async () => {
-    const result = await client.cryptoDeposits.listRecentDeposits({
+    const result = await client.cryptoDeposits.listCoinRecentDeposits({
       currency: coinCurrency,
       limit: 10,
     });
@@ -119,7 +119,7 @@ describe("korbit private integration", () => {
 
   testIf("입금 진행상황 조회", async (context) => {
     if (!coinDepositId) return context.skip();
-    const result = await client.cryptoDeposits.getDeposit({
+    const result = await client.cryptoDeposits.getCoinDeposit({
       currency: coinCurrency,
       coinDepositId,
     });
@@ -127,17 +127,19 @@ describe("korbit private integration", () => {
   });
 
   testIf("출금 가능 주소 목록 조회", async () => {
-    const result = await client.cryptoWithdrawals.listWithdrawableAddresses();
+    const result = await client.cryptoWithdrawals.listCoinWithdrawableAddresses();
     expect(result.success).toBe(true);
   });
 
   testIf("출금 가능 수량 조회", async () => {
-    const result = await client.cryptoWithdrawals.getWithdrawableAmount({ currency: coinCurrency });
+    const result = await client.cryptoWithdrawals.getCoinWithdrawableAmount({
+      currency: coinCurrency,
+    });
     expect(result.success).toBe(true);
   });
 
   testIf("최근 출금내역 조회", async () => {
-    const result = await client.cryptoWithdrawals.listRecentWithdrawals({
+    const result = await client.cryptoWithdrawals.listCoinRecentWithdrawals({
       currency: coinCurrency,
       limit: 10,
     });
@@ -146,7 +148,7 @@ describe("korbit private integration", () => {
 
   testIf("출금 진행상황 조회", async (context) => {
     if (!coinWithdrawalId) return context.skip();
-    const result = await client.cryptoWithdrawals.getWithdrawal({
+    const result = await client.cryptoWithdrawals.getCoinWithdrawal({
       currency: coinCurrency,
       coinWithdrawalId,
     });
@@ -154,12 +156,12 @@ describe("korbit private integration", () => {
   });
 
   testIf("원화 최근 입금내역 조회", async () => {
-    const result = await client.krw.listRecentDeposits({ limit: 10 });
+    const result = await client.krw.listKrwRecentDeposits({ limit: 10 });
     expect(result.success).toBe(true);
   });
 
   testIf("원화 최근 출금내역 조회", async () => {
-    const result = await client.krw.listRecentWithdrawals({ limit: 10 });
+    const result = await client.krw.listKrwRecentWithdrawals({ limit: 10 });
     expect(result.success).toBe(true);
   });
 

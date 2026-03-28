@@ -30,7 +30,6 @@ vi.mock("@exhub/upbit", () => ({
     orderbook: {
       listOrderbooks: vi.fn(),
       listOrderbookInstruments: vi.fn(),
-      listOrderbookSupportedLevels: vi.fn(),
     },
     assets: {
       listBalance: upbitListBalanceMock,
@@ -51,7 +50,7 @@ vi.mock("@exhub/upbit", () => ({
     withdrawals: {
       getWithdrawChance: vi.fn(),
       listWithdrawalAddresses: vi.fn(),
-      withdraw: vi.fn(),
+      createWithdrawal: vi.fn(),
       cancelWithdrawal: vi.fn(),
       createWithdrawKrw: vi.fn(),
       getWithdrawal: vi.fn(),

@@ -1,0 +1,23 @@
+{
+  "name": "@exhub/spec",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "거래소 스펙 및 설정 규칙 정의",
+  "scripts": {
+    "validate": "pnpm exec tsx validate-openapi.ts && pnpm exec tsx validate-asyncapi.ts",
+    "validate:openapi": "pnpm exec tsx validate-openapi.ts",
+    "validate:asyncapi": "pnpm exec tsx validate-asyncapi.ts"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "^12.1.0",
+    "@asyncapi/parser": "^3.6.0",
+    "cheerio": "^1.2.0",
+    "typescript": "^5.9.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wi9ine/exhub.git",
+    "directory": "packages/spec"
+  }
+}

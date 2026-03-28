@@ -1,87 +1,13 @@
-import {
-  createHs256Jwt,
-  createNonce,
-  defaultHttpTransport,
-  ExHubConfigurationError,
-  resolveBaseUrl,
-  sha512HexDigest,
-  toQueryString,
-} from "@exhub/core";
-
-import type { UpbitClient, UpbitClientOptions, UpbitCredentials } from "./types";
-
-const UPBIT_DEFAULT_BASE_URL = "https://api.upbit.com/v1";
+// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.
+import { createRequestFunctions } from "./auth";
+import type { UpbitClient, UpbitClientOptions } from "./types";
 
 type AsyncResult<TMethod> = TMethod extends (...args: never[]) => Promise<infer TResult>
   ? TResult
   : never;
 
-function resolveCredentials(
-  options: UpbitClientOptions,
-): Promise<UpbitCredentials> | UpbitCredentials {
-  if (options.credentialsProvider) {
-    return options.credentialsProvider();
-  }
-  if (options.credentials) {
-    return options.credentials;
-  }
-  throw new ExHubConfigurationError("Upbit 인증 정보가 설정되지 않았습니다.");
-}
-
 export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient {
-  const transport = defaultHttpTransport;
-  const baseURL = resolveBaseUrl(UPBIT_DEFAULT_BASE_URL, options.baseURL);
-  const timeout = options.timeout ?? 10_000;
-
-  function requestPublic<TResponse>(
-    path: string,
-    query?: Record<string, unknown>,
-  ): Promise<TResponse> {
-    return transport.request<TResponse>({
-      method: "GET",
-      baseURL,
-      path,
-      query,
-      timeout,
-    });
-  }
-
-  async function requestPrivate<TResponse>(
-    method: "GET" | "POST" | "DELETE",
-    path: string,
-    query?: Record<string, unknown>,
-    body?: Record<string, unknown>,
-  ): Promise<TResponse> {
-    const credentials = await resolveCredentials(options);
-    const nonce = createNonce();
-    const tokenPayload = {
-      access_key: credentials.accessKey,
-      nonce,
-    };
-    const payload = body ?? query;
-    const queryString = payload ? toQueryString(payload) : "";
-    const signedPayload =
-      queryString.length > 0
-        ? {
-            ...tokenPayload,
-            query_hash: sha512HexDigest(queryString),
-            query_hash_alg: "SHA512",
-          }
-        : tokenPayload;
-
-    return transport.request<TResponse>({
-      method,
-      baseURL,
-      path,
-      query,
-      body,
-      timeout,
-      headers: {
-        Authorization: `Bearer ${createHs256Jwt(signedPayload, credentials.secretKey)}`,
-        Accept: "application/json",
-      },
-    });
-  }
+  const { requestPublic, requestPrivate } = createRequestFunctions(options);
 
   return {
     tradingPairs: {
@@ -158,194 +84,195 @@ export function createUpbitClient(options: UpbitClientOptions = {}): UpbitClient
     },
     assets: {
       listBalance: async () =>
-        requestPrivate<AsyncResult<UpbitClient["assets"]["listBalance"]>>("GET", "/accounts"),
+        requestPrivate<AsyncResult<UpbitClient["assets"]["listBalance"]>>({
+          method: "GET",
+          path: "/accounts",
+        }),
     },
     orders: {
       getOrderChance: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["getOrderChance"]>>(
-          "GET",
-          "/orders/chance",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["getOrderChance"]>>({
+          method: "GET",
+          path: "/orders/chance",
+          query: params,
+        }),
       createOrder: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["createOrder"]>>(
-          "POST",
-          "/orders",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["orders"]["createOrder"]>>({
+          method: "POST",
+          path: "/orders",
           body,
-        ),
+        }),
       createTestOrder: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["createTestOrder"]>>(
-          "POST",
-          "/orders/test",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["orders"]["createTestOrder"]>>({
+          method: "POST",
+          path: "/orders/test",
           body,
-        ),
+        }),
       getOrder: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["getOrder"]>>("GET", "/order", params),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["getOrder"]>>({
+          method: "GET",
+          path: "/order",
+          query: params,
+        }),
       cancelOrder: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOrder"]>>(
-          "DELETE",
-          "/order",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOrder"]>>({
+          method: "DELETE",
+          path: "/order",
+          query: params,
+        }),
       listOrdersByIds: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["listOrdersByIds"]>>(
-          "GET",
-          "/orders/uuids",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["listOrdersByIds"]>>({
+          method: "GET",
+          path: "/orders/uuids",
+          query: params,
+        }),
       cancelOrdersByIds: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOrdersByIds"]>>(
-          "DELETE",
-          "/orders/uuids",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOrdersByIds"]>>({
+          method: "DELETE",
+          path: "/orders/uuids",
+          query: params,
+        }),
       listOpenOrders: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["listOpenOrders"]>>(
-          "GET",
-          "/orders/open",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["listOpenOrders"]>>({
+          method: "GET",
+          path: "/orders/open",
+          query: params,
+        }),
       cancelOpenOrders: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOpenOrders"]>>(
-          "DELETE",
-          "/orders/open",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelOpenOrders"]>>({
+          method: "DELETE",
+          path: "/orders/open",
+          query: params,
+        }),
       listClosedOrders: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["listClosedOrders"]>>(
-          "GET",
-          "/orders/closed",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["orders"]["listClosedOrders"]>>({
+          method: "GET",
+          path: "/orders/closed",
+          query: params,
+        }),
       cancelAndCreateOrder: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelAndCreateOrder"]>>(
-          "POST",
-          "/orders/cancel_replace",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["orders"]["cancelAndCreateOrder"]>>({
+          method: "POST",
+          path: "/orders/cancel_and_new",
           body,
-        ),
+        }),
     },
     withdrawals: {
       getWithdrawChance: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["getWithdrawChance"]>>(
-          "GET",
-          "/withdraws/chance",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["getWithdrawChance"]>>({
+          method: "GET",
+          path: "/withdraws/chance",
+          query: params,
+        }),
       listWithdrawalAddresses: async () =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["listWithdrawalAddresses"]>>(
-          "GET",
-          "/withdraws/coin_addresses",
-        ),
-      withdraw: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["withdraw"]>>(
-          "POST",
-          "/withdraws/coin",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["listWithdrawalAddresses"]>>({
+          method: "GET",
+          path: "/withdraws/coin_addresses",
+        }),
+      createWithdrawal: async (body) =>
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["createWithdrawal"]>>({
+          method: "POST",
+          path: "/withdraws/coin",
           body,
-        ),
+        }),
       cancelWithdrawal: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["cancelWithdrawal"]>>(
-          "DELETE",
-          "/withdraw",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["cancelWithdrawal"]>>({
+          method: "DELETE",
+          path: "/withdraws/coin",
+          query: params,
+        }),
       createWithdrawKrw: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["createWithdrawKrw"]>>(
-          "POST",
-          "/withdraws/krw",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["createWithdrawKrw"]>>({
+          method: "POST",
+          path: "/withdraws/krw",
           body,
-        ),
+        }),
       getWithdrawal: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["getWithdrawal"]>>(
-          "GET",
-          "/withdraw",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["getWithdrawal"]>>({
+          method: "GET",
+          path: "/withdraw",
+          query: params,
+        }),
       listWithdrawals: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["listWithdrawals"]>>(
-          "GET",
-          "/withdraws",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["withdrawals"]["listWithdrawals"]>>({
+          method: "GET",
+          path: "/withdraws",
+          query: params,
+        }),
     },
     deposits: {
       getDepositChance: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDepositChance"]>>(
-          "GET",
-          "/deposits/chance",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDepositChance"]>>({
+          method: "GET",
+          path: "/deposits/chance/coin",
+          query: params,
+        }),
       createDepositAddress: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["createDepositAddress"]>>(
-          "POST",
-          "/deposits/generate_coin_address",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["createDepositAddress"]>>({
+          method: "POST",
+          path: "/deposits/generate_coin_address",
           body,
-        ),
+        }),
       getDepositAddress: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDepositAddress"]>>(
-          "GET",
-          "/deposits/coin_address",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDepositAddress"]>>({
+          method: "GET",
+          path: "/deposits/coin_address",
+          query: params,
+        }),
       listDepositAddresses: async () =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["listDepositAddresses"]>>(
-          "GET",
-          "/deposits/coin_addresses",
-        ),
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["listDepositAddresses"]>>({
+          method: "GET",
+          path: "/deposits/coin_addresses",
+        }),
       createDepositKrw: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["createDepositKrw"]>>(
-          "POST",
-          "/deposits/krw",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["createDepositKrw"]>>({
+          method: "POST",
+          path: "/deposits/krw",
           body,
-        ),
+        }),
       getDeposit: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDeposit"]>>(
-          "GET",
-          "/deposit",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["getDeposit"]>>({
+          method: "GET",
+          path: "/deposit",
+          query: params,
+        }),
       listDeposits: async (params) =>
-        requestPrivate<AsyncResult<UpbitClient["deposits"]["listDeposits"]>>(
-          "GET",
-          "/deposits",
-          params,
-        ),
+        requestPrivate<AsyncResult<UpbitClient["deposits"]["listDeposits"]>>({
+          method: "GET",
+          path: "/deposits",
+          query: params,
+        }),
     },
     travelRule: {
       listTravelRuleVasps: async () =>
-        requestPrivate<AsyncResult<UpbitClient["travelRule"]["listTravelRuleVasps"]>>(
-          "GET",
-          "/travel_rule/vasps",
-        ),
+        requestPrivate<AsyncResult<UpbitClient["travelRule"]["listTravelRuleVasps"]>>({
+          method: "GET",
+          path: "/travel_rule/vasps",
+        }),
       verifyTravelRuleByUuid: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelRuleByUuid"]>>(
-          "POST",
-          "/travel_rule/deposit/uuid",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelRuleByUuid"]>>({
+          method: "POST",
+          path: "/travel_rule/deposit/uuid",
           body,
-        ),
+        }),
       verifyTravelRuleByTxid: async (body) =>
-        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelRuleByTxid"]>>(
-          "POST",
-          "/travel_rule/deposit/txid",
-          undefined,
+        requestPrivate<AsyncResult<UpbitClient["travelRule"]["verifyTravelRuleByTxid"]>>({
+          method: "POST",
+          path: "/travel_rule/deposit/txid",
           body,
-        ),
+        }),
     },
     service: {
       getServiceStatus: async () =>
-        requestPrivate<AsyncResult<UpbitClient["service"]["getServiceStatus"]>>(
-          "GET",
-          "/status/wallet",
-        ),
+        requestPrivate<AsyncResult<UpbitClient["service"]["getServiceStatus"]>>({
+          method: "GET",
+          path: "/status/wallet",
+        }),
       listApiKeys: async () =>
-        requestPrivate<AsyncResult<UpbitClient["service"]["listApiKeys"]>>("GET", "/api_keys"),
+        requestPrivate<AsyncResult<UpbitClient["service"]["listApiKeys"]>>({
+          method: "GET",
+          path: "/api_keys",
+        }),
     },
   };
 }
