@@ -1,5 +1,5 @@
 /**
- * config.yaml + OpenAPI spec에서 types.ts, client.ts를 자동 생성하는 스크립트
+ * config.yaml + OpenAPI/AsyncAPI spec에서 types.ts, client.ts, ws-types.ts, ws-client.ts를 자동 생성하는 스크립트
  *
  * 사용법: npx tsx scripts/generate-sdk.ts
  */
@@ -7,6 +7,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { Parser as AsyncApiParser } from "@asyncapi/parser";
+import type { AsyncAPIDocumentInterface, ChannelInterface, SchemaInterface } from "@asyncapi/parser";
 import YAML from "yaml";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -983,9 +985,465 @@ function hasRequiredQueryParams(op: AnalyzedOperation, autoInjected: string[]): 
   return remaining.length > 0;
 }
 
+// ─── AsyncAPI (WebSocket) 타입 정의 ─────────────────────────
+
+interface AnalyzedWsChannel {
+  channelName: string;
+  camelName: string;
+  pascalName: string;
+  description: string;
+  isPrivate: boolean;
+  publishOperationId: string | null;
+  subscribeOperationId: string | null;
+  requestSchema: SchemaInterface | null;
+  responseSchema: SchemaInterface | null;
+  docUrl: string | null;
+}
+
+// ─── AsyncAPI Parser 기반 스펙 분석 ─────────────────────────
+
+const asyncApiParser = new AsyncApiParser();
+
+async function parseAsyncApiSpec(filePath: string): Promise<AsyncAPIDocumentInterface | null> {
+  const content = fs.readFileSync(filePath, "utf-8");
+  const { document, diagnostics } = await asyncApiParser.parse(content);
+  const errors = diagnostics.filter((d) => d.severity === 0);
+  if (errors.length > 0) {
+    console.error(`  AsyncAPI 파싱 에러 (${filePath}):`);
+    for (const err of errors) {
+      console.error(`    - ${err.message}`);
+    }
+    return null;
+  }
+  return document ?? null;
+}
+
+/** 구독 옵션 스키마 추출: {PascalName}Subscription 등의 named schema를 찾음 */
+function findSubscribeOptionsSchema(
+  doc: AsyncAPIDocumentInterface,
+  pascalName: string,
+  channel: ChannelInterface,
+  schemaMap: Map<string, SchemaInterface>,
+): SchemaInterface | null {
+  // 1. {PascalName}Subscription 스키마 (Upbit)
+  const subSchema = schemaMap.get(`${pascalName}Subscription`);
+  if (subSchema) return subSchema;
+
+  // 2. {PascalName}RequestPayload 또는 {Prefix}{PascalName}RequestPayload (Coinone)
+  const directPayload = schemaMap.get(`${pascalName}RequestPayload`);
+  if (directPayload) return directPayload;
+  for (const prefix of ["Public", "Private"]) {
+    const payloadSchema = schemaMap.get(`${prefix}${pascalName}RequestPayload`);
+    if (payloadSchema) return payloadSchema;
+  }
+
+  // 3. publish message payload에서 추출
+  const pubOps = doc.operations().all().filter(
+    (op) => op.action() === "publish" && op.channels().all().some((c) => c.id() === channel.id()),
+  );
+  for (const op of pubOps) {
+    for (const msg of op.messages().all()) {
+      const payload = msg.payload();
+      if (!payload) continue;
+
+      // 배열 타입 payload (Bithumb, Korbit)
+      if (payload.type() === "array") {
+        const items = payload.items?.();
+        if (!items) continue;
+        if (Array.isArray(items)) {
+          // 튜플 형식: ticket 전용 아이템을 제외한 나머지 반환 (Bithumb)
+          for (const item of items) {
+            const props = item.properties?.();
+            if (!props) continue;
+            const keys = Object.keys(props);
+            if (keys.length === 1 && keys[0] === "ticket") continue;
+            return item;
+          }
+        } else if (items.type?.() === "object" && items.properties?.()) {
+          // 단일 아이템 스키마 (Korbit)
+          return items;
+        }
+        continue;
+      }
+
+      if (payload.type() !== "object" || !payload.properties()) continue;
+      const props = payload.properties()!;
+      const propKeys = Object.keys(props);
+
+      // primus 스타일 {n, o} 패턴 감지 (Gopax)
+      if (propKeys.length === 2 && propKeys.includes("n") && propKeys.includes("o")) {
+        const oSchema = props.o;
+        if (!oSchema) return null;
+        const oProps = oSchema.properties();
+        // o가 빈 객체이면 옵션 불필요
+        if (!oProps || Object.keys(oProps).length === 0) return null;
+        return oSchema;
+      }
+
+      return payload;
+    }
+  }
+
+  return null;
+}
+
+/** 수신 데이터 스키마 추출: named schema 또는 subscribe message payload */
+function findResponseDataSchema(
+  doc: AsyncAPIDocumentInterface,
+  pascalName: string,
+  channel: ChannelInterface,
+  schemaMap: Map<string, SchemaInterface>,
+): SchemaInterface | null {
+  // 1. {PascalName}Data 스키마 (Upbit, Bithumb)
+  const dataSchema = schemaMap.get(`${pascalName}Data`);
+  if (dataSchema) return dataSchema;
+
+  // 2. {Prefix}{PascalName}DataPayload 스키마 (Coinone)
+  for (const prefix of ["Public", "Private"]) {
+    const payloadSchema = schemaMap.get(`${prefix}${pascalName}DataPayload`);
+    if (payloadSchema) return payloadSchema;
+  }
+
+  // 3. subscribe message payload에서 추출
+  const subOps = doc.operations().all().filter(
+    (op) => op.action() === "subscribe" && op.channels().all().some((c) => c.id() === channel.id()),
+  );
+  for (const op of subOps) {
+    for (const msg of op.messages().all()) {
+      const payload = msg.payload();
+      if (!payload) continue;
+      // Control/Error 메시지 스킵
+      const props = payload.properties();
+      if (!props) continue;
+      const propNames = Object.keys(props);
+      const isControl = propNames.includes("requestId") && propNames.includes("status") && propNames.length <= 4;
+      const isError = propNames.includes("status") && propNames.includes("message") && propNames.length <= 2;
+      if (isControl || isError) continue;
+
+      // primus 스타일 {n, o} 패턴 감지 (Gopax) — o의 내부를 반환
+      if (propNames.length >= 2 && propNames.includes("n") && propNames.includes("o")) {
+        const oSchema = props.o;
+        if (!oSchema) return null;
+        const oProps = oSchema.properties();
+        if (!oProps || Object.keys(oProps).length === 0) return null;
+        return oSchema;
+      }
+
+      return payload;
+    }
+  }
+
+  return null;
+}
+
+async function analyzeWsChannels(doc: AsyncAPIDocumentInterface): Promise<AnalyzedWsChannel[]> {
+  const channels: AnalyzedWsChannel[] = [];
+  const allServers = doc.servers().all();
+  const hasPrivateServer = allServers.some((s) => s.id() === "private");
+  const schemas = doc.components()?.schemas()?.all() ?? [];
+  const schemaMap = new Map(schemas.map((s) => [s.id(), s]));
+
+  for (const channel of doc.channels().all()) {
+    const rawName = channel.id();
+
+    // ping/pong, status, error 채널은 스킵
+    const lowerName = rawName.toLowerCase();
+    if (lowerName.includes("ping") || lowerName === "status" || lowerName === "error") continue;
+
+    // 채널에 연결된 operations 분석
+    const channelOps = doc.operations().all().filter(
+      (op) => op.channels().all().some((c) => c.id() === rawName),
+    );
+    const publishOp = channelOps.find((op) => op.action() === "publish");
+    const subscribeOp = channelOps.find((op) => op.action() === "subscribe");
+
+    if (!publishOp && !subscribeOp) continue;
+
+    // private 판별
+    // 1. 채널 이름이 "private."으로 시작하면 private
+    // 2. 채널의 servers에 private만 있으면 private
+    // 3. x-tags에 "개인 API" 태그가 있으면 private
+    let isPrivate = rawName.startsWith("private.");
+    if (!isPrivate) {
+      const channelServers = channel.servers().all();
+      if (channelServers.length > 0) {
+        isPrivate = channelServers.length === 1 && channelServers[0].id() === "private";
+      } else if (hasPrivateServer) {
+        isPrivate = rawName.includes("my") || rawName.includes("My");
+      }
+    }
+    if (!isPrivate) {
+      // operation의 x-tags 확인
+      for (const op of [publishOp, subscribeOp]) {
+        if (!op) continue;
+        const tagsExt = op.extensions()?.all()?.find((e) => e.id() === "x-tags");
+        if (tagsExt) {
+          const tags = tagsExt.value();
+          if (Array.isArray(tags) && tags.some((t: string) => t.includes("개인") || t.includes("private"))) {
+            isPrivate = true;
+            break;
+          }
+        }
+      }
+    }
+
+    // operationId에서 channelKey 추출
+    const pubOpId = publishOp?.id() ?? null;
+    const subOpId = subscribeOp?.id() ?? null;
+
+    let channelKey: string;
+    if (pubOpId) {
+      channelKey = pubOpId
+        .replace(/^subscribe-/, "")
+        .replace(/^request-/, "")
+        .replace(/^send-/, "");
+    } else if (subOpId) {
+      channelKey = subOpId.replace(/^receive-/, "");
+    } else {
+      channelKey = rawName.replace(/^(public|private)\./, "").replace(/구독$/, "");
+    }
+
+    const camelName = toCamelCase(channelKey);
+    const pascalName = toPascalCase(channelKey);
+
+    // 구독 옵션 스키마
+    const requestSchema = findSubscribeOptionsSchema(doc, pascalName, channel, schemaMap);
+    // 수신 데이터 스키마
+    const responseSchema = findResponseDataSchema(doc, pascalName, channel, schemaMap);
+
+    // doc URL 추출 (extensions)
+    let docUrl: string | null = null;
+    for (const op of [publishOp, subscribeOp]) {
+      if (!op) continue;
+      const ext = op.extensions()?.all()?.find((e) => e.id() === "x-doc-url");
+      if (ext) { docUrl = ext.value() as string; break; }
+      if (op.hasExternalDocs()) { docUrl = op.externalDocs()!.url(); break; }
+    }
+
+    channels.push({
+      channelName: rawName,
+      camelName,
+      pascalName,
+      description: channel.description() ?? "",
+      isPrivate,
+      publishOperationId: pubOpId,
+      subscribeOperationId: subOpId,
+      requestSchema,
+      responseSchema,
+      docUrl,
+    });
+  }
+
+  return channels;
+}
+
+// ─── SchemaInterface → TypeScript 변환 ──────────────────────
+
+function schemaToTs(schema: SchemaInterface, indent = 0, fieldsToRemove: string[] = []): string {
+  const pad = "  ".repeat(indent);
+  const innerPad = "  ".repeat(indent + 1);
+
+  const enumValues = schema.enum();
+  if (enumValues && enumValues.length > 0) {
+    return enumValues.map((v) => JSON.stringify(v)).join(" | ");
+  }
+
+  const oneOf = schema.oneOf();
+  if (oneOf && oneOf.length > 0) {
+    return oneOf.map((s) => schemaToTs(s, indent)).join(" | ");
+  }
+
+  const allOf = schema.allOf();
+  if (allOf && allOf.length > 0) {
+    return allOf.map((s) => schemaToTs(s, indent)).join(" & ");
+  }
+
+  const type = schema.type();
+
+  if (type === "object" || schema.properties()) {
+    const props = schema.properties() ?? {};
+    const required = new Set(schema.required() ?? []);
+    const filteredEntries = Object.entries(props).filter(([key]) => !fieldsToRemove.includes(key));
+    // 빈 객체는 Record<string, unknown>으로 변환
+    if (filteredEntries.length === 0) return "Record<string, unknown>";
+    const lines: string[] = ["{"];
+    for (const [key, propSchema] of filteredEntries) {
+      const isRequired = required.has(key);
+      const tsType = schemaToTs(propSchema, indent + 1);
+      lines.push(`${innerPad}${key}${isRequired ? "" : "?"}: ${tsType};`);
+    }
+    lines.push(`${pad}}`);
+    return lines.join("\n");
+  }
+
+  if (type === "array") {
+    const items = schema.items();
+    if (items) {
+      const itemType = schemaToTs(items, indent);
+      return `${itemType}[]`;
+    }
+    return "unknown[]";
+  }
+
+  switch (type) {
+    case "string":
+      return "string";
+    case "number":
+    case "integer":
+      return "number";
+    case "boolean":
+      return "boolean";
+    default:
+      return "unknown";
+  }
+}
+
+/** allOf/oneOf がある場合は interface ではなく type alias が必要 */
+function needsTypeAlias(schema: SchemaInterface): boolean {
+  const allOf = schema.allOf();
+  if (allOf && allOf.length > 0) return true;
+  const oneOf = schema.oneOf();
+  if (oneOf && oneOf.length > 0) return true;
+  return false;
+}
+
+// ─── ws-types.ts 생성 ───────────────────────────────────────
+
+function generateWsTypesFile(
+  config: ExchangeConfig,
+  channels: AnalyzedWsChannel[],
+): string {
+  const exchangeName = toPascalCase(config.name);
+  const lines: string[] = [];
+
+  lines.push("// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.");
+  lines.push('import type { ExHubWsClientOptions } from "@exhub/core";');
+  lines.push("");
+
+  // Credentials 재사용 (types.ts에서 이미 정의됨)
+  lines.push(`import type { ${exchangeName}Credentials } from "./types";`);
+  lines.push("");
+
+  // WsClientOptions
+  lines.push(`export type ${exchangeName}WsClientOptions = ExHubWsClientOptions<${exchangeName}Credentials>;`);
+  lines.push("");
+
+  // 채널별 구독 옵션 및 수신 데이터 타입
+  for (const ch of channels) {
+    // 구독 옵션 타입
+    if (ch.requestSchema) {
+      const tsBody = schemaToTs(ch.requestSchema);
+      if (needsTypeAlias(ch.requestSchema)) {
+        lines.push(`export type ${ch.pascalName}SubscribeOptions = ${tsBody};`);
+      } else {
+        lines.push(`export interface ${ch.pascalName}SubscribeOptions ${tsBody}`);
+      }
+      lines.push("");
+    }
+
+    // 수신 데이터 타입
+    if (ch.responseSchema) {
+      const tsBody = schemaToTs(ch.responseSchema);
+      if (needsTypeAlias(ch.responseSchema)) {
+        lines.push(`export type ${ch.pascalName}Data = ${tsBody};`);
+      } else {
+        lines.push(`export interface ${ch.pascalName}Data ${tsBody}`);
+      }
+      lines.push("");
+    }
+  }
+
+  // WsClient 인터페이스
+  lines.push(`export interface ${exchangeName}WsClient {`);
+  for (const ch of channels) {
+    const optionsType = ch.requestSchema ? `${ch.pascalName}SubscribeOptions` : "void";
+    const dataType = ch.responseSchema ? `${ch.pascalName}Data` : "unknown";
+    const optionsParam = optionsType === "void" ? "" : `options: ${optionsType}, `;
+    lines.push(`  subscribe${ch.pascalName}: (${optionsParam}onMessage: (data: ${dataType}) => void) => () => void;`);
+  }
+  lines.push("  onError: (handler: (error: Error) => void) => void;");
+  lines.push("  close: () => void;");
+  lines.push("}");
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+// ─── ws-client.ts 생성 ──────────────────────────────────────
+
+function generateWsClientFile(
+  config: ExchangeConfig,
+  channels: AnalyzedWsChannel[],
+): string {
+  const exchangeName = toPascalCase(config.name);
+  const lines: string[] = [];
+
+  lines.push("// 이 파일은 scripts/generate-sdk.ts로 자동 생성됩니다. 직접 수정하지 마세요.");
+  lines.push(`import { createWsConnectionFunctions } from "./ws-auth";`);
+  lines.push(`import type { ${exchangeName}WsClient, ${exchangeName}WsClientOptions } from "./ws-types";`);
+  lines.push("");
+
+  lines.push(`export function create${exchangeName}WsClient(options: ${exchangeName}WsClientOptions = {}): ${exchangeName}WsClient {`);
+  lines.push("  const { createPublicManager, createPrivateManager } = createWsConnectionFunctions(options);");
+  lines.push("");
+  lines.push("  let publicManager: ReturnType<typeof createPublicManager> | null = null;");
+  lines.push("  let privateManager: ReturnType<typeof createPrivateManager> | null = null;");
+  lines.push("  const errorHandlers: ((error: Error) => void)[] = [];");
+  lines.push("");
+  lines.push("  function getPublicManager() {");
+  lines.push("    if (!publicManager) {");
+  lines.push("      publicManager = createPublicManager();");
+  lines.push("      for (const handler of errorHandlers) publicManager.onError(handler);");
+  lines.push("    }");
+  lines.push("    return publicManager;");
+  lines.push("  }");
+  lines.push("");
+  lines.push("  function getPrivateManager() {");
+  lines.push("    if (!privateManager) {");
+  lines.push("      privateManager = createPrivateManager();");
+  lines.push("      for (const handler of errorHandlers) privateManager.onError(handler);");
+  lines.push("    }");
+  lines.push("    return privateManager;");
+  lines.push("  }");
+  lines.push("");
+
+  lines.push("  return {");
+
+  for (const ch of channels) {
+    const manager = ch.isPrivate ? "getPrivateManager()" : "getPublicManager()";
+    const hasOptions = !!ch.requestSchema;
+
+    if (hasOptions) {
+      lines.push(`    subscribe${ch.pascalName}: (options, onMessage) =>`);
+      lines.push(`      ${manager}.subscribe("${ch.camelName}", options, onMessage as (data: unknown) => void),`);
+    } else {
+      lines.push(`    subscribe${ch.pascalName}: (onMessage) =>`);
+      lines.push(`      ${manager}.subscribe("${ch.camelName}", undefined, onMessage as (data: unknown) => void),`);
+    }
+  }
+
+  lines.push("    onError: (handler) => {");
+  lines.push("      errorHandlers.push(handler);");
+  lines.push("      if (publicManager) publicManager.onError(handler);");
+  lines.push("      if (privateManager) privateManager.onError(handler);");
+  lines.push("    },");
+  lines.push("    close: () => {");
+  lines.push("      publicManager?.close();");
+  lines.push("      privateManager?.close();");
+  lines.push("      publicManager = null;");
+  lines.push("      privateManager = null;");
+  lines.push("    },");
+
+  lines.push("  };");
+  lines.push("}");
+  lines.push("");
+
+  return lines.join("\n");
+}
+
 // ─── 메인 로직 ───────────────────────────────────────────────
 
-function processExchange(configDir: string): McpExchangeData {
+async function processExchange(configDir: string): Promise<McpExchangeData> {
   const configPath = path.join(configDir, "config.yaml");
   const config = loadYaml(configPath) as ExchangeConfig;
   console.log(`처리 중: ${config.displayName} (${config.name})`);
@@ -1039,6 +1497,35 @@ function processExchange(configDir: string): McpExchangeData {
   fs.writeFileSync(clientPath, clientContent);
   console.log(`  생성: ${path.relative(ROOT, clientPath)}`);
 
+  // WebSocket 스펙 처리
+  const wsSpecs = config.specs.ws ?? [];
+  for (const wsSpecConfig of wsSpecs) {
+    const wsSpecPath = path.resolve(configDir, wsSpecConfig.path);
+    const wsDoc = await parseAsyncApiSpec(wsSpecPath);
+    if (!wsDoc) {
+      console.warn(`  경고: AsyncAPI 스펙 파싱 실패: ${wsSpecPath}`);
+      continue;
+    }
+    const wsChannels = await analyzeWsChannels(wsDoc);
+
+    if (wsChannels.length === 0) {
+      console.warn(`  경고: WebSocket 채널이 없습니다: ${wsSpecPath}`);
+      continue;
+    }
+
+    // ws-types.ts 생성
+    const wsTypesContent = generateWsTypesFile(config, wsChannels);
+    const wsTypesPath = path.join(exchangePkg, "ws-types.ts");
+    fs.writeFileSync(wsTypesPath, wsTypesContent);
+    console.log(`  생성: ${path.relative(ROOT, wsTypesPath)}`);
+
+    // ws-client.ts 생성
+    const wsClientContent = generateWsClientFile(config, wsChannels);
+    const wsClientPath = path.join(exchangePkg, "ws-client.ts");
+    fs.writeFileSync(wsClientPath, wsClientContent);
+    console.log(`  생성: ${path.relative(ROOT, wsClientPath)}`);
+  }
+
   return { config, operationsByCategory, operationsBySpec };
 }
 
@@ -1053,11 +1540,9 @@ const exchangeNames = fs
 console.log(`거래소 ${exchangeNames.length}개 발견: ${exchangeNames.join(", ")}`);
 console.log("");
 
-const allExchangeData: McpExchangeData[] = [];
-for (const exchange of exchangeNames) {
-  allExchangeData.push(processExchange(path.join(SPEC_DIR, exchange)));
-  console.log("");
-}
+const allExchangeData = await Promise.all(
+  exchangeNames.map((exchange) => processExchange(path.join(SPEC_DIR, exchange))),
+);
 
 // MCP exchange-runtime.ts 생성
 const mcpGeneratedDir = path.join(ROOT, "apps", "mcp", "src", "generated");

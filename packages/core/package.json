@@ -21,7 +21,11 @@
     "test:integration:private": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "axios": "^1.12.2"
+    "axios": "^1.12.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.0"
   },
   "repository": {
     "type": "git",

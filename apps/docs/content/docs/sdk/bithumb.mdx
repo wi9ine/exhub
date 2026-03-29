@@ -108,3 +108,61 @@ const order = await client.orders.createOrder({
   volume: "0.001",
 });
 ```
+
+## WebSocket API
+
+### 클라이언트 생성
+
+```typescript
+import { createBithumbWsClient } from "@exhub/bithumb";
+
+const ws = createBithumbWsClient();
+```
+
+### 인증 설정 (Private 채널)
+
+```typescript
+const ws = createBithumbWsClient({
+  credentials: {
+    apiKey: process.env.BITHUMB_API_KEY!,
+    secretKey: process.env.BITHUMB_SECRET_KEY!,
+  },
+});
+```
+
+### Public 채널
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `subscribeTicker(onMessage)` | 현재가 실시간 수신 | [링크](https://apidocs.bithumb.com/reference/현재가-ticker) |
+| `subscribeTrade(onMessage)` | 체결 실시간 수신 | [링크](https://apidocs.bithumb.com/reference/체결-trade) |
+| `subscribeOrderbook(onMessage)` | 호가 실시간 수신 | [링크](https://apidocs.bithumb.com/reference/호가-orderbook) |
+
+### Private 채널
+
+<Callout type="warning">
+  Private 채널은 인증 설정이 필요합니다. `credentials` 없이 호출하면 에러가 발생합니다.
+</Callout>
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `subscribeMyOrder(onMessage)` | 내 주문/체결 실시간 수신 | [링크](https://apidocs.bithumb.com/reference/내-주문-및-체결-myorder) |
+| `subscribeMyAsset(onMessage)` | 내 자산 실시간 수신 | [링크](https://apidocs.bithumb.com/reference/내-자산-myasset) |
+
+### 사용 예시
+
+```typescript
+// 현재가 구독
+const unsubscribe = ws.subscribeTicker((data) => {
+  console.log(`${data.code}: ${data.trade_price}`);
+});
+
+// 에러 처리
+ws.onError((error) => console.error(error));
+
+// 구독 해제
+unsubscribe();
+
+// 연결 종료
+ws.close();
+```

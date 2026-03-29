@@ -123,3 +123,66 @@ const order = await client.orders.createOrder({
 // 주문 취소
 await client.orders.cancelOrder({ uuid: order.uuid });
 ```
+
+## WebSocket API
+
+### 클라이언트 생성
+
+```typescript
+import { createUpbitWsClient } from "@exhub/upbit";
+
+const ws = createUpbitWsClient();
+```
+
+### 인증 설정 (Private 채널)
+
+```typescript
+const ws = createUpbitWsClient({
+  credentials: {
+    accessKey: process.env.UPBIT_ACCESS_KEY!,
+    secretKey: process.env.UPBIT_SECRET_KEY!,
+  },
+});
+```
+
+### Public 채널
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `subscribeTicker(options, onMessage)` | 현재가 실시간 수신 | [링크](https://docs.upbit.com/kr/reference/websocket-ticker) |
+| `subscribeTrade(options, onMessage)` | 체결 실시간 수신 | [링크](https://docs.upbit.com/kr/reference/websocket-trade) |
+| `subscribeOrderbook(options, onMessage)` | 호가 실시간 수신 | [링크](https://docs.upbit.com/kr/reference/websocket-orderbook) |
+| `subscribeCandle(options, onMessage)` | 캔들 실시간 수신 | [링크](https://docs.upbit.com/kr/reference/websocket-candle) |
+| `subscribeListSubscriptions(onMessage)` | 구독 목록 조회 | [링크](https://docs.upbit.com/kr/reference/list-subscriptions) |
+
+### Private 채널
+
+<Callout type="warning">
+  Private 채널은 인증 설정이 필요합니다. `credentials` 없이 호출하면 에러가 발생합니다.
+</Callout>
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `subscribeMyOrder(options, onMessage)` | 내 주문/체결 실시간 수신 | [링크](https://docs.upbit.com/kr/reference/websocket-myorder) |
+| `subscribeMyAsset(options, onMessage)` | 내 자산 변동 실시간 수신 | [링크](https://docs.upbit.com/kr/reference/websocket-myasset) |
+
+### 사용 예시
+
+```typescript
+// 현재가 구독
+const unsubscribe = ws.subscribeTicker(
+  { type: "ticker", codes: ["KRW-BTC", "KRW-ETH"] },
+  (data) => {
+    console.log(`${data.code}: ${data.trade_price}`);
+  },
+);
+
+// 에러 처리
+ws.onError((error) => console.error(error));
+
+// 구독 해제
+unsubscribe();
+
+// 연결 종료
+ws.close();
+```

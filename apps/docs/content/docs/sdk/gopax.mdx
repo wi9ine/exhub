@@ -102,3 +102,65 @@ const order = await client.orders.createOrder({
 // 주문 취소
 await client.orders.cancelOrder("order-id");
 ```
+
+## WebSocket API
+
+### 클라이언트 생성
+
+```typescript
+import { createGopaxWsClient } from "@exhub/gopax";
+
+const ws = createGopaxWsClient();
+```
+
+### 인증 설정 (Private 채널)
+
+```typescript
+const ws = createGopaxWsClient({
+  credentials: {
+    apiKey: process.env.GOPAX_API_KEY!,
+    secretKey: process.env.GOPAX_SECRET_KEY!,
+  },
+});
+```
+
+### Public 채널
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `subscribeOrderbook(options, onMessage)` | 호가 실시간 수신 | [링크](https://gopax.github.io/wsapi/index.html#3e61e5d414) |
+| `subscribeTradingPair(options, onMessage)` | 거래쌍 체결 실시간 수신 | [링크](https://gopax.github.io/wsapi/index.html#b8c4d7cfbf) |
+| `subscribeTicker(onMessage)` | 티커 실시간 수신 | [링크](https://gopax.github.io/wsapi/index.html#a98232916e) |
+
+### Private 채널
+
+<Callout type="warning">
+  Private 채널은 인증 설정이 필요합니다. `credentials` 없이 호출하면 에러가 발생합니다.
+</Callout>
+
+| SDK 메서드 | 설명 | 공식 문서 |
+|-----------|------|----------|
+| `subscribeOpenOrders(onMessage)` | 미체결 주문 실시간 수신 | [링크](https://gopax.github.io/wsapi/index.html#f1d60da232) |
+| `subscribeBalances(onMessage)` | 잔고 실시간 수신 | [링크](https://gopax.github.io/wsapi/index.html#fa07b908ad) |
+| `subscribeMyTrades(onMessage)` | 체결 내역 실시간 수신 | [링크](https://gopax.github.io/wsapi/index.html#70aea396f8) |
+
+### 사용 예시
+
+```typescript
+// 호가 구독
+const unsubscribe = ws.subscribeOrderbook(
+  { tradingPairName: "BTC-KRW" },
+  (data) => {
+    console.log(`매수: ${data.bid[0]?.price}, 매도: ${data.ask[0]?.price}`);
+  },
+);
+
+// 에러 처리
+ws.onError((error) => console.error(error));
+
+// 구독 해제
+unsubscribe();
+
+// 연결 종료
+ws.close();
+```

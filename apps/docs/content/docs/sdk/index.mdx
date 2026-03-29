@@ -76,3 +76,62 @@ import { Callout } from "nextra/components";
 <Callout type="info">
   Public API는 인증 없이 바로 사용할 수 있습니다. Private API를 사용하려면 각 거래소에서 API 키를 발급받아야 합니다.
 </Callout>
+
+## WebSocket API
+
+모든 거래소 SDK는 실시간 데이터 수신을 위한 WebSocket 클라이언트를 제공합니다.
+
+### 공통 사용 패턴
+
+```typescript
+import { create[Exchange]WsClient } from "@exhub/[exchange]";
+
+// Public 채널만 사용
+const ws = create[Exchange]WsClient();
+
+// Private 채널도 사용 (인증 필요)
+const ws = create[Exchange]WsClient({
+  credentials: {
+    // 거래소별 인증 정보
+  },
+});
+
+// 구독 — 반환값은 구독 해제 함수
+const unsubscribe = ws.subscribe[Channel](options, (data) => {
+  console.log(data);
+});
+
+// 에러 처리
+ws.onError((error) => console.error(error));
+
+// 구독 해제
+unsubscribe();
+
+// 전체 연결 종료
+ws.close();
+```
+
+### WebSocket 클라이언트 옵션
+
+| 옵션 | 타입 | 기본값 | 설명 |
+|------|------|--------|------|
+| `credentials` | 거래소별 | - | API 키 등 인증 정보 (Private 채널 사용 시 필요) |
+| `credentialsProvider` | `() => credentials` | - | 인증 정보를 동적으로 제공하는 함수 |
+| `reconnect` | `boolean` | `true` | 연결 끊김 시 자동 재연결 여부 |
+| `maxReconnectAttempts` | `number` | `5` | 최대 재연결 시도 횟수 |
+| `reconnectInterval` | `number` | `1000` | 재연결 간격 (밀리초, 지수 백오프 적용) |
+
+### 자동 재연결
+
+WebSocket 클라이언트는 연결이 끊기면 자동으로 재연결하고 기존 구독을 복원합니다. 지수 백오프(`interval × 2^attempt`, 최대 30초)를 사용합니다.
+
+```typescript
+// 재연결 비활성화
+const ws = create[Exchange]WsClient({ reconnect: false });
+
+// 재연결 설정 커스터마이즈
+const ws = create[Exchange]WsClient({
+  maxReconnectAttempts: 10,
+  reconnectInterval: 2000,
+});
+```
